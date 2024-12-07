@@ -1,0 +1,24 @@
+﻿@model Admin.ProductManagement.Controllers.ProductCategoryController.EditModel
+@using Admin.ProductManagement.Constants;
+@using Steam.Core.Base.Models;
+@{
+    SEOModel tabSeo = new SEOModel();
+    tabSeo.SlugGenerateFrom = "Slug";
+    tabSeo.GetCatePidFrom = "Pid";
+    tabSeo.GetPostPidFrom = "Pid";
+    tabSeo.GetPostTitlteFrom = "Title";
+    tabSeo.NavListButton = "nav_list_button_plugin";
+    tabSeo.ModuleCode = "ProductCategory";
+    tabSeo.PostPid = Model.ProductCategoryModel.Detail.Pid;
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TabSEOComponent), tabSeo)*@
+
+@try
+{
+    @Html.Partial(ProductCategoryConstants.StaticPath.ExtenalViews.SEO.TabSEO, tabSeo);
+}
+catch (Exception ex)
+{
+    <p>Dịch vụ chưa được tích hợp</p>
+
+}

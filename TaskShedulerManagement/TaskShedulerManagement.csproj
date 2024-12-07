@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Views\TaskSchedule\Index\_ModalConfig.cshtml" />
+    <None Include="Views\TaskSchedule\Index\_Table.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Steam.Core.ComponentUILibrary\Steam.Core.ComponentUILibrary.csproj" />
+  </ItemGroup>
+
+</Project>

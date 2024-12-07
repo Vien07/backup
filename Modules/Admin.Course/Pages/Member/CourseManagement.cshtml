@@ -1,0 +1,333 @@
+﻿@page
+@using ComponentUILibrary.Models
+@model Admin.Course.Pages.CMS.Member.CourseManagementModel
+@{
+}
+
+@section Styles {
+    <link rel="stylesheet" href="/assets/vendors/simple-datatables/style.css">
+}
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+            Quản lý khóa học của thành viên
+        </div>
+        <div class="card-body">
+            <button onclick="Open()" class="btn btn-primary">Tạo mới</button>
+            <table class="table table-border" id="table"></table>
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+    <div class="modal fade" id="ModelData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModelDataLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModelDataLabel">Thông tin</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="frmSave" class="form form-horizontal">
+                        <div class="form-body">
+                            <div class="row">
+                                <input id="Pid" hidden value="" name="Pid" />
+                                <div class="col-md-4">
+                                    <label>Khóa học</label>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <select required name="CoursePid" id="SelectCourses" class="nice-select form-control">
+                                        @foreach (var item in Model.Courses)
+                                        {
+                                            <option value="@item.Value">@item.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Key</label>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <input required type="text" id="Key" class="form-control" name="Key" placeholder="nhập key...">
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <a title="copy" role="button" onclick="CopyToClipboard('Key')" class="btn btn-primary text-center"><i class="fa-solid fa-copy"></i></a>
+                                </div>
+                                <div class="col-md-1 form-group">
+                                    <a title="generate code" role="button" onclick="GenerateCode('Key')" class="btn btn-primary text-center"><i class="fa-solid fa-arrows-rotate"></i></a>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Ngày bắt đầu</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input required type="datetime-local" id="StartDate" class="form-control" name="StartDate" placeholder="Email">
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Ngày kết thúc</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input required type="datetime-local" id="ExpireDate" class="form-control" name="ExpireDate" placeholder="Mobile">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" onclick="Save()" class="btn btn-primary">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+    <script src="/assets/vendors/simple-datatables/simple-datatables.js"></script>
+    <script>
+        var formId = "frmSave";
+        var memberPid = "@Model.Pid";
+        var selectId = "SelectCourses";
+        const ModelView = {
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminMember(ModelView);
+        _action.CheckFunction();
+
+
+        var instance = NiceSelect.bind(document.getElementById(selectId), { searchable: true })
+
+        var dataTable = new simpleDatatables.DataTable("#table", {
+            searchable: true,
+            fixedHeight: true,
+            data: LoadData(),
+            columns: [{
+                select: 4,
+                render: function (data, cell, row) {
+                    if (data.toLowerCase() === 'true') {
+                        return `<span class="badge bg-success">Active</span>`;
+
+                    } else {
+                        return `<span class="badge bg-danger">Inactive</span>`;
+                    }
+                }
+            },
+            {
+                select: 5,
+                render: function (data, cell, row) {
+                    return `
+                    <i role="button" onclick="Open(${data})" class="cursor-pointer text-primary fas fa-edit"></i>
+                    <i role="button" onclick="Delete(${data})" class="cursor-pointer  text-danger fas fa-trash-alt"></i>
+                            <i role="button" onclick="SendMail(${data})" class="cursor-pointer  text-default fa fa-envelope"></i>`;
+                }
+            }],
+        });
+
+        function Save() {
+            var validate = $("#" + formId).parsley().validate();
+            if (!validate) {
+                _action._commonAdmin.ToastifyAlert("Vui lòng kiểm tra lại thông tin nhập!!!", 'error')
+
+                return false;
+            }
+
+            let formdata = new FormData($("#" + formId)[0]);
+            formdata.append('MemberPid', memberPid);
+            $.ajax({
+                type: "POST",
+                url: "?handler=Save",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: formdata,
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (!data.response.isError) {
+                        _action._commonAdmin.ToastifyAlert("Thành công!!!", '')
+                        $('#ModelData').modal('hide')
+                        RefreshTable();
+                    } else {
+                        _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                    }
+                },
+                failure: function (response) {
+                    _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                }
+            });
+        }
+
+        function Open(pid) {
+            $('#' + formId)[0].reset()
+            if (pid) {
+                $.ajax({
+                    type: "POST",
+                    url: "?handler=Edit",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: {
+                        courseMemberPid: pid,
+                    },
+                    success: function (data) {
+                        if (!data.response.isError) {
+                            $('#Pid').val(data.response.data.pid)
+                            $(`#${selectId} option[value=${data.response.data.coursePid}]`).attr('selected', 'selected');
+                            instance.update()
+                            $('#Key').val(data.response.data.key)
+                            $('#StartDate').val(data.response.data.startDate)
+                            $('#ExpireDate').val(data.response.data.expireDate)
+                            $('#ModelData').modal('show')
+                        } else {
+                            _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                        }
+                    },
+                    failure: function (response) {
+                        _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                    }
+                });
+            } else {
+                $('#ModelData').modal('show')
+            }
+        }
+
+        function Delete(pid) {
+            $.ajax({
+                type: "POST",
+                url: "?handler=Delete",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    courseMemberPid: pid,
+                },
+                success: function (data) {
+                    if (!data.response.isError) {
+                        _action._commonAdmin.ToastifyAlert("Thành công!!!", '')
+                        RefreshTable();
+                    } else {
+                        _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                    }
+                },
+                failure: function (response) {
+                    _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                }
+            });
+        }
+
+        function SendMail(pid) {
+            $.ajax({
+                type: "POST",
+                url: "?handler=SendMail",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    courseMemberPid: pid,
+                },
+                success: function (data) {
+                    if (!data.response.isError) {
+                        _action._commonAdmin.ToastifyAlert("Thành công!!!", '')
+                        $('#ModelData').modal('hide')
+                        RefreshTable();
+                    } else {
+                        _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                    }
+                },
+                failure: function (response) {
+                    _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                }
+            });
+        }
+
+        function GenerateCode(divId) {
+            let result = '', length = 10;
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const charactersLength = characters.length;
+            let counter = 0;
+            while (counter < length) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                counter += 1;
+            }
+            $('#' + divId).val(result);
+        }
+
+        function CopyToClipboard(divId) {
+            let input = document.getElementById(divId);
+            input.select();
+            document.execCommand("copy");
+        }
+
+        function LoadData() {
+            let obj = {
+                "headings": [
+                    "Khóa học",
+                    "Key",
+                    "Ngày bắt đầu",
+                    "Ngày kết thúc",
+                    "Active",
+                    "Thao tác"
+                ],
+                "data": []
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "?handler=Data",
+                data: {
+                    memberPid: memberPid,
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    response && response.forEach((el, i) => {
+                        obj.data[i] = Object.values(el)
+                    })
+                },
+                failure: function (response) {
+                }
+            });
+
+            return obj;
+        }
+        function RefreshTable() {
+            dataTable.destroy();
+            dataTable = new simpleDatatables.DataTable("#table", {
+                searchable: true,
+                fixedHeight: true,
+                data: LoadData(),
+                columns: [{
+                    select: 4,
+                    render: function (data, cell, row) {
+                        if (data.toLowerCase() === 'true') {
+                            return `<span class="badge bg-success">Active</span>`;
+                        } else {
+                            return `<span class="badge bg-danger">Inactive</span>`;
+                        }
+                    }
+                },
+                {
+                    select: 5,
+                    render: function (data, cell, row) {
+                        return `
+                        <i role="button" onclick="Open(${data})" class="cursor-pointer text-primary fas fa-edit"></i>
+                        <i role="button" onclick="Delete(${data})" class="cursor-pointer  text-danger fas fa-trash-alt"></i>
+                        <i role="button" onclick="SendMail(${data})" class="cursor-pointer  text-default fa fa-envelope"></i>`;
+                    }
+                }],
+            });
+        }
+    </script>
+}

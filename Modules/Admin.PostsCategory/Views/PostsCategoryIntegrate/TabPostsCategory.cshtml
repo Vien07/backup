@@ -1,0 +1,47 @@
+﻿@model dynamic
+
+@using Admin.PostsCategory.Constants;
+@using ComponentUILibrary.Models
+@{
+}
+<div class="form-group row ml-2 col-xl-12 col-sm-12">
+    <style>
+        .PostsCategory-nice-select {
+            margin-left: 13px
+        }
+    </style>
+    <label for="title">Nice Select</label>
+
+    @{
+        List<SelectControlData> aa = new List<SelectControlData>();
+        aa.Add(new SelectControlData { Name = "Option 1", Value = "1" });
+        aa.Add(new SelectControlData { Name = "Option 2", Value = "2" });
+        NiceSelectModel selectModel2 = new NiceSelectModel();
+        selectModel2.Data = aa;
+        selectModel2.Id = "select1";
+        selectModel2.Size = "small";
+        selectModel2.Class = "nice-select PostsCategory-nice-select";
+        selectModel2.SelectedValue = "2";
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+</div>
+
+
+<div class="form-group">
+    <label for="title">Select Multiable</label>
+    @{
+        List<SelectControlData> multiDropdownCpn = new List<SelectControlData>();
+        multiDropdownCpn.Add(new SelectControlData { Name = "option 1", Value = "1" });
+        multiDropdownCpn.Add(new SelectControlData { Name = "option 2", Value = "2" });
+        multiDropdownCpn.Add(new SelectControlData { Name = "option 3", Value = "3" });
+        multiDropdownCpn.Add(new SelectControlData { Name = "option 4", Value = "4" });
+        multiDropdownCpn.Add(new SelectControlData { Name = "option 5", Value = "5" });
+        DropdownFilterMultiSelectModel multiDropdownData = new DropdownFilterMultiSelectModel();
+        multiDropdownData.Data = multiDropdownCpn;
+        multiDropdownData.Id = "selectmulti";
+        multiDropdownData.Size = "";
+        multiDropdownData.Class = "";
+        multiDropdownData.SelectedValue = "1,2,3,4";
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.DropdownFilterMultiSelectComponent), new { model = multiDropdownData })
+</div>

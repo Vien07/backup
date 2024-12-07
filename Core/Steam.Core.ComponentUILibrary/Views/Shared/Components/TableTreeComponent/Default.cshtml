@@ -1,0 +1,92 @@
+﻿@using ComponentUILibrary.Models
+@using ComponentUILibrary
+@using Microsoft.Extensions.Configuration
+@using Steam.Core.ComponentUILibrary.Constant
+
+@model TableTreeModel
+@{
+    string VirtualFolder = ComponentUILibraryConstant.VirtualFolder;
+
+}
+@{
+    var json = Model.TableTreeDataJson();
+}
+
+<link href="@Url.Content(VirtualFolder+TableTreeConstants.PathLib)/pickletree.css" rel="stylesheet" />
+
+<script src="@Url.Content(VirtualFolder+TableTreeConstants.PathLib)/pickletree.js"></script>
+
+<div class="row">
+    <div class="">
+        <div id="div_tree" class="tree"></div>
+
+    </div>
+</div>
+
+
+<script>
+
+    var tree = {}
+    var c_data = []
+    var items = JSON.parse('@Html.Raw(json)')
+    for (let item of items) {
+        item.n_elements= [{
+            icon: 'fa fa-edit',
+            title: 'Edit',
+            //context button click event
+            onClick: (node) => @(Html.Raw(Model.ActionEdit))(node.value)
+        }, {
+            icon: 'fa fa-trash',
+            title: 'Delete',
+            onClick: (node) => @(Html.Raw(Model.ActionDelete))(node.value)
+            }]
+        c_data.push(item)
+    console.log(item);
+    }
+    var tree = new PickleTree({
+        c_target: 'div_tree',
+        rowCreateCallback: (node) => {
+            //console.log(node)
+        },
+        switchCallback: (node) => {
+                        @(Html.Raw(Model.ActionEnable))(node.value, node.checkStatus)
+
+            console.log("switchCallback",node)
+            console.log("switchCallback",node)
+        },
+        drawCallback: () => {
+            //console.log('tree drawed ..');
+        },
+        dragCallback: (node) => {
+            console.log("dragCallback",node);
+        },
+        dropCallback: (node) => {
+            //retuns node with new parent and old parent in 'old_parent' key!!
+            console.log("dropCallback", node);
+            //_action.UpdateParrent(node.value, node.parent.value)
+            @(Html.Raw(Model.ActionUpdateParent))(node.value, node.parent.value)
+        },
+        orderCallback: (main, target) => {
+           // _action.Move(main.value, target.value)
+           @(Html.Raw(Model.ActionMove))(main.value, target.value)
+
+        },
+        c_config: {
+            //start as folded or unfolded
+            foldedStatus: false,
+            //for logging
+            logMode: false,
+            //for switch element
+            switchMode: true,
+            //for automaticly select childs
+            autoChild: true,
+            //for automaticly select parents
+            autoParent: true,
+            //for drag / drop
+            drag: true,
+            //for ordering
+            order: true
+        },
+        c_data: c_data
+    });
+</script>

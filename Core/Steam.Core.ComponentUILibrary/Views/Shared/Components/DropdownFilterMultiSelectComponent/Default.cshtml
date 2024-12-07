@@ -1,0 +1,72 @@
+﻿@using ComponentUILibrary.Models
+@using ComponentUILibrary
+@using Steam.Core.ComponentUILibrary.Constant
+@using Steam.Core.Base.Constant
+@model DropdownFilterMultiSelectModel
+@{
+    string VirtualFolder = SystemInfo.VirtualFolder;
+
+    var data = Model.SelectedValue != null ? Model.SelectedValue.Split(",").ToList() : new List<string>();
+}
+@if (Model.FirstLoadLib)
+{
+    <link href="@Url.Content(VirtualFolder+DropdownFilterMultiSelectConstants.PathLib)/filter_multi_select.css" rel="stylesheet" />
+
+    <script src="@Url.Content(VirtualFolder+DropdownFilterMultiSelectConstants.PathLib)/filter-multi-select-bundle.min.js"></script>
+}
+
+
+<select multiple id="select_@Model.Id" name="select_@Model.Id" class="@Model.Class">
+    @if (Model.Data != null)
+    {
+        foreach (var item in Model.Data)
+        {
+
+            <option @(data.Contains(item.Value) ? "selected" : "") value="@item.Value">@item.Name</option>
+        }
+    }
+</select>
+
+<input id="@Model.Id" value="@Model.SelectedValue" name="@Model.Id" type="text" hidden />
+
+<script>
+            var multiVals_@(Model.Id) = [];
+    var selectMultiControl_@(Model.Id) = {};
+    $(function () {
+
+        try {
+            let dataChoosen_@(Model.Id) = "@Model.SelectedValue"
+
+            dataChoosen_@(Model.Id) && dataChoosen_@(Model.Id).split(',').forEach(function (el) {
+                multiVals_@(Model.Id).push(el)
+            })
+        } catch (e) {
+            console.error(e)
+        }
+
+
+        selectMultiControl_@(Model.Id) = $('#select_@(Model.Id)').filterMultiSelect();
+        $('#select_@(Model.Id)').on('optionselected', function (e) {
+
+           var tempSelected =  JSON.parse(selectMultiControl_@(Model.Id).getSelectedOptionsAsJson())
+            @*multiVals_@(Model.Id).push(e.detail.value)*@
+           var value= tempSelected.@("select_" + Model.Id).join();
+            $('#@(Model.Id)').val(value)
+        });
+
+        $('#select_@(Model.Id)').on('optiondeselected', function (e) {
+            try {
+                var tempSelected = JSON.parse(selectMultiControl_@(Model.Id).getSelectedOptionsAsJson())
+           var value= tempSelected.@("select_" + Model.Id).join();
+
+             @*multiVals_@(Model.Id) = multiVals_@(Model.Id).filter(x => x != e.detail.value)
+            $('#@(Model.Id)').val(multiVals_@(Model.Id).join())*@
+            $('#@(Model.Id)').val(value)
+            } catch (e) {
+
+            }
+
+        });
+
+    });
+</script>

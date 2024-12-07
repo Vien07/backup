@@ -1,0 +1,59 @@
+﻿@using Admin.ProductManagement.Constants;
+@using Admin.ProductManagement.DataTransferObjects.Product;
+@using ComponentUILibrary.Models
+@model Admin.ProductManagement.Controllers.ProductController.EditModel
+
+<div class="mt-2">
+
+
+    <div class="form-group">
+        <label for="">Front Image</label>
+        @{
+            FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+            fileUploadModel.Id = "Images";
+            fileUploadModel.Class = "";
+            fileUploadModel.IsMultiple = false;//true thì tạo control up nhiều ảnh
+            fileUploadModel.FirstLoadLib = true;//true thì tạo control up nhiều ảnh
+            fileUploadModel.Images_Alt = Model.Detail.Images_Alt;
+            fileUploadModel.Images_Description = Model.Detail.Images_Description;
+            fileUploadModel.Images_Caption = Model.Detail.Images_Caption;
+            fileUploadModel.SelectedFiles = Steam.Core.Base.Constant.SystemInfo.VirtualFolder + Model.Detail.FilePath + Model.Detail.Images;// fileUploadModel.GenerateFileJson(listFile);
+
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModel)
+    </div>
+
+    <div class="form-group">
+        <label for="">Back Image</label>
+
+        @{
+            FileUploadControlModel fileUploadModel2 = new FileUploadControlModel();
+            fileUploadModel2.Id = "BackImages";
+            fileUploadModel2.Class = "";
+            fileUploadModel2.IsMultiple = false;//true thì tạo control up nhiều ảnh
+            fileUploadModel2.FirstLoadLib = true;//true thì tạo control up nhiều ảnh
+            fileUploadModel2.Images_Alt = Model.Detail.BackImages_Alt;
+            fileUploadModel2.Images_Description = Model.Detail.BackImages_Description;
+            fileUploadModel2.Images_Caption = Model.Detail.BackImages_Caption;
+            fileUploadModel2.SelectedFiles = Steam.Core.Base.Constant.SystemInfo.VirtualFolder + Model.Detail.BackFilePath + Model.Detail.BackImages;// fileUploadModel.GenerateFileJson(listFile);
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModel2)
+    </div>
+
+    <div class="form-group">
+        <label for="">Danh sách ảnh</label>
+        @{
+            DropzoneModel imagesMultiPicker = new DropzoneModel();
+            imagesMultiPicker.Id = "ListImages";
+            imagesMultiPicker.FirstLoadLib = true;
+
+            imagesMultiPicker.FilePath = ProductConstants.ConfigAsset.Image;
+            imagesMultiPicker.Files = System.Text.Json.JsonSerializer.Serialize<List<ProductFileDto>>(Model.ListFiles);
+
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.DropzoneComponent), new { model = imagesMultiPicker })
+    </div>
+
+
+
+</div>

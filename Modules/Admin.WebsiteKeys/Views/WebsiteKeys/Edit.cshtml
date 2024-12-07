@@ -1,0 +1,182 @@
+﻿@model Admin.WebsiteKeys.Controllers.EditModel
+
+@using Admin.WebsiteKeys.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+                            <div class="row d-flex justify-content-between">
+                                <div class="form-group col-3">
+                                    <label for="Title">Name</label>
+                                    <input required type="text" class="form-control" id="Title" value="@Model.Detail.Title" name="Title" aria-describedby="Title" placeholder="nhập tên...">
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="Key">Key</label>
+                                    <input required type="text" class="form-control" id="Key" value="@Model.Detail.Key" name="Key" aria-describedby="Key" placeholder="nhập key...">
+                                </div>      
+                                <div class="form-group col-3">
+                                    <label for="Group">Group</label>
+                                    <input required type="text" class="form-control" id="Group" value="@Model.Detail.Group" name="Group" aria-describedby="Group" placeholder="nhập nhóm...">
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="Value">Value</label>
+                                    <input required type="text" class="form-control" id="Value" value="@Model.Detail.Value" name="Value" aria-describedby="Value" placeholder="nhập value...">
+                                </div>
+
+                            </div>
+                            <div class="row d-flex">
+                                <div class="form-group col-4">
+                                    <label for="KeyType" class="text-bold">Loại key</label>
+
+                                    @{
+                                        List<RadioData> itemRadioKeyType = new List<RadioData>();
+                                        itemRadioKeyType.Add(new RadioData { Text = "System Key", Id = "1", Value = "sys" });
+                                        itemRadioKeyType.Add(new RadioData { Text = "Custom Key", Id = "2", Value = "cus" });
+                                        RadioModel radioKeyTypeModel = new RadioModel();
+                                        radioKeyTypeModel.Id = "KeyType";
+                                        radioKeyTypeModel.Class = "row";
+                                        radioKeyTypeModel.Style = "margin-left:5px";
+                                        radioKeyTypeModel.Items = itemRadioKeyType;
+                                        radioKeyTypeModel.SelectedValue = Model.Detail.isSystemKey == false ? "cus" : "sys";
+
+                                    }
+                                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.RadioComponent), radioKeyTypeModel)
+                                </div>
+                                <div class="form-group col-4 d-flex flex-column">
+                                    <label for="isMedia" class="text-bold">File Media</label>
+                                    @{
+                                        CheckboxModel checkboxModel = new CheckboxModel();
+                                        checkboxModel.Id = "CheckBox";
+                                        checkboxModel.Class = "";
+                                        checkboxModel.Style = "";
+                                        checkboxModel.CheckValue = "1";
+                                        checkboxModel.UnCheckValue = "0";
+                                        checkboxModel.Value = "0";
+
+                                    }
+                                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CheckBoxComponent), checkboxModel)
+
+
+                                </div>
+
+                            </div>
+
+                            <div id="MediaBox" class="form-group">
+                                <label for="">Media</label>
+
+                                @{
+
+                                    var imageURl = "";
+                                    if (Model != null)
+                                    {
+                                        imageURl = Steam.Core.Base.Constant.SystemInfo.VirtualFolder + Model.Detail.MediaPath + Model.Detail.Images;
+                                    }
+
+                                    FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+                                    fileUploadModel.Id = "Images";
+                                    fileUploadModel.Class = "";
+                                    fileUploadModel.IsMultiple = false;//true thì tạo control up nhiều ảnh
+                                    fileUploadModel.SelectedFiles = imageURl;
+                                    fileUploadModel.Images_Alt = "";
+
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModel)
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="Content">Mô tả</label>
+
+                                <textarea rows="7" id="Description" name="Description" class="form-control">@Model.Detail.Description</textarea>
+
+                            </div>
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+
+                        <div class="demo-inline-spacing">
+                            <button onclick="_action.Save('uploadForm')"  type="button" class="btn rounded-pill btn-primary">
+                                <span class="tf-icons bx bx-save me-1"></span>Lưu
+                            </button>
+                            <a type="button" href="@Url.Content(WebsiteKeysConstants.Route.PageIndex)"  class="btn rounded-pill btn-secondary">
+                                <span class="tf-icons bx bx-x me-1"></span>Đóng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(WebsiteKeysConstants.ModuleInfo.PathCommand)/websitekeys/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@WebsiteKeysConstants.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminWebsiteKeys_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+        function ShowMediaBox() {
+            if ($("#CheckBox").is(":checked")) {
+                $("#MediaBox").show();
+            } else {
+                $("#MediaBox").hide();
+            }
+        }
+        $(document).ready(function () {
+            ShowMediaBox(); // Check the initial state
+
+            // Add an event listener to the checkbox for changes
+            $("#CheckBox").change(function () {
+                ShowMediaBox(); // Check and update when the checkbox state changes
+            });
+        });
+    </script>
+}

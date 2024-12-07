@@ -1,0 +1,21 @@
+﻿@using ComponentUILibrary.Models
+
+@model PageTitleModel
+<div class="page-title">
+    <div class="row">
+
+        <div class="col-12 col-md-6 order-md-1 order-last row">
+
+            <h3 class="col"><i class="@Model.ICon col"></i> @Model.ModuleName</h3>
+
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-first">
+            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-md-end">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Model.BackLink">@Model.ModuleName</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> @Model.View</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>

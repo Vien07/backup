@@ -1,0 +1,115 @@
+﻿@model Admin.EmailManagement.Controllers.EmailAdminModel
+
+@using Admin.EmailManagement.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="UserName">Email Admin</label>
+                                        <input type="text" class="form-control" id="EmailAddress" value="@Model.Detail.EmailAddress" name="EmailAddress" required aria-describedby="EmailAddress" placeholder="Email Admin...">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Name">Tên hiển thị</label>
+                                        <input type="text" class="form-control" id="Sender" value="@Model.Detail.Sender" name="Sender" aria-describedby="Sender" placeholder="Người gửi...">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="UserName">Smtp Server</label>
+                                        <input type="text" class="form-control" id="SmtpServer" value="@Model.Detail.SmtpServer" name="SmtpServer" aria-describedby="SmtpServer" placeholder="SmtpServer...">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Name">Smtp User</label>
+                                        <input type="text" class="form-control" id="SmtpUser" value="@Model.Detail.SmtpUser" name="SmtpUser" aria-describedby="SmtpUser" placeholder="SmtpUser...">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="UserName">Smtp Password</label>
+                                        <input type="text" class="form-control" id="SmtpPassword" value="@Model.Detail.SmtpPassword" name="SmtpPassword" aria-describedby="SmtpPassword" placeholder="SmtpPassword...">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="Name">Port</label>
+                                        <input type="text" class="form-control" id="Port" value="@Model.Detail.Port" name="Port" aria-describedby="Port" placeholder="Port...">
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer mt-2">
+                                    <div class="demo-inline-spacing">
+                                        <button onclick="_action.Save('uploadForm')" type="button" class="btn rounded-pill btn-primary">
+                                            <span class="tf-icons bx bx-save me-1"></span>Lưu
+                                        </button>
+                                        <a type="button" href="@Url.Content(EmailAdminConstans.Route.PageIndex)" class="btn rounded-pill btn-secondary">
+                                            <span class="tf-icons bx bx-x me-1"></span>Đóng
+                                        </a>
+                                    </div>
+
+                                </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(EmailAdminConstans.ModuleInfo.PathCommand)/EmailAdmin/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@EmailAdminConstans.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging"
+        }
+        let _action = new AdminEmail_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+    </script>
+}

@@ -1,0 +1,155 @@
+﻿
+@model Admin.EmailManagement.Controllers.PageModel
+@using ComponentUILibrary.Models
+@using Admin.EmailManagement.Constants
+@using ComponentUILibrary.ViewComponents
+@using PartialView = Admin.EmailManagement.Constants.EmailAdminConstans.StaticPath.PartialView 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+<section class="section">
+    <div class="row" id="table-hover-row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+
+                    <form id="SearchForm" class="row col-xl-12 col-sm-12 cms-filter-row">
+                        <!--filter action-->
+                        @Html.AntiForgeryToken()
+
+                        <div style="padding:0" class="input-group  mb-1 cms-filter form-group  col-auto">
+                            <input type="text" name="KeySearch" id="KeySearch" class="cms-font-size-075  form-control form-control-sm" placeholder="từ khóa tìm kiếm" aria-label="từ khóa tìm kiếm" />
+                            <button class="btn btn-sm btn-outline-secondary" type="button" onclick="_action.Search(1)" id="buttonSearch"><i class="bx bx-search"></i></button>
+                        </div>
+                        <div style="padding:0" class="col-sm-2 cms-filter">
+                            <a type="button" href="@Url.Content(EmailAdminConstans.Route.PageEdit)" class="btn btn-primary ">
+                                New
+                            </a>
+                        </div>
+                        <!--filter action-->
+
+                    </form>
+
+                    <div class="form-group ml-auto  col-auto cms-setting">
+                        <i onclick=" OpenSettingModal()" class="fas fa-cog "></i>
+                    </div>
+                </div>
+                <div class="card-content p-lg-2 pr-2 cms-div-table ">
+                    <!-- table hover -->
+                    <div class="table-responsive">
+                        @{
+                            ComponentUILibrary.Models.TableData table = new ComponentUILibrary.Models.TableData();
+                            table.ID = "test2";
+                            table.Class = "table table-hover bg-white mb-0 ";
+                            table.Body = await Html.PartialAsync(EmailAdminConstans.StaticPath.PartialView.Index_Table, Model.List);
+
+                            List<TableHead> tableHead = new List<TableHead>();
+                            tableHead.Add(new TableHead { Name = "#", Width = 50, Filter = "ASC", OrderBy = "Order" });
+                            tableHead.Add(new TableHead { Name = "Địa chỉ email", Filter = "ASC", OrderBy = "Title" });
+                            tableHead.Add(new TableHead { Name = "Người gửi" });
+                            tableHead.Add(new TableHead { Name = "SmtpServer" });
+                            tableHead.Add(new TableHead { Name = "Port" });
+                            tableHead.Add(new TableHead { Name = "Active", Width = 1, Class = "text-right" });
+                            tableHead.Add(new TableHead { Name = "Action", Width = 1 });
+                            table.Header = tableHead;
+                        }
+                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TableComponent), new { table = table })
+
+
+                        <div class="row mx-0 mt-1 align-items-center">
+                            <div class="col-12 col-sm-6">
+                                <button type="button" onclick="_action.Enable(0,true)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="active"><i class="fas fa-eye"></i></button>
+                                <button type="button" onclick="_action.Enable(0,false)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="inactive"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" onclick="_action.Delete(0)" class="btn btn-sm btn-danger " data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fas fa-trash-alt t"></i></button>
+                                @*<button type="button" onclick="_action.EnableUpdateOrder('edit')" class="btn btn-sm btn-outline-secondary " id="btnOrder" data-toggle="tooltip" data-placement="top" title="" data-original-title="order">
+                                        <i class="fa-solid fa-arrow-down-up-across-line " style="--fa-beat-scale: 2.0;"></i>
+                                    </button>*@
+
+                            </div>
+                            <div class=" col-12 col-sm-6  align-items-center" id="divPaging">
+                                <nav style="float:right" class="pagination-wrap d-inline-block" id="navigation_paging" aria-label="navigation">
+                                    @{
+                                        PaginationModel pageModel = new PaginationModel();
+                                        pageModel.PageIndex = 1;
+                                        pageModel.PageSize = 1;
+                                        pageModel.PageCount = Model.List.PageCount;
+                                        pageModel.Id = "";
+                                        pageModel.Class = "";
+                                    }
+                                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PaginationComponent), Model.Pagination)
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal config -->
+    <div id="divModalConfig">
+        @{
+            ConfigModalModel configModel = new ConfigModalModel();
+            configModel.BodyUrl = PartialView.Index_ModalConfig;
+            configModel.GetConfigModel(Model.Configs);
+        }
+        @await ConfigModalComponent.Render(ViewContext, configModel)
+
+    </div>
+
+
+    <!-- end Modal config -->
+    @Html.AntiForgeryToken()
+
+</section>
+@*<button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+        Tooltip on top
+    </button>*@
+<!-- Hoverable rows end -->
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(EmailAdminConstans.ModuleInfo.PathCommand)/EmailAdmin/index.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@EmailAdminConstans.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            TableDataID: "@table.ID",
+            TbodyId: "tdBody_@table.ID",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images",
+            SearchFormID: "SearchForm"
+        }
+        let _action = new AdminEmail_Index(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+        }
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+
+            //InitDragDropTable()
+        });
+
+
+
+
+    </script>
+}

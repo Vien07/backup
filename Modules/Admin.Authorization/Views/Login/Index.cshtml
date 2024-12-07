@@ -1,0 +1,142 @@
+﻿@using Steam.Core.Base.Constant
+
+@{
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+
+}
+<style>
+    .auth-left-custom {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .auth-right-custom {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .auth-right-title {
+        color: white;
+        font-size:40px
+    }
+    .auth-right-subtitle {
+        color: white;
+        font-size: 25px
+    }
+</style>
+<div id="auth">
+
+    <div class="row h-100">
+        <div class="col-lg-5 col-12 auth-left-custom">
+            <div class="" id="auth-left">
+
+
+                <form id="LoginForm">
+                    <div class="form-group position-relative has-icon-left mb-4">
+                        <input type="text" name="UserName"  style="border-radius:30px"  class="form-control form-control-md input-login" placeholder="UserName">
+                        <div class="form-control-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+                    </div>
+                    <div class="form-group position-relative has-icon-left ">
+                        <input type="password" name="Password" style="border-radius:30px" class="form-control form-control-md input-login" placeholder="Password">
+                        <div class="form-control-icon">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <span style="display: inline-block; vertical-align: middle; float: right; margin-top: -1.8rem; margin-right: 0.8rem;">
+                            <a id="togglePassword">
+                                <i id="toggleIcon" class="bi bi-eye"></i>
+                            </a>
+                        </span>
+                    </div>
+
+                    @*<div class="form-check form-check-lg d-flex align-items-end">
+                        <input class="form-check-input me-2" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label text-gray-600" for="flexCheckDefault">
+                            Keep me logged in
+                        </label>
+                    </div>*@
+                    <button style="border-radius:30px" type="button" class="btn btn-primary btn-block btn-lg shadow-lg " id="btnlogin" onclick="_action.Login('LoginForm')">Log in</button>
+
+                </form>
+                @*<div class="text-center mt-5 text-lg fs-4">
+                    <p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a></p>
+                </div>*@
+            </div>
+        </div>
+        <div class="col-lg-7 d-none d-lg-block">
+            <div class="auth-right-custom " id="auth-right">
+                @*<div class="auth-logo">
+                    <a href="/"><img src="@Steam.Core.Base.Constant.SourceInfo.LogoTeam" alt="Logo"></a>
+                </div>*@
+                <div class="text-center">
+                    <p class="auth-title auth-right-title">.S:Teams</p>
+                    <p class="auth-subtitle auth-right-subtitle ">Content Management System</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@Html.AntiForgeryToken()
+
+<!-- Hoverable rows end -->
+@section Scripts{
+    <script asp-append-version="true" src="@(Admin.Authorization.Constants.ModuleInfo.PathCommand)/Login/LoginCommand.js"></script>
+    <script>
+    const ModelView = {
+            RedirectUrl: "@ViewBag.redirectUrl"
+        }
+        let _action = new AdminLogin(ModelView);
+
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            var passwordInput = document.getElementsByName("Password")[0];
+            var toggleIcon = document.getElementById("toggleIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("bi-eye");
+                toggleIcon.classList.add("bi-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("bi-eye-slash");
+                toggleIcon.classList.add("bi-eye");
+            }
+        });
+
+        $(function () {
+
+            $(".input-login").keyup(function (event) {
+                if (event.keyCode === 13) {
+                    _action.Login("LoginForm")
+                }
+            });
+        });
+
+        function showLoading() {
+            var button = document.getElementById("btnlogin"); // Lấy nút Log in bằng id
+            var originalText = button.innerHTML; // Lưu lại nội dung ban đầu của nút
+            button.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="sr-only"></span></div>';
+        }
+
+        function hideLoading() {
+            var button = document.getElementById("btnlogin");
+            // Hiện lại nội dung ban đầu của nút và ẩn spinner
+            button.innerHTML = 'Log in';
+        }
+
+        function createSpinner() {
+            // Tạo một phần tử spinner để thêm vào button
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner-border spinner-border-sm';
+            spinner.role = 'status';
+
+            const spinnerSpan = document.createElement('span');
+            spinnerSpan.className = 'sr-only';
+            spinnerSpan.textContent = '';
+
+            spinner.appendChild(spinnerSpan);
+            return spinner;
+        }
+    </script>
+}

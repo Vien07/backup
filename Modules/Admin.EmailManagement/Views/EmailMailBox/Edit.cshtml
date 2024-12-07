@@ -1,0 +1,134 @@
+﻿@model Admin.EmailManagement.Controllers.EditMailBoxModel
+
+@using Admin.EmailManagement.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+
+                            <div class="row">
+                                <div class="form-group col-md-2">
+                                    <label for="EmailTittle">Tiêu đề</label>
+                                    <input type="text" class="form-control" id="EmailTittle" value="@Model.Detail.EmailTittle" name="EmailTittle" aria-describedby="EmailTittle" placeholder="nhập tiêu đề...">
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <label for="EmailCode">Email Code</label>
+                                    <input type="text" class="form-control" id="EmailCode" value="@Model.Detail.EmailCode" name="EmailCode" aria-describedby="EmailCode" placeholder="nhập email code...">
+                                </div>
+                                <div class="form-group col-md-5">
+                                    <style>
+                                        .sample-nice-select {
+                                            margin-left: 5px
+                                        }
+                                    </style>
+                                    <label for="">Cấu hình</label>
+                                    @{
+                                        if (Model.ListEmailAdmin.Any())
+                                        {
+                                            List<SelectControlData> listSelect = new List<SelectControlData>();
+                                            foreach (var item in Model.ListEmailAdmin)
+                                            {
+                                                listSelect.Add(new SelectControlData { Name = item.EmailAddress, Value = item.Pid.ToString() });
+                                            }
+                                            NiceSelectModel selectModel2 = new NiceSelectModel();
+                                            selectModel2.Data = listSelect;
+                                            selectModel2.Id = "EmailAdminPid";
+                                            selectModel2.Size = "large";
+                                            selectModel2.Class = "nice-select sample-nice-select";
+
+                                            if (Model.Detail.EmailAdminPid != null && Model.ListEmailAdmin.Select(s => s.Pid).ToList().Contains(Model.Detail.EmailAdminPid.Value))
+                                            {
+                                                selectModel2.SelectedValue = Model.Detail.EmailAdminPid.ToString();
+                                            }
+
+                                            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+                                        }
+                                        else
+                                        {
+                                            <h5>Chưa có Email admin trong hệ thống!</h5>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="EmailReceive">Email nhận</label>
+                                <input type="text" class="form-control" id="EmailReceive" value="@Model.Detail.EmailReceive" name="EmailReceive" aria-describedby="EmailReceive" placeholder="Danh sách email nhận...">
+                            </div>
+                            <div class="form-group">
+                                <label for="EmailContent">Nội dung</label>
+
+                                @{
+
+                                    CodeMirrorModel codeMirrorContent = new CodeMirrorModel();
+                                    codeMirrorContent.Id = "Content";
+                                    codeMirrorContent.FirstLoadLib = true;
+                                    codeMirrorContent.Content = Model.Detail.EmailContent;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorContent)
+                            </div>
+                            <div class="modal-footer mt-2">
+                                <div class="demo-inline-spacing">
+                                    <button onclick="_action.Save('uploadForm')" type="button" class="btn rounded-pill btn-primary">
+                                        <span class="tf-icons bx bx-save me-1"></span>Lưu
+                                    </button>
+                                    <a type="button" href="@Url.Content(EmailMailBoxConstants.Route.PageIndex)" class="btn rounded-pill btn-secondary">
+                                        <span class="tf-icons bx bx-x me-1"></span>Đóng
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(EmailMailBoxConstants.ModuleInfo.PathCommand)/EmailMailBox/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@EmailMailBoxConstants.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging"
+        }
+        let _action = new AdminEmailMailBox_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+    </script>
+}

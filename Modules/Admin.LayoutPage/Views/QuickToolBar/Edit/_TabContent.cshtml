@@ -1,0 +1,38 @@
+﻿@model Admin.LayoutPage.Controllers.QuickToolBarEditModel
+
+@using Admin.LayoutPage.Constants;
+@using ComponentUILibrary.Models
+
+<div class="card-content p-lg-2 pr-2">
+    <form id="uploadForm" class="mt-2">
+
+        <div class="mt-2">
+            <input hidden id="QuickToolBarPid" class="pid" name="Pid" value="@Model.Detail.Pid">
+            <div class="form-group">
+                <label for="title">Tiêu đề</label>
+                <input required type="text" class="form-control" id="title" value="@Model.Detail.Name" name="Name" aria-describedby="Name" placeholder="nhập tên QuickToolBar...">
+            </div>
+
+
+
+ 
+
+            <div class="form-group">
+                <label for="ItemBlock">QuickToolBar Item Block</label>
+
+                @{
+
+                    CodeMirrorModel codeMirrorQuickToolBarBlock = new CodeMirrorModel();
+                    codeMirrorQuickToolBarBlock.Id = "QuickToolBarBlock";
+                    codeMirrorQuickToolBarBlock.FirstLoadLib = true;
+                    codeMirrorQuickToolBarBlock.Content = Model.Detail.QuickToolBarBlock;
+                }
+                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorQuickToolBarBlock)
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        @*<a type="button" href="@QuickToolBarConstants.Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+            <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>*@
+    </div>
+</div>

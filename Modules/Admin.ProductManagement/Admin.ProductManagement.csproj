@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\UpdateModels\**" />
+    <Content Remove="Models\UpdateModels\**" />
+    <EmbeddedResource Remove="Models\UpdateModels\**" />
+    <None Remove="Models\UpdateModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Models\UpdateModels\ProductCategoryUpdateModel.cs" />
+    <Compile Include="Models\UpdateModels\ProductSpecificatyUpdateModel.cs" />
+    <Compile Include="Models\UpdateModels\ProductUpdateModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\OrderManagement\Modals\Index\_ModalConfig.cshtml" />
+    <None Include="Views\OrderManagement\Tables\Index\_Table.cshtml" />
+    <None Include="Views\ProductPolicy\Index\_ModalConfig.cshtml" />
+    <None Include="Views\ProductPolicy\Index\_Table.cshtml" />
+    <None Include="wwwroot\commands\ProductPolicy\edit.js" />
+    <None Include="wwwroot\commands\ProductPolicy\index.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Steam.Core.Base\Steam.Core.Base.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.Common\Steam.Core.Common.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.ComponentUILibrary\Steam.Core.ComponentUILibrary.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.Infrastructure\Steam.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.Utilities\Steam.Core.Utilities.csproj" />
+    <ProjectReference Include="..\Admin.PostsManagement\Admin.PostsManagement.csproj" />
+    <ProjectReference Include="..\Admin.SEO\Admin.SEO.csproj" />
+    <ProjectReference Include="..\Admin.TemplatePage\Admin.TemplatePage.csproj" />
+  </ItemGroup>
+
+
+
+</Project>

@@ -1,0 +1,189 @@
+﻿@model Admin.LayoutPage.Controllers.EditModel
+
+@using Admin.LayoutPage.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+   
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+                            <div class="form-group">
+                                <label for="title">Name</label>
+                                <input required type="text" class="form-control" id="Name" value="@Model.Detail.Name" name="Name" aria-describedby="Name" placeholder="nhập tên...">
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Chủ đề</label>
+                                <input type="text" class="form-control" id="title" value="@Model.Detail.Title" name="title" aria-describedby="title" placeholder="nhập tiêu đề...">
+                            </div>
+                            <div class="form-group">
+                                <label for="TypeSlider" class="text-bold">Loại hiển thị</label>
+
+                                @{
+                                    List<RadioData> itemRadioTypeView = new List<RadioData>();
+                                    itemRadioTypeView.Add(new RadioData { Text = "Danh sách", Id = "TypeView_list", Value = "list" });
+                                    itemRadioTypeView.Add(new RadioData { Text = "Tab", Id = "TypeView_tab", Value = "tab" });
+                                    RadioModel radioTypeViewModel = new RadioModel();
+                                    radioTypeViewModel.Id = "TypeView";
+                                    radioTypeViewModel.Class = "row";
+                                    radioTypeViewModel.Style = "margin-left:5px";
+                                    radioTypeViewModel.Items = itemRadioTypeView;
+                                    radioTypeViewModel.SelectedValue = Model.Detail.TypeView;
+
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.RadioComponent), radioTypeViewModel)
+                            </div>
+                            <div class="form-group">
+                                <label for="Section">Section</label>
+
+                                @{
+
+                                    CodeMirrorModel codeMirrorSection = new CodeMirrorModel();
+                                    codeMirrorSection.Id = "Section";
+                                    codeMirrorSection.FirstLoadLib = true;
+                                    codeMirrorSection.Content = Model.Detail.Section;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorSection)
+                            </div>
+                            <div class="form-group" id="div_ListTabHtml">
+                                <label for="ListItemHtml">Tabs</label>
+
+                                @{
+
+                                    CodeMirrorModel codeMirrorListTabHtml = new CodeMirrorModel();
+                                    codeMirrorListTabHtml.Id = "ListTabHtml";
+                                    codeMirrorListTabHtml.Content = Model.Detail.ListTabHtml;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorListTabHtml)
+                            </div>
+                            <div class="form-group">
+                                <label for="ListItemHtml">Items</label>
+
+                                @{
+
+                                    CodeMirrorModel codeMirrorListItemHTML = new CodeMirrorModel();
+                                    codeMirrorListItemHTML.Id = "ListItemHTML";
+                                    codeMirrorListItemHTML.Content = Model.Detail.ListItemHtml;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorListItemHTML)
+                            </div>
+                            <div class="form-group" id="div_ListItemHtml">
+                                <label for="ListItemHtml">Child Items</label>
+
+                                @{
+
+                                    CodeMirrorModel codeMirrorListItemChildHTML = new CodeMirrorModel();
+                                    codeMirrorListItemChildHTML.Id = "ListItemChildHtml";
+                                    codeMirrorListItemChildHTML.Content = Model.Detail.ListItemChildHtml;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorListItemChildHTML)
+                            </div>
+                            <div class="form-group" id="">
+                                <label for="ScriptBlock">Script Block</label>
+
+                                @{
+
+                                    CodeMirrorModel codeMirrorScriptBlock = new CodeMirrorModel();
+                                    codeMirrorScriptBlock.Id = "ScriptBlock";
+                                    codeMirrorScriptBlock.CodeMode = "javascript";
+                                    codeMirrorScriptBlock.Content = Model.Detail.ScriptBlock;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorScriptBlock)
+                            </div>
+                            <div class="form-group" id="">
+                                <label for="StyleBlock">Style Block</label>
+
+                                @{
+
+                                    CodeMirrorModel codeMirrorStyleBlock = new CodeMirrorModel();
+                                    codeMirrorStyleBlock.Id = "StyleBlock";
+                                    codeMirrorStyleBlock.Content = Model.Detail.StyleBlock;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorStyleBlock)
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Nguồn dữ liệu</label>
+                                <input required type="text" class="form-control" id="SourceData" value="@Model.Detail.SourceData" name="SourceData" aria-describedby="SourceData" placeholder="nhập nguồn dữ liệu...">
+                            </div>
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer mt-2">
+                        <div class="demo-inline-spacing">
+                            <button onclick="_action.Save('uploadForm')" type="button" class="btn rounded-pill btn-primary">
+                                <span class="tf-icons bx bx-save me-1"></span>Lưu
+                            </button>
+                            <a type="button" href="@Url.Content(HomePageConstants.Route.PageIndex)" class="btn rounded-pill btn-secondary">
+                                <span class="tf-icons bx bx-x me-1"></span>Đóng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+@section Scripts{
+
+    <script asp-append-version="true" src="@Url.Content(HomePageConstants.ModuleInfo.PathCommand)/homepage/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@HomePageConstants.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminHomePage_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }  
+        function ShowElementsOfTabView() {
+            var selectedValue = $("input[type=radio][name=TypeView_radio]:checked").val();
+            if (selectedValue == "tab") {
+                $("#div_ListItemHtml").show();
+                $("#div_ListTabHtml").show();
+            } else {
+                $("#div_ListItemHtml").hide();
+                $("#div_ListTabHtml").hide();
+            }
+        }
+        $(document).ready(function () {
+            ShowElementsOfTabView();
+            $("input[type=radio][name=TypeView_radio]").on("change", function () {
+                ShowElementsOfTabView()
+            });
+
+        });
+    </script>
+}

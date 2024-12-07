@@ -1,0 +1,117 @@
+﻿@model Admin.TemplatePage.Controllers.EditModel
+
+@using Admin.TemplatePage.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+                            <div class="row">
+                                <div class="form-group col">
+                                    <label for="title">Name</label>
+                                    <input required type="text" class="form-control" id="Name" value="@Model.Detail.Name" name="Name" aria-describedby="Name" placeholder="nhập tên...">
+                                </div>
+                                <div class="form-group col">
+                                    <label for="title">Url</label>
+                                    <input required type="text" class="form-control" id="Url" value="@Model.Detail.Url" name="Url" aria-describedby="Url" placeholder="nhập đường dẫn...">
+                                </div>
+                            </div>
+                            <div class="form-group col">
+                                <label for="title">Danh sách Parameters </label>
+                                <input  type="text" class="form-control" id="Parameters" value="@Model.Detail.Parameters" name="Parameters" aria-describedby="Url" placeholder="nhập parameters...">
+                            </div>
+                            <div class="form-group">
+                                <label for="PageType" class="text-bold">Page Type</label>
+
+                                @{
+                                    List<RadioData> itemRadioTypeTemplatePage = new List<RadioData>();
+                                    itemRadioTypeTemplatePage.Add(new RadioData { Text = "Danh mục", Id = "1", Value = "cate" });
+                                    itemRadioTypeTemplatePage.Add(new RadioData { Text = "Chi tiết", Id = "2", Value = "detail" });
+                                    RadioModel radioTypeTemplatePageModel = new RadioModel();
+                                    radioTypeTemplatePageModel.Id = "PageType";
+                                    radioTypeTemplatePageModel.Class = "row";
+                                    radioTypeTemplatePageModel.Style = "margin-left:5px";
+                                    radioTypeTemplatePageModel.Items = itemRadioTypeTemplatePage;
+                                    radioTypeTemplatePageModel.SelectedValue = @Model.Detail.PageType;
+
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.RadioComponent), radioTypeTemplatePageModel)
+                            </div>
+
+
+
+
+                            <div class="form-group">
+                                <label for="Content">Mô tả</label>
+
+                                <textarea rows="7" id="Description" name="Description" class="form-control">@Model.Detail.Description</textarea>
+
+                            </div>
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <a type="button" href="@Url.Content(TemplatePageConstants.Route.PageIndex)" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                        <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(TemplatePageConstants.ModuleInfo.PathCommand)/TemplatePage/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@TemplatePageConstants.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminTemplatePage_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+    </script>
+}

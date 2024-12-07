@@ -1,0 +1,26 @@
+﻿@model Admin.TemplatePage.Controllers.EditModel
+@using Admin.TemplatePage.Constants;
+@using Steam.Core.Base.Models;
+@{
+    SEOModel tabSeo = new SEOModel();
+    tabSeo.SlugGenerateFrom = "Name";
+    tabSeo.GetPostPidFrom = "Pid";
+    tabSeo.GetPostTitlteFrom = "Name";
+    tabSeo.NavListButton = "nav_list_button_plugin";
+    tabSeo.PostPid = Model.Detail.Pid;
+    tabSeo.ModuleCode = "TemplatePage";
+    tabSeo.OgImage = Model.Detail.FilePath + Model.Detail.Image;
+
+}
+
+@try
+{
+    @Html.Partial(TemplatePageConstants.StaticPath.ExtenalViews.SEO.TabSEO, tabSeo);
+
+
+}
+catch (Exception ex)
+{
+    <p>Dịch vụ chưa được tích hợp</p>
+
+}

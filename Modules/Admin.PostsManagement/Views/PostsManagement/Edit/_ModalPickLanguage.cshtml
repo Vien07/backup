@@ -1,0 +1,163 @@
+﻿@using Admin.PostsManagement.Constants;
+@using Steam.Core.Base.Models;
+@using ComponentUILibrary.Models
+@using Steam.Core.LocalizeManagement.Constants;
+
+@{
+
+
+}
+<style>
+    .img-logo-flag {
+        height: 20px;
+        width: 20px;
+    }
+</style>
+<div class="modal fade" id="pickLanguageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered1 modal-simple modal-add-new-cc">
+        <div class="modal-content p-3 p-md-5">
+            <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-4">
+                    <h3>Quản lý bản dịch</h3>
+                    @*<p>Add new card to complete payment</p>*@
+                </div>
+                <div id="pickLanguageForm" class="row g-3" onsubmit="return false">
+                    <div class="col-8">
+
+                        @*<label class="form-label w-100" for="modalAddCard">Card Number</label>*@
+
+                    </div>
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1 mt-3">Thêm</button>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary me-sm-3 me-1 mt-3">Bài viết</button>
+                        <button type="reset" class="btn btn-label-secondary btn-reset mt-3" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #template-customizer .template-customizer-open-btn::before {
+        background-image: url('data:image/png;base64,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') !important;
+    }
+</style>
+
+<div id="template-customizer" class="invert-bg-white template-customizer" style="visibility: visible;">
+    <a href="javascript:OpenConfigModel()" class="template-customizer-open-btn" tabindex="-1"></a> <div class="p-4 m-0 lh-1 border-bottom template-customizer-header position-relative py-3">
+        <h4 class="template-customizer-t-panel_header mb-2">Quản lý đa ngôn ngữ</h4>
+        @*<p class="template-customizer-t-panel_sub_header mb-0">Customize and preview in real time</p>*@
+        <div class="d-flex align-items-center gap-2 position-absolute end-0 top-0 mt-4 me-3">
+            <a href="javascript:void(0)" class="template-customizer-reset-btn text-body" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Reset Customizer">
+                <i class="bx bx-refresh fs-4"></i>
+                <span class="badge rounded-pill bg-danger badge-dot badge-notifications"></span>
+            </a>
+            <a href="javascript:void(0)" onclick="CloseConfigModel()" class="template-customizer-close-btn fw-light text-body" tabindex="-1">
+                <i class="bx bx-x fs-4"></i>
+            </a>
+        </div>
+    </div> <div class="template-customizer-inner">
+
+        <div class="template-customizer-layout">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-pills card-header-pills" role="tablist">
+                        @*<li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-within-card-adminconfig" aria-controls="navs-pills-within-card-active" aria-selected="true">Quản lý đa ngôn ngữ</button>
+                        </li>*@
+                        @*<li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-within-card-websiteconfig" aria-controls="navs-pills-within-card-link" aria-selected="false" tabindex="-1">Website</button>
+                        </li>*@
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content p-0">
+                        <div class="tab-pane fade active show" id="navs-pills-within-card-adminconfig" role="tabpanel">
+                            <form id="Admin_PostsManagementConfig" class="form form-vertical mt-3">
+                                <div class="form-body">
+                                    <div class="row">
+
+                                        <div class="col-6">
+                                            @{
+
+                                                List<SelectControlData> aa = new List<SelectControlData>();
+                                                aa.Add(new SelectControlData { Name = "<img class=\"img-logo-flag\" src=\"" + @Url.Content(LocalizedContentPropertyConstants.ModuleInfo.PathAssets) + "/flags/vietnam.png\" /> Việt Nam", Value = "vi" });
+                                                aa.Add(new SelectControlData { Name = "<img class=\"img-logo-flag\" src=\"" + @Url.Content(LocalizedContentPropertyConstants.ModuleInfo.PathAssets) + "/flags/united-kingdom.png\" /> English", Value = "en" });
+                                                aa.Add(new SelectControlData { Name = "<img class=\"img-logo-flag\" src=\"" + @Url.Content(LocalizedContentPropertyConstants.ModuleInfo.PathAssets) + "/flags/china.png\" /> Chinese", Value = "cn" });
+                                                aa.Add(new SelectControlData { Name = "<img class=\"img-logo-flag\" src=\"" + @Url.Content(LocalizedContentPropertyConstants.ModuleInfo.PathAssets) + "/flags/south-korea.png\" /> Korean", Value = "kr" });
+                                                aa.Add(new SelectControlData { Name = "<img class=\"img-logo-flag\" src=\"" + @Url.Content(LocalizedContentPropertyConstants.ModuleInfo.PathAssets) + "/flags/japan.png\" /> Japanese", Value = "jp" });
+                                                NiceSelectModel selectModel2 = new NiceSelectModel();
+                                                selectModel2.Data = aa;
+                                                selectModel2.Id = "LangCode";
+                                                selectModel2.Size = "";
+                                                selectModel2.DefaultValue = "vi";
+                                                selectModel2.DefaultText = "Việt Nam";
+                                                selectModel2.Class = "nice-select";
+                                            }
+                                            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+                                        </div>
+                                        <div class="col-4">
+                                            <button type="submit" class="btn btn-primary me-sm-3">Thêm</button>
+                                        </div>
+
+
+                                    </div>
+                                    <div>
+                                        @{
+                                            ComponentUILibrary.Models.TableData table = new ComponentUILibrary.Models.TableData();
+                                            table.ID = "test2";
+                                            table.Class = "table table-hover bg-white mb-0 ";
+                                            table.Body = "";
+
+                                            List<TableHead> tableHead = new List<TableHead>();
+                                            tableHead.Add(new TableHead { Name = "#", Width = 1, Filter = "ASC", OrderBy = "Order" });
+                                            tableHead.Add(new TableHead { Name = "Language", Width = 1 });
+                                            tableHead.Add(new TableHead { Name = "Action", Width = 100 });
+                                            table.Header = tableHead;
+                                        }
+                                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TableComponent), new { table = table })
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end mt-2">
+                                        <button type="button" onclick="_action.SaveConfig('Admin_PostsManagementConfig','Admin')" class="btn btn-primary me-1 mb-1">Cập nhật</button>
+                                        @*                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Default</button>
+                                        *@
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--<div class="tab-pane fade" id="navs-pills-within-card-websiteconfig" role="tabpanel">
+                            <form id="Website_PostsManagementConfig" class=" mt-3 form form-vertical">
+                                <div class="form-body">
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="PageSize">PageSize</label>
+                                                <input data-toggle="tooltip" data-placement="top" title="PageSize" type="text" id="Website.PageSize" class="form-control" value="Model.GetConfigValue(Config.Website.PageSize)" name="Config.Website.PageSize" placeholder="PageSize">
+                                            </div>
+
+                                        </div>
+                                        <div class="col-12 d-flex mt-2 justify-content-end mt-2">
+                                            <button type="button" onclick="_action.SaveConfig('Website_PostsManagementConfig','Webiste')" class="btn btn-primary me-1 mb-1 ">Cập nhật</button>-->
+                                            @*                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Default</button>
+                                            *@
+                                        <!--</div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>

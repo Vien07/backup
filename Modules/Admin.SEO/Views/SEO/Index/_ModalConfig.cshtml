@@ -1,0 +1,94 @@
+﻿@using Admin.SEO.Constants;
+@using ComponentUILibrary.Models;
+@using Steam.Core.Common;
+@using ConfigAdmin = Admin.SEO.Constants.SEOConstants.Config.Admin;
+
+@model List<ComponentUILibrary.ViewComponents.ConfigModel>;
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-within-card-adminconfig" aria-controls="navs-pills-within-card-active" aria-selected="true">Admin</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-within-card-websiteconfig" aria-controls="navs-pills-within-card-link" aria-selected="false" tabindex="-1">Website</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content p-0">
+            <div class="tab-pane fade active show" id="navs-pills-within-card-adminconfig" role="tabpanel">
+                <form id="Admin_SEOConfig" class="form form-vertical mt-3">
+                    <div class="form-body">
+                        @*<div class="form-group">
+                                <label for="Admin_">Danh sách modules</label>
+                                @{
+
+                                    TagifyModel tagifyModel = new TagifyModel();
+                                    tagifyModel.Id = ConfigAdmin.Modules;
+
+                                    tagifyModel.FirstLoadLib = true;
+                                    tagifyModel.Value = Model.GetConfigValue(ConfigAdmin.Modules);
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TagifyComponent), tagifyModel)
+
+                            </div>*@
+                        <div>
+                            @{
+
+                                KeyValueModel keyValueModel = new KeyValueModel();
+                                keyValueModel.Id = ConfigAdmin.Modules;
+                                keyValueModel.SelectedValue = Model.GetConfigValue(ConfigAdmin.Modules);
+
+                                //keyValueModel.Value = Model.GetConfigValue(ConfigAdmin.Modules);
+                            }
+                            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.KeyValueComponent), keyValueModel)
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="PageSize">PageSize</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="PageSize" type="text"
+                                           id="@SEOConstants.Config.Admin.PageSize"
+                                           class="form-control"
+                                           value="@Model.GetConfigValue(ConfigAdmin.PageSize)"
+                                           name="@SEOConstants.Config.Admin.PageSize" placeholder="PageSize">
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-end mt-2">
+                                <button type="button" onclick="_action.SaveConfig('Admin_SEOConfig','Admin')" class="btn btn-primary me-1 mb-1">Apply</button>
+                                @*                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Default</button>
+                                *@
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="navs-pills-within-card-websiteconfig" role="tabpanel">
+                <form id="Website_SEOConfig" class=" mt-3 form form-vertical">
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="PageSize">PageSize</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="PageSize" type="text" id="@SEOConstants.Config.Website.PageSize" class="form-control" value="@(Model.Where(p=>p.Key == SEOConstants.Config.Website.PageSize).FirstOrDefault() !=null?Model.Where(p=>p.Key == SEOConstants.Config.Website.PageSize).FirstOrDefault().Value:"")" name="@SEOConstants.Config.Website.PageSize" placeholder="PageSize">
+                                </div>
+                                <div class="form-group">
+                                    <label for="PreSlug">PreSlug</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="PreSlug" type="text" id="@SEOConstants.Config.Website.PreSlug" class="form-control" value="@(Model.Where(p=>p.Key == SEOConstants.Config.Website.PreSlug).FirstOrDefault() !=null?Model.Where(p=>p.Key == SEOConstants.Config.Website.PreSlug).FirstOrDefault().Value:"")" name="@SEOConstants.Config.Website.PreSlug" placeholder="PreSlug">
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end mt-2">
+                                <button type="button" onclick="_action.SaveConfig('Website_SEOConfig','Webiste')" class="btn btn-primary me-1 mb-1">Aply</button>
+                                @*                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Default</button>
+                                *@
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

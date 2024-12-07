@@ -1,0 +1,27 @@
+﻿@using Admin.ProductManagement.Services;
+
+@model dynamic;
+
+@using ComponentUILibrary.Models
+@using Admin.ProductManagement;
+@inject Admin.ProductManagement.Database.ProductManagementContext _context;
+@inject IProductCategoryService rep;
+
+@{
+    var listCate = rep.GetChildrenPostCategory(Model.ParentId);
+}
+
+
+<div class="form-group">
+    <label for="title">Danh mục phụ</label>
+    @{
+
+        TreeSelectModel treeSelectModel = new TreeSelectModel();
+        treeSelectModel.ID = Model.Id;
+        treeSelectModel.Class = Model.Class;
+        treeSelectModel.SelectedValue = Model.SelectedValue;
+        treeSelectModel.FirstLoadLib = true;
+        treeSelectModel.MapToObj(listCate, "Pid", "Title", "ParentID", "Order", "Enabled", Model.ParentId.ToString());
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TreeSelectComponent), new { model = treeSelectModel })
+</div>

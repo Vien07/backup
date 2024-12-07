@@ -1,0 +1,23 @@
+﻿@using ComponentUILibrary.Models
+@using Microsoft.Extensions.Configuration;
+
+@model NavLangModel
+@{
+    string tabDiv = string.Empty;
+
+}
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    @foreach (var item in Model.ListLangs)
+    {
+        <li class="nav-item" role="presentation">
+            <a  href="#divModalInfo_@item.Lang" @*onclick="_action.ChangeLang('@item.Lang')"*@ class="nav-link nav-link-lang @(Model.Active == item.Lang?"active":"")"  id="lang-tab-@item.Lang" data-bs-toggle="tab" role="tab" aria-controls="divModalInfo_@item.Lang" aria-selected="true"><span class="@item.Icon">  </span> @item.Name</a>
+        </li>
+
+    }
+</ul>
+
+
+<script>
+    var DefaultLang = '@Model.DefaultLang'
+    //var CurrentNumberLang = '@Model.ListLangs.Count'
+</script>

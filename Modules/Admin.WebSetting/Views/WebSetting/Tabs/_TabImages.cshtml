@@ -1,0 +1,66 @@
+﻿@model Admin.WebSetting.Controllers.PageModel
+@using ComponentUILibrary.Models
+@using Admin.WebSetting.Constants
+@{
+    string getValue(string key)
+    {
+        if (Model.EditModel.ContainsKey(key))
+        {
+            return Model.EditModel[key];
+        }
+        else
+        {
+            return "";
+        }
+    }
+}
+<div class="row m-3">
+    @*<div class="col-md-12">
+            <div class="form-group">
+                <label for="Logo">Logo</label>
+                @{
+
+                    FileUploadControlModel fileUploadModelLogo = new FileUploadControlModel();
+                    fileUploadModelLogo.Id = WebSettingConstants.ConfigName.Logo;
+                    fileUploadModelLogo.Class = "";
+                    fileUploadModelLogo.FirstLoadLib = true;
+                    fileUploadModelLogo.ChooseFromServer = false;
+
+                    fileUploadModelLogo.SelectedFiles = WebSettingConstants.StaticPath.Asset.Image + getValue(WebSettingConstants.ConfigName.Logo);// fileUploadModel.GenerateFileJson(listFile);
+
+                }
+                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModelLogo)
+            </div>
+        </div>*@
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="ogImage">og:Image</label>
+            @{
+
+                FileUploadControlModel fileUploadModelOgImage = new FileUploadControlModel();
+                fileUploadModelOgImage.Id = WebSettingConstants.ConfigName.ogImage;
+                fileUploadModelOgImage.Class = ""; fileUploadModelOgImage.FirstLoadLib = true;
+
+                fileUploadModelOgImage.ChooseFromServer = true;
+                fileUploadModelOgImage.SelectedFiles = Steam.Core.Base.Constant.SystemInfo.VirtualFolder + WebSettingConstants.StaticPath.Asset.Image + getValue(WebSettingConstants.ConfigName.ogImage);// fileUploadModel.GenerateFileJson(listFile);
+
+            }
+            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModelOgImage)
+        </div>
+    </div>
+    @*<div class="col-md-12">
+            <div class="form-group">
+                <label for="ogImage">Favicon</label>
+                @{
+
+                    FileUploadControlModel fileUploadModelFavico = new FileUploadControlModel();
+                    fileUploadModelFavico.Id = WebSettingConstants.ConfigName.Favicon;
+                    fileUploadModelFavico.Class = "";
+                    fileUploadModelFavico.ChooseFromServer = false;
+                    fileUploadModelFavico.SelectedFiles = Steam.Core.Base.Constant.SystemInfo.VirtualFolder + WebSettingConstants.StaticPath.Asset.Image + getValue(WebSettingConstants.ConfigName.Favicon);// fileUploadModel.GenerateFileJson(listFile);
+
+                }
+                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModelFavico)
+            </div>
+        </div>*@
+</div>

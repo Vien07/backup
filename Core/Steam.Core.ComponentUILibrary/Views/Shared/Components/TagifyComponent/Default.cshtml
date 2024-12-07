@@ -1,0 +1,95 @@
+﻿@using ComponentUILibrary.Models
+@using ComponentUILibrary
+@using Steam.Core.ComponentUILibrary.Constant
+
+@model TagifyModel
+@{
+    string VirtualFolder = ComponentUILibraryConstant.VirtualFolder;
+
+}
+@{
+    //var a = Model.PageIndex;
+}
+@if (Model.FirstLoadLib)
+{
+
+    <link href="@Url.Content(VirtualFolder+TagifyConstants.PathLib)/tagify.css" rel="stylesheet" />
+    <script src="@Url.Content(VirtualFolder+TagifyConstants.PathLib)/tagify.js"></script>
+}
+
+@if (Model.Type == 0)
+{
+    <input id="tagify_@Model.Id" class="form-control @Model.Class" value="" />
+}
+else if (Model.Type == 1)
+{
+    <input id="tagify_@Model.Id" class="tagify-email-list @Model.Class" value="" />
+    <button type="button" class="btn btn-sm rounded-pill btn-icon btn-outline-primary mb-1"> <span class="tf-icons bx bx-plus"></span> </button>
+
+}
+<input hidden id="@Model.Id" class="form-control @Model.Class" name="@Model.Id" value="@Model.Value" />
+
+
+<script>
+    var currentTagify_Value_@Model.Id= @Html.Raw(Model.ConvertValueToJsonArray());
+    var tagify_@Model.Id= {}
+    $(function () {
+        var tempType = '@Model.Type'
+       var input_@Model.Id = document.getElementById('tagify_@Model.Id');
+             tagify_@Model.Id = new Tagify(input_@Model.Id);
+            tagify_@(Model.Id).on('remove', onTagRemoved_@(Model.Id));
+            tagify_@(Model.Id).on('add', onTagAdded_@(Model.Id));
+            tagify_@(Model.Id).addTags(currentTagify_Value_@Model.Id);
+        if (tempType == '1') {
+            button_@Model.Id = input_@(Model.Id).nextElementSibling;
+
+            button_@(Model.Id).addEventListener("click", onAddButtonClick_@(Model.Id))
+        }
+
+    });
+
+
+    function onAddButtonClick_@(Model.Id)() {
+        tagify_@(Model.Id).addEmptyTag()
+    }
+
+
+        function onTagRemoved_@(Model.Id)(e) {
+            debugger;
+            console.log('Tags after removing:',  tagify_@(Model.Id).value);
+            var removedTag = e.detail.data.value;
+            console.log('Removed tag:', removedTag);
+            SetTagify_Value_@(Model.Id)(removedTag.trim(),"remove");
+
+        }
+            function onTagAdded_@(Model.Id)(e) {
+            console.log('Tags after adding:',  tagify_@(Model.Id).value);
+            $("#@(Model.Id)").val();
+            var addedTag = e.detail.data.value;
+            console.log('Added tag:', addedTag);
+                SetTagify_Value_@(Model.Id)(addedTag.trim(),"add");
+        }
+    function SetTagify_Value_@(Model.Id)(value, action) {
+         var tempList = currentTagify_Value_@(Model.Id)
+         if (action == "add") {
+             tempList.push(value)
+         }
+         else if (action == "remove") {
+             var indexRemove = tempList.indexOf(value);
+             if (indexRemove !== -1) {
+                 tempList.splice(indexRemove, 1);
+             }
+
+        }
+        var rs = "";
+        tempList = [...new Set(tempList)];
+        tempList.forEach(function (item) {
+            rs += item+";"
+        });
+        $("#@(Model.Id)").val(rs)
+
+        currentTagify_Value_@(Model.Id)= [...tempList];;
+         console.log("tempList",tempList)
+     }
+
+</script>

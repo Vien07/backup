@@ -1,0 +1,34 @@
+﻿@model Admin.LayoutPage.Controllers.MenuStyleEditModel
+
+@using Admin.LayoutPage.Constants;
+@using ComponentUILibrary.Models
+
+<div class="card-content p-lg-2 pr-2">
+    <form id="uploadForm" class="mt-2">
+
+        <div class="mt-2">
+            <input hidden id="MenuStylePid" class="pid" name="Pid" value="@Model.Detail.Pid">
+            <div class="form-group">
+                <label for="title">Tiêu đề</label>
+                <input required type="text" class="form-control" id="title" value="@Model.Detail.Title" name="title" aria-describedby="title" placeholder="nhập tiêu đề...">
+            </div>
+
+            <div class="form-group">
+                <label for="Content">Menu block</label>
+
+                @{
+
+                    CodeMirrorModel codeMirrorMenuBlock = new CodeMirrorModel();
+                    codeMirrorMenuBlock.Id = "MenuBlock";
+                    codeMirrorMenuBlock.FirstLoadLib = true;
+                    codeMirrorMenuBlock.Content = Model.Detail.MenuBlock;
+                }
+                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorMenuBlock)
+            </div>
+        </div>
+    </form>
+    <div class="modal-footer">
+        @*<a type="button" href="@HeaderPageConstants.Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+            <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>*@
+    </div>
+</div>

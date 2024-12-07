@@ -1,0 +1,135 @@
+﻿@model Admin.Slider.EditModel
+
+@using Admin.Slider.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+
+                            <div class="form-group">
+                                <label for="title">Tiêu đề</label>
+                                <input required type="text" class="form-control" id="title" value="@Model.Detail.Title" name="title" aria-describedby="title" placeholder="nhập tiêu đề...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="TypeSlider" class="text-bold">Loại hiển thị</label>
+
+                                @{
+                                    List<RadioData> itemRadioTypeSlider = new List<RadioData>();
+                                    itemRadioTypeSlider.Add(new RadioData { Text = "Hình ảnh", Id = "Position_left", Value = "image" });
+                                    itemRadioTypeSlider.Add(new RadioData { Text = "Video", Id = "Position_center", Value = "video" });
+                                    RadioModel radioTypeSliderModel = new RadioModel();
+                                    radioTypeSliderModel.Id = "TypeMedia";
+                                    radioTypeSliderModel.Class = "row";
+                                    radioTypeSliderModel.Style = "margin-left:5px";
+                                    radioTypeSliderModel.Items = itemRadioTypeSlider;
+                                    radioTypeSliderModel.SelectedValue = Model.Detail.TypeMedia;
+
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.RadioComponent), radioTypeSliderModel)
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">Media</label>
+
+                                @{
+
+                                    var imageURl = "";
+                                    if (Model != null)
+                                    {
+                                        imageURl = Model.Detail.FilePath + Model.Detail.Images;
+                                    }
+
+                                    FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+                                    fileUploadModel.Id = "Images";
+                                    fileUploadModel.Class = "";
+                                    fileUploadModel.IsMultiple = false;//true thì tạo control up nhiều ảnh
+                                    fileUploadModel.SelectedFiles = imageURl;
+                                    fileUploadModel.Images_Alt = Model.Detail.Images_Alt;
+
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModel)
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="Description">Mô tả</label>
+                                @{
+
+                                    EditorModel editorModel = new EditorModel();
+                                    editorModel.Id = "Description";
+                                    editorModel.Cols = "40";
+                                    editorModel.Rows = "70";
+                                    editorModel.Content = Model.Detail.Description;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorModel)
+
+                            </div>
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <a type="button" href="@SliderConstants.Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                        <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+@section Scripts{
+    <script asp-append-version="true" src="@(SliderConstants.ModuleInfo.PathCommand)/slider/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@SliderConstants.Config.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminSlider_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+    </script>
+}

@@ -1,0 +1,97 @@
+﻿@model Admin.HomePage.EditModel
+
+@using Admin.HomePage.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+   
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+                            <div class="form-group">
+                                <label for="title">Name</label>
+                                <input required type="text" class="form-control" id="Name" value="@Model.Detail.Name" name="Name" aria-describedby="Name" placeholder="nhập tên...">
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Chủ đề</label>
+                                <input  type="text" class="form-control" id="title" value="@Model.Detail.Title" name="title" aria-describedby="title" placeholder="nhập tiêu đề...">
+                            </div>
+                            <div class="form-group">
+                                <label for="Section">Section</label>
+                                @{
+
+                                    EditorModel editorModel = new EditorModel();
+                                    editorModel.Id = "Section";
+                                    editorModel.Cols = "30";
+                                    editorModel.Rows = "10";
+                                    editorModel.Content = Model.Detail.Section;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorModel)
+
+                            </div>
+                            <div class="form-group">
+                                <label for="title">List Item - HTML</label>
+                                <textarea required type="text" class="form-control" id="ListItemHTML" value="" name="ListItemHTML" aria-describedby="ListItemHTML" placeholder="nhập html...">@Model.Detail.ListItemHtml</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Nguồn dữ liệu</label>
+                                <input required type="text" class="form-control" id="SourceData" value="@Model.Detail.SourceData" name="SourceData" aria-describedby="SourceData" placeholder="nhập nguồn dữ liệu...">
+                            </div>
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <a type="button" href="@HomePageConstants.Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                        <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+@section Scripts{
+
+    <script asp-append-version="true" src="@(HomePageConstants.ModuleInfo.PathCommand)/homepage/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@HomePageConstants.Config.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminHomePage_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }  
+    </script>
+}

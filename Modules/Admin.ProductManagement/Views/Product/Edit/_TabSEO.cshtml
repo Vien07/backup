@@ -1,0 +1,29 @@
+﻿@model Admin.ProductManagement.Controllers.ProductController.EditModel;
+@using Admin.ProductManagement.Constants;
+@using Steam.Core.Base.Models;
+@{
+    SEOModel tabSeo = new SEOModel();
+    tabSeo.SlugGenerateFrom = "Title";
+    tabSeo.GetCatePidFrom = "CatePid";
+    tabSeo.GetPostPidFrom = "Pid";
+    tabSeo.GetPostTitlteFrom = "Title";
+    tabSeo.NavListButton = "nav_list_button_plugin";
+    tabSeo.ModuleCode = "ProductPost";
+
+    tabSeo.PostPid = Model.Detail.Pid;
+    tabSeo.OgImage = Model.Detail.FilePath + Model.Detail.Images;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TabSEOComponent), tabSeo)*@
+
+@try
+{
+    @Html.Partial(ProductConstants.ConfigSEO.TabSEO, tabSeo);
+
+    @*@await Html.PartialAsync("/Views/SEOntegrated/TabSEO.cshtml", tabSeo);*@
+
+}
+catch (Exception ex)
+{
+    <p>Dịch vụ chưa được tích hợp</p>
+}

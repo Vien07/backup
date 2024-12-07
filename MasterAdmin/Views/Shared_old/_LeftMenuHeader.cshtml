@@ -1,0 +1,42 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<style>
+      @@keyframes colorChange {
+        0% {
+            color: #435ebe;
+        }
+        25% {
+            color: #3c549b;
+        }
+        50% {
+            color: #3d85c6;
+        }
+        75% {
+            color: #a2afd5;
+        }
+        100% {
+            color: #7b8dc7;
+        }
+    }
+
+    .color-changing {
+      animation: colorChange 4s infinite; /* 4s duration, infinite loop */
+    }
+</style>
+<div class="sidebar-header " style=" display: flex; justify-content: center; align-items: center">
+    <div class="d-flex justify-content-between">
+        <div style=" display: flex; justify-content: center; align-items: center" class="logo">
+            <a href="/">
+               <img height="80px" width="80px" src="@Steam.Core.Base.Constant.SourceInfo.LogoTeam" alt="Logo" srcset="">
+            </a>
+            <p class="ml-5 color-changing" style="color: #435ebe;font-size:20px"> &ensp;.S:-Teams</p>
+        </div>
+        <div class="toggler">
+            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+        </div>
+    </div>
+</div>
+

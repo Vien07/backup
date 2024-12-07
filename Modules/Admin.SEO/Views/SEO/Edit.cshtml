@@ -1,0 +1,141 @@
+﻿@model Admin.SEO.Controllers.SEOController.EditModel
+
+@using Admin.SEO.Constants;
+@using ComponentUILibrary.Models
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+
+<section class="section card">
+    <form id="uploadForm">
+        <input name="Pid" hidden value="@Model.Detail.Pid"/>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="PostSlug">Đường dẫn tĩnh</label>
+                    <input type="text" class="form-control" id="PostSlug" value="@Model.Detail.PostSlug" name="PostSlug" aria-describedby="PostSlug" placeholder="nhập đường dẫn...">
+                </div>
+                <div class="row">
+                    <div class="form-group col-3">
+
+                        <label for="OgType">Og:Type</label>
+
+                        @{
+                            List<SelectControlData> aa = new List<SelectControlData>();
+                            aa.Add(new SelectControlData { Name = "website", Value = "website" });
+                            aa.Add(new SelectControlData { Name = "article", Value = "article" });
+                            aa.Add(new SelectControlData { Name = "product", Value = "product" });
+                            NiceSelectModel selectModel2 = new NiceSelectModel();
+                            selectModel2.Data = aa;
+                            selectModel2.Id = "OgType";
+                            selectModel2.Size = "small";
+                            selectModel2.Class = "nice-select ";
+                            selectModel2.SelectedValue = Model.Detail.OgType;
+                        }
+                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="TagKeys">Từ khóa</label>
+                    @{
+
+                        TagifyModel tagKey = new TagifyModel();
+                        tagKey.Id = "TagKeys";
+
+                        tagKey.FirstLoadLib = true;
+                        tagKey.SeparateSympol = ",";
+                        tagKey.Value = Model.Detail.TagKeys;
+                    }
+                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TagifyComponent), tagKey)
+                    @*<input type="text" class="form-control" value="@data.TagKeys" id="TagKeys" name="TagKeys" aria-describedby="TagKeys" placeholder="nhập từ khóa...">*@
+                </div>
+                <div class="form-group">
+                    <label for="MetaDescription">Mô tả</label>
+                    <textarea type="text" class="form-control" rows="8" id="MetaDescription" name="MetaDescription" aria-describedby="MetaDescription" placeholder="nhập mô tả...">@Model.Detail.MetaDescription</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ExtraMeta">Extra Meta</label>
+                    @{
+
+                        CodeMirrorModel codeMirrorExtraMeta = new CodeMirrorModel();
+                        codeMirrorExtraMeta.Id = "ExtraMeta";
+                        codeMirrorExtraMeta.FirstLoadLib = true;
+                        codeMirrorExtraMeta.Content = Model.Detail.ExtraMeta;
+                        codeMirrorExtraMeta.CodeMode = "xml";
+                    }
+                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorExtraMeta)
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="Content">Thẻ meta</label>
+
+                    @{
+
+                        CodeMirrorModel codeMirrorFooterBlock = new CodeMirrorModel();
+                        codeMirrorFooterBlock.Id = "Meta";
+                        codeMirrorFooterBlock.Content = Model.Detail.Meta;
+                        codeMirrorFooterBlock.CodeMode = "xml";
+                    }
+                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorFooterBlock)
+                </div>
+            </div>
+        </div>
+
+        @Html.AntiForgeryToken()
+        <div class="demo-inline-spacing">
+            <button id="btnSaveSeoForm" onclick="_action.Save('uploadForm')" type="button" class="btn rounded-pill btn-success">
+                Lưu SEO
+            </button>
+            <button id="" onclick="_action.GenerateMetaTag('uploadForm')" type="button" class="btn rounded-pill btn-warning">
+                Tạo Meta
+            </button>
+            <a href="@Url.Content(SEOConstants.Route.PageIndex)" type="button" class="btn rounded-pill btn-secondary">
+                Đóng
+            </a>
+        </div>
+    </form>
+</section>
+
+@section Scripts{
+    <script asp-append-version="true" src="@(SEOConstants.ModuleInfo.PathCommand)/seo/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@SEOConstants.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminSEO_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+    </script>
+}

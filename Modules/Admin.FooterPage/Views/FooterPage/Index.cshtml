@@ -1,0 +1,165 @@
+﻿
+@model Admin.FooterPage.FooterPageModel
+@using ComponentUILibrary.Models
+@using Admin.FooterPage.Constants
+@{
+//Layout = "~/Views/Shared/_Layout.cshtml";
+
+//PaginationModel test = new PaginationModel();
+//test.PageIndex = 1;
+//test.PageSize = 10;
+}
+
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+<section class="section">
+    <div class="row" id="table-hover-row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+
+                    <form id="SearchForm" class="row col-xl-12 col-sm-12 cms-filter-row">
+
+                        <div style="padding:0" class="col-sm-3 cms-filter">
+                            <a type="button" href="@FooterPageConstants.Config.Route.PageEdit" class="btn btn-primary ">
+                                Thêm Footer
+                            </a>
+                        </div>
+                        <!--filter action-->
+
+                    </form>
+
+                    <div class="form-group ml-auto  col-auto cms-setting">
+                        <i onclick="_action_FooterPage.OpenSettingModal()" class="fas fa-cog "></i>
+                    </div>
+                </div>
+                <div class="card-content p-lg-2 pr-2 cms-div-table ">
+                    <!-- table hover -->
+                    <div class="table-responsive">
+                        @{
+                            ComponentUILibrary.Models.TableData table = new ComponentUILibrary.Models.TableData();
+                            table.ID = "TableFooterPage";
+                            table.Class = "table table-hover bg-white mb-0 ";
+                            table.Body = await Html.PartialAsync(FooterPageConstants.StaticPath.PartialView.Index_Table, Model.List);
+                            table.ActionMove = "_action_FooterPage.Move";
+                            List<TableHead> tableHead = new List<TableHead>();
+                            tableHead.Add(new TableHead { Name = "#", Width = 50, OrderBy = "Order" });
+                            tableHead.Add(new TableHead { Name = "Kiểu Footer",OrderBy = "Title" });
+                            tableHead.Add(new TableHead { Name = "Active", Width = 1, Class = "text-right" });
+                            tableHead.Add(new TableHead { Name = "Action", Width = 1 });
+                            tableHead.Add(new TableHead { Name = "", Width = 1 });
+
+                            table.Header = tableHead;
+                        }
+                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TableComponent), new { table = table })
+
+
+                        <div class="row mx-0 mt-1 align-items-center">
+                            <div class="col-12 col-sm-6">
+            
+
+                            </div>
+                            <div class=" col-12 col-sm-6  align-items-center" id="divPaging">
+                                <nav style="float:right" class="pagination-wrap d-inline-block" id="navigation_paging" aria-label="navigation">
+                                    @{
+                                        PaginationModel pageModel = new PaginationModel();
+                                        pageModel.PageIndex = 1;
+                                        pageModel.PageSize = 1;
+                                        pageModel.PageCount = Model.List.PageCount;
+                                        pageModel.Id = "";
+                                        pageModel.Class = "";
+                                    }
+                                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PaginationComponent), Model.Pagination)
+
+
+
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- table hover -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*    <div id="divModalInfo">*@
+    <!-- modal -->
+    @*        @await Html.PartialAsync(Model._PartialUrl+Model._PartialModel,Model.ModelFooterPage)
+    *@
+    <div class="modal fade" id="ModelData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModelDataLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModelDataLabel">Thông tin Slide</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NavLangComponent))
+
+                    <div class="tab-content" id="divModalInfo">
+                    </div>
+                </div>
+                @*               <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" onclick="_action_FooterPage.Save()" class="btn btn-primary">Lưu</button>
+
+
+                    </div>*@
+            </div>
+        </div>
+    </div>
+    @*    </div>
+    *@
+    <!-- modal -->
+    <!-- Modal config -->
+    <div id="divModalConfig">
+
+        @await Html.PartialAsync(FooterPageConstants.StaticPath.PartialView.Index_ModalConfig, Model.Configs)
+    </div>
+
+    <!-- end Modal config -->
+    @Html.AntiForgeryToken()
+
+</section>
+@*<button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+        Tooltip on top
+    </button>*@
+<!-- Hoverable rows end -->
+@*@section Scripts{*@
+    <script asp-append-version="true" src="@(FooterPageConstants.ModuleInfo.PathCommand)/footerpage/index.js"></script>
+
+    <script>
+        const ModelView_FooterPage = {
+            RouteIndex: "@FooterPageConstants.Config.Route.PageIndex",
+            DivModalDataID: "divModalInfo_FooterPage",
+            ModalDataID: "ModelData_FooterPage",
+            DivModalConfigID: "divModalConfig_FooterPage",
+            ModalConfigID: "ModalFooterPageConfig",
+            TableDataID: "@table.ID",
+            TbodyId: "tdBody_@table.ID",
+            FromUploadID: "uploadForm_FooterPage",
+            NavPagingID: "navigation_paging_FooterPage",
+            FileUploadID: "Images_FooterPage",
+            SearchFormID: "SearchForm_FooterPage"
+        }
+        let _action_FooterPage = new AdminFooterPage_Index(ModelView_FooterPage);
+        _action_FooterPage.CheckFunction();
+        //var dragger
+
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+
+            //InitDragDropTable()
+        });
+
+
+
+
+    </script>
+@*}*@

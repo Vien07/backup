@@ -1,0 +1,48 @@
+﻿@model Admin.ProductManagement.Controllers.ProductController.EditModel
+@using X.PagedList
+@using Admin.ProductManagement.Constants;
+@using Steam.Core.Base.Constant;
+@using Steam.Core.Common.SteamString;
+
+@if (Model != null && Model.ListPost.Items.Any())
+{
+    int stt = Model.ListPost.PageNumber * Model.ListPost.PageSize - Model.ListPost.PageSize;
+    foreach (var item in Model.ListPost.Items)
+    {
+        stt = stt + 1;
+        <tr id="@item.Pid">
+            <td width="1">
+                <div class="form-check form-check-sm handle">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="form-check-input form-check-primary form-check-glow checkItem" value="@item.Pid" id="checkItem_@item.Pid">
+                    </div>
+                </div>
+            </td>
+            <td width="1"><input tabindex="@(item.Order+1000)" onchange="_action.UpdateOrder(@item.Pid,this.value)" type="number" class="form-control-sm order-input  form-control-plaintext" value="@stt" disabled /></td>
+            <td class="">
+                <div class="avatar avatar-xl rounded me-3">
+                    <img style="border-radius:0px!important" src="@(SystemInfo.MedidaFileServer+ item.FilePath+item.Images)" alt="" srcset="">
+                </div>
+            </td>
+            <td><a href="@ProductConstants.ConfigRoute.PageEdit/@item.Pid" class="cursor-pointer  @(item.Enabled==true?"text-primary":"text-muted") ">@item.Title</a></td>
+            <td>
+                <div class="form-check form-switch">
+                    <input onclick="_action.Enable(@item.Pid,@(item.Enabled==true?"false":"true"))" class="cursor-pointer form-check-input" type="checkbox" id="flexSwitchCheckChecked" @(Model.Detail.PostIds.Contains(item.Pid) ? "checked" : "")>
+                </div>
+            </td>
+            <td class="handle td-handle">
+                <i class="fas fa-grip-horizontal fa-rotate-90"></i>
+
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="7" class="text-center">
+            <span>Không có dữ liệu!!</span>
+        </td>
+
+    </tr>
+}

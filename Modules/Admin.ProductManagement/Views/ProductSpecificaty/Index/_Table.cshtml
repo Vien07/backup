@@ -1,0 +1,42 @@
+﻿@using X.PagedList
+@using Admin.ProductManagement.Constants;
+@using Admin.ProductManagement.Models.ViewModels.ProductSpecificaty;
+@model ProductSpecificatyPagedViewModel;
+
+@if (Model != null && Model.Items.Any())
+{
+    int stt = Model.PageNumber * Model.PageSize - Model.PageSize;
+    foreach (var item in Model.Items)
+    {
+        stt = stt + 1;
+        <tr id="@item.Pid">
+            <td width="1">
+                <div class="form-check form-check-sm handle">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="form-check-input form-check-primary form-check-glow checkItem" value="@item.Pid" id="checkItem_@item.Pid">
+                    </div>
+                </div>
+            </td>
+            <td class="text-bold-500">@Html.Raw(item.Code)</td>
+            <td class="text-bold-500">@Html.Raw(item.Name)</td>
+            <td class="text-bold-500"><div style="background-color:@Html.Raw(item.Value);height:30px;width:30px;border-radius:5px;"></div></td>
+            <td class="text-center">
+                <a href="@ProductSpecificatyConstants.ConfigRoute.PageEdit/@ViewBag.Group/@item.Pid"><i onclick="_action.Edit(@item.Pid)" class="cursor-pointer text-primary fas fa-edit"></i></a>
+                <i onclick="_action.Delete(@item.Pid)" class="cursor-pointer  text-danger fas fa-trash-alt"></i>
+            </td>
+            <td class="handle td-handle">
+                <i class="fas fa-grip-horizontal fa-rotate-90"></i>
+
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="7" class="text-center">
+            <span>Không có dữ liệu!!</span>
+        </td>
+
+    </tr>
+}

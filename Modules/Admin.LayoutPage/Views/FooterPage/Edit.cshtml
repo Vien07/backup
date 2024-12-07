@@ -1,0 +1,159 @@
+﻿@model Admin.LayoutPage.Controllers.FooterPageEditModel
+
+@using Admin.LayoutPage.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+}
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+
+
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+
+                        <ul class="nav nav-tabs alwaystop-header " id="myTab" role="tablist">
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link active" id="content-tab" data-bs-toggle="tab" href="#content" role="tab" aria-controls="content" aria-selected="true">
+                                    <i class="fas fa-font"></i> Nội dung
+                                </a>
+                            </li>
+
+                            <li style="" class="nav_list_button">
+
+                                <div class="">
+
+
+                                    <div class="form-check form-switch " style="float: left; margin-top:7px">
+
+                                        <input @(Model.Detail.Enabled == true ? "checked" : "") onclick="" class="btn cursor-pointer form-check-input" name="CheckBox" type="checkbox" id="CheckBox">
+
+                                    </div>
+                                    <button type="button" id="" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                                    <a type="button" href="@Url.Content(FooterPageConstants.Route.PageIndex)" class="btn btn-danger">X</a>
+
+                                </div>
+                                <div id="nav_list_button_plugin" class="nav_list_button_plugin">
+
+
+                                </div>
+
+                            </li>
+
+
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade active show" id="content" role="tabpanel" aria-labelledby="content-tab">
+                                @Html.Partial(FooterPageConstants.StaticPath.PartialView.Edit_TabContent, Model)
+
+                            </div>
+
+
+
+                        </div>
+                    </form>
+                    @*<div class="modal-footer">
+                        </div>*@
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div @(Model.Detail.Pid == 0 ? "hidden" : "") class="row mt-2" id="divTableChild">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+
+                    <button type="button" onclick="_action.EditChild(0)" class="btn btn-success">Thêm</button>
+                </div>
+                <div class="card-content p-lg-2 pr-2">
+
+                    <div class="row" id="table-hover-row">
+                        <div class="col-12">
+                            <div>
+                                <div class="card-content p-lg-2 pr-2 cms-div-table ">
+                                    <!-- table hover -->
+                                    <div class="table-responsive">
+                                        @{
+                                            ComponentUILibrary.Models.TableData table = new ComponentUILibrary.Models.TableData();
+                                            table.ID = "table_FooterItem";
+                                            table.CheckAllCol = false;
+                                            table.Class = "table table-hover bg-white mb-0 ";
+                                            table.Body = await Html.PartialAsync(FooterPageConstants.StaticPath.PartialView.Edit_Table, Model.List);
+
+                                            List<TableHead> tableHead = new List<TableHead>();
+                                            tableHead.Add(new TableHead { Name = "#", Width = 50 });
+                                            tableHead.Add(new TableHead { Name = "Key" });
+                                            tableHead.Add(new TableHead { Name = "Html" });
+                                            tableHead.Add(new TableHead { Name = "Action", Width = 1 });
+                                            table.Header = tableHead;
+                                        }
+                                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TableComponent), new { table = table })
+
+
+
+                                    </div>
+
+                                    <!-- table hover -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+
+</section>
+<div id="divModalChild">
+
+</div>
+
+
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(FooterPageConstants.ModuleInfo.PathCommand)/footerpage/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@FooterPageConstants.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images",
+            DivModalChildID: "divModalChild",
+            TableChidID: "table_FooterItem",
+            ModalChildID: "modalMenuItemEdit",
+
+
+        }
+        let _action = new AdminFooterPage_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+    
+    </script>
+
+}

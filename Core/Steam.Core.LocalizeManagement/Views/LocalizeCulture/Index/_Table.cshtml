@@ -1,0 +1,56 @@
+﻿@using X.PagedList
+@using Steam.Core.LocalizeManagement.Constants
+@{
+    var CDN_HOST = "";
+}
+
+@model IPagedList<Steam.Core.LocalizeManagement.Database.LocalizeCulture>;
+@if (Model != null && Model.Any())
+{
+
+    int stt = Model.PageNumber * Model.PageSize - Model.PageSize;
+    foreach (var item in Model)
+    {
+        stt = stt + 1;
+        <tr id="@item.Pid" >
+
+
+            <td width="1">
+                <div class="form-check form-check-sm">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="form-check-input form-check-primary form-check-glow checkItem" value="@item.Pid" id="checkItem_@item.Pid">
+                    </div>
+                </div>
+
+            </td>
+            <td width="1"><input tabindex="@(item.Order+1000)" onchange="_action.UpdateOrder(@item.Pid,this.value)" type="number" class="form-control-sm order-input  form-control-plaintext" value="@stt" disabled /></td>
+            <td><a href="javascript:void(0)" onclick="_action.EditModal(@item.Pid)" class="cursor-pointer  @(item.Enabled==true?"text-primary":"text-mute") ">@item.Name</a></td>
+            <td class="text-bold-500">@item.LangCode</td>
+            <td class="text-bold-500">@item.ShortCode</td>
+            <td class="text-bold-500">@item.SlugKey</td>
+            <td>
+                <div class="form-check form-switch">
+                    <input onclick="_action.Enable(@item.Pid,@(item.Enabled==true?"false":"true"))" class="cursor-pointer form-check-input" type="checkbox" id="flexSwitchCheckChecked" @(item.Enabled == true ? "checked" : "")>
+                </div>
+            </td>
+            <td class="text-center">
+                <a href="javascript:void(0)"><i onclick="_action.EditModal(@item.Pid)" class="cursor-pointer text-primary fas fa-edit"></i></a>
+                <i onclick="_action.Delete(@item.Pid)" class="cursor-pointer  text-danger fas fa-trash-alt"></i>
+
+            </td>
+            <td class="handle td-handle">
+                <i  class="fas fa-grip-horizontal fa-rotate-90"></i>
+
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="7" class="text-center">
+            <span>Không có dữ liệu!!</span>
+        </td>
+
+    </tr>
+}

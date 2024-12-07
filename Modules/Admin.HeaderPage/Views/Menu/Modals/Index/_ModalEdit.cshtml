@@ -1,0 +1,68 @@
+﻿@using Admin.HeaderPage.Constants;
+@using Admin.HeaderPage.Constants;
+@using ComponentUILibrary.Models
+@model Admin.HeaderPage.MenuPageModel
+
+<form id="uploadForm" class="mt-2">
+
+    <div class="mt-2">
+        <input hidden id="Pid" class="pid" name="Pid" value="@Model.MenuModel.Pid">
+        <div class="form-group  col-6 col-md-6" @*style="display:@(Model.MenuModel.Detail.ParentID==0?"none;":"")"*@ id="div_ParentID">
+
+            @*<label for="ParentID">Danh mục cha</label>*@
+
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3 col-sm-12">
+                <label for="title">Tiêu đề</label>
+                <input required type="text" class="form-control" id="title" value="@Model.MenuModel.Title" name="Title" aria-describedby="title" placeholder="nhập tiêu đề...">
+            </div>
+            <div class="form-group col-md-3 col-sm-12">
+                <label for="title">Icon</label>
+                <input type="text" class="form-control" id="Icon" value="@Model.MenuModel.Icon" name="Icon" aria-describedby="Icon" placeholder="nhập icon...">
+            </div>
+
+            @*<div hidden class="form-group col-md-3 col-sm-12">
+            <label for="Event">Show Level</label>
+            <input required type="text" class="form-control" id="ShowLevel" value="@Model.MenuModel.Detail.ShowLevel" name="ShowLevel" aria-describedby="ShowLevel" placeholder="nhập cấp...">
+        </div>*@
+            <div class="form-group col-md-3 col-sm-12">
+                <label for="Event">Event</label>
+                <input type="text" class="form-control" id="Event" value="@Model.MenuModel.Event" name="Event" aria-describedby="Event" placeholder="nhập event...">
+            </div>
+            @if (Model.MenuModel.ParentID == 0)
+            {
+                <div class="form-group col-md-3 col-sm-12">
+                    <label for="title">Kiểu menu</label>
+
+                    @{
+
+                        NiceSelectModel selectModel = new NiceSelectModel();
+                        selectModel.Data = Model.ListMenuStyles;
+                        selectModel.Id = "MenuStylePid";
+                        selectModel.Search = 1;
+                        selectModel.Size = "small";
+                        selectModel.Class = "form-group col-md-3 col-sm-12 nice-select sample-nice-select";
+                        selectModel.IsRequire = true;
+                        selectModel.DefaultValue = "0";
+                        selectModel.DefaultText = "--Kiểu menu--";
+                        selectModel.SelectedValue = Model.MenuModel.MenuStylePid.ToString();
+                    }
+                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.Select2Component), new { model = selectModel })
+                </div>
+            }
+
+        </div>
+
+
+    </div>
+
+    <div class="form-group">
+        <label for="title">URL</label>
+        <input type="text" class="form-control" id="URl" value="@Model.MenuModel.URL" name="URL" aria-describedby="URL" placeholder="nhập url...">
+    </div>
+
+
+
+
+</form>

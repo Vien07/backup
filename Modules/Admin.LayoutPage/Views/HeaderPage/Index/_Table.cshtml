@@ -1,0 +1,51 @@
+﻿@using X.PagedList
+@using Admin.LayoutPage.Constants
+@{
+    var CDN_HOST = "";
+}
+
+@model IPagedList<Admin.LayoutPage.Database.HeaderPage>;
+@if (Model != null && Model.Any())
+{
+
+    int stt = Model.PageNumber * Model.PageSize - Model.PageSize;
+    foreach (var item in Model)
+    {
+        stt = stt + 1;
+        <tr id="@item.Pid" class="">
+            <td width="1">
+                <div class="form-check form-check-sm handle">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="form-check-input form-check-primary form-check-glow checkItem" value="@item.Pid" id="checkItem_@item.Pid">
+                    </div>
+                </div>
+            </td>
+            <td width="1">@stt</td>
+
+            <td><a href="@Url.Content(HeaderPageConstants.Config.Route.PageEdit)/@item.Pid" class="cursor-pointer  @(item.Enabled==true?"text-primary":"text-mute") ">@item.Title</a></td>
+
+
+            <td>
+                <div class="form-check form-switch">
+                    <input onclick="_action.Enable(@item.Pid,@(item.Enabled==true?"false":"true"))" class="cursor-pointer form-check-input" type="checkbox" id="flexSwitchCheckChecked" @(item.Enabled == true ? "checked" : "")>
+                </div>
+            </td>
+            <td class="text-center">
+                <i onclick="_action.GenerateHeaderHtml(@item.Pid)" class="far fa-eye cursor-pointer text-success "></i>
+                <i onclick="_action.UpdatePreivewHeaderHtml(@item.Pid)" class="fas fa-sync cursor-pointer text-info"></i>
+
+                <a href="@Url.Content(HeaderPageConstants.Config.Route.PageEdit)/@item.Pid"><i onclick="_action.Edit(@item.Pid)" class="cursor-pointer text-primary fas fa-edit"></i></a>
+                <i onclick="_action.Delete(@item.Pid)" class="cursor-pointer  text-danger fas fa-trash-alt"></i>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="7" class="text-center">
+            <span>Không có dữ liệu!!</span>
+        </td>
+
+    </tr>
+}

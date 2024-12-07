@@ -1,0 +1,246 @@
+﻿@model Admin.ProductManagement.Controllers.OrderManagementController.PageModel
+@using ComponentUILibrary.Models
+@using Admin.ProductManagement.Constants
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+}
+
+<section class="section">
+    <div class="row" id="table-hover-row">
+        <div class="col-12">
+
+            <div class="card mb-4">
+                <div class="card-widget-separator-wrapper">
+                    <div class="card-body card-widget-separator">
+                        <div class="row gy-4 gy-sm-1">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
+                                    <div>
+                                        <h6 class="mb-2">In-store Sales</h6>
+                                        <h4 class="mb-2">$5,345.43</h4>
+                                        <p class="mb-0"><span class="text-muted me-2">5k orders</span><span class="badge bg-label-success">+5.7%</span></p>
+                                    </div>
+                                    <div class="avatar me-sm-4">
+                                        <span class="avatar-initial rounded bg-label-secondary">
+                                            <i class="bx bx-store-alt bx-sm"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr class="d-none d-sm-block d-lg-none me-4">
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="d-flex justify-content-between align-items-start card-widget-2 border-end pb-3 pb-sm-0">
+                                    <div>
+                                        <h6 class="mb-2">Website Sales</h6>
+                                        <h4 class="mb-2">$674,347.12</h4>
+                                        <p class="mb-0"><span class="text-muted me-2">21k orders</span><span class="badge bg-label-success">+12.4%</span></p>
+                                    </div>
+                                    <div class="avatar me-lg-4">
+                                        <span class="avatar-initial rounded bg-label-secondary">
+                                            <i class="bx bx-laptop bx-sm"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr class="d-none d-sm-block d-lg-none">
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="d-flex justify-content-between align-items-start border-end pb-3 pb-sm-0 card-widget-3">
+                                    <div>
+                                        <h6 class="mb-2">Discount</h6>
+                                        <h4 class="mb-2">$14,235.12</h4>
+                                        <p class="mb-0 text-muted">6k orders</p>
+                                    </div>
+                                    <div class="avatar me-sm-4">
+                                        <span class="avatar-initial rounded bg-label-secondary">
+                                            <i class="bx bx-gift bx-sm"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-2">Affiliate</h6>
+                                        <h4 class="mb-2">$8,345.23</h4>
+                                        <p class="mb-0"><span class="text-muted me-2">150 orders</span><span class="badge bg-label-danger">-3.5%</span></p>
+                                    </div>
+                                    <div class="avatar">
+                                        <span class="avatar-initial rounded bg-label-secondary">
+                                            <i class="bx bx-wallet bx-sm"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <form id="SearchForm">
+                        <div class="row mx-2">
+                            <div class="col-md-12">
+                                <div class="dt-action-buttons text-lg-start text-md-end text-start d-flex align-items-center flex-md-row flex-column mb-3 mb-md-0">
+                                    <div id="DataTables_Table_0_filter" class="dataTables_filter mx-1">
+                                        @{
+                                            List<SelectControlData> aa = new List<SelectControlData>();
+                                            aa.Add(new SelectControlData { Name = "Active", Value = "1" });
+                                            aa.Add(new SelectControlData { Name = "InActive", Value = "0" });
+                                            NiceSelectModel selectModel2 = new NiceSelectModel();
+                                            selectModel2.Data = aa;
+                                            selectModel2.Id = "Active";
+                                            selectModel2.Size = "";
+                                            selectModel2.Class = "nice-select";
+                                        }
+                                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+                                    </div>
+                                    <div class="dt-action-buttons text-lg-start text-md-end text-start d-flex align-items-center flex-md-row flex-column mb-3 mb-md-0">
+                                        <div id="DataTables_Table_0_filter" class="dataTables_filter mx-1">
+                                            @{
+                                                FromDateToDateModel fromDateToDateModel = new FromDateToDateModel();
+                                                fromDateToDateModel.Id = "RangeDate";
+                                                fromDateToDateModel.FromDate_Id = "FromDate";
+                                                fromDateToDateModel.ToDate_Id = "ToDate";
+                                                fromDateToDateModel.ClassContainner = "";
+                                                fromDateToDateModel.Placeholder = "Chọn ngày";
+                                                fromDateToDateModel.FirstLoadLIb = true;
+                                                fromDateToDateModel.ValidRangeDay = 1;
+                                                fromDateToDateModel.ToDate = DateTime.Now.AddDays(1).ToString("dd/M/yyyy");
+                                                fromDateToDateModel.FromDate = DateTime.Now.AddMonths(-1).ToString("dd/M/yyyy");
+                                            }
+                                            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FromDateToDateComponent), fromDateToDateModel)
+                                        </div>
+                                    </div>
+                                    <div id="DataTables_Table_0_filter" class="dataTables_filter mx-1">
+                                        <label>
+                                            <input type="search" name="KeySearch" id="KeySearch" class="form-control" placeholder="Nhập từ khóa tìm kiếm..." aria-controls="DataTables_Table_0">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="dt-action-buttons text-lg-start text-md-end text-start d-flex align-items-center flex-md-row flex-column mb-3 mt-1 pl-1 mb-md-0">
+                                    <div class="dt-buttons">
+                                        <button class="dt-button buttons-collection btn btn-label-secondary mx-1" onclick="_action.Search(1)" tabindex="0" aria-controls="DataTables_Table_0" type="button" aria-haspopup="dialog" aria-expanded="false">
+                                            <span><i class="bx bx-search me-1"></i>Tìm kiếm</span>
+                                        </button>
+                                        <button class="dt-button add-new btn btn-primary" tabindex="0" aria-controls="DataTables_Table_0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser">
+                                            <span>
+                                                <i class="bx bx-plus me-0 me-sm-1"></i>
+                                                <span class="d-none d-sm-inline-block">Thêm mới đơn hàng</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-content p-lg-2 pr-2 cms-div-table ">
+                    <!-- table hover -->
+                    <div class="table-responsive">
+                        @{
+                            ComponentUILibrary.Models.TableData table = new ComponentUILibrary.Models.TableData();
+                            table.ID = "test2";
+                            table.Class = "table table-hover bg-white mb-0 ";
+                            table.Body = await Html.PartialAsync(OrderManagementConstants.StaticPath.PartialView.Index_Table, Model.Data);
+
+                            List<TableHead> tableHead = new List<TableHead>();
+                            tableHead.Add(new TableHead { Name = "#", Width = 50 });
+                            tableHead.Add(new TableHead { Name = "Đơn hàng" });
+                            tableHead.Add(new TableHead { Name = "Email" });
+                            tableHead.Add(new TableHead { Name = "Ngày đặt hàng" });
+                            tableHead.Add(new TableHead { Name = "Tình trạng đơn hàng" });
+                            tableHead.Add(new TableHead { Name = "Tình trạng thanh toán" });
+                            tableHead.Add(new TableHead { Name = "Action", Width = 100 });
+
+                            table.Header = tableHead;
+                            table.CheckAllCol = false;
+                        }
+                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TableComponent), new { table = table })
+
+
+                        <div class="row mx-0 mt-1 align-items-center">
+                            <div class="col-12 col-sm-6">
+                            </div>
+                            <div class=" col-12 col-sm-6  align-items-center" id="divPaging">
+                                <nav style="float:right" class="pagination-wrap d-inline-block" id="navigation_paging" aria-label="navigation">
+                                    @{
+                                        PaginationModel pageModel = new PaginationModel();
+                                        pageModel.PageIndex = 1;
+                                        pageModel.PageSize = 1;
+                                        pageModel.PageCount = Model.Data.PageCount;
+                                        pageModel.Id = "";
+                                        pageModel.Class = "";
+                                    }
+                                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PaginationComponent), Model.Pagination)
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- table hover -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <!-- modal -->
+    <!-- Modal config -->
+    <div id="divModalConfig">
+        @await Html.PartialAsync(OrderManagementConstants.StaticPath.PartialView.Index_ModalConfig, Model.Configs)
+    </div>
+
+    <!-- end Modal config -->
+    @Html.AntiForgeryToken()
+
+</section>
+
+@section Scripts {
+    <script asp-append-version="true" src="@Url.Content(OrderManagementConstants.ModuleInfo.PathCommand)/AdminOrderManagementCommand.js"></script>
+
+    <script asp-append-version="true" src="@Url.Content(OrderManagementConstants.ModuleInfo.PathCommand)/OrderManagement/index.js"></script>
+    <script>
+        const ModelView = {
+            RouteIndex: "@OrderManagementConstants.Config.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            TableDataID: "@table.ID",
+            TbodyId: "tdBody_@table.ID",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images",
+            SearchFormID: "SearchForm"
+        }
+        let _action = new AdminOrderManagement_Index(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+        }
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+
+            //InitDragDropTable()
+        });
+
+
+
+
+    </script>
+}

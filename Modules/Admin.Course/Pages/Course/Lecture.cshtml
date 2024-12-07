@@ -1,0 +1,394 @@
+﻿@page
+@using ComponentUILibrary.Models
+@model Admin.Course.Pages.CMS.Course.LectureModel
+@{
+}
+
+@*---------------------------------------------Main-------------------------------------------------------------------------*@
+<section id="basic-list-group">
+    <div class="buttons">
+        <button type="button" class="btn btn-sm btn-outline-primary block" data-bs-toggle="modal" data-bs-target="#ModelChapter">Thêm chương</button>
+    </div>
+    <div class="row match-height" id="tableData"></div>
+    <div class="modal-footer">
+        <a type="button" href="/Course/Index" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+        <button type="button" onclick="Save()" class="btn btn-primary">Lưu</button>
+    </div>
+</section>
+
+@*---------------------------------------------Model-------------------------------------------------------------------------*@
+<div class="modal fade" id="ModelChapter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModelChapterLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModelChapterLabel">Thông tin chương</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Tiêu đề</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <input type="text" id="ChapterName" class="form-control"
+                                       name="ChapterName" placeholder="nhập tiêu đề...">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" onclick="createChapter()" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ModelLecture" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ModelLectureLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModelLectureLabel">Thông tin bài học</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Chọn bài học</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                @{
+                                    NiceSelectModel selectModel = new NiceSelectModel();
+                                    selectModel.Data = Model.Lectures;
+                                    selectModel.Id = "SelectLectures";
+                                    selectModel.Size = "small";
+                                    selectModel.Search = 1;
+                                    selectModel.Class = "nice-select";
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent),new {model=selectModel})
+                            </div>
+                            <div class="col-md-4">
+                                <label>Tiêu đề</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <input id="LectureTitle" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" id="SaveLecture" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*---------------------------------------------Component-------------------------------------------------------------------------*@
+
+
+<div id="ChapterComponent" style="display:none">
+    <div class="col-lg-12 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div style="margin-bottom:15px" class="row">
+
+                    <div class="col-md-11 col-lg-11 col-12">
+                        <input class="form-control form-control-sm" onchange="changeTitleChapter({{id}}, this)" value="{{title}}" />
+
+                    </div>
+                    <div class="col-md-1 col-md-1 col-12">
+                        <input style="width:60px" type="text" onchange="changeOrderChapter({{id}}, this)" value="{{order}}" class="text-center form-control-sm form-control" />
+
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button type="button" class="btn btn-sm btn-outline-primary block" onclick="openModalLecture({{id}})">
+                        Thêm bài học
+                    </button>
+                    <a role="button" onclick="removeChapter({{id}})" class="btn btn-sm btn-outline-danger block">Xóa chương</a>
+                </div>
+            </div>
+            <div class="card-body">
+                {{lectures}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<table style="display:none">
+    <tbody id="LectureComponent">
+        <tr>
+            <td><a class="cursor-pointer">{{title}}</a></td>
+            <td width="1" class="text-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" {{checked}} onchange="changePreviewLecture({{chapterID}}, {{id}}, this)" />
+                    <label class="form-check-label">Preview</label>
+                </div>
+            </td>
+            <td width="1" class="text-center">
+                <input style="width:60px;" type="text" class="form-control-sm form-control text-center" onchange="changeOrderLecture({{chapterID}}, {{id}}, this)" value="{{order}}" />
+            </td>
+            <td width="1" class="text-center">
+                <a onclick="removeLecture({{chapterID}}, {{id}})" role="button"><i class="cursor-pointer  text-danger fas fa-trash-alt"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@Html.AntiForgeryToken()
+
+@section Scripts{
+    <script>
+        const ModelView = {
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminCourse(ModelView);
+        _action.CheckFunction();
+        let CourseID = '@Model.ID';
+        let DATA = []
+
+        //--------------------------------------------------------ACTION------------------------------------------
+        $(function () {
+            $.ajax({
+                type: "GET",
+                url: "?handler=Lecture",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    id: CourseID
+                },
+                success: function (data) {
+                    if (!data.response.isError) {
+                        DATA = data.response.data.chapters;
+                        renderChapter()
+                    }
+                },
+                failure: function (response) {
+                    _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                }
+            });
+        })
+        function Save() {
+            let model = {
+                chapters: DATA,
+                id: CourseID
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "?handler=Save",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: JSON.stringify(model),
+                contentType: "application/json",
+                success: function (data) {
+                    _action._commonAdmin.ToastifyAlert("Thành công!!!", 'success')
+                    location.href = "/Course/Index";
+                },
+                failure: function (response) {
+                    _action._commonAdmin.ToastifyAlert("Thất bại!!!", 'error')
+                }
+            });
+        }
+        
+        //--------------------------------------------------------SECTION-----------------------------------------
+        function renderChapter() {
+            DATA.sort((a, b) => { return a.order - b.order })
+            let component = $('#ChapterComponent').html();
+            let html = ``;
+
+            for (let item of DATA) {
+                //handle lecture
+                let lectureComponent = $('#LectureComponent').html();
+                let htmlLecture = ` <table class="table table-striped">`;
+                if (item.lectures.length > 0) {
+                    item.lectures.sort((a, b) => { return a.order - b.order })
+                    for (let ele of item.lectures) {
+                        //htmlLecture += lectureComponent
+                        //    .replaceAll('{{title}}', ele.title)
+                        //    .replaceAll('{{order}}', ele.order)
+                        //    .replaceAll('{{id}}', ele.id)
+                        //    .replaceAll('{{chapterID}}', item.id)
+                        //    .replaceAll('{{checked}}', ele.preview ? "checked" : "a");
+
+                        htmlLecture += `
+                        <tr>
+                            <td><input onchange="changeTitleLecture(${item.id}, ${ele.id}, this)" class="form-control form-control-sm" value="${ele.title}" /></td>
+                            <td><a class="cursor-pointer">${ele.lectureName}</a></td>
+                            <td width="1" class="text-center"><div class="form-check"><input class="form-check-input" type="checkbox" ${ele.preview ? 'checked' : ''} onchange="changePreviewLecture(${item.id}, ${ele.id}, this)" /><label class="form-check-label">Preview</label></div></td>
+                            <td width="1" class="text-center"><input style="width:60px;" type="text" class="form-control-sm form-control text-center" onchange="changeOrderLecture(${item.id}, ${ele.id}, this)" value="${ele.order}"></td>
+                            <td width="1" class="text-center"><a onclick="removeLecture(${item.id}, ${ele.id})" role="button"><i class="cursor-pointer  text-danger fas fa-trash-alt"></i></a></td>
+                        </tr>`
+                    }
+                }
+                htmlLecture += ` </table>`
+                //html += component
+                //    .replaceAll('{{title}}', item.title)
+                //    .replaceAll('{{id}}', item.id)
+                //    .replaceAll('{{order}}', item.order)
+                //    .replaceAll("{{lectures}}", htmlLecture)
+
+                html += `
+                <div class="col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div style="margin-bottom:15px" class="row">
+                                <div class="col-md-11 col-lg-11 col-12">
+                                    <input class="form-control form-control-sm" onchange="changeTitleChapter(${item.id}, this)" value="${item.title}" />
+                                </div>
+                                <div class="col-md-1 col-md-1 col-12">
+                                    <input style="width:60px" type="text" onchange="changeOrderChapter(${item.id}, this)" value="${item.order}" class="text-center form-control-sm form-control" />
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                <button type="button" class="btn btn-sm btn-outline-primary block" onclick="openModalLecture(${item.id})">Thêm bài học</button>
+                                <a role="button" onclick="removeChapter(${item.id})" class="btn btn-sm btn-outline-danger block">Xóa chương</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            ${htmlLecture}
+                        </div>
+                    </div>
+                </div>`
+            }
+
+            $('#tableData').html(html)
+        }
+        function createChapter() {
+            let chapterName = $('#ChapterName').val();
+            if (chapterName == "") {
+                _action._commonAdmin.ToastifyAlert("Không được bỏ trống!!!", 'error')
+                return;
+            }
+
+            let id = 0;
+            let order = 1;
+
+            if (DATA.length > 0) {
+                id = Math.max(...DATA.map(o => o.id))
+                order = Math.max(...DATA.map(o => o.order))
+
+                order += 1
+            }
+
+            //increase id
+            id += 1
+
+            DATA.push({ id: id, title: chapterName, order: order, lectures: [] })
+            renderChapter();
+        }
+        function removeChapter(id) {
+            DATA = DATA.filter(x => x.id != id)
+            renderChapter()
+        }
+        function changeOrderChapter(id, e) {
+            for (let item of DATA) {
+                if (item.id == id) {
+                    item.order = parseInt(e.value)
+                }
+            }
+            renderChapter()
+        }
+        function changeTitleChapter(id, e) {
+            for (let item of DATA) {
+                if (item.id == id) {
+                    item.title = e.value
+                }
+            }
+            renderChapter()
+        }
+
+        //--------------------------------------------------------LECTURE------------------------------------------
+        function openModalLecture(chapterId) {
+            $('#ModelLecture').find('button[id=SaveLecture]').attr('onclick', `createLecture(${chapterId})`)
+            $('#ModelLecture').modal('show')
+        }
+        function createLecture(chapterId) {
+            for (let item of DATA) {
+                if (item.id == chapterId) {
+                    let order = 1;
+                    let id = parseInt($('#SelectLectures').val());
+                    let text = $('#LectureTitle').val();
+                    let lectureName = $('.nice-select').find('span.current').text();
+                    if (item.lectures.length > 0) {
+                        order = Math.max(...item.lectures.map(o => o.order))
+                        order += 1
+                        let model = item.lectures.filter(x => x.id == id)[0]
+                        if (model) {
+                            _action._commonAdmin.ToastifyAlert("Đã tồn tại bài học trong chương này!!!", 'error')
+                            return;
+                        } else {
+                            item.lectures.push({ id: id, title: text, lectureName: lectureName, order: order, preview: false })
+                        }
+                    } else {
+                        item.lectures.push({ id: id, title: text, lectureName: lectureName, order: order, preview: false })
+                    }
+                }
+            }
+
+            renderChapter();
+        }
+        function changeOrderLecture(chapterId, lectureId, e) {
+            for (let item of DATA) {
+                if (item.id == chapterId) {
+                    for (let ele of item.lectures) {
+                        if (ele.id == lectureId) {
+                            ele.order = parseInt(e.value)
+                        }
+                    }
+                }
+            }
+            renderChapter()
+        }
+        function changePreviewLecture(chapterId, lectureId, e) {
+            for (let item of DATA) {
+                if (item.id == chapterId) {
+                    for (let ele of item.lectures) {
+                        if (ele.id == lectureId) {
+                            ele.preview = e.checked
+                        }
+                    }
+                }
+            }
+        }
+
+        function changeTitleLecture(chapterId, lectureId, e) {
+            for (let item of DATA) {
+                if (item.id == chapterId) {
+                    for (let ele of item.lectures) {
+                        if (ele.id == lectureId) {
+                            ele.title = e.value
+                        }
+                    }
+                }
+            }
+        }
+
+        function removeLecture(chapterId, lectureId) {
+            for (let item of DATA) {
+                if (item.id == chapterId) {
+                    item.lectures = item.lectures.filter(x => x.id != lectureId)
+                }
+            }
+            renderChapter()
+        }
+    </script>
+}

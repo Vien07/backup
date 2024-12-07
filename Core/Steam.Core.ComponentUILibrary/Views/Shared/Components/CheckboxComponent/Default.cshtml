@@ -1,0 +1,25 @@
+﻿@using ComponentUILibrary.Models
+@model CheckboxModel
+
+<div class="d-inline-block me-2 mb-1">
+    <div class="form-check">
+        <div class="checkbox">
+            <input hidden  id="idcheckbox_@Model.Id"  name="@Model.Id" value="@Model.Value">
+            <input type="checkbox" id="@Model.Id"  class="form-check-input" @(Model.Value==Model.CheckValue?"checked":"")>
+            <label for="@Model.Id">@Model.Text</label>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#@Model.Id').click(function () {
+        var checked = $(this).is(':checked');
+        if ($(this).is(':checked')) {
+            $('#idcheckbox_@Model.Id').val('@Model.CheckValue');
+        } else {
+            $('#idcheckbox_@Model.Id').val('@Model.UnCheckValue');
+        }
+        @Model.CustomEvent
+    });
+
+</script>

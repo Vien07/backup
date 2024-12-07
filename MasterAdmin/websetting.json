@@ -1,0 +1,14 @@
+{
+  "WebsiteName": "CMS Website",
+  "RootDomain": "https://localhost:7042",
+  "MinWidth": "768",
+  "MaxWidth": "1920",
+  "Logo": "logo-fbv-cp2.png",
+  "Favicon": "default-avatar.png",
+  "ogImage": "full_bizmac_banner-gioi-thieu-20226301311291.jpeg",
+  "Recaptcha": "on",
+  "Robots": "on",
+  "Maintenance": "on",
+  "ReCAPTCHASite": "",
+  "ReCAPTCHASecret": ""
+}

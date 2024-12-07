@@ -1,0 +1,53 @@
+﻿@model Admin.PostsCategory.Controllers.PostsCategoryController.EditModel
+
+@using Admin.PostsCategory.Constants;
+@using ComponentUILibrary.Models
+<div class="mt-2">
+
+
+    <div class="form-group">
+        <label for="">Thumbnail</label>
+
+        @{
+
+            var imageThumbnailURl = "";
+            if (Model.PostsCategoryModel.Detail != null)
+            {
+                imageThumbnailURl = Steam.Core.Base.Constant.SystemInfo.VirtualFolder + Model.PostsCategoryModel.Detail.FilePath + Model.PostsCategoryModel.Detail.Images;
+            }
+
+            FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+            fileUploadModel.Id = "Thumbnail";
+            fileUploadModel.Class = "";
+            fileUploadModel.FirstLoadLib = true;
+            fileUploadModel.SelectedFiles = imageThumbnailURl;
+            fileUploadModel.Images_Alt = Model.PostsCategoryModel.Detail.Images_Alt;
+
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModel)
+    </div>
+
+
+    <div class="form-group">
+        <label for="">Banner</label>
+
+        @{
+
+            var imageURl = "";
+            if (Model.PostsCategoryModel.Detail != null)
+            {
+                imageURl =Steam.Core.Base.Constant.SystemInfo.VirtualFolder+ Model.PostsCategoryModel.Detail.BannerFilePath  + Model.PostsCategoryModel.Detail.Banner;
+            }
+
+            FileUploadControlModel fileUploadModel2 = new FileUploadControlModel();
+            fileUploadModel2.Id = "Banner";
+            fileUploadModel2.Class = "";
+            fileUploadModel2.SelectedFiles = imageURl;
+            fileUploadModel2.Images_Alt = Model.PostsCategoryModel.Detail.Banner_Alt;
+
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModel2)
+    </div>
+
+
+</div>

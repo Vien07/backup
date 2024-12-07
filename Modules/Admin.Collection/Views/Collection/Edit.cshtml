@@ -1,0 +1,171 @@
+﻿@model Admin.Collection.CollectionController.EditModel
+@using Admin.Collection.Constants;
+
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section ">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+
+                        <ul class="nav nav-tabs alwaystop-header " id="myTab" role="tablist">
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link active" id="content-tab" data-bs-toggle="tab" href="#content" role="tab" aria-controls="content" aria-selected="true">
+                                    <i class="fas fa-font"></i> Nội dung
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="images-tab" data-bs-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false">
+                                    <i class="fas fa-images"></i> Hình ảnh
+                                </a>
+                            </li>
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="category-tab" data-bs-toggle="tab" href="#category" role="tab" aria-controls="category" aria-selected="false">
+                                    <i class="fas fa-list"></i> Danh mục
+                                </a>
+                            </li>
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="collection-tab" data-bs-toggle="tab" href="#collection" role="tab" aria-controls="collection" aria-selected="false">
+                                    <i class="fas fa-bookmark"></i> Bộ sưu tập
+                                </a>
+                            </li>
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="seoSetting-tab" data-bs-toggle="tab" href="#seoSetting" role="tab" aria-controls="seoSetting" aria-selected="false">
+                                    <i class="fab fa-searchengin"></i> SEO
+                                </a>
+                            </li>
+
+                            <li style="" class="nav_list_button">
+
+                                <div class="">
+
+
+                                    <div class="form-check form-switch " style="float: left; margin-top:7px">
+
+                                        <input @(Model.Detail.Enabled == true ? "checked" : "") onclick="" class="cursor-pointer form-check-input" name="CheckBox" type="checkbox" id="CheckBox">
+
+                                    </div>
+                                    <button type="button" id="" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                                    <a type="button" href="@CollectionConstants.Route.PageIndex" class="btn btn-danger">X</a>
+
+                                </div>
+                                <div id="nav_list_button_plugin" class="nav_list_button_plugin">
+
+
+                                </div>
+
+                            </li>
+
+
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade active show" id="content" role="tabpanel" aria-labelledby="content-tab">
+                                @Html.Partial(CollectionConstants.StaticPath.PartialView.Edit_TabContent, Model)
+                            </div>
+                            <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                                @Html.Partial(CollectionConstants.StaticPath.PartialView.Edit_TabImages, Model)
+
+                            </div>
+                            <div class="tab-pane fade " id="category" role="tabpanel" aria-labelledby="category-tab">
+                                @Html.Partial(CollectionConstants.StaticPath.PartialView.Edit_TabCategory, Model)
+
+                            </div>
+                            <div class="tab-pane fade " id="collection" role="tabpanel" aria-labelledby="collection-tab">
+                                @Html.Partial(CollectionConstants.StaticPath.PartialView.Edit_TabCollection, Model)
+
+                            </div>
+                            <div class="tab-pane fade" id="seoSetting" role="tabpanel" aria-labelledby="seoSetting-tab">
+                                @Html.Partial(CollectionConstants.StaticPath.PartialView.Edit_TabSEO, Model)
+
+                            </div>
+
+
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        @*<a type="button" href="@CollectionConstants.Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                            <button type="button" id="btnSaveForm" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @Html.AntiForgeryToken()
+    .
+</section>
+@await Html.PartialAsync(CollectionConstants.StaticPath.PartialView.Edit_ModalChooseProducts, Model)
+
+
+@section Scripts{
+    <script asp-append-version="true" src="@(CollectionConstants.ModuleInfo.PathCommand)/Collection/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@CollectionConstants.Route.PageIndex",
+            CollectionPid: @Model.Detail.Pid,
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            tbodyChooseProductID:  "tdBody_table_ChooseProduct",
+            tbodyCollectionProductID:  "tdBody_table_Collections",
+            NavPagingChooseProductID: "productchoose_navigation_paging",
+            SearchModalChooseProductFormID: "SearchModalChooseProductForm",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminCollection_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+        var PlugSEOSave= () => {
+
+        }
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+    </script>
+    <script>
+        function OpenChooseProductModal() {
+            _action.SearchProductForCollection(1)
+            $("#ModalChooseProduct").modal("show")
+        }
+        function CloseChooseProductModal() {
+            $("#ModalChooseProduct").modal("hide")
+        }
+    </script>
+}

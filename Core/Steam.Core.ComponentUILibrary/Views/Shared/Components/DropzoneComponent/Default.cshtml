@@ -1,0 +1,301 @@
+﻿@using ComponentUILibrary.Models
+@using System.Text.Json;
+@using ComponentUILibrary
+@using Steam.Core.ComponentUILibrary.Constant
+
+@model DropzoneModel
+@{
+    string VirtualFolder = ComponentUILibraryConstant.VirtualFolder;
+
+}
+
+@{
+    //var strJsonFile = JsonSerializer.Serialize<DropzoneData>(Model.Files);
+
+    //var a = Model.PageIndex;
+}
+@if (Model.FirstLoadLib)
+{
+    <link href="@Url.Content(VirtualFolder+DropzoneComponentConstants.PathLib)/dropzone.css" rel="stylesheet" />
+
+    <!-- add before </body> -->
+    <script src="@Url.Content(VirtualFolder+DropzoneComponentConstants.PathLib)/dropzone.js"></script>
+}
+
+<style>
+    .dropzone {
+        background: white;
+        border-radius: 5px;
+        border: 2px dashed rgb(0, 135, 247);
+        border-image: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<div class="row">
+    <div class="col-10 col-md-11 col-sm-10">
+        <div class=" needsclick dropzone" id="@Model.Id">
+            <div class="dz-message needsclick">
+                Drop files here or click to upload.<BR>
+            </div>
+        </div>
+    </div>
+    <div class="col-2 col-md-1 col-sm-2 ">
+        <a href="@VirtualFolder/filemanager/dialog.php?type=1&amp;field_id=@(Model.Id)_imageFromServerMulti&amp;relative_url=1&amp;multiple=1filemanager/dialog.php" class="@(Model.Id)-iframe-btn">
+
+            <div class="d-flex justify-content-center align-items-center h-100 w-100">
+                <i style="font-size:3.25rem;cursor:pointer" class="fas fa-cloud-download-alt">
+                </i>
+            </div>
+        </a>
+    </div>
+</div>
+<input hidden id="ListFiles" name="ListFiles" />
+<input hidden id="@(Model.Id)_imageFromServerMulti" onchange="addLocalFileToLocalDzopzone_@(Model.Id)(this.value)" name="@(Model.Id)_imageFromServerMulti" />
+<div class="modal fade text-left" id="InfoImageModal" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel33">Thông tin ảnh </h4>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div id="@(Model.Id)_InfoImageForm">
+                <div class="modal-body">
+                    <label>Caption</label>
+                    <div class="form-group">
+                        <input id="InfoImageForm_Caption" type="text" placeholder="Caption"
+                               class="form-control">
+                    </div>
+                    <label>Mô tả </label>
+                    <div class="form-group">
+                        <textarea id="InfoImageForm_Description" placeholder="Nhập mô tả.."
+                                  class="form-control"></textarea>
+                    </div>
+                    <label>Alt</label>
+                    <div class="form-group">
+                        <textarea id="InfoImageForm_Alt" placeholder="Nhập alt.."
+                                  class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input id="InfoImageForm_Order" type="text" placeholder="Thứ tự"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary"
+                            data-bs-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Đóng</span>
+                    </button>
+                    <button type="button" id="@(Model.Id)_btnSaveImageInfo" class="btn btn-primary ml-1"
+                            data-bs-dismiss="modal">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Lưu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.@(Model.Id)-iframe-btn').fancybox({
+        'type': 'iframe',
+        'iframe': {
+            'css': {
+                'height': '700px'
+            }
+        }
+    });
+    Dropzone.autoDiscover = false;
+    var listImagesInfo_@(Model.Id) = []
+
+    let moduleDropzone_@(Model.Id) = new Dropzone("#@Model.Id", {
+        url: "#", addRemoveLinks: true,
+        init: function () {
+
+        },
+        accept: function (file, done) {
+            var reader = new FileReader();
+            var dz = this;
+            reader.addEventListener("loadend", function (event) {
+                console.log(event.target.result);
+                file.status = Dropzone.SUCCESS;
+                dz.emit("success", file);
+                dz.emit("complete", file);
+            });
+            reader.readAsText(file);
+        },
+        removedfile: function (file) {
+            console.log('delete',file)
+            var removeFile = file.previewTemplate;
+            removeFile.remove()
+
+            var imageInfo = listImagesInfo_@(Model.Id).find(x => x.id === file.upload.uuid);
+            if (imageInfo.status == "exist") {
+                imageInfo.status="delete"
+            } else {
+                var tempImageInfo = listImagesInfo_@(Model.Id).filter((item) => item.id !== file.upload.uuid);
+                listImagesInfo_@(Model.Id) = tempImageInfo
+            }
+
+            $("#ListFiles").val(JSON.stringify(listImagesInfo_@(Model.Id)))
+
+        },
+        thumbnail: function (file, dataUrl) {
+            if (file.previewElement) {
+                console.log("thumnail", file)
+                if (file.status!=null && file.status !=="exist" && file.status !=="server")
+                {
+                    var tempInfo = {
+                        id: file.upload.uuid,
+                        caption: "",
+                        description: "",
+                        order: "",
+                        dataUrl: dataUrl,
+                        status: "new"
+
+                    }
+                    listImagesInfo_@(Model.Id).push(tempInfo);
+
+                }
+
+                $("#ListFiles").val(JSON.stringify(listImagesInfo_@(Model.Id)))
+
+
+                file.previewElement.classList.remove("dz-file-preview");
+                var images = file.previewElement.querySelectorAll("[data-dz-thumbnail]");
+                for (var i = 0; i < images.length; i++) {
+                    var thumbnailElement = images[i];
+                    thumbnailElement.alt = file.name;
+                    thumbnailElement.src = dataUrl;
+                }
+                setTimeout(function () { file.previewElement.classList.add("dz-image-preview"); }, 1);
+            }
+        }
+
+    });
+
+    moduleDropzone_@(Model.Id).on("addedfile", function (file) {
+        file.previewElement.addEventListener("click", function () {
+            //file.id=1;
+            console.log(file)
+            $("#InfoImageModal").modal("show")
+            //var imageInfo = listImagesInfo_@(Model.Id).find(x => x.id === uuid);
+
+            $("#@(Model.Id)_btnSaveImageInfo").attr('onClick', `SaveImagesInfo_@(Model.Id)('${file.upload.uuid}')`)
+            SetImageInfo_@(Model.Id)(file.upload.uuid, file.dataURL)
+
+        });
+    });
+    var infoImageFormName_@(Model.Id) = '#@(Model.Id)_InfoImageForm'
+
+    var existingFiles_@(Model.Id) = JSON.parse('@Html.Raw(Model.Files)');
+    for (let i = 0; i < existingFiles_@(Model.Id).length; i++) {
+        var mockFile = { name: existingFiles_@(Model.Id)[i].UploadFileName, size: 0 };
+        debugger
+        moduleDropzone_@(Model.Id).displayExistingFile(mockFile, existingFiles_@(Model.Id)[i].FilePath + existingFiles_@(Model.Id)[i].UploadFileName);
+        mockFile["upload"] = { uuid: existingFiles_@(Model.Id)[i].Pid }
+        mockFile["status"] ="exist";
+        var tempInfo = {
+            id: existingFiles_@(Model.Id)[i].Pid,
+            caption: existingFiles_@(Model.Id)[i].Caption,
+            description: existingFiles_@(Model.Id)[i].Description,
+            order: existingFiles_@(Model.Id)[i].Order,
+            dataUrl: "@Model.FilePath" + existingFiles_@(Model.Id)[i].UploadFileName,
+            name: existingFiles_@(Model.Id)[i].UploadFileName,
+            alt: existingFiles_@(Model.Id)[i].Alt,
+            status: "exist"
+        }
+        listImagesInfo_@(Model.Id).push(tempInfo);
+        $("#ListFiles").val(JSON.stringify(listImagesInfo_@(Model.Id)))
+    }
+
+    function SaveImagesInfo_@(Model.Id)(uuid) {
+        var caption = $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Caption`).val();
+        var description = $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Description`).val();
+        var order = $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Order`).val();
+        var alt = $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Alt`).val();
+
+        var imageInfo = listImagesInfo_@(Model.Id).find(x => x.id == uuid);
+        if (imageInfo != null) {
+            imageInfo.caption = caption;
+            imageInfo.description = description;
+            imageInfo.order = order;
+            imageInfo.alt = alt;
+            if (imageInfo.status == "exist") {
+                imageInfo.status ="edit"
+            }
+        }
+        $("#ListFiles").val(JSON.stringify(listImagesInfo_@(Model.Id)))
+    }
+    function SetImageInfo_@(Model.Id)(uuid) {
+        $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Caption`).val("")
+        $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Description`).val("")
+        $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Order`).val("")
+        var imageInfo = listImagesInfo_@(Model.Id).find(x => x.id === uuid);
+        if (imageInfo != null) {
+            $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Caption`).val(imageInfo.caption)
+            $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Description`).val(imageInfo.description)
+            $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Order`).val(imageInfo.order)
+            $(`${infoImageFormName_@(Model.Id)} #InfoImageForm_Alt`).val(imageInfo.alt)
+        }
+
+    }
+
+    function addLocalFileToLocalDzopzone_@(Model.Id)(listFile) {
+
+        try {
+            debugger;
+            var existingFiles_@(Model.Id) = [];
+            try {
+                existingFiles_@(Model.Id)  = JSON.parse(listFile);
+
+            } catch (e) {
+                existingFiles_@(Model.Id).push(listFile);
+            }
+            for (let i = 0; i < existingFiles_@(Model.Id).length; i++) {
+                const uniqueID = generateUniqueID();
+                var mockFile = { name: existingFiles_@(Model.Id)[i] };
+                moduleDropzone_@(Model.Id).displayExistingFile(mockFile, "/FileStorage/Storage/" + existingFiles_@(Model.Id)[i]);
+                mockFile["upload"] = { uuid: uniqueID }
+        mockFile["status"] ="server";
+        var tempInfo = {
+            id: uniqueID,
+            caption: "",
+            description: "",
+            order: "",
+            alt: "",
+            dataUrl: "/FileStorage/Storage/" + existingFiles_@(Model.Id)[i],
+            name: getFileName(existingFiles_@(Model.Id)[i]),
+            status: "server"
+        }
+        listImagesInfo_@(Model.Id).push(tempInfo);
+        $("#ListFiles").val(JSON.stringify(listImagesInfo_@(Model.Id)))
+    }
+
+
+        } catch (e) {
+
+        }
+
+    }
+    function generateUniqueID() {
+        const timestamp = new Date().getTime(); // Get current timestamp
+        const randomChars = Math.random().toString(36).substring(2, 10); // Generate random characters
+
+        const uniqueID = `${timestamp}-${randomChars}`;
+        return uniqueID;
+    }
+    function getFileName(filePath) {
+        const parts = filePath.split('/');
+        const fileName = parts[parts.length - 1];
+        return fileName;
+    }
+
+</script>

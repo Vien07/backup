@@ -1,0 +1,45 @@
+﻿@using Admin.FooterPage.Constants;
+@model Admin.FooterPage.Database.FooterItem;
+<div class="modal left fade" id="modalMenuItemEdit" tabindex="-1" role="dialog" aria-labelledby="myModal2Label2">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-full" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header ">
+
+                <h4 class="modal-title justify-content-center " id="myModalLabel2">@(Model.Pid == 0 ? "Thêm nội dung" : "Cập nhật nội dung")</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="tab-content" id="myTabContent">
+                    <form id="FooterItemForm" class="form form-vertical mt-3">
+                        <div class="form-body">
+                            <div class="mt-2">
+                                <input hidden id="@nameof(Model.Pid)" name="@nameof(Model.Pid)" value="@(Model.Pid)">
+                                <input hidden id="FooterPagePid" name="FateCatePid" value="@(Model.FooterPagePid)">
+                                <div class="form-group">
+                                    <label for="Content">Key</label>
+                                    <input required class="form-control " id="Key" value="@Model.Key" name="Key" aria-describedby="Key" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="Content">Footer Item Block</label>
+                                    <textarea rows="15" required class="form-control " id="ItemBlock" name="ItemBlock" aria-describedby="ItemBlock">@Model.ItemBlock</textarea>
+                                </div>
+
+                                <div class="col-12 d-flex justify-content-end">
+                                    <button type="button" onclick="_action.SaveChild('FooterItemForm')" class="btn btn-primary me-1 mb-1">
+                                        @(Model.Pid == 0 ? "Add" : "Update")
+                                    </button>
+                                </div>
+                                @*</div>*@
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div>

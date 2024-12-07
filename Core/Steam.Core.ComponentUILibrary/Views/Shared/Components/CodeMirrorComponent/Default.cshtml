@@ -1,0 +1,90 @@
+﻿@using ComponentUILibrary.Models
+@using ComponentUILibrary
+@using Microsoft.Extensions.Configuration
+@using Steam.Core.ComponentUILibrary.Constant
+@model CodeMirrorModel
+@{
+    string VirtualFolder = ComponentUILibraryConstant.VirtualFolder;  
+    var content = "";
+    if (!String.IsNullOrEmpty(Model.Content))
+    {
+        content = Model.Content;
+
+    }
+
+    //var a = Model.PageIndex;
+}
+@if (Model.FirstLoadLib)
+{
+    <link rel="stylesheet" href="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/codemirror.css">
+    <link rel="stylesheet" href="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/show-hint.css">
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/codemirror.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/show-hint.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/xml-hint.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/html-hint.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/xml.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/javascript.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/css.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/htmlmixed.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/active-line.js"></script>
+    <script src="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/matchbrackets.js"></script>
+
+    <link rel="stylesheet" href="@Url.Content(VirtualFolder+CodeMirrorConstants.PathLib)/neonsyntax.css">
+}
+
+
+<style type="text/css">
+    .CodeMirror {
+        font-size: 15px;
+        width: 100%,;
+        height: 100%;
+    }
+</style>
+<textarea id="codemirror@(Model.Id)" name="codemirror@(Model.Id)"></textarea>
+
+<input id="@Model.Id" hidden value="@Model.Content" name="@Model.Id" />
+
+
+<script>
+    CodeMirror.commands.autocomplete = function (cm){
+        CodeMirror.showHint(cm, CodeMirror.hint.html);
+    }
+    $(function () {
+        codemirror_@(Model.Id)  = CodeMirror.fromTextArea(document.getElementById("codemirror@(Model.Id)"), {
+                mode: "@Model.CodeMode",
+                        //theme: "neonsyntax",
+                        lineWrapping: true,
+                        autoCloseTags: true,
+
+                lineNumbers: true,
+                styleActiveLine: true,
+                matchBrackets: true,
+                extraKeys: {
+                    "Ctrl-Space": "autocomplete",
+
+                },
+                 @*value: "@Html.Raw(content)"*@
+             })
+                    codemirror_@(Model.Id).on('change', editor => {
+                        @*console.log(codemirror_@(Model.Id).getValue().toString())*@
+                        var content = JSON.stringify(codemirror_@(Model.Id).getValue());
+                        $("#@Model.Id").val(content.substring(1, content.length-1))
+            })
+    });
+    setTimeout(() => {
+        codemirror_@(Model.Id).setValue(decodeHtml(`@Html.Raw(content.Replace("<", "&lt;").Replace(">", "&gt;"))`))
+          codemirror_@(Model.Id).refresh()
+    }, 1000);
+
+    function decodeHtml(input) {
+        var entities = {
+            '&lt;': '<',
+            '&gt;': '>',
+            '&amp;': '&',
+        };
+
+        return input.replace(/&lt;|&gt;|&amp;/g, function (match) {
+            return entities[match];
+        });
+    }
+</script>

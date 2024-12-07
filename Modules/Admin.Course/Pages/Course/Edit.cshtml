@@ -1,0 +1,147 @@
+﻿@page
+@using ComponentUILibrary.Models
+@model Admin.Course.Pages.CMS.Course.EditModel
+@{
+}
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                <div class="card-header">
+                </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.CourseModel.Pid">
+                            <div class="form-group">
+                                <label for="title">Tiêu đề</label>
+                                <input required type="text" class="form-control" id="title" value="@Model.CourseModel.Title" name="title" aria-describedby="title" placeholder="nhập tiêu đề...">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6 col-12">
+                                        <label for="Price">Giá</label>
+                                        <input required type="text" class="form-control" id="Price" value="@Model.CourseModel.Price" @*pattern="/^-?[0-9]+([.,][0-9]+)?$/"*@ name="Price" aria-describedby="Price" placeholder="nhập giá...">
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <label for="PriceDiscount">Giá khuyến mãi</label>
+                                        <input required type="text" class="form-control" id="PriceDiscount" value="@Model.CourseModel.PriceDiscount" name="PriceDiscount" aria-describedby="PriceDiscount" placeholder="nhập giá khuyến mãi...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-4 col-12">
+                                        <label for="NumberOfLessons">Số bài học</label>
+                                        <input required type="number" class="form-control" id="NumberOfLessons" value="@Model.CourseModel.NumberOfLessons"  name="NumberOfLessons" aria-describedby="Price" placeholder="nhập số...">
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        <label for="Duration">Thời gian ước tính</label>
+                                        <input required type="text" class="form-control" id="Duration" value="@Model.CourseModel.Duration" name="Duration" aria-describedby="Duration" placeholder="3h 56m">
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        <label for="SkillLevel">Cấp độ</label>
+                                        <input required type="text" class="form-control" id="SkillLevel" value="@Model.CourseModel.SkillLevel" name="SkillLevel" aria-describedby="SkillLevel" placeholder="Beginer">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @{
+                                    RadioButtonModel RadioButtonModel = new RadioButtonModel();
+
+                                    List<RadioButtonData> list = new List<RadioButtonData>();
+                                    list.Add(new RadioButtonData { Id = "Hot", Name = "Hot", Value = Model.CourseModel.Hot.ToString(), Checked = Model.CourseModel.Hot, Class = "", Text = "Hot" });
+                                    list.Add(new RadioButtonData { Id = "New", Name = "New", Value = Model.CourseModel.New.ToString(), Checked = Model.CourseModel.New, Class = "", Text = "New" });
+
+                                    RadioButtonModel.Items = list;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.RadioButtonComponent),RadioButtonModel)
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="title">Danh mục</label>
+                                @{
+                                    DropdownFilterMultiSelectModel multiDropdownData = new DropdownFilterMultiSelectModel();
+                                    multiDropdownData.Data = Model.CategoryData;
+                                    multiDropdownData.Id = "Categories";
+                                    multiDropdownData.Name = "categories";
+                                    multiDropdownData.SelectedValue = Model.CourseCategories;
+                                    multiDropdownData.Size = "";
+                                    multiDropdownData.Class = "";
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.DropdownFilterMultiSelectComponent),new {model=multiDropdownData})
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">Hình ảnh</label>
+                                @{
+                                    List<string> listFile = new List<string>();
+                                    if (!String.IsNullOrEmpty(Model.CourseModel.Images))
+                                    {
+                                        listFile.Add(Model.CourseModel.Images);
+                                    }
+                                    FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+                                    fileUploadModel.Id = "Images";
+                                    fileUploadModel.Class = "";
+                                    fileUploadModel.IsMultiple = false;//true thì tạo control up nhiều ảnh
+                                    fileUploadModel.SelectedFiles = fileUploadModel.GenerateFileJson(listFile);
+
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent),fileUploadModel)
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Description">Mô tả</label>
+                                <textarea rows="5" class="form-control" id="Description" name="Description" placeholder="nhập mô tả...">@Model.CourseModel.Description</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Content">Nội dụng</label>
+                                @{
+
+                                    EditorModel editorModel = new EditorModel();
+                                    editorModel.Id = "Content";
+                                    editorModel.Cols = "30";
+                                    editorModel.Rows = "10";
+                                    editorModel.Content = @Model.CourseModel.Content;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent),editorModel)
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <a type="button" href="/Course/Index" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                        <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+
+@section Scripts{
+    <script>
+        const ModelView = {
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminCourse(ModelView);
+        _action.CheckFunction();
+    </script>
+}

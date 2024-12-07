@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Steam.Core.Base\Steam.Core.Base.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.Common\Steam.Core.Common.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.ComponentUILibrary\Steam.Core.ComponentUILibrary.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.Infrastructure\Steam.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.LocalizeManagement\Steam.Core.LocalizeManagement.csproj" />
+    <ProjectReference Include="..\..\Core\Steam.Core.Utilities\Steam.Core.Utilities.csproj" />
+    <ProjectReference Include="..\Admin.Payments\Admin.Payments.csproj" />
+  </ItemGroup>
+
+
+
+</Project>

@@ -1,0 +1,131 @@
+﻿@model Admin.TemplatePage.Controllers.EditModel
+
+@using Admin.TemplatePage.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+
+                        <ul class="nav nav-tabs alwaystop-header " id="myTab" role="tablist">
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link active" id="content-tab" data-bs-toggle="tab" href="#content" role="tab" aria-controls="content" aria-selected="true">
+                                    <i class="fas fa-font"></i> Nội dung
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="images-tab" data-bs-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false">
+                                    <i class="fas fa-images"></i> Hình ảnh
+                                </a>
+                            </li>
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="seoSetting-tab" data-bs-toggle="tab" href="#seoSetting" role="tab" aria-controls="seoSetting" aria-selected="false">
+                                    <i class="fab fa-searchengin"></i> SEO
+                                </a>
+                            </li>
+
+                            <li style="" class="nav_list_button">
+
+                                <div class="">
+
+
+                                    <div class="form-check form-switch " style="float: left; margin-top:7px">
+
+                                        <input @(Model.Detail.Enabled == true ? "checked" : "") onclick="" class="cursor-pointer form-check-input" name="CheckBox" type="checkbox" id="CheckBox">
+
+                                    </div>
+                                    <button type="button" id="" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                                    <a type="button" href="@Url.Content(TemplatePageConstants.Route.PageIndex)" class="btn btn-danger">X</a>
+
+                                </div>
+                                <div id="nav_list_button_plugin" class="nav_list_button_plugin">
+
+
+                                </div>
+
+                            </li>
+
+
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade active show" id="content" role="tabpanel" aria-labelledby="content-tab">
+                                @{string GroupView = TemplatePageConstants.StaticPath.PartialView.Edit_TabContent; }
+                                @Html.Partial(GroupView, Model)
+
+                            </div>
+                            <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                                @Html.Partial(TemplatePageConstants.StaticPath.PartialView.Edit_TabImages, Model)
+
+                            </div>
+                            <div class="tab-pane fade" id="seoSetting" role="tabpanel" aria-labelledby="seoSetting-tab">
+                                @Html.Partial(TemplatePageConstants.StaticPath.PartialView.Edit_TabSEO, Model)
+
+                            </div>
+
+
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        @*<a type="button" href="@PostsManagementConstants.Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                <button type="button" id="btnSaveForm" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(TemplatePageConstants.ModuleInfo.PathCommand)/TemplatePage/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@TemplatePageConstants.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminTemplatePage_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+    </script>
+}

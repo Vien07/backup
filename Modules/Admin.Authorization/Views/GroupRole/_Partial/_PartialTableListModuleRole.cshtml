@@ -1,0 +1,56 @@
+﻿@using X.PagedList
+@using ComponentUILibrary.Models
+@{
+    var CDN_HOST = "";
+}
+
+@model IPagedList<Admin.Authorization.Database.ModuleRole>;
+
+    <h4>Danh sách quyền thuộc nhóm</h4>
+@if (Model != null && Model.Any())
+{
+
+    int stt = Model.PageNumber * Model.PageSize - Model.PageSize;
+    foreach (var item in Model.Where(s => s.IdParent == null))
+    {
+        stt = stt + 1;
+        <tr id="@item.Pid" class="handle">
+            <td width="1">
+                <div class="form-check form-check-sm handle">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="form-check-input form-check-primary form-check-glow checkItem" value="@item.Pid" id="checkItem_@item.Pid">
+                    </div>
+                </div>
+            </td>
+            <td width="1"><input tabindex="@(item.Order+1000)" onchange="_action.UpdateOrder(@item.Pid,this.value)" type="number" class="form-control-sm order-input  form-control-plaintext" value="@stt" disabled /></td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @{
+                    List<SelectControlData> multiDropdownModuleRole = new List<SelectControlData>();
+                    foreach (var role in Model.Where(s => s.IdParent == item.Pid))
+                    {
+                        multiDropdownModuleRole.Add(new SelectControlData { Name = role.Name, Value = role.Pid.ToString() });
+                    }
+                    DropdownFilterMultiSelectModel multiDropdownData = new DropdownFilterMultiSelectModel();
+                    multiDropdownData.Data = multiDropdownModuleRole;
+                    multiDropdownData.Id = "selectmultiModuleRole_" + item.Pid;
+                    multiDropdownData.Size = "";
+                    multiDropdownData.Class = "";
+                    //multiDropdownData.SelectedValue = "1,2,3,4";
+                }
+                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.DropdownFilterMultiSelectComponent), new { model = multiDropdownData })
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="7" class="text-center">
+            <span>Không có dữ liệu!!</span>
+        </td>
+
+    </tr>
+}

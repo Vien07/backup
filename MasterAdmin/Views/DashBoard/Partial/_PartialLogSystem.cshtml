@@ -1,0 +1,34 @@
+﻿@using Admin.Authorization.Constants;
+@model List<Admin.Authorization.Database.LogManagement>;
+
+<div class="card">
+    <div class="card-header">
+        <h4>Hoạt động</h4>
+    </div>
+    <div class="card-content pb-4">
+        <ul class="list-group">
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-12">
+                                <div>
+                                    <span class="remind-work-date">@item.UpdateDate</span>
+                                    <span> | </span>
+                                    <span class=" remind-work-title">@item.UpdateUser</span>
+                                </div>
+
+                                <div>@item.ActionName</div>
+                            </div>
+                        </div>
+
+                    </li>
+                }
+            }
+
+     
+        </ul>
+    </div>
+</div>

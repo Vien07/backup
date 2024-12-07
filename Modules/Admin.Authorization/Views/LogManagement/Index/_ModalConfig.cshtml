@@ -1,0 +1,92 @@
+﻿@using Admin.Authorization.Constants;
+@model List<ComponentUILibrary.ViewComponents.ConfigModel>;
+
+
+
+
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-within-card-adminconfig" aria-controls="navs-pills-within-card-active" aria-selected="true">Admin</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-within-card-websiteconfig" aria-controls="navs-pills-within-card-link" aria-selected="false" tabindex="-1">Website</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content p-0">
+            <div class="tab-pane fade active show" id="navs-pills-within-card-adminconfig" role="tabpanel">
+                <form id="Admin_LogManagementConfig" class="form form-vertical mt-3">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-12 row">
+                                <label for="MaxHeight">Kích thước hình tối đa</label>
+
+                                <div class="form-group col-5">
+                                    <input data-toggle="tooltip" data-placement="top" title="MaxWidth" type="text" id="@LogManagementConstants.Config.Admin.MaxWidth" value="@(Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.MaxWidth).FirstOrDefault() !=null?Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.MaxWidth).FirstOrDefault().Value:"")" class="form-control" name="@LogManagementConstants.Config.Admin.MaxWidth" placeholder="MaxWidth">
+                                </div>
+                                <div class="form-group col-5">
+                                    <input data-toggle="tooltip" data-placement="top" title="MaxHeight" type="text" id="@LogManagementConstants.Config.Admin.MaxHeight" value="@(Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.MaxHeight).FirstOrDefault() !=null?Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.MaxHeight).FirstOrDefault().Value:"")" class="form-control" name="@LogManagementConstants.Config.Admin.MaxHeight" placeholder="MaxHeight">
+                                </div>
+                            </div>
+                            <div class="col-12 row">
+                                <label for="ThumbHeight">Kích thước hình Thumb</label>
+
+                                <div class="form-group col-6">
+                                    <input data-toggle="tooltip" data-placement="top" title="ThumbHeight" type="text" id="@LogManagementConstants.Config.Admin.ThumbHeight" value="@(Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.ThumbHeight).FirstOrDefault() !=null?Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.ThumbHeight).FirstOrDefault().Value:"")" class="form-control" name="@LogManagementConstants.Config.Admin.ThumbHeight" placeholder="ThumbHeight">
+                                </div>
+                                <div class="form-group col-6">
+                                    <input data-toggle="tooltip" data-placement="top" title="ThumbWidth" type="text" id="@LogManagementConstants.Config.Admin.ThumbWidth" class="form-control" value="@(Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.ThumbWidth).FirstOrDefault() !=null?Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.ThumbWidth).FirstOrDefault().Value:"")" name="@LogManagementConstants.Config.Admin.ThumbWidth" placeholder="ThumbWidth">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="PageSize">PageSize</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="PageSize" type="text" id="@LogManagementConstants.Config.Admin.PageSize" class="form-control" value="@(Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.PageSize).FirstOrDefault() !=null?Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.PageSize).FirstOrDefault().Value:"")" name="@LogManagementConstants.Config.Admin.PageSize" placeholder="PageSize">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="Config1">Thêm config</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="Config1" type="text" id="@LogManagementConstants.Config.Admin.Config1" class="form-control" value="@(Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.Config1).FirstOrDefault() !=null?Model.Where(p=>p.Key == LogManagementConstants.Config.Admin.Config1).FirstOrDefault().Value:"")" name="@LogManagementConstants.Config.Admin.Config1" placeholder="Config1">
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="button" onclick="_action.SaveConfig('Admin_LogManagementConfig','Admin')" class="btn btn-primary me-1 mb-1">Apply</button>
+                                @*                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Default</button>
+                                *@
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="navs-pills-within-card-websiteconfig" role="tabpanel">
+                <form id="Website_LogManagementConfig" class=" mt-3 form form-vertical">
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="PageSize">PageSize</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="PageSize" type="text" id="@LogManagementConstants.Config.Website.PageSize" class="form-control" value="@(Model.Where(p=>p.Key == LogManagementConstants.Config.Website.PageSize).FirstOrDefault() !=null?Model.Where(p=>p.Key == LogManagementConstants.Config.Website.PageSize).FirstOrDefault().Value:"")" name="@LogManagementConstants.Config.Website.PageSize" placeholder="PageSize">
+                                </div>
+                                <div class="form-group">
+                                    <label for="PreSlug">PreSlug</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="PreSlug" type="text" id="@LogManagementConstants.Config.Website.PreSlug" class="form-control" value="@(Model.Where(p=>p.Key == LogManagementConstants.Config.Website.PreSlug).FirstOrDefault() !=null?Model.Where(p=>p.Key == LogManagementConstants.Config.Website.PreSlug).FirstOrDefault().Value:"")" name="@LogManagementConstants.Config.Website.PreSlug" placeholder="PreSlug">
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="button" onclick="_action.SaveConfig('Website_LogManagementConfig','Webiste')" class="btn btn-primary me-1 mb-1">Aply</button>
+                                @*                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Default</button>
+                                *@
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

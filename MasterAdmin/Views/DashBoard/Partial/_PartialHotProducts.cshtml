@@ -1,0 +1,48 @@
+﻿@using Admin.Authorization.Constants;
+@model List<MasterAdmin.Models.DashboardViewModel.Product_Item>;
+<div class="card">
+    <div class="card-header">
+        <h4>Sản phẩm nổi bật</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-lg">
+                <thead>
+                    <tr>
+                        <th>Tiêu đề</th>
+                        <th>Slug</th>
+                        <th>Lượt xem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="col-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-md">
+                                            <img src="@item.ImagePath">
+                                        </div>
+                                        <p class="font-bold ms-3 mb-0">@item.Title</p>
+                                    </div>
+                                </td>
+                                <td class="col-auto">
+                                    <p class=" mb-0">
+                                        http://ofd.vn/san-pham/@item.Slug
+                                    </p>
+                                </td>
+                                <td class="">
+                                    <p class=" mb-0">@item.CountView</p>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+ 
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

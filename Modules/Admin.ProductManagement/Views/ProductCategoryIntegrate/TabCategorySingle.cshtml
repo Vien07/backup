@@ -1,0 +1,40 @@
+﻿@model dynamic;
+@using ComponentUILibrary.Models
+@inject Admin.ProductManagement.Database.ProductManagementContext _context;
+
+@{
+    var listCate = _context.ProductCategories.Where(p => p.Enabled == true && p.ParentID == 0).Select(
+                     row => new SelectControlData
+                     {
+                         Value = row.Pid.ToString(),
+                         Name = row.Title
+                     }
+                    ).ToList<SelectControlData>();
+
+}
+<div class="form-group row ml-2 col-xl-12 col-sm-12">
+    <style>
+        .PostsCategory-nice-select {
+            margin-left: 13px
+        }
+    </style>
+    <label for="title">Danh mục</label>
+
+    @{
+        NiceSelectModel selectModel2 = new NiceSelectModel();
+        selectModel2.Data = listCate;
+        selectModel2.Id = Model.Id;
+        selectModel2.Size = Model.Size;
+        selectModel2.Class = Model.Class;
+        selectModel2.SelectedValue = Model.SelectedValue;
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+</div>
+
+<script>
+    $('#nice_select_@Model.Id').on('change', function () {
+
+       
+    });
+</script>
+

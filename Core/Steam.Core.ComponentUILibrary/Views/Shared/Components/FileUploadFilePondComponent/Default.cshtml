@@ -1,0 +1,270 @@
+﻿@using ComponentUILibrary.Models
+@using ComponentUILibrary
+@using Microsoft.Extensions.Configuration;
+@using Steam.Core.ComponentUILibrary.Constant
+
+@model FileUploadControlModel
+@{
+    string VirtualFolder = ComponentUILibraryConstant.VirtualFolder;
+
+}
+
+@{
+    var checkExt = "";
+    var lastDotIndex = Model.SelectedFiles.LastIndexOf('.');
+    if (lastDotIndex >= 0)
+    {
+        checkExt = Model.SelectedFiles.Substring(lastDotIndex + 1);
+    }
+    //var a = Model.PageIndex;
+    string file = "files: [],";
+    string fileStatus = "new";
+    if (checkExt == "")
+    {
+        file = "files: [],";
+    }
+    else
+    {
+        file = "files: [{source: '" + Model.SelectedFiles + "',options:{type: 'remote',metadata:{date: '2018-10-5T12:00',},},},],";
+        fileStatus = "existed";
+    }
+}
+@if (Model.FirstLoadLib)
+{
+    <link href="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond.css" rel="stylesheet" />
+    <link href="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond.css" rel="stylesheet" />
+    <link href="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-image-preview.css" rel="stylesheet" />
+
+    <link href="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-file-poster.css" rel="stylesheet" />
+
+    @*<link src="@Url.Content(VirtualFolder+FancyboxComponentConstants.PathLib)/fancybox.css" rel="stylesheet" integrity="sha512-nNlU0WK2QfKsuEmdcTwkeh+lhGs6uyOxuUs+n+0oXSYDok5qy0EI0lt01ZynHq6+p/tbgpZ7P+yUb+r71wqdXg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>*@
+
+    <!-- filepond validation -->
+
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-file-poster.js"></script>
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-file-validate-size.js"></script>
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-file-validate-type.js"></script>
+    <!-- image editor -->
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-image-exif-orientation.js"></script>
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-image-crop.js"></script>
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-image-filter.js"></script>
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-image-preview.js"></script>
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-image-resize.js"></script>
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond-plugin-fetch-svg-preview.min.js"></script>
+    @*<script src="@Url.Content(VirtualFolder+FancyboxComponentConstants.PathLib)/fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css" integrity="sha512-nNlU0WK2QfKsuEmdcTwkeh+lhGs6uyOxuUs+n+0oXSYDok5qy0EI0lt01ZynHq6+p/tbgpZ7P+yUb+r71wqdXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="@Url.Content(VirtualFolder+FileUploadFilePondComponentConstants.PathLib)/filepond.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.js"></script>
+
+}
+
+
+<!-- add before </body> -->
+<div class="row">
+    <div class="col-10 col-md-11 col-sm-10">
+        <input @(Model.IsMultiple == true ? "multiple" : "") type="file" data-max-file-size="@Model.MaxFileSize" id="@Model.Id" name="@Model.Id" class="image-preview-filepond @Model.Class" value="">
+
+    </div>
+    @if (Model.ChooseFromServer)
+    {
+        <div class="col-2 col-md-1 col-sm-2 ">
+            <a href="@VirtualFolder/filemanager/dialog.php?type=1&amp;field_id=@(Model.Id)_imageFromServerSingle&amp;relative_url=1&amp;multiple=0filemanager/dialog.php" class="iframe-btn">
+                <div class="d-flex justify-content-center align-items-center h-100 w-100">
+                    <i style="font-size:3.25rem;cursor:pointer" class="fas fa-cloud-download-alt">
+                    </i>
+                </div>
+            </a>
+
+        </div>
+    }
+
+</div>
+<ul hidden class="parsley-errors-list filled" id="fileValidate_@Model.Id"><li class="parsley-required">Vui lòng không để trống.</li></ul>
+<div class="modal fade text-left" id="@(Model.Id)_FilePond_InfoImageModal" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel33" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel33">Thông tin ảnh </h4>
+                <button type="button" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div id="@(Model.Id)_InfoImageForm">
+                <div class="modal-body">
+                    <label>Caption</label>
+                    <div class="form-group">
+                        <input id="" name="Images_Caption" value="@Model.Images_Caption" type="text" placeholder="Caption"
+                               class="form-control">
+                    </div>
+                    <label>Mô tả </label>
+                    <div class="form-group">
+                        <textarea id="" name="Images_Description" value="@Model.Images_Description" placeholder="Nhập mô tả.."
+                                  class="form-control">@Model.Images_Description</textarea>
+                    </div>
+                    <label>Alt</label>
+                    <div class="form-group">
+                        <input id="" name="Images_Alt" value="@Model.Images_Alt" placeholder="nhập alt..."
+                               class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnSaveImageInfoFilePond" class="btn btn-primary ml-1"
+                            data-bs-dismiss="modal">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Lưu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input hidden onchange="addLocalFileToLocalPond_@(Model.Id)(this.value)" id="@(Model.Id)_imageFromServerSingle" type="text" value="">
+
+<script>
+    var @(Model.Id)_filepond;
+    var @(Model.Id) = {
+        file: {},
+        metadata: {
+            filePath: '',
+            fileStatus: '@fileStatus'
+        }
+    };
+    var filePond_@(Model.Id) = [];
+
+    $(function () {
+        FilePond.registerPlugin(
+            FilePondPluginFileValidateSize,
+            FilePondPluginFileValidateType,
+            FilePondPluginImagePreview,
+            FilePondPluginFilePoster,
+            FilePondPluginFetchSVGPreview
+        );
+
+        FilePond.setOptions({
+            // Add your FilePond options here
+        });
+
+    initFilePond_@(Model.Id)()
+
+    });
+
+    $('.iframe-btn').fancybox({
+        'type': 'iframe',
+        'iframe': {
+            'css': {
+                'height': '700px'
+            }
+        }
+    });
+    function intDropEvent_@(Model.Id)(){
+        $('#'+'@(Model.Id)'+ ' .filepond--drop-label').on('click', function () {
+            isFileSever_@(Model.Id)=false
+        });
+    }
+    var isFileSever_@(Model.Id) = false;
+    function initFilePond_@(Model.Id)(){
+       @(Model.Id).file = FilePond.create(document.querySelector('#@Model.Id'), {
+            onremovefile: function (error, file) {
+                console.log('onremovefile', file);
+                @(Model.Id).file = {};
+                @(Model.Id).metadata.filePath = '';
+                @(Model.Id).metadata.fileStatus = 'remove';
+            },
+            onaddfilestart: function (file) {
+                console.log('add 1', file)
+                if (!isFileSever_@(Model.Id)) {
+                              @(Model.Id).file = file
+                       @(Model.Id).metadata.filePath = '';
+                     @(Model.Id).metadata.fileStatus = 'new';
+                }
+
+            },
+           onaddfileprogress: function (file, progress) {
+                console.log('add 1', progress)
+
+                @(Model.Id).file = file
+                @(Model.Id).metadata.fileStatus = 'new';
+            },
+            allowImagePreview: true,
+            allowImageFilter: false,
+            allowImageExifOrientation: true,
+            allowImageCrop: false,
+            styleItemPanelAspectRatio: 0.2,
+            acceptedFileTypes: [
+                'image/webp', 'image/svg+xml', 'image/png', 'image/jpg', 'image/jpeg',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                '@(Model.AcceptVideo == true ? "video/mp4" : "")'
+            ],
+            @Html.Raw(file)
+            ValidateID: fileValidate_@Model.Id,
+            fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+                $('#fileValidate_@Model.Id').attr('hidden', true);
+                resolve(type);
+            }),
+        });
+        intDropEvent_@(Model.Id)()
+    }
+
+
+    function addLocalFileToLocalPond_@(Model.Id)(filename) {
+        isFileSever_@(Model.Id) = true;
+        try {
+             fileForm = "server";
+
+            console.log('add from server', filename)
+            var fileUrl = '@VirtualFolder/FileStorage/Storage/' + filename;
+            FilePond.destroy(document.querySelector('#@Model.Id'));
+          @(Model.Id).metadata.fileStatus = 'server';
+         @(Model.Id).metadata.filePath = filename;
+            @(Model.Id).file = FilePond.create(document.querySelector('#@Model.Id'), {
+                       onaddfilestart: function (file) {
+           console.log('add 1', file)
+           if (!isFileSever_@(Model.Id)) {
+                         @(Model.Id).file = file
+                  @(Model.Id).metadata.filePath = '';
+                @(Model.Id).metadata.fileStatus = 'new';
+           }
+
+       },
+              onremovefile: function (error, file) {
+                console.log('onremovefile', file);
+                @(Model.Id).file = {};
+                @(Model.Id).metadata.filePath = '';
+                @(Model.Id).metadata.fileStatus = 'remove';
+            },
+                allowImagePreview: true,
+                allowImageFilter: false,
+                allowImageExifOrientation: false,
+                allowImageCrop: false,
+                styleItemPanelAspectRatio: 0.2,
+                acceptedFileTypes: [
+                    'image/webp', 'image/svg+xml', 'image/png', 'image/jpg', 'image/jpeg',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                ],
+                files: [{
+                    source: fileUrl,
+                    options: {
+                        type: 'remote',
+                        metadata: {
+                            date: '2018-10-5T12:00',
+                        },
+                    },
+                }, ],
+                ValidateID: fileValidate_@Model.Id,
+                fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+                    $('#fileValidate_@Model.Id').attr('hidden', true);
+                    resolve(type);
+                })
+            })
+
+                 intDropEvent()
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+</script>

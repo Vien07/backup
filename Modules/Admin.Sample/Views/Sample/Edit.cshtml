@@ -1,0 +1,183 @@
+﻿@model Admin.Sample.Controllers.SampleController.EditModel
+
+@using Admin.Sample.Constants
+@using ComponentUILibrary.Models
+@using ComponentUILibrary.ViewComponents
+@using PartialViews = Admin.Sample.Constants.SampleConstants.StaticPath.PartialView
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section" id="sectionEdit">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+
+                        <ul class="nav nav-tabs alwaystop-header " id="myTab" role="tablist">
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link active" id="content-tab" data-bs-toggle="tab" href="#content" role="tab" aria-controls="content" aria-selected="true">
+                                    <i class="fas fa-font"></i> Nội dung
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="images-tab" data-bs-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false">
+                                    <i class="fas fa-images"></i> Hình ảnh
+                                </a>
+                            </li>
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="category-tab" data-bs-toggle="tab" href="#category" role="tab" aria-controls="category" aria-selected="false">
+                                    <i class="fas fa-list"></i> Danh mục
+                                </a>
+                            </li>
+                            <li class="nav-item steam-admin-tab" role="presentation">
+                                <a class="nav-link" id="seoSetting-tab" data-bs-toggle="tab" href="#seoSetting" role="tab" aria-controls="seoSetting" aria-selected="false">
+                                    <i class="fab fa-searchengin"></i> SEO
+                                </a>
+                            </li>
+
+                            <li style="" class="nav_list_button">
+
+                                <div class="">
+
+
+                                    <div class="form-check form-switch " style="float: left; margin-top:7px">
+
+                                        <input @(Model.Detail.Enabled == true ? "checked" : "") onclick="" class="cursor-pointer form-check-input" name="CheckBox" type="checkbox" id="CheckBox">
+
+                                    </div>
+                                    <button type="button" id="btnSave" onclick="_action.Save('uploadForm',@Model.Detail.Pid)" class="btn btn-primary">Lưu</button>
+                                    <a type="button" href="@Url.Content(SampleConstants.Config.Route.PageIndex)" class="btn btn-danger">X</a>
+
+                                </div>
+                                <div class="btn-group" id="dropdown-icon-demo">
+                                    <button type="button" class="btn " id="changeLangBtn" data-bs-toggle="dropdown" aria-expanded="false"><img style="width:24px" src="/assets/flags/@(Model.LangCode).png" />@*<i class="bx bx-globe"></i>*@</button>
+                                    <input name="LangCode" id="LangCode" value="@Model.LangCode" hidden />
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center change-language btn" langcode="vi">
+                                                <img style="width:24px" src="/assets/flags/vi.png" />&nbsp; Việt Nam
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center change-language btn" langcode="en">
+                                                <img style="width:24px" src="/assets/flags/en.png" />&nbsp; English
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div id="nav_list_button_plugin" class="nav_list_button_plugin">
+
+
+                                </div>
+
+                            </li>
+
+
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade active show" id="content" role="tabpanel" aria-labelledby="content-tab">
+                                @Html.Partial(PartialViews.Edit_TabContent, Model);
+                            </div>
+                            <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+                                @Html.Partial(PartialViews.Edit_TabImages, Model)
+                            </div>
+                            <div class="tab-pane fade " id="category" role="tabpanel" aria-labelledby="category-tab">
+                                @*@Html.Partial(PartialViews.Edit_TabCategory, Model)*@
+
+                            </div>
+                            <div class="tab-pane fade" id="seoSetting" role="tabpanel" aria-labelledby="seoSetting-tab">
+                                @Html.Partial(PartialViews.Edit_TabSEO, Model)
+                            </div>
+
+
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        @*<a type="button" href="@SampleConstants.Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                            <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+@if (String.IsNullOrEmpty(Model.LangCode) && Model.LangCode != Steam.Core.Base.Constant.DefaultConfig.DEFAULT_LANGUAGE)
+{
+
+}
+@*@await MoveableModalComponent.Render(ViewContext, null)*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css" integrity="sha512-nNlU0WK2QfKsuEmdcTwkeh+lhGs6uyOxuUs+n+0oXSYDok5qy0EI0lt01ZynHq6+p/tbgpZ7P+yUb+r71wqdXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+@section Scripts{
+    @*<script asp-append-version="true" src="/_content/Admin.Sample/Scripts/SampleCommand.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script asp-append-version="true" src="@(SampleConstants.ModuleInfo.PathCommand)/sample/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@SampleConstants.Config.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            RouteEdit: "@SampleConstants.Config.Route.PageEdit",
+            FileUploadID: "Images",
+            DivSectionID: "sectionEdit"
+        }
+        let _action = new AdminSample_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+            $('.change-language').click(function (ele) {
+                var pid = $('#Pid').val()
+                if (pid > 0) {
+                    var langCode = $(this).attr('langcode');
+                    alert(langCode)
+                    //$("#changeLangBtn").html(`<img style="width:24px" src="/assets/flags/${langCode}.png" />`)
+                    //$('#LangCode').val(langCode)
+                    location.href = `/Sample/Edit/@(Model.Detail.Pid)?langCode=${langCode}`
+                } else {
+                    alert("Vui lòng lưu bài viết trước khi chuyển qua ngôn ngữ khác")
+                }
+
+            });
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+
+    </script>
+
+}

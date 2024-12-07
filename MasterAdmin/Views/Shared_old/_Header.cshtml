@@ -1,0 +1,125 @@
+﻿@using System.IdentityModel.Tokens.Jwt
+@inject Steam.Core.Base.IIdentityService identitySrv
+
+@{
+    var user = identitySrv.GetUser();
+    string DisplayName = user.DisplayName;
+    string Role = user.UserRole;
+    string UserName = user.UserName;
+
+}
+<header class="mb-3" style="position: sticky;top: 0;z-index: 99;background-color: white;height: 73px;">
+    <nav b-s896ofwr6n="" class="navbar navbar-expand navbar-light ">
+        <div b-s896ofwr6n="" class="container-fluid">
+            <a b-s896ofwr6n="" href="#" class="burger-btn d-block">
+                <i b-s896ofwr6n="" class="bi bi-justify fs-3"></i>
+            </a>
+
+            <button b-s896ofwr6n="" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span b-s896ofwr6n="" class="navbar-toggler-icon"></span>
+            </button>
+            <div b-s896ofwr6n="" class="collapse navbar-collapse" id="navbarSupportedContent">
+                <h3 class="col"> @ViewData["PageTitle"]</h3>
+                <div class="btn-group mb-1">
+                    <div class="dropdown dropdown-color-icon">
+                        <button style="height: 23px; width: 44px; margin-top: 3px; " class="ms-auto mb-2 mb-lg-0 btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenuButtonEmoji" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="me-50"><i class="fas fa-link"></i></span>
+                        </button>
+                        <div class="dropdown-menu " aria-labelledby="dropdownMenuButtonEmoji" style="margin: 0px; position: absolute; inset: 0px auto auto 0px; transform: translate(0px, 38px);" data-popper-placement="bottom-start">
+                            <a class="dropdown-item" href="#">
+                                <span class="dropdown-item-emoji">😆</span>
+                                Fanpage
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <span class="dropdown-item-emoji">😎</span>
+                                Misa
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <span class="dropdown-item-emoji">🤩</span>
+                                Tikok
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <ul b-s896ofwr6n="" class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    @*<li b-s896ofwr6n="" class="nav-item dropdown me-1">
+                            <a b-s896ofwr6n="" class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i b-s896ofwr6n="" class="bi bi-envelope bi-sub fs-4 text-gray-600"></i>
+                            </a>
+                            <ul b-s896ofwr6n="" class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                <li b-s896ofwr6n="">
+                                    <h6 b-s896ofwr6n="" class="dropdown-header">Mail</h6>
+                                </li>
+                                <li b-s896ofwr6n=""><a b-s896ofwr6n="" class="dropdown-item" href="#">No new mail</a></li>
+                            </ul>
+                        </li>*@
+                    <li b-s896ofwr6n="" class="nav-item dropdown me-3">
+                        <a b-s896ofwr6n="" class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img width="32" height="32" src="~/assets/images/logo/vi.png" />
+
+                            @*<i b-s896ofwr6n="" class="bi bi-globe-americas bi-sub fs-4 text-gray-600"></i>*@
+                        </a>
+                        <ul b-s896ofwr6n="" class="dropdown-menu dropdown-menu-end" style=" justify-content: center; min-width: 65px; text-align: center;" aria-labelledby="dropdownMenuButton">
+                            <li b-s896ofwr6n="">
+                                @*<div class="row">
+                                    <div class="col-md-6">*@
+                                <img onclick="alert('vi')" style="cursor:pointer" width="24" height="24" src="~/assets/images/logo/vi.png" />
+
+                                @*</div>
+                                    <div class="col-md-6">*@
+                                <img onclick="alert('en')" style="cursor:pointer" width="24" height="24" src="~/assets/images/logo/en.png" />
+
+                                @*</div>
+                                    </div>*@
+                            </li>
+                            @*<li b-s896ofwr6n=""><a b-s896ofwr6n="" class="dropdown-item">No notification available</a></li>*@
+                        </ul>
+                    </li>
+                </ul>
+
+                <div b-s896ofwr6n="" class="dropdown">
+                    <a b-s896ofwr6n="" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div b-s896ofwr6n="" class="user-menu d-flex">
+                            <div b-s896ofwr6n="" class="user-name text-end me-3">
+                                <h6 b-s896ofwr6n="" class="mb-0 text-gray-600">@DisplayName</h6>
+                                <p b-s896ofwr6n="" class="mb-0 text-sm text-gray-600">@Role</p>
+                            </div>
+                            <div b-s896ofwr6n="" class="user-img d-flex align-items-center">
+                                <div b-s896ofwr6n="" class="avatar avatar-md">
+                                    <img b-s896ofwr6n="" src="~/assets/images/faces/1.jpg">
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <ul b-s896ofwr6n="" class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li b-s896ofwr6n="">
+                            <h6 b-s896ofwr6n="" class="dropdown-header">Hello, @DisplayName!</h6>
+                        </li>
+                        <li b-s896ofwr6n="">
+                            <a b-s896ofwr6n="" class="dropdown-item" href="#">
+                                <i b-s896ofwr6n="" class="icon-mid bi bi-person me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        @*<li b-s896ofwr6n="">
+                                <a b-s896ofwr6n="" class="dropdown-item" href="#">
+                                    <i b-s896ofwr6n="" class="icon-mid bi bi-gear me-2"></i>
+                                    Settings
+                                </a>
+                            </li>
+                            <li b-s896ofwr6n="">
+                                <a b-s896ofwr6n="" class="dropdown-item" href="#">
+                                    <i b-s896ofwr6n="" class="icon-mid bi bi-wallet me-2"></i>
+                                    Wallet
+                                </a>
+                            </li>*@
+                        <li b-s896ofwr6n="">
+                            <hr b-s896ofwr6n="" class="dropdown-divider">
+                        </li>
+                        <li b-s896ofwr6n=""><a b-s896ofwr6n="" class="dropdown-item" href="@Steam.Core.Base.Constant.SystemInfo.VirtualFolder/Login/Logout"><i b-s896ofwr6n="" class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

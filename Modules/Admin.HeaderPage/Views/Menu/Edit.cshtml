@@ -1,0 +1,164 @@
+﻿@model Admin.HeaderPage.MenuEditModel
+
+@using Admin.HeaderPage.Constants;
+@using ComponentUILibrary.Models
+@using static Admin.HeaderPage.Constants.MenuConstants; 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.MenuModel.Pid">
+                            <div class="form-group  col-6 col-md-6" @*style="display:@(Model.MenuModel.Detail.ParentID==0?"none;":"")"*@ id="div_ParentID">
+
+                                @*<label for="ParentID">Danh mục cha</label>*@
+
+                                @{
+
+                                    NiceSelectModel selectModel = new NiceSelectModel();
+                                    selectModel.Data = Model.Parrents;
+                                    selectModel.Id = "ParentID";
+                                    selectModel.Search = 1;
+                                    selectModel.Size = "small";
+                                    selectModel.Class = "nice-select sample-nice-select";
+                                    selectModel.IsRequire = false;
+                                    selectModel.DefaultValue = "0";
+                                    selectModel.DefaultText = "--HeaderPage cha--";
+                                    selectModel.SelectedValue = Model.MenuModel.ParentID.ToString();
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel })
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <label for="title">Tiêu đề</label>
+                                    <input required type="text" class="form-control" id="title" value="@Model.MenuModel.Title" name="Title" aria-describedby="title" placeholder="nhập tiêu đề...">
+                                </div>
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <label for="title">Icon</label>
+                                    <input type="text" class="form-control" id="Icon" value="@Model.MenuModel.Icon" name="Icon" aria-describedby="Icon" placeholder="nhập icon...">
+                                </div>
+
+                                @*<div hidden class="form-group col-md-3 col-sm-12">
+                <label for="Event">Show Level</label>
+                <input required type="text" class="form-control" id="ShowLevel" value="@Model.MenuModel.Detail.ShowLevel" name="ShowLevel" aria-describedby="ShowLevel" placeholder="nhập cấp...">
+            </div>*@
+                                <div class="form-group col-md-3 col-sm-12">
+                                    <label for="Event">Event</label>
+                                    <input type="text" class="form-control" id="Event" value="@Model.MenuModel.Event" name="Event" aria-describedby="Event" placeholder="nhập event...">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">URL</label>
+                            <input  type="text" class="form-control" id="URl" value="@Model.MenuModel.URL" name="URL" aria-describedby="URL" placeholder="nhập url...">
+                        </div>
+                        <div class="row">
+                            <!--<div class="form-group col-3 col-md-3">
+
+                                @{
+                                    CheckboxModel checkboxModel = new CheckboxModel();
+                                    checkboxModel.Id = "IsParent";
+                                    checkboxModel.CustomEvent = "ShowDivParrent(checked)";
+                                    checkboxModel.Class = "";
+                                    checkboxModel.Style = "";
+                                    checkboxModel.CheckValue = "1";
+                                    checkboxModel.UnCheckValue = "0";
+                                    if (Model.MenuModel.ParentID == 0)
+                                    {
+                                        checkboxModel.Value = "1";
+
+                                    }
+                                    else
+                                    {
+                                        checkboxModel.Value = "0";
+
+                                    }
+
+                                }-->
+                                @*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CheckBoxComponent), checkboxModel)*@
+                                <!--<label for="IsParent" class="text-bold">Danh mục cha</label>
+                                <script>
+                                    function ShowDivParrent(checked) {
+
+                                        if (!checked) {
+                                            $("#div_ParentID").show();
+
+                                        } else {
+                                            $("#div_ParentID").hide();
+
+                                        }
+                                    }
+                                </script>
+                            </div>-->
+       
+
+                        </div>
+
+
+                    </form>
+                    <div class="modal-footer">
+                        <a type="button" href="@Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                        <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+
+@section Scripts{
+    <script asp-append-version="true" src="@(ModuleInfo.PathCommand)/menu/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@Config.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminMenu_Edit (ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+    </script>
+}

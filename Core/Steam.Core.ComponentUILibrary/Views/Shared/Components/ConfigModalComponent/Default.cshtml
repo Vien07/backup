@@ -1,0 +1,34 @@
+﻿@using ComponentUILibrary.ViewComponents
+@model ConfigModalModel
+
+<div id="template-customizer" class="invert-bg-white" style="visibility: visible;">
+    <a href="javascript:OpenConfigModel()" class="template-customizer-open-btn" tabindex="-1"></a>
+    <div class="p-4 m-0 lh-1 border-bottom template-customizer-header position-relative py-3">
+        <h4 class="template-customizer-t-panel_header mb-2">Cấu hình</h4>
+        <div class="d-flex align-items-center gap-2 position-absolute end-0 top-0 mt-4 me-3">
+            <a href="javascript:void(0)" class="template-customizer-reset-btn text-body" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Reset Customizer">
+                <i class="bx bx-refresh fs-4"></i>
+                <span class="badge rounded-pill bg-danger badge-dot badge-notifications"></span>
+            </a>
+            <a href="javascript:void(0)" onclick="CloseConfigModel()" class="template-customizer-close-btn fw-light text-body" tabindex="-1">
+                <i class="bx bx-x fs-4"></i>
+            </a>
+        </div>
+    </div>
+    <div class="template-customizer-inner">
+        <div class="template-customizer-layout modal-config">
+            @await Html.PartialAsync(Model.BodyUrl, Model.Data)
+
+        </div>
+    </div>
+</div>
+<script>
+    function CloseConfigModel() {
+        $("#template-customizer").removeClass("template-customizer-open")
+
+    }
+    function OpenConfigModel() {
+        $("#template-customizer").addClass("template-customizer-open")
+
+    }
+</script>

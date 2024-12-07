@@ -1,0 +1,126 @@
+﻿@page
+@using ComponentUILibrary.Models
+@model Admin.Course.Pages.CMS.Lecture.EditModel
+@{
+}
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.LectureModel.Pid">
+                            <div class="form-group">
+                                <label for="title">Tiêu đề</label>
+                                <input required type="text" class="form-control" id="title" value="@Model.LectureModel.Title" name="title" aria-describedby="title" placeholder="nhập tiêu đề...">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Hình ảnh</label>
+                                @{
+                                    List<string> listFile = new List<string>();
+                                    if (!String.IsNullOrEmpty(Model.LectureModel.Images))
+                                    {
+                                        listFile.Add(Model.LectureModel.Images);
+                                    }
+                                    FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+                                    fileUploadModel.Id = "Images";
+                                    fileUploadModel.Class = "";
+                                    fileUploadModel.IsMultiple = false;//true thì tạo control up nhiều ảnh
+                                    fileUploadModel.SelectedFiles = fileUploadModel.GenerateFileJson(listFile);
+
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent),fileUploadModel)
+                            </div>
+                            <div class="form-group">
+                                <label for="Description">Mô tả</label>
+                                @{
+
+                                    EditorModel editorDesModel = new EditorModel();
+                                    editorDesModel.Id = "Description_";
+                                    editorDesModel.Cols = "30";
+                                    editorDesModel.Rows = "10";
+                                    editorDesModel.Content = @Model.LectureModel.Description;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent),editorDesModel)
+                            </div>
+                            <div class="form-group row ml-2 col-xl-12 col-sm-12">
+                                <style>
+                                    .sample-nice-select {
+                                        margin-left: 5px
+                                    }
+                                </style>
+                                <label for="title">Loại</label>
+
+                                @{
+                                    List<SelectControlData> data = new List<SelectControlData>();
+                                    data.Add(new SelectControlData { Name = "Video", Value = "video" });
+                                    data.Add(new SelectControlData { Name = "Text", Value = "text" });
+                                    NiceSelectModel selectModel2 = new NiceSelectModel();
+                                    selectModel2.Data = data;
+                                    selectModel2.Id = "select1";
+                                    selectModel2.Name = "Type";
+                                    selectModel2.Size = "small";
+                                    selectModel2.SelectedValue = @Model.LectureModel.Type;
+                                    selectModel2.Class = "nice-select sample-nice-select";
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent),new {model=selectModel2})
+                            </div>
+
+                            <div class="form-group">
+                                <label for="video">Video</label>
+                                <input type="text" class="form-control" id="video" value="@Model.LectureModel.Video" name="video" aria-describedby="video" placeholder="nhập link...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="TimeOfVideo">Thời lượng video</label>
+                                <input type="text" class="form-control" id="TimeOfVideo" value="@Model.LectureModel.TimeOfVideo" name="TimeOfVideo" aria-describedby="video" placeholder="nhập thời lượng...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Content">Văn bản</label>
+                                @{
+
+                                    EditorModel editorContentModel = new EditorModel();
+                                    editorContentModel.Id = "Content";
+                                    editorContentModel.Cols = "30";
+                                    editorContentModel.Rows = "10";
+                                    editorContentModel.Content = @Model.LectureModel.Content;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent),editorContentModel)
+                            </div>
+                            <div class="form-group">
+                                <label for="NumberOfQuestion">Số câu hỏi trong văn bản</label>
+                                <input type="text" class="form-control" id="NumberOfQuestion" value="@Model.LectureModel.NumberOfQuestion" name="NumberOfQuestion" aria-describedby="video" placeholder="nhập số...">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <a type="button" href="/Lecture/Index" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                        <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+
+@section Scripts{
+    <script>
+        const ModelView = {
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminLecture(ModelView);
+        _action.CheckFunction();
+    </script>
+}

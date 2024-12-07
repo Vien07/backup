@@ -1,0 +1,23 @@
+﻿@model Admin.MemberManagement.Controllers.FeedbackEditModel
+
+@using Admin.MemberManagement.Constants;
+@using ComponentUILibrary.Models
+<div class="mt-2">
+
+
+    <div class="form-group">
+        <label for="">Danh sách ảnh</label>
+        @{
+            DropzoneModel imagesMultiPicker = new DropzoneModel();
+            imagesMultiPicker.Id = "ListImages";
+            imagesMultiPicker.FirstLoadLib = true;
+            imagesMultiPicker.FilePath = FeedbackConstants.StaticPath.Asset.Image;
+            imagesMultiPicker.Files = System.Text.Json.JsonSerializer.Serialize<List<Admin.MemberManagement.Database.Feedback_Files>>(Model.ListFiles);
+
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.DropzoneComponent), new { model = imagesMultiPicker })
+    </div>
+
+
+
+</div>

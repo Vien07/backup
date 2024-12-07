@@ -1,0 +1,37 @@
+﻿@using X.PagedList
+@using Admin.ProductManagement.Constants
+@using Admin.ProductManagement.Models.ViewModels.OrderManagement
+
+@model OrderManagementPagedViewModel;
+
+@if (Model != null && Model.Items.Any())
+{
+    int stt = Model.PageNumber * Model.PageSize - Model.PageSize;
+    foreach (var item in Model.Items)
+    {
+        stt = stt + 1;
+        <tr id="@item.Pid">
+            <td width="1"><input tabindex="@(item.Order+1000)" onchange="_action.UpdateOrder(@item.Pid,this.value)" type="number" class="form-control-sm order-input  form-control-plaintext" value="@stt" disabled /></td>
+            <td class="text-bold-500">@Html.Raw(item.OrderNo)</td>
+            <td class="text-bold-500">@Html.Raw(item.Email)</td>
+            <td class="text-bold-500">@Html.Raw(item.OrderDate)</td>
+            <td class="text-bold-500">@Html.Raw(item.OrderStatus)</td>
+            <td class="text-bold-500">@Html.Raw(item.PaymentStatus)</td>
+            <td class="text-center">
+                <i onclick="" class="cursor-pointer  text-info fas fa-sync"></i>
+
+                <a href="@Admin.ProductManagement.Constants.OrderManagementConstants.Config.Route.PageEdit/@item.Pid"><i onclick="_action.Edit(@item.Pid)" class="cursor-pointer text-primary fas fa-eye"></i></a>
+                <i onclick="_action.Delete(@item.Pid)" class="cursor-pointer  text-danger fas fa-window-close"></i>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="9" class="text-center">
+            <span>Không có dữ liệu!!</span>
+        </td>
+
+    </tr>
+}

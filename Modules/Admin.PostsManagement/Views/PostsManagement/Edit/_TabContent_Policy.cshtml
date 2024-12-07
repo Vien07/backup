@@ -1,0 +1,47 @@
+﻿@model Admin.PostsManagement.Controllers.PostsManagementController.EditModel
+
+@using Admin.PostsManagement.Constants;
+@using ComponentUILibrary.Models
+<input hidden id="Pid" class="Pid" name="Pid" value="@Model.Detail.Pid">
+<div class="form-group">
+</div>
+<div class="row">
+<div class="form-group col-md-12">
+    <label for="title">Tiêu đề</label>
+    <input type="text" class="form-control" id="Title" value="@Model.Detail.Title" name="Title" aria-describedby="title" placeholder="nhập tiêu đề...">
+
+
+
+</div>
+
+</div>
+
+<div class="form-group">
+    <label for="Content">Mô tả ngắn</label>
+    @{
+
+        EditorModel editorModel = new EditorModel();
+        editorModel.Id = "Description";
+        editorModel.Cols = "30";
+        editorModel.Rows = "10";
+        editorModel.Rows = "10";
+        editorModel.FirstLoadLib = true;
+        editorModel.Content = Model.Detail.Description;
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorModel)
+
+</div>
+<div class="form-group">
+    <label for="Content">Nội dung</label>
+    @{
+
+        EditorModel editorContent = new EditorModel();
+        editorContent.Id = "Content";
+
+        editorContent.Height = 800;
+        editorContent.FirstLoadLib = true;
+        editorContent.Content = Model.Detail.Content;
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorContent)
+
+</div>

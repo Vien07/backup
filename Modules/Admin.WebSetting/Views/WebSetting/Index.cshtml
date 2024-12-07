@@ -1,0 +1,122 @@
+﻿@model Admin.WebSetting.Controllers.PageModel
+@using ComponentUILibrary.Models
+@using Admin.WebSetting.Constants
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+}
+
+@functions {
+    string getValue(string key)
+    {
+        if (Model.EditModel.ContainsKey(key))
+        {
+            return Model.EditModel[key];
+        }
+        else
+        {
+            return "";
+        }
+    }
+}
+
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+<section class="section">
+    <div class="row" id="table-hover-row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="TabInfo-tab" data-bs-toggle="tab" href="#TabInfo"
+                               role="tab" aria-controls="home" aria-selected="true">Thông tin</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="TabImages-tab" data-bs-toggle="tab" href="#TabImages"
+                               role="tab" aria-controls="profile" aria-selected="false">Hình ảnh</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="TabActions-tab" data-bs-toggle="tab" href="#TabActions"
+                               role="tab" aria-controls="contact" aria-selected="false">Thao tác</a>
+                        </li>   
+                        <li class="nav-item"  role="presentation">
+                            <a  class="nav-link" id="TabStyle-tab" data-toggle="TabStyle" data-bs-toggle="tab" href="#TabStyle"
+                               role="tab" aria-controls="contact" aria-selected="false">Website Styles</a>
+                        </li>   
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="TabApi-tab" data-bs-toggle="tab" href="#TabApi"
+                               role="tab" aria-controls="contact" aria-selected="false">Api</a>
+                        </li>
+                        @*<li class="nav-item" role="presentation">
+                                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact"
+                                   role="tab" aria-controls="contact" aria-selected="false">Mạng xã hội</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#contact"
+                                   role="tab" aria-controls="contact" aria-selected="false">Styles</a>
+                            </li>*@
+                    </ul>
+                    <form class="tab-content" id="frmWebSetting">
+                        <div class="tab-pane fade show active" id="TabInfo" role="tabpanel" aria-labelledby="TabInfo-tab">
+                            @Html.Partial(WebSettingConstants.StaticPath.PartialView.TabInfo, Model)
+
+
+                        </div>
+                        <div class="tab-pane fade" id="TabImages" role="tabpanel" aria-labelledby="TabImages-tab">
+                            @Html.Partial(WebSettingConstants.StaticPath.PartialView.TabImages, Model)
+
+                        </div>
+                        <div class="tab-pane fade" id="TabActions" role="tabpanel" aria-labelledby="TabActions-tab">
+                            @Html.Partial(WebSettingConstants.StaticPath.PartialView.TabActions, Model)
+
+                        </div>      
+                        <div  class="tab-pane fade" id="TabStyle" role="tabpanel" aria-labelledby="TabStyle-tab">
+                            @Html.Partial(WebSettingConstants.StaticPath.PartialView.TabStyle, Model)
+
+                        </div> 
+                        <div class="tab-pane fade" id="TabApi" role="tabpanel" aria-labelledby="TabApi-tab">
+                            @Html.Partial(WebSettingConstants.StaticPath.PartialView.TabApi, Model)
+
+                        </div>
+                        <div style="text-align:right" class="mt-2">
+                            @*<button onclick="_action.RestartWebsite()" class="btn btn-success" type="button">Update Meta</button>*@
+                            <button onclick="_action.RestartWebsite()" class="btn btn-info" type="button">Restart Website</button>
+
+                            <button onclick="_action.Save(1)" class="btn btn-primary" type="button">Apply</button>
+                            <button onclick="_action.Save(0)" class="btn btn-sucess" type="button">Save</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.AntiForgeryToken()
+
+</section>
+
+<!-- Hoverable rows end -->
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(WebSettingConstants.ModuleInfo.PathCommand)/index.js"></script>
+
+    <script>
+        const ModelView = {
+            FromUploadID: "frmWebSetting",
+            FileUploadID: ["Logo", "ogImage", "Favicon"]
+        }
+        let _action = new WebSetting(ModelView);
+        _action.CheckFunction();
+
+        //document.body.addEventListener('click', function (event) {
+        //    codemirror_WebsiteStyleVariables.refresh()
+
+        //});
+        $('a[data-toggle="TabStyle"]').on('shown.bs.tab', function (e) {
+            codemirror_WebsiteStyleVariables.refresh()
+            codemirror_WebsiteCustomStyle.refresh()
+        });
+    </script>
+}

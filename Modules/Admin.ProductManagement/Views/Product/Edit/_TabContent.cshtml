@@ -1,0 +1,157 @@
+﻿@model Admin.ProductManagement.Controllers.ProductController.EditModel
+
+@using Admin.ProductManagement.Constants;
+@using ComponentUILibrary.Models
+<input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+<div class="form-group">
+</div>
+
+<div class="form-group">
+    <label for="title">Tiêu đề</label>
+    <input required type="text" class="form-control" id="Title" value="@Model.Detail.Title" name="Title" aria-describedby="title" placeholder="nhập tiêu đề...">
+</div>
+
+
+
+<div class="form-group">
+    <label for="title">Slug</label>
+    <input required type="text" class="form-control" id="Slug" value="@Model.Detail.Slug" name="Slug" aria-describedby="Slug" placeholder="nhập slug...">
+</div>
+<div class="row">
+    <div class="form-group  col-md-3">
+        <label for="SellingPrice">Giá bán</label>
+        <input required type="text" class="form-control" id="SellingPrice" value="@Model.Detail.SellingPrice" name="SellingPrice" aria-describedby="SellingPrice" placeholder="nhập giá bán...">
+    </div>
+    <div class="form-group">
+        <label for="TypeProduct">Loại sản phẩm</label>
+        @{
+            //var listCateType = new List<SelectControlData>()
+            //{
+            //    new SelectControlData() {Name = "Bán chạy", Value = "hot", Order = 0},
+            //    new SelectControlData() {Name = "Sản phẩm mới", Value = "new", Order = 1},
+            //    new SelectControlData() {Name = "Nam", Value ="man", Order = 2},
+            //    new SelectControlData() {Name = "Nữ", Value = "women", Order = 3},
+            //    new SelectControlData() {Name = "UniSex", Value ="unisex", Order = 4}
+            //};
+            DropdownFilterMultiSelectModel multiDropdownData = new DropdownFilterMultiSelectModel();
+            multiDropdownData.Data = Model.ListProductTypes;
+            multiDropdownData.Id = "TypeProduct";// "selectmulti";
+            multiDropdownData.Size = "medium";
+            multiDropdownData.Class = "form-control";
+            multiDropdownData.FirstLoadLib = true;
+            multiDropdownData.SelectedValue = Model.Detail.TypeProduct;
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.DropdownFilterMultiSelectComponent), new { model = multiDropdownData })
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="title">Thông tin thêm</label>
+    @{
+
+        TreeSelectModel treeSelectModel = new TreeSelectModel();
+        treeSelectModel.ID = "ProductPolicyIds";
+        treeSelectModel.Class ="";
+        treeSelectModel.isIndependentNodes = false;
+        treeSelectModel.SelectedValue = Model.Detail.ProductPolicyIds;
+        treeSelectModel.FirstLoadLib = true;
+        treeSelectModel.isGrouped = false;
+        treeSelectModel.MapToObj(Model.ListPolicies, "Pid", "Title", "ParentCode", "", "", "");
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TreeSelectComponent), new { model = treeSelectModel })
+</div>
+@*<div class="form-group">
+        <label for="Content">Kích thước sản phẩm</label>
+        @{
+
+            EditorModel editorProductDimension = new EditorModel();
+            editorProductDimension.Id = "ProductDimension";
+            editorProductDimension.Cols = "30";
+            editorProductDimension.Rows = "10";
+            editorProductDimension.FirstLoadLib = true;
+            editorProductDimension.Content = Model.Detail.ProductDimension;
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorProductDimension)
+    </div>
+
+    <div class="form-group">
+        <label for="Content">Hướng dẫn bảo quản</label>
+        @{
+
+            EditorModel editorStorageInstruction = new EditorModel();
+            editorStorageInstruction.Id = "StorageInstruction";
+            editorStorageInstruction.Cols = "30";
+            editorStorageInstruction.Rows = "10";
+            editorStorageInstruction.FirstLoadLib = true;
+            editorStorageInstruction.Content = Model.Detail.StorageInstruction;
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorStorageInstruction)
+    </div>
+
+    <div class="form-group">
+        <label for="Content">Chính sách giao hànng</label>
+        @{
+
+            EditorModel editorDeliveryPolicy = new EditorModel();
+            editorDeliveryPolicy.Id = "DeliveryPolicy";
+            editorDeliveryPolicy.Cols = "30";
+            editorDeliveryPolicy.Rows = "10";
+            editorDeliveryPolicy.FirstLoadLib = true;
+            editorDeliveryPolicy.Content = Model.Detail.DeliveryPolicy;
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorDeliveryPolicy)
+    </div>
+
+    <div class="form-group">
+        <label for="Content">Chính sách đổi trả</label>
+        @{
+
+            EditorModel editorExchangePolicy = new EditorModel();
+            editorExchangePolicy.Id = "ExchangePolicy";
+            editorExchangePolicy.Cols = "30";
+            editorExchangePolicy.Rows = "10";
+            editorExchangePolicy.FirstLoadLib = true;
+            editorExchangePolicy.Content = Model.Detail.ExchangePolicy;
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorExchangePolicy)
+    </div>*@
+
+<div class="form-group">
+    <label for="Content">Mô tả ngắn</label>
+    @{
+
+        EditorModel editorModel = new EditorModel();
+        editorModel.Id = "Description";
+        editorModel.Cols = "30";
+        editorModel.Rows = "10";
+        editorModel.FirstLoadLib = true;
+        editorModel.Content = Model.Detail.Description;
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorModel)
+</div>
+
+<div class="form-group">
+    <label for="Content">Chi tiết</label>
+    @{
+
+        EditorModel editorContent = new EditorModel();
+        editorContent.Id = "Content";
+        editorContent.Cols = "30";
+        editorContent.Rows = "40";
+        editorContent.Content = Model.Detail.Content;
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorContent)
+
+</div>
+
+@*<div class="form-group">
+        <label for="title">Ngày xuất bản</label>
+        @{
+            DatePickerModel datePickerModel = new DatePickerModel();
+            datePickerModel.Id = "PublishDate";
+            datePickerModel.ClassContainner = "col-lg-4 mb-1";
+            datePickerModel.Placeholder = "Chọn ngày";
+            datePickerModel.Value = DateTime.Now.ToString("dd/M/yyyy");
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.DatePickerComponent), datePickerModel)
+    </div>*@

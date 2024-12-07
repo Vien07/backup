@@ -1,0 +1,61 @@
+﻿@model Admin.WebSetting.Controllers.PageModel
+@using ComponentUILibrary.Models
+@using Admin.WebSetting.Constants
+@{
+    string getValue(string key)
+    {
+        if (Model.EditModel.ContainsKey(key))
+        {
+            return Model.EditModel[key];
+        }
+        else
+        {
+            return "";
+        }
+    }
+}
+<div class="m-3 row">
+    @*<div class="form-group col-md-8 col-sm-12">
+        <label for="Content">--Variables</label>
+
+
+        @{
+
+            CodeMirrorModel codeMirrorWebsiteStyle = new CodeMirrorModel();
+            codeMirrorWebsiteStyle.Id = "WebsiteStyleVariables";
+            codeMirrorWebsiteStyle.CodeMode = "css";
+            codeMirrorWebsiteStyle.Content = getValue(WebSettingConstants.ConfigName.WebsiteStyleVariables);
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorWebsiteStyle)
+    </div>*@
+
+    <div class="form-group col-md-3 col-sm-12">
+        <div class="form-group">
+            <label for="Content">FontSize</label>
+
+            <div style="width:70%" class="form-group position-relative has-icon-right">
+
+                <input name="@WebSettingConstants.ConfigName.FontSize" id="@WebSettingConstants.ConfigName.FontSize" min="70" max="130" type="number" value="@getValue(WebSettingConstants.ConfigName.FontSize)" class="form-control" placeholder="">
+                <div class="form-control-icon">
+                    %
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+@*<div class="form-group">
+    <label for="Content">Webiste Custom Style</label>
+
+
+    @{
+
+        CodeMirrorModel codeMirrorWebsiteCustomStyle = new CodeMirrorModel();
+        codeMirrorWebsiteCustomStyle.Id = "WebsiteCustomStyle";
+        codeMirrorWebsiteCustomStyle.CodeMode = "css";
+        codeMirrorWebsiteCustomStyle.Content = getValue(WebSettingConstants.ConfigName.WebsiteCustomStyle);
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorWebsiteCustomStyle)
+</div>*@

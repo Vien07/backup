@@ -1,0 +1,56 @@
+﻿@model Admin.ProductManagement.Controllers.ProductController.EditModel
+
+@using Admin.ProductManagement.Constants;
+@using ComponentUILibrary.Models
+<input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+<div class="form-group">
+</div>
+
+<div class="card-content p-lg-2 pr-2 cms-div-table ">
+    <!-- table hover -->
+    <div class="table-responsive">
+        @{
+        ComponentUILibrary.Models.TableData table = new ComponentUILibrary.Models.TableData();
+        table.ID = "product_post";
+        table.Class = "table table-hover bg-white mb-0 ";
+        table.Body = await Html.PartialAsync(ProductConstants.ConfigPartial.Edit_TabPostTable, Model);
+
+        List<TableHead>
+            tableHead = new List<TableHead>
+                ();
+                tableHead.Add(new TableHead { Name = "#", Width = 50, Filter = "ASC", OrderBy = "Order" });
+                tableHead.Add(new TableHead { Name = "Hình ảnh", Width = 1 });
+                tableHead.Add(new TableHead { Name = "Tiêu đề", Filter = "ASC", OrderBy = "Title" });
+                tableHead.Add(new TableHead { Name = "Active", Width = 1, Class = "text-right" });
+                tableHead.Add(new TableHead { Name = "", Width = 1 });
+                table.Header = tableHead;
+                }
+                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TableComponent), new { table = table })
+
+
+                <div class="row mx-0 mt-1 align-items-center">
+                    <div class="col-12 col-sm-6">
+                        <button type="button" onclick="_action.Enable(0,true)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="active"><i class="fas fa-eye"></i></button>
+                        <button type="button" onclick="_action.Enable(0,false)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="inactive"><i class="fas fa-eye-slash"></i></button>
+
+                    </div>
+                    <div class=" col-12 col-sm-6  align-items-center" id="divPaging">
+                        <nav style="float:right" class="pagination-wrap d-inline-block" id="navigation_paging" aria-label="navigation">
+                            @{
+                            PaginationModel pageModel = new PaginationModel();
+                            pageModel.PageIndex = 1;
+                            pageModel.PageSize = 1;
+                            pageModel.PageCount = Model.ListPostPagination.PageCount;
+                            pageModel.Id = "";
+                            pageModel.Class = "";
+                            }
+                            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PaginationComponent), Model.ListPostPagination)
+                        </nav>
+                    </div>
+                </div>
+
+    </div>
+
+    <!-- table hover -->
+
+</div>

@@ -1,0 +1,24 @@
+﻿@using ComponentUILibrary.Models
+@model RadioButtonModel
+
+<ul class="@(!Model.Display ? "row" : "") list-unstyled mb-0 @Model.Class" style="@Model.Style">
+    @foreach (var item in Model.Items)
+    {
+        <li class="d-inline-block me-2 mb-1">
+            <div class="form-check">
+                <div class="checkbox">
+                    <input hidden id="@item.Id" type="text" value="@item.Value" name="@item.Name" />
+                    <input type="checkbox" id="checkbox_@item.Id" data-id="@item.Id" class="form-check-input"
+                       onchange="checkboxChange(this)" @(item.Checked ?"checked":"") />
+                    <label for="checkbox_@item.Id">@item.Text</label>
+                </div>
+            </div>
+        </li>
+    }
+</ul>
+<script>
+    function checkboxChange(e) {
+        let id = $(e).data("id")
+        $(e).is(":checked") ? $("#" + id).val(true) : $("#" + id).val(false)
+    }
+</script>

@@ -1,0 +1,109 @@
+﻿@model Admin.ProductManagement.Controllers.ProductCategoryController.EditModel;
+
+@using Admin.ProductManagement.Constants;
+@using ComponentUILibrary.Models;
+
+
+<input hidden id="Pid" class="pid" name="Pid" value="@Model.ProductCategoryModel.Detail.Pid">
+<div class="row">
+
+    <div class="form-group col-md-1 col-sm-12">
+
+        @{
+            CheckboxModel checkboxModel = new CheckboxModel();
+            checkboxModel.Id = "IsParent";
+            checkboxModel.CustomEvent = "";
+            checkboxModel.Class = "";
+            checkboxModel.Style = "";
+            checkboxModel.CheckValue = "1";
+            checkboxModel.UnCheckValue = "0";
+            if (Model.ProductCategoryModel.Detail.ParentID == 0)
+            {
+                checkboxModel.Value = "1";
+            }
+            else
+            {
+                checkboxModel.Value = "0";
+            }
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CheckBoxComponent), checkboxModel)
+        <label for="IsParent" class="text-bold">Root</label>
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="form-group col-md-2 col-sm-12">
+        <label for="ParentID">Danh mục cha</label>
+
+        @{
+
+            NiceSelectModel selectModel = new NiceSelectModel();
+            selectModel.Data = Model.Parrents;
+            selectModel.Id = "ParentID";
+            selectModel.Search = 1;
+            selectModel.Size = "small";
+            selectModel.Class = "nice-select form-group";
+            selectModel.SelectedValue = Model.ProductCategoryModel.Detail.ParentID.ToString();
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel })
+    </div>
+    <div class="form-group col-md-4 col-sm-12">
+        <label for="title">Tiêu đề</label>
+        <input required type="text" class="form-control" id="Title" value="@Model.ProductCategoryModel.Detail.Title" name="Title" aria-describedby="Title" placeholder="nhập tiêu đề...">
+    </div>
+    <div class="form-group col-md-4 col-sm-12">
+        <label for="title">Slug</label>
+        <input type="text" class="form-control" id="Slug" value="@Model.ProductCategoryModel.Detail.Slug" name="Slug" aria-describedby="Slug" placeholder="nhập slug...">
+    </div>
+    <div class="form-group col-md-2 col-sm-12">
+        <label for="title">Icon</label>
+        <input type="text" class="form-control" id="Icon" value="@Model.ProductCategoryModel.Detail.Icon" name="Icon" aria-describedby="Icon" placeholder="nhập icon...">
+    </div>
+</div>
+
+<div class="form-group row" id="">
+
+    @*<div class="form-group col-md-3 col-sm-12">
+    <label for="ParentID">Trang danh mục</label>
+
+    @{
+
+    NiceSelectModel selectModel2 = new NiceSelectModel();
+    selectModel2.Data = Model.ListPageCate;
+    selectModel2.Id = "WebsiteCatePage";
+    selectModel2.Search = 1;
+    selectModel2.Size = "small";
+    selectModel2.DefaultValue = "";
+    //selectModel2.DefaultText = "/ProductPage/Cate";
+
+    selectModel2.Class = "nice-select form-group sample-nice-select ";
+    selectModel2.SelectedValue = Model.MisaProductCategoryModel.Detail.WebsiteCatePage.ToString();
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+    </div>
+    <div class="form-group col-md-3 col-sm-12">
+    <label for="ParentID">Trang chi tiết</label>
+
+    @{
+
+    NiceSelectModel selectModel3 = new NiceSelectModel();
+    selectModel3.Data = Model.ListPageDetail;
+    selectModel3.Id = "WebsiteDetailPage";
+    selectModel3.Search = 1;
+    selectModel3.Size = "small";
+    selectModel3.DefaultValue = "";
+    //selectModel3.DefaultText = "/ProductPage/Detail";
+    selectModel3.Class = "nice-select form-group sample-nice-select";
+    selectModel3.SelectedValue = Model.MisaProductCategoryModel.Detail.WebsiteDetailPage.ToString();
+    }
+    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel3 })
+    </div>*@
+
+    @*<div class="form-group col-md-3 col-sm-12">
+    <label for="Parameter">Parameter </label>
+    <input type="text" class="form-control" id="Parameter" value="@Model.MisaProductCategoryModel.Detail.Parameter" name="Parameter" aria-describedby="Parameter" placeholder="nhập tham số...">
+    </div>*@
+</div>
+
+

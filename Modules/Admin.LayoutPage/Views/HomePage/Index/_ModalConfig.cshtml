@@ -1,0 +1,112 @@
+﻿@using ComponentUILibrary.Models;
+@using Steam.Core.Common;
+
+@using ConfigAdmin = Admin.LayoutPage.Constants.HomePageConstants.Config.Admin
+@model List<ComponentUILibrary.ViewComponents.ConfigModel>
+@using static Admin.LayoutPage.Constants.HomePageConstants
+
+@using WebSiteConfig = Admin.LayoutPage.Constants.HomePageConstants.Config.Website;
+@using AdminConfig = Admin.LayoutPage.Constants.HomePageConstants.Config.Admin;
+<div class="card">
+    <div class="card-header">
+        <ul class="nav nav-pills card-header-pills" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-within-card-adminconfig" aria-controls="navs-pills-within-card-active" aria-selected="true">Admin</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-within-card-websiteconfig" aria-controls="navs-pills-within-card-link" aria-selected="false" tabindex="-1">Website</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content p-0">
+            <div class="tab-pane fade active show" id="navs-pills-within-card-adminconfig" role="tabpanel">
+                <form id="Admin_HomePageConfig" class="form form-vertical mt-3">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-12 row">
+                                <label for="MaxHeight">Kích thước hình tối đa</label>
+
+                                <div class="form-group col-5">
+                                    <input data-toggle="tooltip" data-placement="top" title="MaxWidth" type="text" id="@AdminConfig.MaxWidth" value="@Model.GetConfigValue(AdminConfig.MaxWidth)" class="form-control" name="@AdminConfig.MaxWidth" placeholder="MaxWidth">
+                                </div>
+                                <div class="form-group col-5">
+                                    <input data-toggle="tooltip" data-placement="top" title="MaxHeight" type="text" id="@AdminConfig.MaxHeight" value="@Model.GetConfigValue(AdminConfig.MaxHeight)" class="form-control" name="@AdminConfig.MaxHeight" placeholder="MaxHeight">
+                                </div>
+                            </div>
+                            <div class="col-12 row">
+                                <label for="ThumbHeight">Kích thước hình Thumb</label>
+
+                                <div class="form-group col-6">
+                                    <input data-toggle="tooltip" data-placement="top" title="ThumbHeight" type="text" id="@AdminConfig.ThumbHeight" value="@Model.GetConfigValue(AdminConfig.ThumbHeight)" class="form-control" name="@AdminConfig.ThumbHeight" placeholder="ThumbHeight">
+                                </div>
+                                <div class="form-group col-6">
+                                    <input data-toggle="tooltip" data-placement="top" title="ThumbWidth" type="text" id="@AdminConfig.ThumbWidth" class="form-control" value="@Model.GetConfigValue(AdminConfig.ThumbWidth)" name="@AdminConfig.ThumbWidth" placeholder="ThumbWidth">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="PageSize">PageSize</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="PageSize" type="text" id="@AdminConfig.PageSize" class="form-control" value="@Model.GetConfigValue(AdminConfig.PageSize)" name="@AdminConfig.PageSize" placeholder="PageSize">
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-end mt-2">
+                                <button type="button" onclick="_action.SaveConfig('Admin_HomePageConfig','Admin')" class="btn btn-primary me-1 mb-1">Apply</button>
+                                @*                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Default</button>
+                                *@
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="navs-pills-within-card-websiteconfig" role="tabpanel">
+                <form id="Website_HomePageConfig" class=" mt-3 form form-vertical">
+                    <div class="form-body">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="ApiUpdateHomePage">Api cập nhật trang chủ</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="ApiUpdateHomePage" type="text"
+                                           id="@WebSiteConfig.ApiUpdateHomePage" name="@WebSiteConfig.ApiUpdateHomePage"
+                                           class="form-control"
+                                           value="@Model.GetConfigValue(WebSiteConfig.ApiUpdateHomePage)" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ApiUpdatePreviewHomePage">Api cập nhật preview trang chủ</label>
+                                    <input data-toggle="tooltip" data-placement="top" title="ApiUpdatePreviewHomePage"
+                                           type="text" id="@WebSiteConfig.ApiUpdatePreviewHomePage" name="@WebSiteConfig.ApiUpdatePreviewHomePage"
+                                           class="form-control" value="@Model.GetConfigValue(WebSiteConfig.ApiUpdatePreviewHomePage)" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ApiRevertHomePage">Api khôi phục trang chủ</label>
+                                    <input data-toggle="tooltip"
+                                           data-placement="top"
+                                           title="ApiRevertHomePage" type="text"
+                                           id="@WebSiteConfig.ApiRevertHomePage" class="form-control"
+                                           value="@Model.GetConfigValue(WebSiteConfig.ApiRevertHomePage)"
+                                           name="@WebSiteConfig.ApiRevertHomePage" placeholder="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ApiPreviewPage">Api Preview Page</label>
+                                    <input data-toggle="tooltip"
+                                           data-placement="top"
+                                           title="ApiPreviewPage" type="text"
+                                           id="@WebSiteConfig.ApiPreviewPage" class="form-control"
+                                           value="@Model.GetConfigValue(WebSiteConfig.ApiPreviewPage)"
+                                           name="@WebSiteConfig.ApiPreviewPage" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end mt-2">
+                                <button type="button" onclick="_action.SaveConfig('Website_HomePageConfig','Webiste')" class="btn btn-primary me-1 mb-1">Aply</button>
+                                @*                                        <button type="reset" class="btn btn-light-secondary me-1 mb-1">Default</button>
+                                *@
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

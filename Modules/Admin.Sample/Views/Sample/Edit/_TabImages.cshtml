@@ -1,0 +1,39 @@
+﻿@model Admin.Sample.Controllers.SampleController.EditModel
+
+@using Admin.Sample.Constants
+@using ComponentUILibrary.Models
+@using ComponentUILibrary.ViewComponents
+@using Admin.Sample.Database
+@using PathAsset = Admin.Sample.Constants.SampleConstants.StaticPath.Asset
+<div class="mt-2">
+    <div class="form-group">
+        <label for="">FilePond</label>
+
+        @{
+
+            FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+            fileUploadModel.Id = "Images";
+            fileUploadModel.Class = "";
+            fileUploadModel.FirstLoadLib = true;
+            fileUploadModel.Images_Alt = Model.Detail.Images_Alt;
+            fileUploadModel.Images_Description = Model.Detail.Images_Description;
+            fileUploadModel.Images_Caption = Model.Detail.Images_Caption;
+            fileUploadModel.SelectedFiles = !String.IsNullOrEmpty(Model.Detail.Images) ? Steam.Core.Base.Constant.SystemInfo.MedidaFileServer + Model.Detail.FilePath + Model.Detail.Images : "";// fileUploadModel.GenerateFileJson(listFile);
+
+        }
+        @await FileUploadFilePondComponent.Render(ViewContext,fileUploadModel)
+    </div>
+    <div class="form-group">
+        <label for="">Dropzone</label>
+        @{
+            DropzoneModel imagesMultiPicker = new DropzoneModel();
+            imagesMultiPicker.Id = "ImagesMultiPicker";
+            imagesMultiPicker.FirstLoadLib = true;
+            imagesMultiPicker.FilePath = SampleConstants.StaticPath.Asset.Image;
+            imagesMultiPicker.Files = System.Text.Json.JsonSerializer.Serialize<List<Admin.Sample.Database.Sample_Files>>(Model.ListFiles);
+
+        }
+        @await DropzoneComponent.Render(ViewContext, imagesMultiPicker)
+    </div>
+
+</div>

@@ -1,0 +1,157 @@
+﻿@model Admin.ProductManagement.Controllers.ProductSpecificatyController.PageModel
+@using ComponentUILibrary.Models
+@using Admin.ProductManagement.Constants;
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+}
+
+<section class="section">
+    <div class="row" id="table-hover-row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+
+                    <form id="SearchForm" class="row cms-filter-row">
+                        <div class="d-flex flex-wrap">
+                            <!--filter action-->
+                            @Html.AntiForgeryToken()
+                            <div style="padding:0" class="form-group cms-filter mb-1 nice-select-custom-box">
+                                @{
+                                    List<SelectControlData> a = new List<SelectControlData>();
+                                    a.Add(new SelectControlData { Name = "GET", Value = "1" });
+                                    a.Add(new SelectControlData { Name = "POST", Value = "2" });
+                                    NiceSelectModel selectModel = new NiceSelectModel();
+                                    selectModel.Data = a;
+                                    selectModel.Id = "Cate";
+                                    selectModel.Size = "small";
+                                    selectModel.Class = "nice-select";
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel })
+
+                            </div>
+
+                            <div style="padding:0" class="input-group  mb-1 cms-filter form-group">
+                                <input type="text" name="KeySearch" id="KeySearch" class="cms-font-size-075  form-control form-control-sm" placeholder="Từ khóa tìm kiếm" aria-label="từ khóa tìm kiếm" />
+                                <button class="btn btn-sm btn-outline-secondary" type="button" onclick="_action.Search(1)" id="buttonSearch"><i class="bx bx-search"></i></button>
+                            </div>
+                            <div style="padding:0" class="cms-filter">
+                                <a type="button" href="@Url.Content(ProductSpecificatyConstants.ConfigRoute.PageEdit)/@ViewBag.Group" class="btn btn-primary ">
+                                    New
+                                </a>
+                            </div>
+                            <!--filter action-->
+                        </div>
+
+
+                    </form>
+
+                    @*<div class="form-group ml-auto  col-auto cms-setting">
+                        <i onclick=" OpenSettingModal()" class="fas fa-cog "></i>
+                    </div>*@
+                </div>
+                <div class="card-content p-lg-2 pr-2 cms-div-table ">
+                    <!-- table hover -->
+                    <div class="table-responsive">
+                        @{
+                            ComponentUILibrary.Models.TableData table = new ComponentUILibrary.Models.TableData();
+                            table.ID = "test2";
+                            table.Class = "table table-hover bg-white mb-0 ";
+                            table.Body = await Html.PartialAsync(ProductSpecificatyConstants.ConfigPartial.Index_Table, Model.Data);
+
+                            List<TableHead> tableHead = new List<TableHead>();
+                            tableHead.Add(new TableHead { Name = "Code", Filter = "ASC", OrderBy = "Code" });
+                            tableHead.Add(new TableHead { Name = "Name", Filter = "ASC", OrderBy = "Name" });
+                            tableHead.Add(new TableHead { Name = "Value", Filter = "ASC", OrderBy = "Value" });
+                            tableHead.Add(new TableHead { Name = "Action", Width = 1 });
+                            tableHead.Add(new TableHead { Name = "", Width = 1 });
+                            table.Header = tableHead;
+                        }
+                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TableComponent), new { table = table })
+
+
+                        <div class="row mx-0 mt-1 align-items-center">
+                            <div class="col-12 col-sm-6">
+                                <button type="button" onclick="_action.Delete(0)" class="btn btn-sm btn-danger " data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fas fa-trash-alt t"></i></button>
+                            </div>
+                            <div class=" col-12 col-sm-6  align-items-center" id="divPaging">
+                                <nav style="float:right" class="pagination-wrap d-inline-block" id="navigation_paging" aria-label="navigation">
+                                    @{
+                                        PaginationModel pageModel = new PaginationModel();
+                                        pageModel.PageIndex = 1;
+                                        pageModel.PageSize = 1;
+                                        pageModel.PageCount = Model.Data.PageCount;
+                                        pageModel.Id = "";
+                                        pageModel.Class = "";
+                                    }
+                                    @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PaginationComponent), Model.Pagination)
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- table hover -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <!-- Modal config -->
+    <div id="divModalConfig">
+
+        @await Html.PartialAsync(ProductSpecificatyConstants.ConfigPartial.Index_ModalConfig, Model.Configs)
+    </div>
+
+    <!-- end Modal config -->
+    @Html.AntiForgeryToken()
+
+</section>
+@*<button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+        Tooltip on top
+    </button>*@
+<!-- Hoverable rows end -->
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(ProductSpecificatyConstants.ModuleInfo.PathCommand)commands/ProductSpecificatyCommand.js"></script>
+    <script asp-append-version="true" src="@Url.Content(ProductSpecificatyConstants.ModuleInfo.PathCommand)commands/ProductSpecificaty/index.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@(ProductSpecificatyConstants.ConfigRoute.PageIndex+"/"+Model.Group)",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            TableDataID: "@table.ID",
+            TbodyId: "tdBody_@table.ID",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images",
+            SearchFormID: "SearchForm"
+        }
+        let _action = new AdminProductSpecificaty_Index(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+        }
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+
+            //InitDragDropTable()
+        });
+
+
+
+
+    </script>
+}

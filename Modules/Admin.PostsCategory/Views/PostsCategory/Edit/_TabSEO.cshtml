@@ -1,0 +1,28 @@
+﻿@model Admin.PostsCategory.Controllers.PostsCategoryController.EditModel
+@using Admin.PostsCategory.Constants;
+@using Steam.Core.Base.Models;
+@{
+    SEOModel tabSeo = new SEOModel();
+    tabSeo.SlugGenerateFrom = "Title";
+    tabSeo.GetCatePidFrom = "Pid";
+    tabSeo.GetPostPidFrom = "Pid";
+    tabSeo.GetPostTitlteFrom = "Title";
+    tabSeo.NavListButton = "nav_list_button_plugin";
+    tabSeo.ModuleCode = "PostsCategory";
+    tabSeo.PostPid = Model.PostsCategoryModel.Detail.Pid;
+    tabSeo.OgImage = Model.PostsCategoryModel.Detail.FilePath + Model.PostsCategoryModel.Detail.Images;
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TabSEOComponent), tabSeo)*@
+
+@try
+{
+    @Html.Partial(PostsCategoryConstants.StaticPath.ExtenalViews.SEO.TabSEO, tabSeo);
+
+    @*@await Html.PartialAsync("/Views/SEOntegrated/TabSEO.cshtml", tabSeo);*@
+
+}
+catch (Exception ex)
+{
+    <p>Dịch vụ chưa được tích hợp</p>
+
+}

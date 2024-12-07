@@ -1,0 +1,120 @@
+﻿@model Admin.ProductManagement.Controllers.ProductPolicyController.EditModel
+
+@using Admin.ProductManagement.Constants;
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+
+}
+@*@await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.PageTitleComponent), new { model = Model.PageTitle })*@
+
+<section class="section">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                    <div class="card-header">
+                    </div>*@
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <div class="mt-2">
+                            <input hidden id="Pid" class="pid" name="Pid" value="@Model.Detail.Pid">
+                            <div class="row">
+                                <div class="form-group col">
+                                    <label for="title">Tên điều khoản</label>
+                                    <input required type="text" class="form-control" id="Name" value="@Model.Detail.Name" name="Name" aria-describedby="Name" placeholder="nhập tên...">
+                                </div>
+            
+                            </div>
+                           <div class="form-group row ml-2 col-xl-12 col-sm-12">
+                                <style>
+                                    .sample-nice-select {
+                                        margin-left: 13px
+                                    }
+                                </style>
+                                <label for="title">Nhóm điều khoản</label>
+
+                                @{
+                              
+                                    NiceSelectModel selectModel2 = new NiceSelectModel();
+                                    selectModel2.Data = Model.ListPolicies;
+                                    selectModel2.Id = "Group";
+                                    selectModel2.Size = "small";
+                                    selectModel2.Class = "nice-select sample-nice-select";
+                                    selectModel2.SelectedValue = Model.Detail.Group;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+                            </div>
+                             <div class="form-group">
+                                <label for="Description">Nội dung</label>
+                                @{
+
+                                    EditorModel editorModel = new EditorModel();
+                                    editorModel.Id = "Content";
+                                    editorModel.Cols = "30";
+                                    editorModel.Rows = "10";
+                                    editorModel.FirstLoadLib = true;
+                                    editorModel.Content = Model.Detail.Content;
+                                }
+                                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorModel)
+
+                            </div>
+
+
+
+                 
+
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <a type="button" href="@Url.Content(ProductPolicyConstants.Route.PageIndex)" class="btn btn-secondary">Đóng</a>
+                        <button type="button" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.AntiForgeryToken()
+
+</section>
+@section Scripts{
+    <script asp-append-version="true" src="@Url.Content(ProductPolicyConstants.ModuleInfo.PathCommand)/ProductPolicy/edit.js"></script>
+
+    <script>
+        const ModelView = {
+            RouteIndex: "@ProductPolicyConstants.Route.PageIndex",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images"
+        }
+        let _action = new AdminProductPolicy_Edit(ModelView);
+        _action.CheckFunction();
+        //var dragger
+        function OpenSettingModal() {
+            $("#myModal2").modal("show")
+        }
+        function CloseSettingModal() {
+            $("#myModal2").modal("hide")
+        }
+        function ChangeFilter() {
+            $("#sort-amount").html('<i  class="fas fa-sort-amount-down-alt"></i>')
+
+        }
+
+        $(function () {
+
+
+            //var cars = $('#cars').filterMultiSelect();
+
+            //InitDragDropTable()
+        });
+
+    </script>
+}

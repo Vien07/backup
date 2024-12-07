@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Title>Responsive File Manager for ASP.NET Core</Title>
+    <Description></Description>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Version>1.4.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Peachpie.AspNetCore.Web" Version="1.1.9" />
+
+  </ItemGroup>
+</Project>

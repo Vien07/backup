@@ -1,0 +1,164 @@
+﻿@model SEOModel
+
+@using Admin.SEO.Constants;
+@using ComponentUILibrary.Models
+@using Steam.Core.Base.Models;
+@{
+
+    SEOModel seoModel = Model as SEOModel;
+}
+@inject Admin.SEO.Database.SEOContext _context;
+
+@{
+    var data = _context.SEOs.Where(p => p.PostPid == seoModel.PostPid && p.ModuleCode == seoModel.ModuleCode).FirstOrDefault();
+    if (data == null)
+    {
+        data = new Admin.SEO.Database.SEO();
+    }
+}
+<input hidden name="SEOPid" value="@data.Pid" />
+<input hidden name="CatePid" value="@Model.GetCatePidFrom" />
+<input hidden name="PostTitle" id="PostTitle" value="" />
+<input hidden name="ModuleCode" id="ModuleCode" value="@Model.ModuleCode" />
+<input hidden name="OgImage" id="OgImage" value="@Model.OgImage" />
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label for="PostSlug">Đường dẫn tĩnh</label>
+            <input type="text" class="form-control" id="PostSlug" value="@data.PostSlug" name="PostSlug" aria-describedby="PostSlug" placeholder="nhập đường dẫn...">
+        </div>
+        <div class="row">
+            <div class="form-group col-3">
+                <style>
+                    .sample-nice-select {
+                    }
+                </style>
+                <label for="OgType">Og:Type</label>
+
+                @{
+                    List<SelectControlData> aa = new List<SelectControlData>();
+                    aa.Add(new SelectControlData { Name = "website", Value = "website" });
+                    aa.Add(new SelectControlData { Name = "article", Value = "article" });
+                    aa.Add(new SelectControlData { Name = "product", Value = "product" });
+                    NiceSelectModel selectModel2 = new NiceSelectModel();
+                    selectModel2.Data = aa;
+                    selectModel2.Id = "OgType";
+                    selectModel2.Size = "small";
+                    selectModel2.Class = "nice-select ";
+                    selectModel2.SelectedValue = data.OgType;
+                }
+                @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.NiceSelectComponent), new { model = selectModel2 })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="TagKeys">Từ khóa</label>
+            @{
+
+                TagifyModel tagKey = new TagifyModel();
+                tagKey.Id = "TagKeys";
+
+                tagKey.FirstLoadLib = true;
+                tagKey.SeparateSympol = ",";
+                tagKey.Value = data.TagKeys;
+            }
+            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.TagifyComponent), tagKey)
+            @*<input type="text" class="form-control" value="@data.TagKeys" id="TagKeys" name="TagKeys" aria-describedby="TagKeys" placeholder="nhập từ khóa...">*@
+        </div>
+        <div class="form-group">
+            <label for="MetaDescription">Mô tả</label>
+            <textarea type="text" class="form-control" rows="8" id="MetaDescription" name="MetaDescription" aria-describedby="MetaDescription" placeholder="nhập mô tả...">@data.MetaDescription</textarea>
+        </div>
+        <div class="form-group">
+            <label for="ExtraMeta">Extra Meta</label>
+            @{
+
+                CodeMirrorModel codeMirrorExtraMeta = new CodeMirrorModel();
+                codeMirrorExtraMeta.Id = "ExtraMeta";
+                codeMirrorExtraMeta.FirstLoadLib = true;
+                codeMirrorExtraMeta.Content = data.ExtraMeta;
+                codeMirrorExtraMeta.CodeMode = "xml";
+            }
+            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorExtraMeta)
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <label for="Content">Thẻ meta</label>
+
+            @{
+
+                CodeMirrorModel codeMirrorFooterBlock = new CodeMirrorModel();
+                codeMirrorFooterBlock.Id = "Meta";
+                codeMirrorFooterBlock.Content = data.Meta;
+                codeMirrorFooterBlock.CodeMode = "xml";
+            }
+            @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorFooterBlock)
+        </div>
+    </div>
+</div>
+
+@*<div class="row mt-2">
+    <button type="button" id="btnSaveSeoForm" onclick="_actionSEOIntegrate.Save('uploadForm')" class="btn btn-success col-md-1">Lưu SEO</button>
+    <button type="button" id="btnSaveSeoForm" onclick="_actionSEOIntegrate.SetData()" class="btn btn-info col-md-1">Tạo SEO</button>
+    <button type="button" id="btnSaveSeoForm" onclick="_actionSEOIntegrate.GenerateMetaTag('uploadForm')" class="btn btn-warning col-md-1">Tạo MetaTag</button>
+</div>*@
+<div class="demo-inline-spacing">
+    <button id="btnSaveSeoForm" onclick="_actionSEOIntegrate.Save('uploadForm')" type="button" class="btn rounded-pill btn-success">
+      Lưu SEO
+    </button>  
+    <button  onclick="_actionSEOIntegrate.SetData()" type="button" class="btn rounded-pill btn-info">Tạo SEO
+    </button> 
+    <button  onclick="_actionSEOIntegrate.GenerateMetaTag('uploadForm')" type="button" class="btn rounded-pill btn-warning">Tạo Meta
+    </button>
+
+</div>
+<script asp-append-version="true" src="@Url.Content(SEOConstants.ModuleInfo.PathCommand)/seointegrate/index.js"></script>
+
+<script>
+    const btnSaveSEO =`<button type="button" id="btnSaveSeoForm" onclick="_actionSEOIntegrate.Save('uploadForm')" class="btn btn-success">Lưu SEO</button>`
+    const ModelViewSEOIntegrate_Index = {
+            RouteIndex: "",
+            DivModalDataID: "divModalInfo",
+            ModalDataID: "ModelData",
+            DivModalConfigID: "divModalConfig",
+            ModalConfigID: "ModelConfig",
+            FromUploadID: "uploadForm",
+            NavPagingID: "navigation_paging",
+            FileUploadID: "Images",
+            GetCatePidFrom:"@Model.GetCatePidFrom",
+            GetPostPidFrom:"@Model.GetPostPidFrom",
+            SlugGenerateFrom: "@Model.SlugGenerateFrom",
+            PostTitleGenerateFrom: "@Model.GetPostTitlteFrom",
+            GetOgImageGenerateFrom: "@Model.GetOgImageFrom",
+            OgImage: "@Model.OgImage",
+            MetaDescriptionGenerateFrom: "@Model.MetaDescriptionGenerateFrom"
+        }
+    var _actionSEOIntegrate = new SEOIntegrate_Index(ModelViewSEOIntegrate_Index);
+
+
+
+    $('.steam-admin-tab').on("click", function () {
+        var nav = $('.nav-tabs a[href="#seoSetting"]')
+        var classActive = nav[0].className
+        if (classActive.includes("active")) {
+            @*$('#@seoModel.NavListButton').append(btnSaveSEO)*@
+         //$("#btnSaveForm").attr("onClick", "_actionSEOIntegrate.Save('uploadForm')");
+            _actionSEOIntegrate.SetData()
+        } else {
+            //$("#btnSaveSeoForm").remove();
+
+            //$("#btnSaveForm").attr("onClick", "_action.Save('uploadForm')");
+
+        }
+        setTimeout(() => {
+            codemirror_Meta.refresh()
+
+        }, 500);
+    });
+
+</script>
+@section Scripts{
+
+}

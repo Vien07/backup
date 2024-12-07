@@ -1,0 +1,47 @@
+﻿@model Admin.ProductManagement.Controllers.MisaApiTrackerController.EditModel
+@using Admin.ProductManagement.Constants;
+
+@using ComponentUILibrary.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["PageTitle"] = Model.PageTitle.ModuleName;
+}
+
+<section class="section ">
+    <div class="row" id="">
+        <div class="col-12">
+            <div class="card">
+                @*
+                <div class="card-header">
+                </div>*@
+
+                <div class="card-content p-lg-2 pr-2">
+                    <form id="uploadForm" class="mt-2">
+                        <div class="form-group">
+                            <label for="Content">Headers</label>
+                            <textarea rows="4" cols="30" class="form-control">@Html.Raw(Model.Detail.RequestHeaders)</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Content">Params</label>
+                            <textarea rows="4" class="form-control">@Html.Raw(Model.Detail.RequestParams)</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Content">Response</label>
+                            <textarea rows="7" class="form-control">@Html.Raw(Model.Detail.Response)</textarea>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        @*<a type="button" href="@MisaApiTrackerConstants.Config.Route.PageIndex" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                        <button type="button" id="btnSaveForm" onclick="_action.Save('uploadForm')" class="btn btn-primary">Lưu</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @Html.AntiForgeryToken()
+    .
+</section>

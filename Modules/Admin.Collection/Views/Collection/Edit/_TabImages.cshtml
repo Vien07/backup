@@ -1,0 +1,47 @@
+﻿@model Admin.Collection.CollectionController.EditModel
+
+@using Admin.Collection.Constants;
+@using ComponentUILibrary.Models
+<div class="mt-2">
+
+
+    <div class="form-group">
+        <label for="">Thumbnail</label>
+
+        @{
+
+
+            //List<string> listFile = new List<string>();
+            //if (!String.IsNullOrEmpty(Model.Detail.Images))
+            //{
+            //    listFile.Add(Model.Detail.FilePath + Model.Detail.Images);
+
+            //}
+            FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+            fileUploadModel.Id = "Images";
+            fileUploadModel.Class = "";
+            fileUploadModel.FirstLoadLib = true;
+            fileUploadModel.Images_Alt = Model.Detail.Images_Alt;
+            fileUploadModel.Images_Description = Model.Detail.Images_Description;
+            fileUploadModel.Images_Caption = Model.Detail.Images_Caption;
+            fileUploadModel.SelectedFiles = Model.Detail.FilePath + Model.Detail.Images;// fileUploadModel.GenerateFileJson(listFile);
+
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModel)
+    </div>
+    <div class="form-group">
+        <label for="">Danh sách ảnh</label>
+        @{
+            DropzoneModel imagesMultiPicker = new DropzoneModel();
+            imagesMultiPicker.Id = "ListImages";
+            imagesMultiPicker.FirstLoadLib =true;
+            imagesMultiPicker.FilePath = CollectionConstants.StaticPath.Asset.Image;
+            imagesMultiPicker.Files = System.Text.Json.JsonSerializer.Serialize<List<Admin.Collection.Database.Collection_Files>>(Model.ListFiles);
+
+        }
+        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.DropzoneComponent), new { model = imagesMultiPicker })
+    </div>
+
+
+
+</div>

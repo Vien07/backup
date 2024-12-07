@@ -1,0 +1,43 @@
+﻿@using X.PagedList
+@using Admin.HeaderPage.Constants
+@{
+    var CDN_HOST = "";
+}
+
+@model List<Admin.HeaderPage.Database.MenuItemStyle>;
+@if (Model != null && Model.Any())
+{
+
+    int stt = 0;
+    foreach (var item in Model)
+    {
+        stt = stt + 1;
+        <tr id="@item.Pid" class="handle">
+            <td width="1">
+                <div class="form-check form-check-sm handle">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="form-check-input form-check-primary form-check-glow checkItem" value="@item.Pid" id="checkItem_@item.Pid">
+                    </div>
+                </div>
+            </td>
+            <td width="1"><input tabindex="@(item.Order+1000)" onchange="_action.UpdateOrder(@item.Pid,this.value)" type="number" class="form-control-sm order-input  form-control-plaintext" value="@stt" disabled /></td>
+
+            <td><a onclick="_action.EditChild(@item.Pid)" class="cursor-pointer  @(item.Enabled==true?"text-primary":"text-mute") ">@item.Level</a></td>
+            <td>@item.ItemBlock</td>
+
+            <td class="text-center">
+                <a ><i onclick="_action.EditChild(@item.Pid)" class="csor-pointer text-primary fas fa-edit"></i></a>
+                <i onclick="_action.DeleteChild(@item.Pid)" class="cursor-pointer  text-danger fas fa-trash-alt"></i>
+            </td>
+        </tr>
+    }
+}
+else
+{
+<tr>
+    <td colspan="4" class="text-center">
+        <span>Không có dữ liệu!!</span>
+    </td>
+
+</tr>
+}

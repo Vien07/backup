@@ -1,0 +1,108 @@
+﻿@using ComponentUILibrary.Models
+@using ComponentUILibrary
+@using Steam.Core.ComponentUILibrary.Constant
+
+@model EditorModel
+@{
+    string VirtualFolder = ComponentUILibraryConstant.VirtualFolder;
+
+}
+
+@if (Model.FirstLoadLib)
+{
+    <script src="@Url.Content(VirtualFolder+TinymceConstants.PathLib)/tinymce.min.js"></script>
+    <script src="@Url.Content(VirtualFolder+TinymceConstants.PathLib)/plugins/code/plugin.min.js"></script>
+}
+
+<textarea id="@(Model.Id)_tinymce" cols="@Model.Cols" rows="@Model.Rows">@Html.Raw(Model.Content)</textarea>
+
+<input id="@Model.Id" hidden value="@Model.Content" name="@Model.Id" />
+
+<script>
+    $(function() {
+        try {
+            tinymce.remove('#@(Model.Id)_tinymce')
+
+        } catch (e) {
+
+        }
+        tinymce.init({
+            selector: '#@(Model.Id)_tinymce',
+            branding: false,
+            height: @Model.Height,
+
+            plugins: [
+                'toc advlist autolink lists link image charmap print preview hr anchor pagebreak textcolor link image ',
+                'searchreplace searchreplace  visualchars code fullscreen codesample ',
+                'insertdatetime emoticons directionality media table contextmenu paste code help wordcount filemanager responsivefilemanager media quickbars powerpaste'
+            ],
+            menubar: 'file edit view insert format tools table help',
+            contextmenu: "paste | link image inserttable responsivefilemanager | cell row column deletetable",
+            toolbar: 'toc | undo redo | bold italic underline strikethrough | fontselect formatselect  backcolor forecolor | alignleft aligncenter alignright alignjustify | outdent indent |bullist numlist outdent indent | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | link unlink anchor | table responsivefilemanager pageembed template | code codesample  | media | removeformat | a11ycheck ltr rtl | showcomments addcomment | fullscreen save|  help',
+            quickbars_selection_toolbar: ' | bold italic underline strikethrough |  formatselect  backcolor forecolor | alignleft aligncenter alignright alignjustify  |',
+            image_advtab: true,
+            quickbars_insert_toolbar: false,
+            external_filemanager_path: "@VirtualFolder/filemanager/",
+            filemanager_title: "FileStorage",
+            filemanager_path: "@VirtualFolder/filemanager",
+            external_plugins: {
+                "filemanager": "@VirtualFolder/filemanager/plugin.min.js"
+            },
+            //images_upload_handler: image_upload_handler,
+            setup: function(editor) {
+                editor.on('keyup', function(e) {
+                    //console.log(editor.getContent({ format: 'text' }));
+                    $('#@(Model.Id)').val(editor.getContent({ format: 'raw' }));
+                });
+                editor.on('click', function (e) {
+                                     $('#@(Model.Id)').val(editor.getContent({ format: 'raw' }));
+                });
+
+            }
+        });
+    });
+
+    function image_upload_handler(blobInfo, success, failure, progress) {
+        var xhr, formData;
+
+        xhr = new XMLHttpRequest();
+        xhr.withCredentials = false;
+        xhr.open("POST", "/DashBoard/UploadImage", true);
+
+        xhr.upload.onprogress = function (e) {
+            progress(e.loaded / e.total * 100);
+        };
+
+        xhr.onload = function () {
+            var json;
+
+            if (xhr.status === 403) {
+                failure('HTTP Error: ' + xhr.status, { remove: true });
+                return;
+            }
+
+            if (xhr.status < 200 || xhr.status >= 300) {
+                failure('HTTP Error: ' + xhr.status);
+                return;
+            }
+
+            json = JSON.parse(xhr.responseText);
+
+            if (!json || typeof json.location != 'string') {
+                failure('Invalid JSON: ' + xhr.responseText);
+                return;
+            }
+
+            success(json.location);
+        };
+
+        xhr.onerror = function () {
+            failure('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+        };
+
+        formData = new FormData();
+        formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+        xhr.send(formData);
+    };
+</script>

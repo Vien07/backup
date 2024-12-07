@@ -1,0 +1,150 @@
+﻿@using Admin.LayoutPage.Constants;
+@using ComponentUILibrary.Models
+
+@model Admin.LayoutPage.Database.SliderItem;
+
+    <div class="modal fade" id="modalMenuItemEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalMenuItemEdit" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-full" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header ">
+
+                    <h4 class="modal-title justify-content-center " id="myModalLabel2">@(Model.Pid == 0 ? "Thêm nội dung" : "Cập nhật nội dung")</h4>
+                    <button type="button" class="btn-close" onclick="CloseModalEdit(true)" aria-label="Close"></button>
+
+                </div>
+
+                <div class="modal-body">
+                    <div class="tab-content" id="myTabContent">
+                        <form id="SliderItemForm" class="form form-vertical mt-3">
+                            <div class="form-body">
+                                <div class="mt-2">
+                                    <input hidden id="@nameof(Model.Pid)" name="@nameof(Model.Pid)" value="@(Model.Pid)">
+                                    @*<input hidden id="SliderPid" name="SliderPid" value="@(Model.SliderPid)">*@
+
+                                    <div class="form-group">
+                                        <label for="title">Tiêu đề</label>
+                                        <input required type="text" class="form-control" id="title" value="@Model.Title" name="title" aria-describedby="title" placeholder="nhập tiêu đề...">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="TypeSlider" class="text-bold">Loại hiển thị</label>
+
+                                        @{
+                                            List<RadioData> itemRadioTypeSlider = new List<RadioData>();
+                                            itemRadioTypeSlider.Add(new RadioData { Text = "Hình ảnh", Id = "Position_left", Value = "image" });
+                                            itemRadioTypeSlider.Add(new RadioData { Text = "Video", Id = "Position_center", Value = "video" });
+                                            RadioModel radioTypeSliderModel = new RadioModel();
+                                            radioTypeSliderModel.Id = "TypeMedia";
+                                            radioTypeSliderModel.Class = "row";
+                                            radioTypeSliderModel.Style = "margin-left:5px";
+                                            radioTypeSliderModel.Items = itemRadioTypeSlider;
+                                            radioTypeSliderModel.SelectedValue = Model.TypeMedia;
+
+                                        }
+                                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.RadioComponent), radioTypeSliderModel)
+                                    </div>
+                                    <div id="VideoBox" class="form-group">
+                                        <label for="title">Link Video</label>
+                                        <input  type="text" class="form-control" id="VideoLink" value="@Model.VideoLink" name="VideoLink" aria-describedby="" placeholder="nhập link...">
+                                    </div>
+                                    <div id="ImageBox" class="form-group">
+                                        <label for="">Media</label>
+
+                                        @{
+
+                                            var imageURl = "";
+                                            if (Model != null)
+                                            {
+                                                imageURl =Steam.Core.Base.Constant.SystemInfo.VirtualFolder+ Model.FilePath + Model.Images;
+                                            }
+
+                                            FileUploadControlModel fileUploadModel = new FileUploadControlModel();
+                                            fileUploadModel.Id = "Images";
+                                            fileUploadModel.Class = "";
+                                            fileUploadModel.AcceptVideo = true;
+                                            fileUploadModel.FirstLoadLib = true;
+                                            //true thì tạo control up nhiều ảnh
+                                            fileUploadModel.SelectedFiles = imageURl;
+                                            fileUploadModel.Images_Alt = Model.Images_Alt;
+
+                                        }
+                                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.FileUploadFilePondComponent), fileUploadModel)
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="Description">Mô tả</label>
+                                        @{
+
+                                            EditorModel editorModel = new EditorModel();
+                                            editorModel.Id = "Description";
+                                            editorModel.Cols = "40";
+                                            editorModel.Rows = "70";
+                                            editorModel.FirstLoadLib = true;
+                                            editorModel.Content = Model.Description;
+                                        }
+                                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.EditorTinymceComponent), editorModel)
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="ItemBlock">Slider Item Block</label>
+
+                                        @{
+
+                                            CodeMirrorModel codeMirrorItemBlock = new CodeMirrorModel();
+                                            codeMirrorItemBlock.Id = "ItemBlock";
+                                            codeMirrorItemBlock.Content = Model.ItemBlock;
+                                        }
+                                        @await Component.InvokeAsync(nameof(ComponentUILibrary.ViewComponents.CodeMirrorComponent), codeMirrorItemBlock)
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button type="button" onclick="_action.SaveChild('SliderItemForm')" class="btn btn-primary me-1 mb-1">
+                                            @(Model.Pid == 0 ? "Add" : "Update")
+                                        </button>
+                                    </div>
+                                    @*</div>*@
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div><!-- modal-content -->
+        </div><!-- modal-dialog -->
+    </div>
+<script>
+    function ShowMediaBox() {
+        var selectedValue = $("input[type=radio][name=TypeMedia_radio]:checked").val();
+        if (selectedValue == "image") {
+            $("#ImageBox").show();
+            $("#VideoBox").hide();
+        } else {
+            $("#ImageBox").hide();
+            $("#VideoBox").show();
+        }
+    }
+    $(document).ready(function () {
+        ShowMediaBox();
+
+        // Add an event listener to the checkbox for changes
+        $("input[type=radio][name=TypeMedia_radio]").on("change", function () {
+            //if ($("input[type=radio][name=TypeMedia_radio]:checked").val() == "image") {
+            //    $("#ImageBox").show();
+            //    $("#VideoBox").hide();
+            //}
+            //else {
+            //    $("#ImageBox").hide();
+            //    $("#VideoBox").show();
+            //}
+            ShowMediaBox()
+        });
+
+    });
+</script>
+
+    
