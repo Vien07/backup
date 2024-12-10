@@ -1,0 +1,139 @@
+﻿@using CMS.Services.TranslateServices;
+@using Microsoft.AspNetCore.Http;
+@using CMS.Repository;
+@using CMS.Services.CommonServices;
+@using DTO.News;
+@using DTO;
+@using System.Text;
+
+@inject IHttpContextAccessor _httpContextAccessor
+@inject IHome_Repository _repHome
+@inject IContact_Repository _repContact;
+@inject ITranslateServices _translate
+@inject ICommonServices _mtc;
+@inject ICustomer_Repository _repCustomer
+@{
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    var newsCateList = _repHome.GetNewsCateList(lang);
+    var galleryCateList = _repHome.GetGalleryCateList(lang);
+    var aboutList = await _repHome.GetAboutMenuList(lang);
+    var productCateList = _repHome.GetProductCateList(lang);
+    var data = _repContact.GetContactInfo(lang);
+    var customer = _repCustomer.GetProfile();
+}
+
+<header class="header" id="header">
+    <div class="container d-flex">
+        <a class="logo-full" href="@Html.Raw(_translate.GetUrl("url.home"))" title="logo" alt="logo">
+            <img class="logo" src="@ConstantStrings.UrlConfigurationImages@(_mtc.GetConfigValue(ConstantStrings.KeyLogo))" alt="logo" />
+        </a>
+        <nav class="navigate-dym" id="navigate">
+            <div class="menu">
+                <div class="menu-header">
+                    <div class="tt-lg text-primary text-uppercase mb-0 letter-spacing-1">
+                        Menu
+                    </div>
+                    <div class="btn-close" id="close-menu"></div>
+                </div>
+                <div class="menu-body">
+                    <ul class="menu-slide">
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self"><span>@Html.Raw(_translate.GetString("menu.home"))</span></a>
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.about"))" title="@Html.Raw(_translate.GetString("menu.about"))" alt="@Html.Raw(_translate.GetString("menu.about"))" target="_self">
+                                <span>@Html.Raw(_translate.GetString("menu.about"))</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.feature"))" title="@Html.Raw(_translate.GetString("menu.feature"))" alt="@Html.Raw(_translate.GetString("menu.feature"))"><span>@Html.Raw(_translate.GetString("menu.feature"))</span></a>
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.product"))" title="@Html.Raw(_translate.GetString("menu.product"))" alt="@Html.Raw(_translate.GetString("menu.product"))"><span>@Html.Raw(_translate.GetString("menu.product"))</span></a>
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.news"))" title="@Html.Raw(_translate.GetString("menu.news"))" alt="@Html.Raw(_translate.GetString("menu.news"))" target="_self"><span>@Html.Raw(_translate.GetString("menu.news"))</span></a>
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.contact"))" title="@Html.Raw(_translate.GetString("menu.contact"))" alt="@Html.Raw(_translate.GetString("menu.contact"))" target="_self"><span>@Html.Raw(_translate.GetString("menu.contact"))</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-footer">
+                    @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-hotline"])) || !String.IsNullOrEmpty(Convert.ToString(data["contact-email"])))
+                    {
+                        <div class="fs-15 mb-2">@Html.Raw(_translate.GetString("menu.contact-info"))</div>
+                        @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-hotline"])))
+                        {
+                            <div class="form-group mb-2">
+                                <div class="fs-12">Hotline</div>
+                                <a href="tel:@Html.Raw(data["contact-hotline"])" alt="@Html.Raw(data["contact-hotline"])" title="">@Html.Raw(data["contact-hotline"])</a>
+                            </div>
+                        }
+                        @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-email"])))
+                        {
+                            <div class="form-group mb-2">
+                                <div class="fs-12">Email</div>
+                                <a href="mailto:@Html.Raw(data["contact-email"])" alt="@Html.Raw(data["contact-email"])" title="@Html.Raw(data["contact-email"])">@Html.Raw(data["contact-email"])</a>
+                            </div>
+                        }
+                    }
+
+
+                </div>
+            </div>
+        </nav>
+        <div class="header-right d-flex">
+            <div class="header-right-item signin">
+                <div class="group-login">
+                    @if (customer.Pid == 0)
+                    {
+                    <a class="btn btn-login" alt="@Html.Raw(_translate.GetString("user.sign-in"))" title="@Html.Raw(_translate.GetString("user.sign-in"))" href="@Html.Raw(_translate.GetUrl("url.sign-in"))">@Html.Raw(_translate.GetString("user.sign-in"))</a>
+                    <a class="btn btn-register" alt="@Html.Raw(_translate.GetString("user.sign-up"))" title="@Html.Raw(_translate.GetString("user.sign-up"))" href="@Html.Raw(_translate.GetUrl("url.sign-up"))">@Html.Raw(_translate.GetString("user.sign-up"))</a>
+
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <a class="account-link"
+                               alt="@Html.Raw(customer.LastName)"
+                               title="@Html.Raw(customer.LastName)"
+                               href="javascript:void(0)">
+                                <div class="avatar avatar-sm">
+                                    <img src="@(!String.IsNullOrEmpty(customer.PicThumb) ? Html.Raw(customer.PicThumb) : "/css/skin/user-default.png")" alt="@Html.Raw(customer.LastName)" />
+                                </div>
+                                <div class="info">
+                                    <div class="tt name-user">@Html.Raw(customer.FirstName) @Html.Raw(customer.LastName)</div>
+                                </div>
+                                <div class="toggle">
+                                    <i class="fa fa-caret-down"></i>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <a href="@Html.Raw(_translate.GetUrl("url.setting-account"))" alt="@Html.Raw(_translate.GetString("menu.setting-account"))" title="@Html.Raw(_translate.GetString("menu.setting-account"))">@Html.Raw(_translate.GetString("menu.setting-account"))</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="@Html.Raw(_translate.GetUrl("url.change-password"))" alt="@Html.Raw(_translate.GetString("menu.change-password"))" title="">@Html.Raw(_translate.GetString("menu.change-password"))</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="@Html.Raw(_translate.GetUrl("url.order-management"))" alt="@Html.Raw(_translate.GetString("menu.order-management"))" title="@Html.Raw(_translate.GetString("menu.order-management"))">@Html.Raw(_translate.GetString("menu.order-management"))</a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a href="/Customer/LogOut" alt="@Html.Raw(_translate.GetString("menu.log-out"))" title="@Html.Raw(_translate.GetString("menu.log-out"))">@Html.Raw(_translate.GetString("menu.log-out"))</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+            <div class="header-right-item menu">
+                <button class="btn-menu" id="menu-toggle" role="button">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>

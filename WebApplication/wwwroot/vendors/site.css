@@ -1,0 +1,40 @@
+﻿#popupModal img {
+    margin: 0;
+    max-height: 100%;
+}
+
+#popupModal .btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 77;
+    padding: 0.25rem 0.25rem;
+    margin: 6px;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    background-color: #f3f3f3;
+}
+
+@media (min-width: 768px) {
+    #popupModal img {
+        max-height: calc(100vh - 4rem);
+    }
+
+    #popupModal .modal-dialog {
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        min-height: 0;
+        height: 100%;
+        width: 92%;
+        max-width: 1080px;
+        padding: 2rem 1.5rem;
+        margin: auto;
+    }
+
+    #popupModal .modal-content {
+        width: auto;
+        display: block;
+    }
+}

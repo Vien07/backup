@@ -1,0 +1,77 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using Microsoft.AspNetCore.Http
+@inject ITranslateServices _translate
+@inject ICommonServices _common
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    if (string.IsNullOrEmpty(lang))
+    {
+        lang = ConstantStrings.DefaultLang;
+    }
+    //var linkPolicy = _common.GetConfigValue(ConstantStrings.KeyLinkPolicy);
+    //var googleLoginActive = _common.GetConfigValue(ConstantStrings.KeyGoogleLoginActive);
+    //var facebookLoginActive = _common.GetConfigValue(ConstantStrings.KeyFacebookLoginActive);
+}
+
+@section Meta {
+    @Html.Raw(ViewBag.Meta)
+}
+<section class="block-bg block-login">
+    <div class="container container-content">
+        <div class="card-login">
+            <div class="title-box mb-4">
+                <div class="tt-lg text-gradient text-uppercase">@Html.Raw(_translate.GetString("user.sign-in"))</div>
+            </div>
+            <form id="formInput" class="material-form form-validate form-sign-up-validate" novalidate="">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <input type="email" class="form-control" name="Email" id="Email" required="" data-parsley-required-message="Vui lòng nhập email" />
+                            <label for="Email" class="label-text">Email</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <input class="form-control" autocomplete="new-password" type="password" name="Password" id="Password" required="" data-parsley-required-message="Vui lòng nhập mật khẩu" />
+                            <label for="Password" class="label-text">Mật khẩu</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-end mb-3 mt-2">
+                            <a class="desc" alt="@Html.Raw(_translate.GetString("user.forgot-password"))" title="@Html.Raw(_translate.GetString("user.forgot-password"))" href="@_translate.GetUrl("url.forgot-password")">@Html.Raw(_translate.GetString("user.forgot-password"))</a>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-center mb-3">
+                            <button id="btn_login" type="button" class="btn btn-primary d-block w-100 text-center rounded-2">
+                                @Html.Raw(_translate.GetString("user.sign-in"))
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="border-0 border-top border-top-2 border-dashed"></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-center mt-3">
+                            <span class="me-1">@Html.Raw(_translate.GetString("user.no-account"))</span><a class="link" alt="@Html.Raw(_translate.GetString("user.sign-up"))" tilte="@Html.Raw(_translate.GetString("user.sign-up"))" href="@_translate.GetUrl("url.sign-up")">@Html.Raw(_translate.GetString("user.sign-up"))</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<partial name="/Views/Shared/Convenience.cshtml" />
+
+@section Scripts {
+
+    <script type="text/javascript">
+        initParsley(".form-sign-up-validate", "@lang");
+    </script>
+}

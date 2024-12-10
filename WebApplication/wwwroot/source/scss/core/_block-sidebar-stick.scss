@@ -1,0 +1,141 @@
+$sticky-position-top: 70px;
+
+.block-sidebar,
+[data-wrapper] {
+    --sidebar-width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.sidebar,
+.block-sidebar,
+[data-wrapper],
+[data-sidebar] {
+    position: relative;
+}
+.anchor-bottom {
+    position: absolute;
+    bottom: 0;
+}
+.sidebar, .mainbody {
+    width: var(--sidebar-width);
+    flex: 0 0 auto;
+}
+@include media-breakpoint-up(md) {
+    .block-sidebar,
+    [data-wrapper] {
+        --block-sidebar-gutter: 12px;
+        --sidebar-width: 30%;
+        
+        margin-left: calc(var(--block-sidebar-gutter) * -1);
+        margin-right: calc(var(--block-sidebar-gutter) * -1);
+    }
+    .sidebar,
+    .mainbody,
+    [data-sidebar],
+    [data-mainbody] {
+        padding-left: var(--block-sidebar-gutter);
+        padding-right: var(--block-sidebar-gutter);
+    }
+    [data-stick] {
+        &.is-stick {
+            position: fixed;
+            top: $sticky-position-top;
+        }
+        &.is-stuck {
+            position: absolute;
+            top: auto;
+            bottom: 0;
+        }
+    }
+    .mainbody {
+        width: calc(100% - var(--sidebar-width));
+        flex: 1 1 auto;
+    }
+}
+@include media-breakpoint-up(xl) {
+    .block-sidebar {
+        --sidebar-width: 320px;
+        --block-sidebar-gutter: 18px;
+    }
+}
+// ++++++++++++++++++++++++++++++++
+// Social News-detail stick
+.content-master {
+    position: relative;
+    min-height: 360px;
+}
+.social-share {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 24px 0;
+    .label {
+        display: block;
+        width: 100%;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1.5px;
+    }
+    a, .btn {
+        margin: 4px;
+    }
+}
+@include media-breakpoint-up(md) {
+    $space: 70px;
+
+    .content-master {
+        padding-left: $space;
+    }
+    .social-share {
+        position: absolute;
+        top: 0;
+        border: none;
+        padding: 0;
+        margin: 0;
+        left: initial;
+        flex-direction: column-reverse;
+        margin-left: -$space;
+        text-align: left;
+
+        &.is-stick {
+            position: fixed;
+            top: $sticky-position-top;
+        }
+        &.is-stuck {
+            position: absolute;
+            top: auto;
+            bottom: 0;
+        }
+        .label {
+            text-align: left;
+            height: 20px;
+            width: auto;
+            margin: 75px 0 0 8px;
+            transform: rotate(-90deg);
+            transform-origin: left top;
+        }
+        a, .btn {
+            margin: 0 0 5px;
+        }
+    }
+}
+// Panel
+.pane {
+    &-tt {
+        padding: .25rem 0 .75rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid rgba(#000,.1);
+        text-transform: uppercase;
+    }
+    &-menu {
+        background-color: #f9f6f0;
+        padding: 1rem;
+        border-radius: 3px;
+        .pane-tt {
+            margin-bottom: .5rem;
+        }
+    }
+}

@@ -1,0 +1,151 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+<div class="container-fluid px-lg-4">
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>@_translate.GetStringAdmin("Phân quyền cho nhóm quản lý")</h5>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <form class="form-inline align-items-center pb-10">
+                    <div class="col-auto form-group pl-0 pr-2 mb-3 ">
+                        <input type="search" id="inputSearch" class="form-control form-control-sm" placeholder="Keyword search" />
+                        <div class="input-group-append">
+                            <button onclick="Search()" type="button" class="btn btn-sm btn-light ml-2" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-search")">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover mb-0">
+                                    <thead id="theadData" class="bg-light">
+                                        <tr></tr>
+                                    </thead>
+                                    <tbody id="tbodyData">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        (function () {
+            if ('@ViewBag.GroupUserCode' != '') {
+                //window.history.pushState({}, document.title, "/" + "b-admin/Permit/Index");
+                GetListData(unicodeBase64Decode('@ViewBag.GroupUserCode'));
+            }
+        })();
+        function GetListData(groupUserCode) {
+            $.ajax({
+                url: '/b-admin/Permit/GetDataGroup',
+                data: {
+                    groupUserCode: groupUserCode,
+                    txtSearch: $('#inputSearch').val()
+                },
+                method: 'GET',
+            }).done(function (response) {
+                if (response != "Error" && response != "") {
+                    LoadGrid(response);
+                }
+                else {
+                    location.href =  '/b-admin/Group/Index';
+                }
+            })
+        }
+        function LoadGrid(response) {
+            var data = JSON.parse(response);
+            $('#tbodyData').empty();
+            $('#theadData tr').empty();
+            if (data != null && data.length > 0) {
+                //append thead
+                var fData = data[0].Permissons;
+                if (fData.length > 0) {
+                    var htmlHead = `<th>Modules</th>`;
+                    for (let i = 0; i < fData.length; i++) {
+                        htmlHead += `<th class="w-10 text-nowrap">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" onchange="SaveAll(this.id)" class="custom-control-input" id="${"CheckBoxAll_" + fData[i].PermissionCode}" name="ckb">
+                                                                    <label class="custom-control-label" for="${"CheckBoxAll_" + fData[i].PermissionCode}">${fData[i].PermissionName}</label>
+                                                                </div>
+                                                    </th>`;
+                    }
+                    $('#theadData tr').append(htmlHead);
+                }
+                //append body
+                var htmlBody = ``;
+                for (let i = 0; i < data.length; i++) {
+                    htmlBody += `  <tr><td><div class="d-flex">${data[i].ModuleName}</div></td>`;
+                    var listPermission = data[i].Permissons;
+                    for (let j = 0; j < listPermission.length; j++) {
+                        htmlBody += `<td>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input ${listPermission[j].IsChecked ? "checked" : ""} type="checkbox" onchange="Save(this.id)" class="custom-control-input" id="${data[i].ModuleCode + "_" + listPermission[j].PermissionCode}" name="ckb">
+                                                            <label class="custom-control-label" for="${data[i].ModuleCode + "_" + listPermission[j].PermissionCode}">&nbsp;</label>
+                                                        </div>
+                                                    </td>`;
+                    }
+                    htmlBody += `</tr>`;
+                }
+                $('#tbodyData').append(htmlBody);
+            }
+            else {
+                htmlBody += `  <tr><td style="text-align:center">Không có dữ liệu</td>`;
+                $('#tbodyData').append(htmlBody);
+            }
+        }
+        function Save(id) {
+            $.ajax({
+                url: '/b-admin/Permit/InsertGroupPermission',
+                type: 'POST',
+                data: {
+                    groupUserCode: unicodeBase64Decode('@ViewBag.GroupUserCode'),
+                    id: id,
+                    isChecked: $('#' + id).is(':checked')
+                },
+                success: function (response) {
+                    if (response == "Error") {
+                        AlertToast('@_translate.GetStringAdmin("alert.infomation")', '@_translate.GetStringAdmin("alert.error")', 'error');
+                    } @*else {
+                        AlertToast('@_translate.GetStringAdmin("alert.infomation")', '@_translate.GetStringAdmin("alert.success")', 'success');
+                    }*@
+                },
+                error: function (e) { }
+            })
+        }
+        function SaveAll(id) {
+            var permission = id.split("_")[1];
+            var checked = $('#' + id).is(':checked');
+            $('#tbodyData input[id*=' + permission + ']').each((i, ele) => {
+                if (checked == true) {
+                    $(ele).prop('checked', true);
+                } else {
+                    $(ele).prop('checked', false);
+                }
+                $(ele).trigger('change');
+            })
+        }
+        function Search() {
+            GetListData(unicodeBase64Decode('@ViewBag.GroupUserCode'));
+        }
+        $('#inputSearch').keypress(function (e) {
+             if ( e.which == 13 ) {
+                 e.preventDefault();
+                 Search();
+             }
+        })
+    </script>
+}

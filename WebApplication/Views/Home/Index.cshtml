@@ -1,0 +1,455 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services;
+@using DTO;
+@using DTO.News;
+@using DTO.Product;
+@using DTO.Feature;
+@using DTO.Gallery;
+@using DTO.FAQ;
+@using DTO.Website;
+@using CMS.Services.CommonServices;
+@using DTO.Customer;
+@inject ITranslateServices _translate
+@inject ICommonServices _common;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SlideDto> slide = ViewBag.Slide as List<SlideDto>;
+    List<NewsDto> news = ViewBag.News as List<NewsDto>;
+    List<ProductDto> products = ViewBag.Products as List<ProductDto>;
+    List<FAQDto> faq = ViewBag.FAQ as List<FAQDto>;
+    List<HomePageDto> homePageIntro = ViewBag.HomePageIntro as List<HomePageDto>;
+    List<HomePageDto> homePageFeature = ViewBag.HomePageFeature as List<HomePageDto>;
+    PopupDto popup = ViewBag.Popup;
+    CustomerDto customer = ViewBag.Customer as CustomerDto;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+    string homeImage = ViewBag.HomeImage as string;
+    string homeImageMobile = ViewBag.HomeImageMobile as string;
+    string featureImage = ViewBag.FeatureImage as string;
+    string faqImage = ViewBag.FAQImage as string;
+}
+
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    @if (slide.Any())
+    {
+        <section class="home-slider-o">
+            <div class="home-slider">
+                @foreach (var item in slide)
+                {
+                    <div class="carousel-cell">
+                        <div class="img-slide">
+                            <img src="@Html.Raw(item.Images)" alt="@Html.Raw(item.TitleAlt)" />
+                        </div>
+                        <div class="container absolute d-flex @(item.Position == "left" ? "justify-content-start text-start" : item.Position == "center" ? "justify-content-center text-center" : "justify-content-end text-end")">
+                            <div class="textbox">
+                                <h1 class="tt-lg text-uppercase font-primary">
+                                    @Html.Raw(item.Title)
+                                </h1>
+                                <div class="desc">@Html.Raw(item.Description)</div>
+                                @if (!String.IsNullOrEmpty(item.Link))
+                                {
+                                    <a class="button btn btn-primary"
+                                       alt="@Html.Raw(_translate.GetString("home.learn-more"))"
+                                       title="@Html.Raw(_translate.GetString("home.learn-more"))"
+                                       href="@Html.Raw(item.Link)"
+                                       target="@(item.TargetLink == "_blank" ? "_blank" : "")">@Html.Raw(_translate.GetString("home.learn-more"))</a>
+
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+}
+
+@if (homePageIntro.Any())
+{
+    <section class="block-bg py-5 py-xl-6">
+        <div class="container">
+            <div class="row gy-3 w-xxl-90 mx-auto">
+                @foreach (var item in homePageIntro)
+                {
+                    @if (item.Position == "left")
+                    {
+                        <div class="col-12 col-lg-6 wow zoomOutIn ps-lg-5">
+                            <div class="title-box mb-4">
+                                <div class="tt-lg text-uppercase text-gradient">
+                                    @Html.Raw(item.Title)
+                                </div>
+                            </div>
+                            <div class="desc text-desc mb-4">
+                                @Html.Raw(item.Content)
+                            </div>
+                            @if (!string.IsNullOrEmpty(item.IntroLink))
+                            {
+
+                                <a class="btn btn-sm btn-primary"
+                                   alt="@Html.Raw(_translate.GetString("home.learn-more"))"
+                                   title="@Html.Raw(_translate.GetString("home.learn-more"))"
+                                   href="@Html.Raw(item.IntroLink)">
+                                    <span>@Html.Raw(_translate.GetString("home.learn-more"))</span>
+                                </a>
+
+                            }
+                        </div>
+                        <div class="col-12 col-lg-6 wow zoomOutIn">
+                            <div class="thumb">
+                                <img alt="@Html.Raw(item.TitleAlt)" src="@Html.Raw(item.Images)" />
+                            </div>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <div class="col-12 col-lg-6 wow zoomOutIn">
+                            <div class="thumb">
+                                <img alt="@Html.Raw(item.TitleAlt)" src="@Html.Raw(item.Images)" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 wow zoomOutIn ps-lg-5">
+                            <div class="title-box mb-4">
+                                <div class="tt-lg text-uppercase text-gradient">
+                                    @Html.Raw(item.Title)
+                                </div>
+                            </div>
+                            <div class="desc text-desc mb-4">
+                                @Html.Raw(item.Content)
+                            </div>
+                            @if (!string.IsNullOrEmpty(item.IntroLink))
+                            {
+
+                                <a class="btn btn-sm btn-primary"
+                                   alt="@Html.Raw(_translate.GetString("home.learn-more"))"
+                                   title="@Html.Raw(_translate.GetString("home.learn-more"))"
+                                   href="@Html.Raw(item.IntroLink)">
+                                    <span>@Html.Raw(_translate.GetString("home.learn-more"))</span>
+                                </a>
+
+                            }
+                        </div>
+
+                    }
+                }
+
+            </div>
+        </div>
+    </section>
+}
+@if (homePageFeature.Any())
+{
+    <section class="block-bg py-5 py-xl-6 block-features">
+        <div class="container">
+            <div class="title-box text-center mb-5">
+                <div class="tt-lg text-uppercase text-gradient">@Html.Raw(_translate.GetString("menu.feature"))</div>
+            </div>
+            <div class="row gy-3 align-items-center w-xxl-90 mx-auto">
+                <div class="col-12 col-lg-6 col-xl-5 wow zoomOutIn pe-lg-5">
+                    <div class="row row-cols-1 list-features__v1">
+                        @foreach (var item in homePageFeature)
+                        {
+                            <div class="col">
+                                <div class="d-flex">
+                                    <div class="avatar">
+                                        <img src="@Html.Raw(item.Images)" alt="@Html.Raw(item.TitleAlt)" />
+                                    </div>
+                                    <div class="info">
+                                        <div class="tt-xs">@Html.Raw(item.Title)</div>
+                                        <div class="desc">
+                                            @Html.Raw(item.Description)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 col-xl-7 wow zoomOutIn">
+                    @if (!String.IsNullOrEmpty(featureImage))
+                    {
+                        <div class="thumb">
+                            <img src="@Html.Raw(featureImage)" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="thumb">
+                            <img src="/css/skin/theme/features.png" />
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </section>
+}
+@if (!String.IsNullOrEmpty(homeImage))
+{
+    <section class="block-bg py-5 py-xl-6">
+        <div class="container wow zoomOutIn">
+            <div class="title-box text-center mb-3">
+                <div class="tt-lg text-uppercase text-gradient">
+                    @Html.Raw(_translate.GetString("home.info"))
+                </div>
+            </div>
+            <div class="desc text-center mb-45 text-desc">
+                @Html.Raw(_translate.GetString("home.info-desc"))
+            </div>
+            @if (!String.IsNullOrEmpty(homeImageMobile))
+            {
+                <div class="thumb d-block d-md-none w-xxl-90 mx-auto">
+                    <img src="@Html.Raw(homeImageMobile)" alt="@Html.Raw(_translate.GetString("home.info"))" title="@Html.Raw(_translate.GetString("home.info"))" />
+                </div>
+            }
+            <div class="thumb d-md-block d-none w-xxl-90 mx-auto">
+                <img src="@Html.Raw(homeImage)" alt="@Html.Raw(_translate.GetString("home.info"))" title="@Html.Raw(_translate.GetString("home.info"))" />
+            </div>
+        </div>
+    </section>
+}
+@if (products.Any())
+{
+    <section class="block-bg py-5 py-xl-6">
+        <div class="container wow zoomOutIn">
+            <div class="title-box text-center mb-3">
+                <div class="tt-lg text-uppercase text-gradient">
+                    @Html.Raw(_translate.GetString("product.title"))
+                </div>
+            </div>
+            <div class="desc text-center mb-45 text-desc">
+                @Html.Raw(_translate.GetString("product.desc"))
+            </div>
+            <div class="list-pricing w-xxl-90 mx-auto">
+                @foreach (var item in products)
+                {
+
+                    <div class="table-price @(item.IsHot ? "popular" : "")">
+                        <div class="price-header">
+                            <div class="badge">
+                                <span>@Html.Raw(item.Title)</span>
+                            </div>
+                            @if (item.Price > 0)
+                            {
+
+                                <div class="price">@Html.Raw(item.PriceString)<span class="unit">₫</span></div>
+                                <div class="text-desc">Mỗi tháng</div>
+                            }
+                            else
+                            {
+                                <div class="price">@Html.Raw(_translate.GetString("product.contact"))</div>
+                                <div class="text-desc">@Html.Raw(_translate.GetString("product.receive-best-price"))</div>
+                            }
+
+                        </div>
+                        <div class="price-body">
+                            @Html.Raw(item.Content)
+                        </div>
+                        <div class="price-footer">
+                            @if (item.Price > 0)
+                            {
+                                @if (customer.Pid == 0)
+                                {
+                                    <a class="btn btn-outline-primary"
+                                       onclick="CheckUser()"
+                                       alt="@Html.Raw(_translate.GetString("product.buy-now"))"
+                                       title="@Html.Raw(_translate.GetString("product.buy-now"))"
+                                       href="javascript:void(0)">@Html.Raw(_translate.GetString("product.buy-now"))</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-outline-primary btn-add-cart"
+                                       onclick="addToCart(@(item.Pid), 0, 0, 1)"
+                                       alt="@Html.Raw(_translate.GetString("product.buy-now"))"
+                                       title="@Html.Raw(_translate.GetString("product.buy-now"))"
+                                       href="javascript:void(0)">@Html.Raw(_translate.GetString("product.buy-now"))</a>
+                                }
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-primary"
+                                   alt="@Html.Raw(_translate.GetString("product.contact-now"))"
+                                   title="@Html.Raw(_translate.GetString("product.contact-now"))"
+                                   href="@Html.Raw(_translate.GetUrl("url.contact"))">@Html.Raw(_translate.GetString("product.contact-now"))</a>
+                            }
+
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    </section>
+
+}
+
+
+
+@if (faq.Any())
+{
+    <section class="block-bg py-5 py-xl-6 block-faq">
+        <div class="container wow zoomOutIn">
+            <div class="title-box text-center mb-3">
+                <div class="tt-lg text-uppercase text-gradient">
+                    @Html.Raw(_translate.GetString("home.faq"))
+                </div>
+            </div>
+            <div class="desc text-center mb-45 text-desc">
+                @Html.Raw(_translate.GetString("home.faq-desc"))
+            </div>
+            <div class="row align-items-center w-xxl-90 mx-auto">
+                <div class="col-12 col-lg-7">
+                    <div class="faq-group">
+                        @foreach (var item in faq)
+                        {
+                            <div class="faq-items">
+                                <a class="faq-links @(item == faq[0] ? "open-toggle" : "")"
+                                   role="button"
+                                   alt="@Html.Raw(item.TitleAlt)"
+                                   title="@Html.Raw(item.TitleAlt)"
+                                   data-toggle="#FAQ-@Html.Raw(item.Pid)">@Html.Raw(item.Title)</a>
+                                <div class="faq-collapse faq-content" id="FAQ-@Html.Raw(item.Pid)">
+                                    <p>
+                                        @Html.Raw(item.Answer)
+                                    </p>
+                                </div>
+                            </div>
+                            @*<div class="faq-items">
+                                <a class="faq-links"
+                                   role="button"
+                                   alt="@Html.Raw(item.TitleAlt)"
+                                   title="@Html.Raw(item.TitleAlt)"
+                                   data-toggle="#FAQ-@Html.Raw(item.Pid)">@Html.Raw(item.Title)</a>
+                                <div class="faq-collapse faq-content" id="FAQ-@Html.Raw(item.Pid)" style="display: none;">
+                                    <p>
+                                        @Html.Raw(item.Answer)
+                                    </p>
+                                </div>
+                            </div>*@
+                        }
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="thumb rounded-3">
+                        @if (!String.IsNullOrEmpty(faqImage))
+                        {
+
+                            <img class="rounded-3" src="@Html.Raw(faqImage)" alt="FAQ" />
+                        }
+                        else
+                        {
+                            <img class="rounded-3" src="/css/skin/theme/bg-faq.png" alt="FAQ" />
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+@if (news.Any())
+{
+    <section class="block-bg py-5 py-xl-6">
+        <div class="container">
+            <div class="title-box mb-4 w-xxl-90 mx-auto">
+                <div class="tt-lg text-uppercase text-gradient">@Html.Raw(_translate.GetString("menu.news"))</div>
+            </div>
+            <div class="desc mb-4 text-desc w-xxl-90 mx-auto">
+                @Html.Raw(_translate.GetString("home.news-desc"))
+            </div>
+            <div class="grid-news w-xxl-90 mx-auto">
+                @foreach (var item in news)
+                {
+                    if (item == news[0])
+                    {
+                        <div class="grid-news-item">
+                            <div class="block">
+                                <a class="absolute"
+                                   alt="@Html.Raw(item.TitleAlt)"
+                                   title="@Html.Raw(item.TitleAlt)"
+                                   href="@Html.Raw(_translate.GetUrl("url.news"))@(item.Slug).html"></a>
+                                <div class="thumb-res wide">
+                                    <img src="@Html.Raw(item.PicFull)" alt="@Html.Raw(item.TitleAlt)" title="@Html.Raw(item.TitleAlt)" />
+                                </div>
+                                <div class="info">
+                                    <div class="tt">
+                                        @Html.Raw(item.Title)
+                                    </div>
+                                    <div class="desc">
+                                        @Html.Raw(item.Description)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <div class="grid-news-item">
+                            <div class="block">
+                                <a class="absolute"
+                                   alt="@Html.Raw(item.TitleAlt)"
+                                   title="@Html.Raw(item.TitleAlt)"
+                                   href="@Html.Raw(_translate.GetUrl("url.news"))@(item.Slug).html"></a>
+                                <div class="info">
+                                    <div class="tt">
+                                        @Html.Raw(item.Title)
+                                    </div>
+                                    <div class="desc">
+                                        @Html.Raw(item.Description)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+
+                }
+            </div>
+        </div>
+    </section>
+}
+<partial name="/Views/Shared/Convenience.cshtml" />
+
+@section Scripts{
+    <script asp-append-version="true" src="~/vendors/controllers/homeController.js"></script>
+    <script asp-append-version="true" src="~/vendors/controllers/cartController.js"></script>
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+         var checkoutUrl = "@Html.Raw(_translate.GetUrl("url.check-out"))"
+    </script>
+}

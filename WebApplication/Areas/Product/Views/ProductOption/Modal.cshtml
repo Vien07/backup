@@ -1,0 +1,42 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+
+<div class="form-group">
+    <input required type="text" class="form-control raw" name="Code" id="Code" aria-describedby="text" placeholder="Nhập code">
+</div>
+
+<div class="form-group">
+    <input required type="text" class="form-control raw" name="Name" id="Name" aria-describedby="text" placeholder="Nhập tên danh mục">
+</div>
+<div class="form-group">
+    <textarea type="text" class="form-control raw" name="Description" id="Description" aria-describedby="text" placeholder="Nhập mô tả"></textarea>
+</div>
+<div hidden class="form-group">
+    <select id="ParentId" onchange="SaveRawData()" class="form-control select2 form-control-sm border mr-5 mb-5">
+    </select>
+</div>
+
+<div hidden class="row">
+    <div class="col-md-3 form-group">
+        <div id="imgPicThumb" style="background-image: url('/b-admin/dist/img/avatar3.jpg');" class="avatar avatar-lg border rounded mr-4 mb-4 p-5">
+        </div>
+    </div>
+    <div class="col-md-9 form-group">
+        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+            <div class="form-control text-truncate" data-trigger="fileinput">
+                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                <span class="fileinput-filename"></span>
+            </div>
+            <span class="input-group-append">
+                <span class=" btn btn-primary btn-file">
+                    <span class="fileinput-new">@_translate.GetStringAdmin("label.choose-file")</span>
+                    <span class="fileinput-exists">@_translate.GetStringAdmin("label.change")</span>
+                    <input onchange="readURL(this,'#imgPicThumb',0);" type="file" name="Images">
+                </span>
+                <a role="button" href="#" onclick="ClearImages('#imgPicThumb')" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">@_translate.GetStringAdmin("label.delete")</a>
+            </span>
+        </div>
+        <small class="form-text text-muted">@_translate.GetStringAdmin("label.format-images") (.gif, .png, .jpg, .jpeg)</small>
+    </div>
+</div>

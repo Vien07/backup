@@ -1,0 +1,106 @@
+﻿@using System.Web
+@using DTO.About;
+@using CMS.Services.TranslateServices
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    AboutDto data = ViewBag.Data as AboutDto;
+
+    //var url = Context.Request.Host.Value;
+    string banner = ViewBag.Banner as string;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(data.Title)</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.about"))@(Html.Raw(data.Slug)).html" title="@Html.Raw(data.TitleAlt)" alt="@Html.Raw(data.TitleAlt)" target="_self">@Html.Raw(data.Title)</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+
+
+@if (data != null)
+{
+
+
+    @if (data.Default)
+    {
+        <section class="block-bg content-post py-5 py-xl-6">
+            @Html.Raw(data.Content)
+        </section>
+    }
+    else
+    {
+        <section class="block-bg content-post py-5 py-xl-6">
+            <div class="container">
+                <div class="title-box mb-4">
+                    <h2 class="tt-lg text-gradient text-uppercase">
+                        @Html.Raw(data.Title)
+                    </h2>
+                </div>
+                <div class="content">
+                    @Html.Raw(data.Content)
+                </div>
+            </div>
+        </section>
+    }
+}
+else
+{
+    <section class="block-bg content-post py-5 py-xl-6">
+        <div style="margin-top:25px" class="text-center">@Html.Raw(_translate.GetString("common.infoisupdating"))</div>
+    </section>
+
+}
+<partial name="/Views/Shared/Convenience.cshtml" />
+@section Scripts{
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+    </script>
+}

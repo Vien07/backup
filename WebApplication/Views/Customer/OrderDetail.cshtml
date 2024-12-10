@@ -1,0 +1,1227 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services;
+@using CMS.Repository;
+@using DTO.Customer;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+@using DTO.Cart;
+
+@inject ICustomer_Repository _rep
+@inject ITranslateServices _translate
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Customer/Layout/_LayoutCustomer.cshtml";
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    //var orderList = ViewBag.Orderlist as List<OrderListDto>;
+    string banner = ViewBag.Banner as string;
+    var orderData = ViewBag.Order as OrderListDto;
+    var orderBackgroundImages = ViewBag.OrderImages as List<OrderImage>;
+    string htmlTableBody = ViewBag.TableBody as string;
+    string htmlPaging = ViewBag.Paging as string;
+    long Pid = 0;
+    if (!String.IsNullOrEmpty(ViewBag.Pid))
+    {
+        Pid = Convert.ToInt64(ViewBag.Pid);
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("menu.setting-account"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.setting-account"))" title="@Html.Raw(_translate.GetString("menu.setting-account"))" alt="@Html.Raw(_translate.GetString("menu.setting-account"))" target="_self">@Html.Raw(_translate.GetString("menu.setting-account"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0)" title="@Html.Raw(_translate.GetString("menu.order-management"))" alt="@Html.Raw(_translate.GetString("menu.order-management"))" target="_self">@Html.Raw(_translate.GetString("menu.order-management"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+
+<div class="mainbody mb-4 mb-md-0 order-md-2" data-mainbody>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <div class="tt-lg tt-ss text-gradient mb-0">
+                Gói  @Html.Raw(orderData.ProductTitle)
+            </div>
+        </div>
+        <div>
+            <a class="btn btn-upgrade" alt="Nâng cấp" title="Nâng cấp" href="@Html.Raw(_translate.GetUrl("url.contact"))">Nâng cấp</a>
+        </div>
+    </div>
+    <div class="packageInfo">
+        <div class="table-info mb-4">
+            <div class="left">
+                <div class="form-group">
+                    <span class="text">Tên công ty:</span>
+                    <span class="value">@Html.Raw(orderData.CompanyName)</span>
+                </div>
+                <div class="form-group">
+                    <span class="text">Mã số thuế:</span>
+                    <span class="value">@Html.Raw(orderData.TaxCode)</span>
+                </div>
+                <div class="form-group">
+                    <span class="text">Địa chỉ:</span>
+                    <span class="value">
+                        @Html.Raw(orderData.CompanyAddress)
+                    </span>
+                </div>
+            </div>
+
+            <div class="right">
+                <div class="form-group">
+                    <span class="text">Số lượng hồ sơ tối đa:</span>
+                    <span class="value">@Html.Raw(orderData.UserLimit)</span>
+                </div>
+                <div class="form-group">
+                    <span class="text">Ngày đăng ký:</span>
+                    <span class="value">@Html.Raw(orderData.RegisterDateString)</span>
+                </div>
+                <div class="form-group">
+                    <span class="text">Ngày hết hạn:</span>
+                    <span class="value">@Html.Raw(orderData.ExpiredDateString)</span>
+                </div>
+                <div class="form-group">
+                    <span class="text">Kỳ thanh toán:</span>
+                    <span class="value">@Html.Raw(orderData.Months) tháng</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-upload-custom mb-45">
+            <div class="tt-xs mb-1">Cài đặt ảnh nền công ty</div>
+            <div class="text-desc mb-3">
+                Hình ảnh có kích thước tối thiểu 1280x832px, kích thước
+                khuyên dùng 1920x1080px.
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <div class="thumb-res wide thumb-coverUpload">
+                    <img id="backgroundImage" src="@(!String.IsNullOrEmpty(orderData.BackgroundImage) ? Html.Raw(orderData.BackgroundImage) : "/css/skin/bg-default.png")" />
+                </div>
+                <div class="form-group">
+                    <a class="btn btn-custom-primary"
+                       data-bs-toggle="dropdown"
+                       data-bs-target="AddFile">
+                        Chọn ảnh nền<i class="fa fa-caret-down ms-1"></i>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="AddFile">
+                        <li>
+                            <a class="dropdown-item"
+                               href="#"
+                               data-bs-target="#currentImg"
+                               data-bs-toggle="modal">Ảnh gần đây</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               href="#"
+                               data-bs-target="#uploadImg"
+                               data-bs-toggle="modal">Tải ảnh lên</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="table-manager">
+            <div class="title-box mb-4">
+                <div class="tt-lg text-gradient">QUẢN LÝ HỒ SƠ</div>
+            </div>
+            <div class="grid-filter">
+                <div class="col-left">
+                    <div class="form-search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="SearchKeyword" id="SearchKeyword" placeholder="Tìm kiếm từ khoá" />
+                            <i onclick="Search(1)" class="fa fa-search addon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-right">
+                    <div class="group-button">
+                        <div class="form-group">
+                            <a class="btn btn-primary"
+                               data-bs-toggle="dropdown"
+                               data-bs-target="AddFile">
+                                Thêm hồ sơ<i class="fa fa-caret-down ms-1"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="AddFile">
+                                <li>
+                                    <a id="btnOpenAddPopup" class="dropdown-item"
+                                       onclick="OpenAddPopupCard()"
+                                       alt="Add"
+                                       title="Add"
+                                       href="javascript:void(0)"
+                                       data-bs-target="#editProfile"
+                                       data-bs-toggle="modal">Thêm mới</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       alt="Upload CSV"
+                                       title="Upload CSV"
+                                       href="#"
+                                       data-bs-target="#uploadCSV"
+                                       data-bs-toggle="modal">Upload file CSV</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a class="btn btn-secondary"
+                           alt="Export CSV"
+                           title="Export CSV"
+                           href="javascript:void(0)"
+                           onclick="ExportCSV()">Xuất file CSV</a>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-custom table-hover table-striped"
+                       border="0">
+                    <thead>
+                        <tr>
+                            <th width="80" scope="row"><span>STT</span></th>
+                            <th scope="row"><span>Họ tên</span></th>
+                            <th scope="row"><span>Chức danh</span></th>
+                            <th width="150" scope="row">
+                                <span>Thao tác</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        @Html.Raw(htmlTableBody)
+                    </tbody>
+                </table>
+            </div>
+            <div id="tablePagination" class="table-pagination">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <span class="text-desc">
+                            Tổng hồ sơ trong gói:<span id="currentUserAmount" class="text-body fw-semibold ms-1">@Html.Raw(orderData.CurrentUserAmount)</span>/@Html.Raw(orderData.UserLimit)
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <nav id="tablePaging" class="pagination justify-content-end">
+                            @Html.Raw(htmlPaging)
+                        </nav>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Modal {
+    <div class="modal fade" id="editProfile" tabindex="-1" role="dialog" aria-labelledby="editProfileTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg"
+             role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="d-flex align-items-start form-uploadImg">
+                        <div class="left">
+                            <div class="form-groupUpload mb-3 mb-lg-0">
+                                <div class="img-review avatar rounded-circle">
+                                    <img id="imgPicThumbCard" class="rounded-circle"
+                                         src="/css/skin/user-default.png" />
+                                    <!-- <a
+                                      class="btn-close"
+                                      alt=""
+                                      title=""
+                                      href="javascript:void(0)"
+                                      onClick=""
+                                    ></a> -->
+                                </div>
+                                <input id="Avatar" type="file" alt="Avatar" title="Avatar" name="Avatar" value="" onchange="readURL(this,'#imgPicThumbCard',0);" accept=".jpg, .jpeg, .png"/>
+                                <label for="Avatar">Chọn ảnh</label>
+                                <!-- <div class="afterImg">
+                                  <div class="label-text">Messenger.png</div>
+                                  <label for="imgPreview">Thay đổi</label>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="right">
+                            <form id="form-edit-card" class="form-validate material-form form-edit">
+                                <div class="row g-2 gx-3">
+                                    <div class="col-12">
+                                        <div class="tt-xs mb-1">Thông tin cá nhân</div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" required="" id="FullNameCard" name="FullName" value="" />
+                                            <label class="label-text" data-example="Ex: Nguyễn Văn A" data-text="Họ và tên"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" required="" value="" id="Position" name="Position" />
+                                            <label class="label-text" data-example="Ex: Tổng giám đốc" data-text="Chức danh"></label>
+                                        </div>
+                                    </div>
+                                    <div hidden class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="PersonalLink" name="PersonalLink" />
+                                            <label class="label-text" data-example="Ex: https://bizmac.com/" data-text="Link cá nhân"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="PersonalPhone" name="PersonalPhone" pattern="(\+?\d{1,4}[-.\s]?)?(\(?\d{1,4}\)?[-.\s]?)?(\d{3,4}[-.\s]?\d{4,7})" />
+                                            <label class="label-text" data-example="Ex: 84901234567" data-text="Điện thoại cá nhân"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="HomePhone" name="HomePhone" pattern="(\+?\d{1,4}[-.\s]?)?(\(?\d{1,4}\)?[-.\s]?)?(\d{3,4}[-.\s]?\d{4,7})" />
+                                            <label class="label-text" data-example="Ex: 02873006461" data-text="Điện thoại bàn"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="CompanyPhone" name="CompanyPhone" pattern="(\+?\d{1,4}[-.\s]?)?(\(?\d{1,4}\)?[-.\s]?)?(\d{3,4}[-.\s]?\d{4,7})" />
+                                            <label class="label-text" data-example="Ex: 84901234567" data-text="Điện thoại công việc"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="email" value="" id="PersonalEmail" name="PersonalEmail" />
+                                            <label class="label-text" data-example="Ex: nguyenvana@gmail.com" data-text="Email cá nhân"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="email" value="" id="WorkEmail" name="WorkEmail" />
+                                            <label class="label-text" data-example="Ex: nguyenvana@gmail.com" data-text="Email công việc"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" required="" value="" id="Url" name="Url" />
+                                            <label class="label-text" data-example="Ex: nguyen-van-a (không nhập ký tự đặc biệt)" data-text="Url"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="tt-xs mt-3 mb-2">Liên kết Website</div>
+                                    </div>
+                                    <div id="CardCustomLinks"></div>
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-add btn-muted" alt="Add Link" title="Add Link" onClick="addCustomLinkInput()">
+                                            <i class="far fa-plus me-1"></i>Thêm liên kết
+                                        </button>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="tt-xs mt-3 mb-2">Liên kết Social</div>
+                                    </div>
+                                    <div hidden class="col-12 col-md-6">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" value="" id="CompanyWebsiteLink" name="CompanyWebsiteLink" />
+                                            <label class="label-text">Website công ty</label>
+                                        </div>
+                                    </div>
+                                    <div hidden class="col-md-6 ">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" value="" id="PersonalWebsiteLink" name="PersonalWebsiteLink" />
+                                            <label class="label-text">Website cá nhân</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="Zalo" name="Zalo" />
+                                            <label class="label-text" data-example="Ex: 0901234567" data-text="Zalo"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control form-custom-label" type="text" value="" id="Facebook" name="Facebook" />
+                                            <label class="label-text" data-example="Ex: https://www.facebook.com/NguyenvanA" data-text="Facebook"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="Twitter" name="Twitter" />
+                                            <label class="label-text" data-example="Ex: https://x.com/NguyenvanA" data-text="X"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="LinkedIn" name="LinkedIn" />
+                                            <label class="label-text" data-example="Ex: https://www.linkedin.com/in/NguyenvanA" data-text="LinkedIn"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="Telegram" name="Telegram" />
+                                            <label class="label-text" data-example="Ex: NguyenvanA" data-text="Telegram"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="WhatsApp" name="WhatsApp" />
+                                            <label class="label-text" data-example="Ex: 84901234567" data-text="WhatsApp"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="Viber" name="Viber" />
+                                            <label class="label-text" data-example="Ex: 84901234567" data-text="Viber"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-group form-custom-label">
+                                            <input class="form-control" type="text" value="" id="Skype" name="Skype" />
+                                            <label class="label-text" data-example="Ex: live:.cid.9b5e4e3cff16d106" data-text="Skype"></label>
+                                        </div>
+                                    </div>
+
+                                    <div id="QrBox" class="col-12">
+                                        <div class="tt-xs mt-3 mb-3">Mã QR</div>
+                                        <div class="img-qr">
+                                            <img id="imgQrImage" alt="QrImage" src="" />
+                                        </div>
+                                    </div>
+                                    <input hidden id="qrLinkInput" />
+                                    <div class="col-12 text-end mt-4">
+                                        <div class="d-flex align-items-center justify-content-end flex-wrap gap-2">
+                                            <a id="btnCopyCardLink" class="btn btn-desc px-4 d-none" href="javascript:void(0)" alt="Copy" title="Copy"><span>Copy link</span></a>
+                                            <a id="btnSaveCard" onclick="SaveCard('')" class="btn btn-primary px-4" href="javascript:void(0)" alt="Save" title="Save"><span>Lưu thay đổi</span></a>
+                                            <a id="btnDeleteCard" onclick="DeleteCard('')" class="btn btn-outline-primary px-4" href="javascript:void(0)" alt="Delete" title="Delete"><span>Xoá hồ sơ</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="uploadCSV" tabindex="-1" role="dialog" aria-labelledby="uploadCSVTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="form-upload-custom">
+                        <div class="tt-sm mb-1">Upload file CSV</div>
+                        <div class="text-desc mb-3">
+                            Upload - File thông tin hồ sơ tất cả nhân sự. Tải file csv
+                            mẫu <a alt="Tải file csv mẫu" title="Tải file csv mẫu" href="\data\example-card-upload.csv" download>tại đây</a>.
+                        </div>
+                        <div class="form-group">
+                            <label class="icon" for="uploadImgDefault">
+                                <i class="fa fa-file-upload"></i>
+                            </label>
+                            <input type="file" accept=".csv" alt="CSV" title="CSV" name="csvFileInput" id="csvFileInput" placeholder="Chọn ảnh nền" class="form-control" />
+                            <a class="btn btn-upload" id="uploadCsvbtn" alt="Upload CSV" title="Upload CSV" href="javascript:void(0)" onClick="handleCsvUpload()">Upload</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="uploadImg" tabindex="-1" role="dialog" aria-labelledby="uploadImgTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg"
+             role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="form-upload-custom">
+                        <div class="tt-sm mb-1">Tải ảnh lên</div>
+                        <div class="text-desc mb-3">
+                            Hình ảnh có kích thước tối thiểu 1280x832px, kích thước
+                            khuyên dùng 1920x1080px.
+                        </div>
+                        <div class="form-group">
+                            <label class="icon" for="uploadImgDefault">
+                                <i class="fa fa-image"></i>
+                            </label>
+                            <input type="file" name="Background" id="Background" placeholder="Chọn ảnh nền" class="form-control" accept=".jpg, .jpeg, .png"/>
+                            <a class="btn btn-upload" alt="Background" title="Background" for="BackgroundUploadBtn" href="javascript:void(0)" onClick="UploadBackgroundImage()">Upload</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="currentImg" tabindex="-1" role="dialog" aria-labelledby="currentImgTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg"
+             role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="form-currentImg">
+                        <div class="tt-sm mb-1">Ảnh gần đây</div>
+                        <div class="text-desc mb-3">
+                            Hình ảnh đã được đăng tải lên gần đây.
+                        </div>
+                        <ul id="listCurrentImg" class="list-currentImg">
+                            @foreach (var item in orderBackgroundImages)
+                            {
+                                <li id="background_@(item.Pid)" class="currentImg-items">
+                                    <a onclick="SetBackgroundImage(@item.Pid)" data-value="@item.Pid" class="currentImg-link @(item.Active ? "active" : "")" alt="@item.BackgroundImageUrl" title="@item.BackgroundImageUrl">
+                                        <div class="thumb-res wide">
+                                            <img src="@item.BackgroundImageUrl" alt="@item.BackgroundImageUrl" />
+                                        </div>
+                                    </a>
+                                </li>
+                            }
+
+
+                        </ul>
+                        @if (orderBackgroundImages.Any())
+                        {
+                            <div class="text-end mt-4">
+                                <button onclick="UpdateBackgroundImageFromList()" type="button" alt="Chọn ảnh" title="Chọn ảnh" role="button" class="btn btn-primary">
+                                    <span>Chọn ảnh</span>
+                                </button>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+@section Scripts{
+    <script type="text/javascript">
+  var actionUrl = "/Customer/"
+  var lang = "vi";
+  var orderPid = @Pid;
+  var currentBackgroundId = 0;
+  var objOrder = {
+    pid: 0,
+    companyName: "",
+    companyAddress: "",
+    taxCode: "",
+    backgroundImage: "",
+    registerDate: "",
+    expiredDate: "",
+    cycle: 0,
+  };
+  var objCardDetail = {
+    fullName: "",
+    personalPhone: "",
+    homePhone: "",
+    companyPhone: "",
+    personalEmail: "",
+    workEmail: "",
+    position: "",
+    url: "",
+    telegram: "",
+    whatsapp: "",
+    viber: "",
+    skype: "",
+    zalo: "",
+    linkedIn: "",
+    facebook: "",
+    twitter: "",
+    customLink: [],
+    avatar: "",
+    qrCode: "",
+    personalLink: "",
+    companyWebsiteLink: "",
+    personalWebsiteLink: "",
+    qrLink: "",
+  }
+        let linkCounter = 0;
+        var objCustomLink = [];
+        InitInput();
+        initParsley('#form-edit-card', lang)
+
+        function Search(pageIndex) {
+            var formData = new FormData;
+            formData.append('PageIndex', pageIndex);
+            formData.append('SearchKeyword', $("#SearchKeyword").val());
+            formData.append('OrderId', orderPid);
+            const tableBody = $("#tableBody");
+            const paging = $("#tablePaging");
+            const currentUserAmount = $("#currentUserAmount");
+            $.ajax({
+                url: actionUrl + "SearchListCard",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: (response) => {
+                    if (response.isError) {
+                        tableBody.html(response.data.htmlTableBody);
+                        paging.html(response.data.htmlPaging);
+                        currentUserAmount.html(response.data.htmlCurrentUserAmount);
+                    }
+
+                },
+                error: (error) => {
+                    console.log(error);
+                }
+            });
+        }
+
+        function InitInput() {
+            $(".currentImg-link").each(function () {
+                let e = $(this);
+                if (e.hasClass("active")) {
+                    currentBackgroundId = e.data("value");
+                }
+            });
+            $("#btnCopyCardLink").click(function () {
+                navigator.clipboard.writeText($("#qrLinkInput").val())
+                AlertToast("Info", "Copied", "success")
+            });
+        }
+        function UploadBackgroundImage() {
+            $('#BackgroundUploadBtn').prop('disabled', true);
+            var newBackgroundImage = $('#Background').prop('files')[0];
+            if (newBackgroundImage != null) {
+                var formData = new FormData();
+                formData.append('Background', newBackgroundImage);
+                formData.append('OrderPid', orderPid);
+                var url = actionUrl + 'UploadBackgroundImage';
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: formData
+                }).done(function (response) {
+                    if (response.isError) {                                             
+                        var html = '';
+                        for (var item of response.data) {
+                            html += `<li class="currentImg-items">
+                <a onclick="SetBackgroundImage(${item.pid})" class="currentImg-link ${item.active == true ? 'active' : ''}" alt="${item.backgroundImageUrl}" title="${item.backgroundImageUrl}">
+                    <div class="thumb-res wide">
+                        <img src="${item.backgroundImageUrl}" alt="${item.backgroundImageUrl}" />
+                    </div>
+                </a>
+            </li>`;
+                            if (item.active) {
+                                $("#backgroundImage").attr("src", item.backgroundImageUrl);
+                            }
+                        }
+                        $("#listCurrentImg").html(html);
+                        $(".currentImg-link").each(function () {
+                            let e = $(this);
+                            e.on("click", function (i) {
+                                i.preventDefault();
+                                e.parents(".list-currentImg")
+                                    .find(".currentImg-link")
+                                    .not(e)
+                                    .removeClass("active");
+                                e.toggleClass("active");
+                                if (e.hasClass("no-bg")) {
+                                    e.removeClass("active");
+                                }
+                            });
+                        });
+                        $('#uploadImg').modal('hide');
+                        AlertToast('Thông báo', 'Thành công', 'success');
+                        $('#Background').val('');
+                        $('#BackgroundUploadBtn').prop('disabled', false);
+                    } else {
+                        $('#BackgroundUploadBtn').prop('disabled', false);
+                        AlertToast('Thông báo', response.messError, 'error');
+                    }
+                });
+            } else {
+                AlertToast('Thông báo', 'Chưa chọn ảnh!', 'warning');
+                $('#BackgroundUploadBtn').prop('disabled', false);
+            }
+        }
+        function UpdateBackgroundImageFromList() {
+            var formData = new FormData();
+            formData.append('ImageId', currentBackgroundId);
+            formData.append('OrderPid', orderPid);
+            var url = actionUrl + 'UpdateBackgroundImageFromList';
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: formData
+                }).done(function (response) {
+                    if (response.isError) {
+                        $("#backgroundImage").attr("src", response.data.url);
+                        $('#currentImg').modal('hide');
+                        AlertToast('Thông báo', 'Thành công', 'success');
+                    } else {
+                        AlertToast('Thông báo', response.messError, 'error');
+                    }
+                });
+
+        }
+        function SetBackgroundImage(imageId) {
+            currentBackgroundId = imageId;
+        }
+        function handleCsvUpload(event) {
+            $('#uploadCsvbtn').prop('disabled', true);
+            var file = $('#csvFileInput').prop('files')[0];
+            if (file == null) {
+                AlertToast('Thông báo', 'Chưa chọn file!', 'warning');
+                $('#uploadCsvbtn').prop('disabled', false);
+                return;
+            }
+            Swal.fire({
+                title: 'Bạn có muốn upload dữ liệu?',
+                text: "",
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+
+                    var formData = new FormData();
+                    formData.append("File", file);
+                    formData.append("OrderPid", orderPid);
+                    $.ajax({
+                        url: actionUrl + "UploadCSV",
+                        beforeSend: function () {
+                            Swal({
+                                title: "Processing...",
+                                text: "Please wait",
+                                imageUrl: "/img/configuration/Ajax-loader.gif",
+                                showConfirmButton: false,
+                                allowOutsideClick: false
+                            });
+                        },
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+
+                            if (!response.isError) {
+                                //AlertToast('Thông báo', 'Thành công', 'success')
+                                $('#uploadCSV').modal('hide');
+                                Search(1);
+                                UploadCSVMessage(response.data);
+                            }
+                            else {
+                                if (response.messError) {
+                                    AlertToast('Thông báo', response.messError, 'error')
+                                }
+                                else {
+                                    AlertToast('Thông báo', 'Thất bại', 'error')
+                                }
+                            }
+                            Swal.close();
+                            $('#csvFileInput').val('');
+                        },
+                        error: function (response) {
+                            Swal.close();
+                            SweetAlert('Thông báo', "Lỗi không xác định", 'error')
+                            $('#csvFileInput').val('');
+                        }
+                    });
+                }
+            })
+
+        }
+        function ExportCSV() {
+            Swal.fire({
+                title: 'Bạn có muốn xuất dữ liệu CSV?',
+                text: "",
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+                    var formData = new FormData();
+                    formData.append("OrderPid", orderPid);
+                    $.ajax({
+                        url: actionUrl + "ExportCSV",
+                        beforeSend: function () {
+                            Swal({
+                                title: "Processing...",
+                                text: "Please wait",
+                                imageUrl: "/img/configuration/Ajax-loader.gif",
+                                showConfirmButton: false,
+                                allowOutsideClick: false
+                            });
+                        },
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (!response.isError) {
+                                var csvString = response.data;
+                                var universalBOM = "\uFEFF";
+                                var blob = new Blob([universalBOM + csvString], { type: 'text/csv;charset=utf-8;' });
+                                var link = document.createElement("a");
+                                link.setAttribute("href", URL.createObjectURL(blob));
+                                link.setAttribute("download", "export.csv");
+                                link.style.visibility = 'hidden';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                URL.revokeObjectURL(link.href);
+                                Swal.close();
+                                Swal.fire('Thông báo', 'Xuất dữ liệu CSV thành công', 'success');
+
+                            } else {
+                                if (response.messError) {
+                                    Swal.close();
+                                    Swal.fire('Thông báo', response.messError, 'error');
+                                }
+                                else {
+                                    Swal.close();
+                                    Swal.fire('Thông báo', 'Xuất dữ liệu CSV thất bại', 'error');
+                                }
+
+                            }
+                        },
+                        error: function (error) {
+                            Swal.close();
+                            Swal.fire('Thông báo', 'Lỗi khi xuất dữ liệu CSV', 'error');
+                        }
+                    });
+                }
+            });
+        }
+        function UploadCSVMessage(data) {
+            // Determine which notification box to show based on upload success
+            var modalHtml = `
+        <div class="modal fade active show" id="uploadNotice" tabindex="-1" role="dialog" aria-labelledby="uploadWarningTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-body">
+    `;
+
+            if (data.uploadFail > 0) {
+                // Show the warning notification
+                modalHtml += `
+            <div class="box-notification noti-warning">
+                <div class="icon">
+                    <i class="fa-light fa-info-circle"></i>
+                </div>
+                <div class="info">
+                    <div class="tt-sm">Vui lòng kiểm tra lại thông tin</div>
+                    <div class="data">
+                        <div class="table-row">
+                            <div class="col">Dữ liệu nhập thành công</div>
+                            <div class="col">
+                                <span class="text-success">${data.uploadSuccess}</span>
+                            </div>
+                        </div>
+                        <div class="table-row">
+                            <div class="col">Dữ liệu nhập thất bại</div>
+                            <div class="col">
+                                <span class="text-danger">${data.uploadFail}</span>
+                            </div>
+                        </div>
+                        <div class="table-row">
+                            <div class="col">STT dữ liệu thất bại</div>
+                            <div class="col">
+                                <span class="text-danger">${data.failIds.join(', ')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+            } else {
+                // Show the success notification
+                modalHtml += `
+            <div class="box-notification noti-success">
+                <div class="icon">
+                    <i class="fa-light fa-check-circle"></i>
+                </div>
+                <div class="info">
+                    <div class="tt-sm">Thông tin đã được cập nhật</div>
+                    <div class="data">
+                        <div class="table-row">
+                            <div class="col">Dữ liệu nhập thành công</div>
+                            <div class="col">
+                                <span class="text-success">${data.uploadSuccess}</span>
+                            </div>
+                        </div>
+                        <div class="table-row">
+                            <div class="col">Dữ liệu nhập thất bại</div>
+                            <div class="col">
+                                <span class="text-danger">${data.uploadFail}</span>
+                            </div>
+                        </div>
+                        <div class="table-row">
+                            <div class="col">STT dữ liệu thất bại</div>
+                            <div class="col">
+                                <span class="text-danger">${data.failIds.join(', ')}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+            }
+
+            // Close the modal content and append to body
+            modalHtml += `
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+            // Append the modal to the body
+            $('body').append(modalHtml);
+
+            // Show the modal
+            $('#uploadNotice').modal('show');
+
+            // Remove the modal from the DOM after it is hidden to avoid duplicates
+            $('#uploadNotice').on('hidden.bs.modal', function (e) {
+                $(this).remove();
+            });
+        }
+        function readURL(input, divImages, id) {
+            try {
+                var file = $('#Avatar').prop('files')[0];
+                if (file != null) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function (e) {
+                        var image = new Image();
+                        image.src = e.target.result;
+                        image.onload = function () {
+                            $(divImages).attr("src", image.src);
+                        };
+                    }
+                } else {
+                    // Not supported
+                }
+            } catch (e) {
+
+            }
+
+        }
+        function addCustomLinkInput(title = '', link = '') {
+            linkCounter++;
+            const linkClass = `customLink_${linkCounter}`;
+            const html = `
+        <div class="col-12 col-sm-3 gx-2 ${linkClass}">
+            <div class="form-group form-custom-label">
+                <input
+                    class="form-control customLinkTitle"
+                    type="text"
+                    value="${title}"
+                />
+                 <label class="label-text" data-example="Ex: GreenEcard" data-text="Tên link"></label>
+            </div>
+        </div>
+        <div class="col-12 col-sm-9 ${linkClass}">
+            <div class="d-flex form-customLink align-items-center">
+                <div class="form-group form-custom-label">
+                    <input
+                        class="form-control customLinkUrl"
+                        type="text"
+                        value="${link}"
+                    />
+                    <label class="label-text" data-example="Ex: https://greenecard.vn/" data-text="Link"></label>
+                </div>
+                <button class="btn close-btn" onclick="removeCustomLink(${linkCounter})">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+    `;
+            $(html).insertBefore('#CardCustomLinks');
+
+            // Store custom link data
+            let customLink = {
+                id: linkClass,
+                title: title,
+                link: link
+            };
+            objCustomLink.push(customLink);
+
+            // Update title and link values in objCustomLink when inputs change
+            $(`.${linkClass} .customLinkTitle`).on('input', function (e) {
+                objCustomLink.find(link => link.id === linkClass).title = $(this).val();
+                $(this).val().length > 0 ? $(this).addClass("has-value") : $(this).removeClass("has-value");
+            });
+
+            $(`.${linkClass} .customLinkUrl`).on('input', function (e) {
+                objCustomLink.find(link => link.id === linkClass).link = $(this).val();
+                $(this).val().length > 0 ? $(this).addClass("has-value") : $(this).removeClass("has-value");
+            });
+            addHasValueClass(`.${linkClass} .customLinkTitle`);
+            addHasValueClass(`.${linkClass} .customLinkUrl`);
+        }
+        function removeCustomLink(counter) {
+            $(`.customLink_${counter}`).remove();
+            objCustomLink = objCustomLink.filter(link => link.id !== `customLink_${counter}`);
+        }
+        function OpenAddPopupCard() {
+            ClearInputPopupCard();
+            ShowRawDataCard();
+            $('#btnSaveCard').attr('onclick', 'SaveCard()');
+        }
+        function OpenEditModalCard(Pid) {
+            ClearInputPopupCard();
+            $('#btnSaveCard').attr('onclick', `SaveCard(${Pid})`)
+            $('#btnDeleteCard').attr('onclick', `DeleteCard(${Pid})`)
+            $('#btnDeleteCard').removeClass('d-none')
+            $.ajax({
+                url: actionUrl + "EditCard",
+                method: "POST",
+                data: { Pid: Pid },
+                success: function (data) {
+                    CustomSetDataEditCard(data);
+                    ShowRawDataCard()
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+        function CustomSetDataEditCard(data) {
+            objCardDetail = data.objCardDetail;
+            //console.log(objCardDetail)
+
+
+        }
+        function ClearInputPopupCard() {
+            objCardDetail = {
+                pid: "",
+                fullName: "",
+                personalPhone: "",
+                homePhone: "",
+                companyPhone: "",
+                personalEmail: "",
+                workEmail: "",
+                position: "",
+                url: "",
+                telegram: "",
+                whatsapp: "",
+                viber: "",
+                skype: "",
+                zalo: "",
+                linkedIn: "",
+                facebook: "",
+                customLink: [],
+                avatar: "/css/skin/user-default.png",
+                qrCode: "",
+                personalLink: "",
+                companyWebsiteLink: "",
+                personalWebsiteLink: "",
+                qrLink: "",
+            };
+            for (var i = 0; i < objCustomLink.length; i++) {
+                $(`.${objCustomLink[i].id}`).remove();
+            }
+            objCustomLink = [];
+            linkCounter = 0;
+            $("#QrBox").addClass("d-none");
+            $("#btnCopyCardLink").addClass("d-none");
+            $('#btnDeleteCard').addClass('d-none')
+            $('#Avatar').val('');
+        }
+        function ShowRawDataCard() {
+            $("#FullNameCard").val(objCardDetail.fullName); addHasValueClass("#FullNameCard");
+            $("#PersonalPhone").val(objCardDetail.personalPhone); addHasValueClass("#PersonalPhone");
+            $("#CompanyPhone").val(objCardDetail.companyPhone); addHasValueClass("#CompanyPhone");
+            $("#HomePhone").val(objCardDetail.homePhone); addHasValueClass("#HomePhone");
+            $("#PersonalEmail").val(objCardDetail.personalEmail); addHasValueClass("#PersonalEmail");
+            $("#WorkEmail").val(objCardDetail.workEmail); addHasValueClass("#WorkEmail");
+            $("#Position").val(objCardDetail.position); addHasValueClass("#Position");
+            $("#Url").val(objCardDetail.url); addHasValueClass("#Url");
+            $("#Telegram").val(objCardDetail.telegram); addHasValueClass("#Telegram");
+            $("#WhatsApp").val(objCardDetail.whatsApp); addHasValueClass("#WhatsApp");
+            $("#Viber").val(objCardDetail.viber); addHasValueClass("#Viber");
+            $("#Skype").val(objCardDetail.skype); addHasValueClass("#Skype");
+            $("#Zalo").val(objCardDetail.zalo); addHasValueClass("#Zalo");
+            $("#Facebook").val(objCardDetail.facebook); addHasValueClass("#Facebook");
+            $("#Twitter").val(objCardDetail.twitter); addHasValueClass("#Twitter");
+            $("#LinkedIn").val(objCardDetail.linkedIn); addHasValueClass("#LinkedIn");
+            $("#PersonalLink").val(objCardDetail.personalLink); addHasValueClass("#PersonalLink");
+            $("#CompanyWebsiteLink").val(objCardDetail.companyWebsiteLink); addHasValueClass("#CompanyWebsiteLink");
+            $("#PersonalWebsiteLink").val(objCardDetail.personalWebsiteLink); addHasValueClass("#PersonalWebsiteLink");
+            if (objCardDetail.avatar != null) {
+                $("#imgPicThumbCard").attr("src", objCardDetail.avatar);
+            }
+            if (objCardDetail.qrCode != null && objCardDetail.qrCode != "") {
+                $("#QrBox").removeClass("d-none");
+                $("#imgQrImage").attr("src", objCardDetail.qrCode);
+            }
+            if (objCardDetail.qrLink != null && objCardDetail.qrLink != "") {
+                $("#btnCopyCardLink").removeClass("d-none");
+                $("#qrLinkInput").val(objCardDetail.qrLink);
+            }
+            if (objCardDetail.customLink.length > 0) {
+                linkCounter = 0;
+
+                objCardDetail.customLink.forEach(link => {
+                    addCustomLinkInput(link.title, link.link);
+                });
+            }
+        }
+
+        function addHasValueClass(selector) {
+            const $input = $(selector);
+            if ($input.val().trim() !== '') {
+                $input.addClass('has-value');
+            } else {
+                $input.removeClass('has-value');
+            }
+        }
+        function SaveCard(pid) {
+            $('#btnSaveCard').prop('disabled', true);
+            var $selector = $('#form-edit-card'),
+                form = $selector.parsley();
+            var validate = form.validate();
+            if (validate) {
+                var formData = new FormData();
+                formData = GetFormDataCard();
+                var url = actionUrl + 'InsertCard';
+                if (pid != null && pid != "") {
+                    formData.append('Pid', pid);
+                    url = actionUrl + 'UpdateCard';
+                }
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: formData
+                }).done(function (response) {
+                    responseSaveCard(response)
+                    $('#btnSaveCard').prop('disabled', false);
+                })
+            } else {
+                $('#btnSaveCard').prop('disabled', false);
+
+            }
+        }
+        function responseSaveCard(response) {
+            var data = response;
+            if (data.error.status) {
+                $('#editProfile').modal('hide');
+                AlertToast('Thông báo', 'Thành công', 'success')
+                Search(1);
+
+            }
+            else {
+                if (data.error.code == "duplicateUrl") {
+                    var passwordField = $("#form-edit-card").find('input[name="Url"]');
+                    if (passwordField.length > 0 && passwordField.parsley()) {
+
+                        passwordField.parsley().reset();
+                        passwordField
+                            .parsley()
+                            .addError('urlError', { message: data.error.mess });
+                    } else {
+                        //console.log(data.error);
+                    }
+                }
+                else if (data.error.code == "limitReached") {
+                    AlertToast('Thông báo', data.error.mess, 'error')
+                }
+                else {
+                    AlertToast('Thông báo', 'Thất bại', 'error')
+                }
+            }
+        }
+        function ValidateCard() {
+            if ($('#FullNameCard').val() == '') {
+                AlertToast("Thông tin card", "Chưa nhập tên", "warning");
+                return false;
+            }
+            if ($('#Url').val() == '') {
+                AlertToast("Thông tin card", "Chưa nhập Url", "warning");
+                return false;
+            }
+            if ($('#Position').val() == '') {
+                AlertToast("Thông tin card", "Chưa nhập chức danh", "warning");
+                return false;
+            }
+            return true;
+        }
+        function DeleteCard(pid) {
+            $('#btnDeleteCard').prop('disabled', true);
+            Swal.fire({
+                title: 'Bạn có muốn xóa dữ liệu?',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+
+                    var url = actionUrl + 'DeleteCard';
+                    var formData = new FormData();
+                    formData.append('Pid', pid)
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                    }).done(function (response) {
+                        if (response.isError) {
+                            $('#editProfile').modal('hide');
+                            ClearInputPopupCard();
+                            AlertToast('Thông báo', 'Thành công', 'success')
+                            Search(1);
+
+                        } else {
+                            AlertToast('Thông báo', response.messError, 'error')
+                        }
+                    })
+                }
+            })
+
+            $('#btnDeleteCard').prop('disabled', false);
+        }
+        function GetFormDataCard() {
+            var formData = new FormData();
+            formData.append('Avatar', $('#Avatar').prop('files')[0])
+            formData.append('OrderPid', orderPid);
+            formData.append('FullName', $('#FullNameCard').val());
+            formData.append('PersonalPhone', $('#PersonalPhone').val());
+            formData.append('HomePhone', $('#HomePhone').val());
+            formData.append('CompanyPhone', $('#CompanyPhone').val());
+            formData.append('PersonalEmail', $('#PersonalEmail').val());
+            formData.append('WorkEmail', $('#WorkEmail').val());
+            formData.append('Position', $('#Position').val());
+            formData.append('Url', $('#Url').val());
+            formData.append('Telegram', $('#Telegram').val());
+            formData.append('WhatsApp', $('#WhatsApp').val());
+            formData.append('Viber', $('#Viber').val());
+            formData.append('Skype', $('#Skype').val());
+            formData.append('Zalo', $('#Zalo').val());
+            formData.append('LinkedIn', $('#LinkedIn').val());
+            formData.append('Twitter', $('#Twitter').val());
+            formData.append('Facebook', $('#Facebook').val());
+            formData.append('PersonalLink', $('#PersonalLink').val());
+            formData.append('CompanyWebsiteLink', $('#CompanyWebsiteLink').val());
+            formData.append('PersonalWebsiteLink', $('#PersonalWebsiteLink').val());
+            for (let i = 0; i < objCustomLink.length; i++) {
+                formData.append('CustomLink[' + i + '].Id', objCustomLink[i].id);
+                formData.append('CustomLink[' + i + '].Title', objCustomLink[i].title);
+                formData.append('CustomLink[' + i + '].Link', objCustomLink[i].link);
+            }
+            return formData;
+        }
+
+    </script>
+}

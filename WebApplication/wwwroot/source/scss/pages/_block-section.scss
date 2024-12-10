@@ -1,0 +1,128 @@
+// fix over background inner container
+[data-relative] {
+	@extend .position-relative;
+}
+.overlay-over {
+	--b-width: 8000px;
+
+	@extend %absolute-all;
+    width: var(--b-width);
+    z-index: -1;
+    margin-left: calc(var(--b-width) * -.5);
+}
+.row-flip {
+	> *:first-child {
+		order: 3;
+	}
+	> *:nth-child(2) {
+		order: 2;
+	}
+	> *:last-child {
+		order: 1;
+	}
+}
+@each $breakpoint in map-keys($grid-breakpoints) {
+  	@include media-breakpoint-up($breakpoint) {
+    	$infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+    	.row#{$infix}-flip {
+    		> *:first-child {
+				order: 3;
+			}
+			> *:nth-child(2) {
+				order: 2;
+			}
+			> *:last-child {
+				order: 1;
+			}
+    	}
+  	}
+}
+// block balance
+$bl-md: map-get($container-max-widths, "md");
+$bl-lg: map-get($container-max-widths, "lg");
+$bl-xl: map-get($container-max-widths, "xl");
+$bl-xxl: map-get($container-max-widths, "xxl");
+.block-balance {
+	--tt-xl: 32px;
+	.content {
+		padding: 1.5rem;
+	}
+}
+@include media-breakpoint-up(md) {
+	.block-balance {
+		display: flex;
+		.bl-col {
+			width: 50%;
+			flex: 0 0 auto;
+			padding: 0;
+		}
+		.col-text {
+			display: flex;
+		}
+		.col-text:nth-child(1) {
+            justify-content: flex-end;
+		}
+		//
+		.content {
+			padding: 36px 8%;
+			width: $bl-md / 2;
+		}
+		&.row-md-flip {
+			.col-text {
+				justify-content: flex-end;
+			}
+			.col-text:nth-child(1) {
+				justify-content: flex-start;
+			}
+		}
+		
+		//
+        .col-text:not([class*="bg-"]),
+        .col-text.bg-white {
+        	.content {
+        		padding-left: 9%;
+        		padding-right: 0;
+        	}
+        	&:nth-child(1) .content {
+        		padding-left: 0;
+        		padding-right: 9%;
+        	}
+        }
+        &.row-md-flip {
+        	.col-text:not([class*="bg-"]),
+			.col-text.bg-white {
+				.content {
+					padding-left: 0;
+					padding-right: 9%;
+				}
+				&:nth-child(1) .content {
+					padding-left: 9%;
+					padding-right: 0;
+				}
+			}
+        }
+	}
+}
+@include media-breakpoint-up(lg) {
+	.block-balance {
+		--tt-xl: 36px;
+		.content {
+			width: $bl-lg / 2;
+		}
+	}
+}
+@include media-breakpoint-up(xl) {
+	.block-balance {
+		--tt-xl: 42px;
+		.content {
+			width: $bl-xl / 2;
+		}
+	}
+}
+@include media-breakpoint-up(xxl) {
+	.block-balance {
+		.content {
+			width: $bl-xxl / 2;
+		}
+	}
+}

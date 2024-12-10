@@ -1,0 +1,183 @@
+.form-search {
+	@include absolute(0,0,0,0);
+	padding: 5px 15px 5px 5px;
+	background: #fff;
+	z-index: 981;
+	display: flex;
+	visibility: hidden;
+	transition: all 0.3s ease;
+	transform: translateY(-100%);
+    align-items: center;
+    
+	.form-control {
+		border-width: 0;
+		border-radius: 0;
+		font-size: 16px;
+		padding: 0 40px 0 12px;
+		height: 40px;
+		&:focus {
+			box-shadow: none;
+			background-color: #fff;
+			border-color: $primary;
+		}
+	}
+	.form-group {
+		flex: 1 1 auto;
+	}
+	.fa-times {
+		padding: 0 0 2px;
+		font-weight: 400;
+		border: none;
+		background: transparent !important;
+		width: 30px;
+		height: 35px;
+		text-align: center;
+		&:before {
+			content: '\f053';
+		}
+		&:hover,
+		&:focus {
+			background: transparent;
+		}
+	}
+	.addon.fa-search,
+	.icon-submit {
+		@include absolute(0,0,0);
+		opacity: .7;
+		border: none;
+		background-color: transparent;
+		text-decoration: none;
+		display: flex;
+		align-items: center;
+		padding: 0 8px;
+		color: $dark;
+		text-shadow: none;
+	}
+	.open,
+	&.active {
+		visibility: visible;
+		transform: none;
+	}
+
+	#searchwait {
+		@include absolute(7px, 35px);
+		width: 25px;
+		height: 25px;
+		background: url('skin/loading.gif') no-repeat center center;
+	}
+}
+.dropdown-sug {
+	@include absolute(100%,0,null,0);
+	background: #fff;
+	z-index: 777;
+	border-radius: 5px;
+	box-shadow: 0 5px 20px -5px rgba(#000, .3);
+	margin-top: 1px;
+	overflow: hidden;
+	// display: none;
+	.form-search.open-suggest & {
+		display: block;
+	}
+
+	.item {
+		display: flex;
+		margin: 0 !important;
+		padding: .75rem;
+		position: relative;
+		color: $color-body;
+		+ .item {
+			border-top: 1px solid #ddd;
+		}
+	}
+	.thumb {
+		width: 45px;
+		flex: 0 0 auto;
+	}
+	img {
+		border-radius: 3px;
+	}
+	.tt {
+		font-size: 14px;
+	}
+	.info {
+		display: block;
+		// white-space: nowrap;
+		// overflow: hidden;
+		// text-overflow: ellipsis;
+		padding: 10px 10px;
+	}
+	.item:hover {
+		background: #f2f2f2;
+		.info {
+			color: $primary;
+		}
+	}
+}
+@mixin form-search-static($width: 300px, $bg:#f8f8f8, $border:1px solid rgba(#000,.1), $radius: 4px) {
+	position: static;
+	padding: 0;
+	margin: 0;
+	visibility: visible;
+	transform: none;
+	transition: none;
+	.toggle-form-search {
+		display: none;
+	}
+	.form-control,
+	.form-select {
+        border: $border;
+        background: $bg;
+        border-radius: $radius;
+        width: $width;
+        &:focus {
+        	border-color: rgba($primary, .6);
+        	box-shadow: 0 0 0 4px rgba($primary, .25);
+        	background: #fff;
+        }
+	}
+	.addon.fa-search {
+		padding: 0 14px;
+	}
+}
+// md gotoptourist
+@mixin form-search-md {
+	.header > .container-fluid {
+		position: relative;
+	}
+	.form-search {
+		position: absolute;
+		padding: 0 10vw;
+		transform: scale(1.1);
+		transition: all 0.4s ease;
+		visibility: hidden;
+		overflow: hidden;
+		opacity: 0;
+		background-color: $primary;
+		.fa-times {
+			width: 40px;
+			text-align: left;
+			padding: 0 8px;
+		}
+		.form-control {
+			background: transparent !important;
+			@include placeholder(rgba(#fff,.6));
+			&:focus {
+				@include placeholder-focus;
+			}
+		}
+		.fa-times,
+		.fa-search,
+		.form-control {
+			color: #fff !important;
+		}
+		&.active {
+            visibility: visible;
+            opacity: 1;
+            transform: none;
+            z-index: 999;
+		}
+		.header.stick .form-search {
+			padding: 0 15vw;
+		}
+	}
+}

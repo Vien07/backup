@@ -1,0 +1,23 @@
+extends template/template
+
+block vars
+    - title = '404 Page Not Found'
+    - bannerLg = false
+    - bannerImageName = ''
+    - menuActive = ''
+
+block mainer
+    .container.pt-3.pb-4
+        .row.align-items-center
+            .col-md-6.order-md-2.pe-lg-6
+                .page-404.d-flex.align-items-center.justify-content-center
+                    .content.text-center.text-md-left.pb-4
+                        .heading 404
+                        .tt-sm Whoops! Page not found
+                        p.mb-4 Liên kết vừa truy cập không còn khả dụng, có thể trang đã được di chuyển, đổi tên hoặc không tồn tại. Chúng tôi rất tiếc về sự cố này và sẽ cố gắng khắc phục trong thời gian sớm nhất, trân trọng!
+                        a(href="index.html").text-decoration-none.hover-link
+                            i.fa.fa-long-arrow-left.mr-2
+                            | Về trang chủ
+
+            .col-md-6.order-md-1.text-center
+                img(src="css/skin/404.jpg" alt="")

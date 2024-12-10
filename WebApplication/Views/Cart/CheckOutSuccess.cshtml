@@ -1,0 +1,161 @@
+﻿@using System.Web
+@using CMS.Services
+@using CMS.Services.TranslateServices
+@using DTO.Customer;
+@using DTO.Cart;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+@using CMS.Repository
+
+@inject ITranslateServices _translate
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string banner = ViewBag.Banner as string;
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    var order = ViewBag.Order as OrderDto;
+}
+
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("menu.check-out"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.product"))" title="@Html.Raw(_translate.GetString("menu.product"))" alt="@Html.Raw(_translate.GetString("menu.product"))" target="_self">@Html.Raw(_translate.GetString("menu.product"))</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a href="javascript:void(0)" title="@Html.Raw(_translate.GetString("menu.check-out"))" alt="@Html.Raw(_translate.GetString("menu.check-out"))" target="_self">@Html.Raw(_translate.GetString("menu.check-out"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+}
+
+<section class="block-bg py-5 py-xl-6">
+    <div class="container">
+        <div class="cardCart w-xxl-90 mx-auto">
+            <div class="row g-3 align-items-center">
+                <div class="col-12 col-lg-6 order-md-2 ps-lg-5">
+                    <div class="title-box mb-4">
+                        <div class="tt-lg text-capitalize text-gradient">
+                            @Html.Raw(_translate.GetString("user.order-success"))
+                        </div>
+                    </div>
+                    <div class="desc text-desc mb-3">
+                        @Html.Raw(_translate.GetString("user.order-success-desc"))
+                    </div>
+                    <div class="block-noti-success">
+                        @*<div class="mb-2">
+                                <span class="text-desc">Đơn hàng:</span>
+                                <a class="text-desc px-2 py-0" alt="@Html.Raw(order.Pid)" title="@Html.Raw(order.Pid)" href="@Html.Raw(_translate.GetUrl("url.order-management"))" role="button">#@Html.Raw(order.Pid)</a>
+                            </div>*@
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-3 col-lg-4">
+                                        <span class="text-desc">Người nhận:</span>
+                                    </div>
+                                    <div class="col-12 col-md-9 col-lg-8">
+                                        <span class="fw-semibold">@Html.Raw(order.FullName)</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="mb-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-3 col-lg-4">
+                                        <span class="text-desc">Email:</span>
+                                    </div>
+                                    <div class="col-12 col-md-9 col-lg-8">
+                                        <span class="fw-semibold">@Html.Raw(order.Email)</span>
+                                    </div>
+                                </div>
+                            </li>
+                            @if (!String.IsNullOrEmpty(order.PhoneNumber))
+                            {
+                                <li class="mb-2">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3 col-lg-4">
+                                            <span class="text-desc">Số điện thoại:</span>
+                                        </div>
+                                        <div class="col-12 col-md-9 col-lg-8">
+                                            <span class="fw-semibold">@Html.Raw(order.PhoneNumber)</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                            @if (!String.IsNullOrEmpty(order.FullAddress))
+                            {
+                                <li class="mb-2">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3 col-lg-4">
+                                            <span class="text-desc">Địa chỉ:</span>
+                                        </div>
+                                        <div class="col-12 col-md-9 col-lg-8">
+                                            <span class="fw-semibold">
+                                                @Html.Raw(order.FullAddress)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+
+                            <li class="mb-2">
+                                <div class="row">
+                                    <div class="col-12 col-md-3 col-lg-4">
+                                        <span class="text-desc">Tổng tiền:</span>
+                                    </div>
+                                    <div class="col-12 col-md-9 col-lg-8">
+                                        <span class="fw-semibold price text-danger">@Html.Raw(order.TotalString)<span class="unit"><u>₫</u></span></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="d-flex align-items-center flex-wrap gap-2 mt-4">
+                        <a class="btn btn-primary" alt="@Html.Raw(_translate.GetString("menu.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" href="@Html.Raw(_translate.GetUrl("url.home"))"><span>Trở về trang chủ</span></a>
+                        <a class="btn btn-outline-primary" alt="@Html.Raw(_translate.GetString("menu.order-management"))" title="@Html.Raw(_translate.GetString("menu.order-management"))" href="@Html.Raw(_translate.GetUrl("url.order-management"))"><span>Quản lý đơn hàng</span></a>
+                    </div>
+                    @if (!string.IsNullOrEmpty(ViewBag.InfoPayment) && ViewBag.DisplayiBanking == "on")
+                    {
+                        <div class="flex-wrap gap-2 mt-4">
+
+
+                            <div class="text-desc fs-14 fw-semibold mb-3">
+                                @Html.Raw(_translate.GetString("cart.payment-info"))
+                            </div>
+                            @Html.Raw(ViewBag.InfoPayment)
+
+                        </div>
+                    }
+                </div>
+                <div class="col-12 col-lg-6 order-md-1">
+                    <div class="thumb">
+                        <img src="/css/skin/theme/order.png" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<partial name="/Views/Shared/Convenience.cshtml" />
+@section Scripts {
+
+
+}

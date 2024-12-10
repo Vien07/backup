@@ -1,0 +1,206 @@
+﻿@using CMS.Services.TranslateServices
+@using Microsoft.AspNetCore.Http;
+@using CMS.Services.CommonServices;
+@using DTO.Website;
+@using DTO;
+@using DTO.Branch;
+@inject ITranslateServices _translate
+@inject ICommonServices _common;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    string lang = ViewBag.Lang as string;
+    dynamic data = ViewBag.ContactInfo;
+    string banner = ViewBag.Banner as string;
+    //string ShareFacebook = ViewBag.ShareFacebook as string;
+    //string ShareTwitter = ViewBag.ShareTwitter as string;
+    //string ShareYoutube = ViewBag.ShareYoutube as string;
+    //string ShareInstagram = ViewBag.ShareInstagram as string;
+    //string ShareLinkedin = ViewBag.ShareLinkedin as string;
+    //string SharePinterest = ViewBag.SharePinterest as string;
+    //string reCapchaSiteKey = ViewBag.reCapchaSiteKey as string;
+    //string EmailAdmin = ViewBag.EmailAdmin as string;
+    //string Domain = ViewBag.Domain as string;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("menu.contact"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.contact"))" title="@Html.Raw(_translate.GetString("menu.contact"))" alt="@Html.Raw(_translate.GetString("menu.contact"))" target="_self">@Html.Raw(_translate.GetString("menu.contact"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+
+
+<section class="block-bg block-contact">
+    <div class="container py-5 py-xl-6">
+        <div class="list-contact row row-cols-1 row-cols-sm-2 row-cols-md-3 justify-content-center mb-5">
+            @if (!string.IsNullOrEmpty(Convert.ToString(data["contact-address"])))
+            {
+                <div class="col wow fadeInDown">
+                    <div class="block">
+                        <div class="icon">
+                            <i class="fa-light fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info">
+                            <div class="tt">@Html.Raw(_translate.GetString("contact.address"))</div>
+                            <div class="desc">
+                                @Html.Raw(data["contact-address"])
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Convert.ToString(data["contact-hotline"])))
+            {
+                <div class="col wow fadeInDown">
+                    <a class="block" alt="@Html.Raw(data["contact-hotline"])" title="@Html.Raw(data["contact-hotline"])" href="tel:@Html.Raw(data["contact-hotline"])">
+                        <div class="icon">
+                            <i class="fa-light fa-phone-volume"></i>
+                        </div>
+                        <div class="info">
+                            <div class="tt">@Html.Raw(_translate.GetString("contact.hotline"))</div>
+                            <div class="desc">@Html.Raw(data["contact-hotline"])</div>
+                        </div>
+                    </a>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Convert.ToString(data["contact-email"])))
+            {
+                <div class="col wow fadeInDown">
+                    <a class="block"
+                       alt="@Html.Raw(data["contact-email"])"
+                       title="@Html.Raw(data["contact-email"])"
+                       href="mailto:@Html.Raw(data["contact-email"])">
+                        <div class="icon">
+                            <i class="fa-light fa-envelope"></i>
+                        </div>
+                        <div class="info">
+                            <div class="tt">@Html.Raw(_translate.GetString("contact.email"))</div>
+                            <div class="desc">@Html.Raw(data["contact-email"])</div>
+                        </div>
+                    </a>
+                </div>
+            }
+
+        </div>
+        <div class="row justify-content-between align-items-center mb-4 gx-md-5">
+            <div class="col-md-6 mb-4 order-md-2">
+                <div class="text-center">
+                    <div class="title-box text-center mb-4">
+                        <div class="tt-lg text-uppercase text-gradient">
+                            @Html.Raw(_translate.GetString("contact.contact-us"))
+                        </div>
+                    </div>
+                </div>
+                <form id="formContact" class="form-validate material-form">
+                    <div class="row gx-2">
+                        <div class="col-lg-6">
+                            <div class="form-group mb-1">
+                                <input class="form-control" id="FullName" name="FullName" type="text" required data-parsley-required-message="Vui lòng nhập tên" />
+                                <label class="label-text">@Html.Raw(_translate.GetString("contact.fullname"))</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group mb-1">
+                                <input class="form-control" id="Email" name="Email" type="email" required data-parsley-required-message="Vui lòng nhập email"/>
+                                <label class="label-text">@Html.Raw(_translate.GetString("contact.email"))</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group mb-1">
+                                <input class="form-control" id="Phone" name="Phone" type="tel" required data-parsley-required-message="Vui lòng nhập số điện thoại"/>
+                                <label class="label-text">@Html.Raw(_translate.GetString("contact.phone"))</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group mb-1">
+                                <input class="form-control" id="Subject" name="Subject" type="text" required data-parsley-required-message="Vui lòng nhập tiêu đề" />
+                                <label class="label-text">@Html.Raw(_translate.GetString("contact.title"))</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-1">
+                                <textarea class="form-control" rows="5" required id="Content" name="Content" data-parsley-required-message="Vui lòng nhập nội dung"></textarea>
+                                <label class="label-text">@Html.Raw(_translate.GetString("contact.content"))</label>
+                            </div>
+                        </div>
+                        <div class="col-12 text-center mt-3">
+                            <div @(ViewBag.Recaptcha == "off" ? "hidden" : "") class="g-recaptcha" data-sitekey="@ViewBag.RecaptchaSiteKey"></div>
+                            <button class="btn btn-primary my-2 ms-3" type="button" onclick="SendContact()">
+                                @Html.Raw(_translate.GetString("contact.send-contact"))
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Convert.ToString(data["contact-map"])))
+            {
+                <div class="col-md-6 mb-4 order-md-1">
+                    <div class="map thumb-res square-sm mb-0">
+                        @Html.Raw(data["contact-map"])
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<partial name="/Views/Shared/Convenience.cshtml" />
+@section Scripts{
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script asp-append-version="true" src="/vendors/controllers/contactController.js"></script>
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+        var errorValidateRecaptcha = "@_translate.GetString("contact.error-recaptcha")";
+        var recapchaStatus = '@ViewBag.Recaptcha';
+        var homeUrl = "@_translate.GetUrl("url.home")";
+        initParsley("#formContact", "@lang");
+        var content = "@_translate.GetString("contact.contact-content")";
+    </script>
+}

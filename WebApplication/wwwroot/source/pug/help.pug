@@ -1,0 +1,106 @@
+extends template/template
+block vars
+	- title= 'Trợ giúp'
+	- wrapperClass = ''
+	- menuActive = ''
+	- homeSlider = false
+	- bannerAll = false
+	- breadcrumb = true
+	- navigate = false
+
+block breadcrumb 
+	+breadcrumb('container', {})
+block mainer
+	main.mainer
+		.container
+			section.banner-main.block-bg.d-flex.align-items-center.mb-5(style="background-image:url('css/skin/theme/block-02.jpg')")
+				.text-banner
+					.tt-lg.fw-semibold Trợ giúp
+
+			.help-body.pb-4 
+				.block-sidebar
+					.sidebar
+						.pane.pane-menu.mb-4
+							.tt.text-uppercase.mb-3 Mục trợ giúp
+							ul.list-unstyled.ps-0.mb-0
+								li.mb-1
+									button.btn.btn-toggle.align-items-center.rounded(data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true") Tài khoản
+									.collapse.show#home-collapse
+										ul.btn-toggle-nav.list-unstyled.fw-normal.pb-1.small
+											li: a.link-dark.rounded(href="#") Đổi mật khẩu
+											li: a.link-dark.rounded(href="#") Đổi Họ Tên
+											li: a.link-dark.rounded(href="#") Báo cáo
+								li.mb-1
+									button.btn.btn-toggle.align-items-center.rounded.collapsed(data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false") Đọc sách
+									.collapse#dashboard-collapse
+										ul.btn-toggle-nav.list-unstyled.fw-normal.pb-1.small
+											li: a.link-dark.rounded(href="#") Sách nói
+											li: a.link-dark.rounded(href="#") Sách điện tử
+											li: a.link-dark.rounded(href="#") Sách giấy
+											li: a.link-dark.rounded(href="#") Khác
+								li.mb-1
+									button.btn.btn-toggle.align-items-center.rounded.collapsed(data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false") Mua sách
+									.collapse#orders-collapse
+										ul.btn-toggle-nav.list-unstyled.fw-normal.pb-1.small
+											li: a.link-dark.rounded(href="#") Cửa hàng
+											li: a.link-dark.rounded(href="#") Gian hàng Online
+											li: a.link-dark.rounded(href="#") Giao hàng
+											li: a.link-dark.rounded(href="#") Đổi trả
+					.mainbody
+						.mainbody-content.clearfix
+							h2.tt-md Change your Kobo account password
+							p: b If you know your account password, follow these steps to change it.
+							blockquote To reset your Facebook, Gmail, or other external account, you'll need to go to their respective website to reset your password. The steps in this article let you change your Rakuten Kobo account password only.
+							p 
+								b Note: 
+								| If you don't know your account password and want to reset it, follow the steps in this article:
+							p Follow these steps to change your password:
+							ol
+								li
+									span.wysiwyg-font-size-default.wysiwyg-color-black
+										| Go to 
+										a(href="#" target="_blank" rel="noopener") laviebook.com
+										| .
+								li
+									span.wysiwyg-font-size-default.wysiwyg-color-black
+										span.wysiwyg-underline
+											a(href="#" target="_blank" rel="noopener") Sign in to your
+										a(href="#" target="_blank" rel="noopener")  account
+										| .
+										span.wysiwyg-underline
+											br
+								li
+									span.wysiwyg-font-size-default.wysiwyg-color-black
+										| Click 
+										|  
+										strong My Account
+										span.wysiwyg-font-size-default  at the top of the screen.
+								li
+									span.wysiwyg-font-size-default.wysiwyg-color-black
+										| Click 
+										strong Account Settings
+										span.wysiwyg-font-size-default . 
+									ul
+										li
+											span.wysiwyg-font-size-default.wysiwyg-color-black Under the ‘Change Password’ section, enter your:
+										li
+											span.wysiwyg-font-size-default.wysiwyg-color-black Current password
+										li
+											span.wysiwyg-font-size-default.wysiwyg-color-black New password
+										li
+											span.wysiwyg-font-size-default.wysiwyg-color-black Confirmation of the new password.
+								li
+									span.wysiwyg-font-size-default.wysiwyg-color-black
+										| Click 
+										strong Save
+										span.wysiwyg-font-size-default .
+							p If you’re signed in to a Kobo eReader or the Kobo Books app, you’ll need to sign out and sign back in with your new password. 
+							p &nbsp;
+							h2.tt-md Change your Kobo account email address
+							p: b You can change the email address that you use to sign in to your Kobo account.
+							ol
+								li Go to laviebook.com.
+								li Sign in to your account.
+								li Click  My Account at the top of the screen.
+								li Click Account Settings.
+								li Under the ‘My Account’ tab, enter your new email address under Sign In Information.

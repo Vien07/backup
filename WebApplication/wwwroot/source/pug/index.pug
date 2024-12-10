@@ -1,0 +1,90 @@
+extends template/template
+block vars
+	- title= 'Trang chủ'
+	- wrapperClass = 'home-page'
+	- menuActive = 'index'
+	- homeSlider = true
+	- bannerAll = false
+	- breadcrumb = false
+	- navigate = true
+	
+block mainer
+	main.mainer
+		section.container.py-45.py-lg-5 
+			.heading-section.d-flex
+				.tt-wrap.wow.fadeInUp
+					.badge.bg-ebooks.rounded-1 Sách điện tử
+					h1.tt-sm Top sách mới 
+				+a('products.html', 'text-link-more wow fadeInUp')
+					| Xem tất cả
+					i.far.fa-chevron-right
+			.carousel-c2md5.list-products
+				+list_products('carousel-cell wow fadeInUp', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '', 'button')
+				+list_products('carousel-cell wow fadeInUp', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '', 'button')
+		section.block-bg.bg-third.py-5.py-lg-6
+			.container.review-demo
+				.row
+					.col-md-4.wow.fadeInLeft
+						.wrap-book
+							.abook 
+								.abook-front: +img('products/book.jpg')
+								.abook-middle
+								.abook-back
+					.col-md-8.col-lg-5.col-info.wow.fadeInRight
+						.tt-lg The Best Punctuation Book
+						.desc-multi
+							p Punctuate with Confidence—No Matter the Style
+							p Confused about punctuation? There’s a reason. Everywhere you turn, publications seem to follow different rules on everything from possessive apostrophes to hyphens to serial commas. Then there are all the gray areas of punctuation—situations the rule books gloss over or never mention at all. At last, help has arrived. This complete reference guide from grammar columnist June Casagrande covers the basic rules of punctuation plus the finer points not addressed anywhere else, offering clear answers to... perplexing questions about semicolons, quotation marks, periods, apostrophes, and more. Better yet, this is the only guide that uses handy icons to show how punctuation rules differ for book, news, academic, and science styles—so you can boldly switch between essays, online newsletters, reports, fiction, and magazine and news articles.
+						.button.mt-3
+							+a('product-detail.html', 'text-link-more')
+								| Xem chi tiết !{'<i class="far fa-chevron-right"></i>'}
+					.col-md-3.col-review.wow.fadeInRight
+						.review-demo-box 
+							.d-flex.align-items-center.flex-wrap
+								.star-rate.mr-3 
+									+star('5')
+								.text-dark.mr-3.fs-13 5.0/5
+								.text-dark.mr-3.fs-13 25 đánh giá
+							.comments-box
+								.tt Van Nguyen
+								.text-clip Like all of Powers' books, Bewilderment is beautifully written and leverages the complexity of its characters' passions -- in this case. This book is shorter and drew me in more quickly than some of his others, though. I love his
+							.mt-3 
+								+a('product-detail.html', 'fw-semibold')
+									i.bi.bi-arrow-return-right.mr-2
+									| Xem thêm các đánh giá
+		section.container.py-45.py-lg-5 
+			.heading-section.d-flex
+				.tt-wrap.wow.fadeInUp
+					.badge.bg-audiobooks.rounded-1 Sách nói
+					h2.tt-sm Top thịnh hành
+					.desc Here are the greatest audiobooks for your listening pleasure
+				+a('products.html', 'text-link-more wow fadeInUp')
+					| Xem tất cả
+					i.far.fa-chevron-right
+			.carousel-c2md5.list-products
+				+list_products('carousel-cell wow fadeInUp', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '', 'button')
+				+list_products('carousel-cell wow fadeInUp', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '', 'button')
+		section.container.py-45.py-lg-5 
+			.heading-section.d-flex
+				.tt-wrap.wow.fadeInUp
+					.badge.bg-audiobooks.rounded-1 Sách nói
+					h2.tt-sm Top tiểu thuyết
+					.desc Exciting new titles that might just become your next beloved read.
+				+a('products.html', 'text-link-more wow fadeInUp')
+					| Xem tất cả
+					i.far.fa-chevron-right
+			.carousel-c2md5.list-products
+				+list_products('carousel-cell wow fadeInUp', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '', 'button')
+				+list_products('carousel-cell wow fadeInUp', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '', 'button')
+		section.container.py-45.py-lg-5 
+			.heading-section.d-flex
+				.tt-wrap.wow.fadeInUp
+					.badge.bg-paperbooks.rounded-1 Sách giấy
+					h2.tt-sm Sách khoa học
+					.desc Books you wont be able to put down. Thriller or sci fi, choose your next great read
+				+a('products.html', 'text-link-more wow fadeInUp')
+					| Xem tất cả
+					i.far.fa-chevron-right
+			.carousel-c2md5.list-products
+				+list_products('carousel-cell wow fadeInUp', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '', 'button')
+				+list_products('carousel-cell wow fadeInUp', '1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '', 'button')

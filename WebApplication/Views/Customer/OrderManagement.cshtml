@@ -1,0 +1,637 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services;
+@using CMS.Repository;
+@using DTO.Customer;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+@using DTO.Cart;
+
+@inject ICustomer_Repository _rep
+@inject ITranslateServices _translate
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Customer/Layout/_LayoutCustomer.cshtml";
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    var orderList = ViewBag.Orderlist as List<OrderListDto>;
+    var orderWaiting = orderList.Where(x => x.Status == "Waiting").ToList();
+    var orderCancel = orderList.Where(x => x.Status == "Canceled").ToList();
+    var orderActive = orderList.Where(x => x.Status == "Success" && x.ExpiredDate > DateTime.Now).ToList();
+    var orderInActive = orderList.Where(x => x.Status == "Success" && x.ExpiredDate <= DateTime.Now).ToList();
+    string banner = ViewBag.Banner as string;
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("menu.setting-account"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.setting-account"))" title="@Html.Raw(_translate.GetString("menu.setting-account"))" alt="@Html.Raw(_translate.GetString("menu.setting-account"))" target="_self">@Html.Raw(_translate.GetString("menu.setting-account"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0)" title="@Html.Raw(_translate.GetString("menu.order-management"))" alt="@Html.Raw(_translate.GetString("menu.order-management"))" target="_self">@Html.Raw(_translate.GetString("menu.order-management"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+<div class="mainbody mb-4 mb-md-0 order-md-2" data-mainbody>
+    <div class="tt-lg tt-ss text-gradient mb-4">
+        Đơn hàng của bạn
+    </div>
+    <div class="nav-nowrap nav-management">
+        <div class="nav">
+            <a class="nav-link active" alt="Tất cả" title="Tất cả" data-bs-toggle="tab" data-bs-target="#manageOrderAll">Tất cả</a>
+            <a class="nav-link" alt="Đang xử lý" title="Đang xử lý" data-bs-toggle="tab" data-bs-target="#manageOrdered">Đang xử lý</a>
+            <a class="nav-link" alt="Đang hoạt động" title="Đang hoạt động" data-bs-toggle="tab" data-bs-target="#manageActived">Đang hoạt động</a>
+            <a class="nav-link" alt="Đã huỷ" title="Đã huỷ" data-bs-toggle="tab" data-bs-target="#manageCanceled">Đã huỷ</a>
+            <a class="nav-link" alt="Đã hết hạn" title="Đã hết hạn" data-bs-toggle="tab" data-bs-target="#manageOutdated">Đã hết hạn</a>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade active show" id="manageOrderAll">
+            <div class="cardOrder">
+                <div class="OrderHeader">
+                    <div class="code">Mã đơn hàng</div>
+                    <div class="dateOrder">Ngày đặt</div>
+                    <div class="status">Tình trạng</div>
+                    <div class="statusPayment">Thanh toán</div>
+                    <div class="total">Tổng tiền</div>
+                    <div class="viewDetail">Xem</div>
+                </div>
+                <div class="OrderBody">
+                    @if (orderList.Count == 0)
+                    {
+                        <div class="OrderBodyItem">
+                            <div class="empty-block">
+                                Bạn chưa có đơn hàng nào
+                            </div>
+                        </div>
+                    }
+                    @foreach (var item in orderList)
+                    {
+                        string badge = "";
+                        string badgeText = "";
+                        string text = "";
+                        if (item.Status == "Waiting")
+                        {
+                            badge = "badge-process";
+                            badgeText = "Đang xử lý";
+                        }
+                        if (item.Status == "Success" && item.ExpiredDate > DateTime.Now)
+                        {
+                            badge = "badge-success";
+                            badgeText = "Đang hoạt động";
+                        }
+                        if (item.Status == "Success" && item.ExpiredDate <= DateTime.Now)
+                        {
+                            badge = "badge-outdated";
+                            badgeText = "Đã hết hạn";
+                        }
+                        if (item.Status == "Canceled")
+                        {
+                            badge = "badge-cancel";
+                            badgeText = "Đã hủy";
+                        }
+                        if (item.IsPayment == "Đã thanh toán")
+                        {
+                            text = "text-success";
+                        }
+
+                        <div class="OrderBodyItem">
+                            <div class="code" data-title="Mã đơn hàng: ">
+                                <span>#@Html.Raw(item.Code)</span>
+                            </div>
+                            <div class="dateOrder" data-title="Ngày đặt: ">
+                                <span>@Html.Raw(item.OrderDate)</span>
+                            </div>
+                            <div class="status" data-title="Tình trạng: ">
+                                <span class="badge @badge">@badgeText</span>
+                            </div>
+                            <div class="statusPayment" data-title="Thanh toán: ">
+                                <span class="@text">@Html.Raw(item.IsPayment)</span>
+                            </div>
+                            <div class="total" data-title="Tổng tiền: ">
+                                <div class="price">
+                                    @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                </div>
+                            </div>
+                            <div class="viewDetail">
+                                <a class="btn btn-collapse"
+                                   alt="Chi tiết"
+                                   title="Chi tiết"
+                                   href="#AllOrderDetail@(Html.Raw(item.Code))"
+                                   data-bs-toggle="collapse"
+                                   data-bs-target="#AllOrderDetail@(Html.Raw(item.Code))">
+                                    <span class="text">Chi tiết</span>
+                                    <i class="fa-regular fa-caret-down ms-1"></i>
+                                </a>
+                            </div>
+                            <div class="accordian-body collapse"
+                                 id="AllOrderDetail@(Html.Raw(item.Code))">
+                                <div class="bag-order">
+                                    <div class="order-item">
+                                        <div class="order-header">
+                                            <div class="tt">Gói @Html.Raw(item.ProductTitle)</div>
+                                        </div>
+                                        <div class="order-info">
+                                            <div class="form-group">
+                                                <span class="text-desc">Số lượng hồ sơ tối đa:</span><span class="fw-bold">@Html.Raw(item.UserLimit)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Công ty:</span><span class="fw-bold">@Html.Raw(item.CompanyName)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày đăng ký:</span><span class="fw-bold">@Html.Raw(item.RegisterDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày hết hạn:</span><span class="fw-bold">@Html.Raw(item.ExpiredDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Kỳ thanh toán:</span><span class="fw-bold">@Html.Raw(item.Months) tháng</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-total">
+                                            <div class="desc fs-14">Thành tiền:</div>
+                                            <div class="price">
+                                                @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-download">
+                                            @if (item.Status == "Success" && item.ExpiredDate > DateTime.Now)
+                                            {
+
+
+                                                <a class="btn btn-primary"
+                                                   alt="Quản lý gói "
+                                                   title="Quản lý gói "
+                                                   href="@Html.Raw(_translate.GetUrl("url.order-detail"))?pid=@(item.Code)">
+                                                    <span>Quản lý gói </span><i class="far fa-caret-right ms-1"></i>
+                                                </a>
+                                            }
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="manageOrdered">
+            <div class="cardOrder">
+                <div class="OrderHeader">
+                    <div class="code">Mã đơn hàng</div>
+                    <div class="dateOrder">Ngày đặt</div>
+                    <div class="status">Tình trạng</div>
+                    <div class="statusPayment">Thanh toán</div>
+                    <div class="total">Tổng tiền</div>
+                    <div class="viewDetail">Xem</div>
+                </div>
+                <div class="OrderBody">
+                    @if (orderWaiting.Count == 0)
+                    {
+                        <div class="OrderBodyItem">
+                            <div class="empty-block">
+                                Bạn chưa có đơn hàng nào
+                            </div>
+                        </div>
+                    }
+                    @foreach (var item in orderWaiting)
+                    {
+                        string badge = "badge-process";
+                        string badgeText = "Đang xử lý";
+                        string text = "";
+                        if (item.IsPayment == "Đã thanh toán")
+                        {
+                            text = "text-success";
+                        }
+
+                        <div class="OrderBodyItem">
+                            <div class="code" data-title="Mã đơn hàng: ">
+                                <span>#@Html.Raw(item.Code)</span>
+                            </div>
+                            <div class="dateOrder" data-title="Ngày đặt: ">
+                                <span>@Html.Raw(item.OrderDate)</span>
+                            </div>
+                            <div class="status" data-title="Tình trạng: ">
+                                <span class="badge @badge">@badgeText</span>
+                            </div>
+                            <div class="statusPayment" data-title="Thanh toán: ">
+                                <span class="@text">@Html.Raw(item.IsPayment)</span>
+                            </div>
+                            <div class="total" data-title="Tổng tiền: ">
+                                <div class="price">
+                                    @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                </div>
+                            </div>
+                            <div class="viewDetail">
+                                <a class="btn btn-collapse"
+                                   alt="Chi tiết"
+                                   title="Chi tiết"
+                                   href="#WaitingOrderDetail@(Html.Raw(item.Code))"
+                                   data-bs-toggle="collapse"
+                                   data-bs-target="#WaitingOrderDetail@(Html.Raw(item.Code))">
+                                    <span class="text">Chi tiết</span>
+                                    <i class="fa-regular fa-caret-down ms-1"></i>
+                                </a>
+                            </div>
+                            <div class="accordian-body collapse"
+                                 id="WaitingOrderDetail@(Html.Raw(item.Code))">
+                                <div class="bag-order">
+                                    <div class="order-item">
+                                        <div class="order-header">
+                                            <div class="tt">Gói @Html.Raw(item.ProductTitle)</div>
+                                        </div>
+                                        <div class="order-info">
+                                            <div class="form-group">
+                                                <span class="text-desc">Số lượng hồ sơ tối đa:</span><span class="fw-bold">@Html.Raw(item.UserLimit)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Công ty:</span><span class="fw-bold">@Html.Raw(item.CompanyName)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày đăng ký:</span><span class="fw-bold">@Html.Raw(item.RegisterDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày hết hạn:</span><span class="fw-bold">@Html.Raw(item.ExpiredDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Kỳ thanh toán:</span><span class="fw-bold">@Html.Raw(item.Months) tháng</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-total">
+                                            <div class="desc fs-14">Thành tiền:</div>
+                                            <div class="price">
+                                                @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-download">
+                                            @*<a class="btn btn-primary"
+                                               alt="Quản lý gói "
+                                               title="Quản lý gói "
+                                               href="orderDetail.html">
+                                                <span>Quản lý gói </span><i class="far fa-caret-right ms-1"></i>
+                                            </a>*@
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="manageActived">
+            <div class="cardOrder">
+                <div class="OrderHeader">
+                    <div class="code">Mã đơn hàng</div>
+                    <div class="dateOrder">Ngày đặt</div>
+                    <div class="status">Tình trạng</div>
+                    <div class="statusPayment">Thanh toán</div>
+                    <div class="total">Tổng tiền</div>
+                    <div class="viewDetail">Xem</div>
+                </div>
+                <div class="OrderBody">
+                    @if (orderActive.Count == 0)
+                    {
+                        <div class="OrderBodyItem">
+                            <div class="empty-block">
+                                Bạn chưa có đơn hàng nào
+                            </div>
+                        </div>
+                    }
+                    @foreach (var item in orderActive)
+                    {
+                        string badge = "badge-success";
+                        string badgeText = "Đang hoạt động";
+                        string text = "";
+                        if (item.IsPayment == "Đã thanh toán")
+                        {
+                            text = "text-success";
+                        }
+
+                        <div class="OrderBodyItem">
+                            <div class="code" data-title="Mã đơn hàng: ">
+                                <span>#@Html.Raw(item.Code)</span>
+                            </div>
+                            <div class="dateOrder" data-title="Ngày đặt: ">
+                                <span>@Html.Raw(item.OrderDate)</span>
+                            </div>
+                            <div class="status" data-title="Tình trạng: ">
+                                <span class="badge @badge">@badgeText</span>
+                            </div>
+                            <div class="statusPayment" data-title="Thanh toán: ">
+                                <span class="@text">@Html.Raw(item.IsPayment)</span>
+                            </div>
+                            <div class="total" data-title="Tổng tiền: ">
+                                <div class="price">
+                                    @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                </div>
+                            </div>
+                            <div class="viewDetail">
+                                <a class="btn btn-collapse"
+                                   alt="Chi tiết"
+                                   title="Chi tiết"
+                                   href="#ActiveOrderDetail@(Html.Raw(item.Code))"
+                                   data-bs-toggle="collapse"
+                                   data-bs-target="#ActiveOrderDetail@(Html.Raw(item.Code))">
+                                    <span class="text">Chi tiết</span>
+                                    <i class="fa-regular fa-caret-down ms-1"></i>
+                                </a>
+                            </div>
+                            <div class="accordian-body collapse"
+                                 id="ActiveOrderDetail@(Html.Raw(item.Code))">
+                                <div class="bag-order">
+                                    <div class="order-item">
+                                        <div class="order-header">
+                                            <div class="tt">Gói @Html.Raw(item.ProductTitle)</div>
+                                        </div>
+                                        <div class="order-info">
+                                            <div class="form-group">
+                                                <span class="text-desc">Số lượng hồ sơ tối đa:</span><span class="fw-bold">@Html.Raw(item.UserLimit)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Công ty:</span><span class="fw-bold">@Html.Raw(item.CompanyName)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày đăng ký:</span><span class="fw-bold">@Html.Raw(item.RegisterDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày hết hạn:</span><span class="fw-bold">@Html.Raw(item.ExpiredDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Kỳ thanh toán:</span><span class="fw-bold">@Html.Raw(item.Months) tháng</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-total">
+                                            <div class="desc fs-14">Thành tiền:</div>
+                                            <div class="price">
+                                                @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                            </div>
+                                        </div>
+
+                                            <div class="order-download">
+                                                <a class="btn btn-primary"
+                                                   alt="Quản lý gói "
+                                                   title="Quản lý gói "
+                                                   href="@Html.Raw(_translate.GetUrl("url.order-detail"))?pid=@(item.Code)">
+                                                    <span>Quản lý gói </span><i class="far fa-caret-right ms-1"></i>
+                                                </a>
+                                            </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="manageCanceled">
+            <div class="cardOrder">
+                <div class="OrderHeader">
+                    <div class="code">Mã đơn hàng</div>
+                    <div class="dateOrder">Ngày đặt</div>
+                    <div class="status">Tình trạng</div>
+                    <div class="statusPayment">Thanh toán</div>
+                    <div class="total">Tổng tiền</div>
+                    <div class="viewDetail">Xem</div>
+                </div>
+                <div class="OrderBody">
+                    @if (orderCancel.Count == 0)
+                    {
+                        <div class="OrderBodyItem">
+                            <div class="empty-block">
+                                Bạn chưa có đơn hàng nào
+                            </div>
+                        </div>
+                    }
+                    @foreach (var item in orderCancel)
+                    {
+                        string badge = "badge-cancel";
+                        string badgeText = "Đã hủy";
+                        string text = "";
+                        if (item.IsPayment == "Đã thanh toán")
+                        {
+                            text = "text-success";
+                        }
+
+                        <div class="OrderBodyItem">
+                            <div class="code" data-title="Mã đơn hàng: ">
+                                <span>#@Html.Raw(item.Code)</span>
+                            </div>
+                            <div class="dateOrder" data-title="Ngày đặt: ">
+                                <span>@Html.Raw(item.OrderDate)</span>
+                            </div>
+                            <div class="status" data-title="Tình trạng: ">
+                                <span class="badge @badge">@badgeText</span>
+                            </div>
+                            <div class="statusPayment" data-title="Thanh toán: ">
+                                <span class="@text">@Html.Raw(item.IsPayment)</span>
+                            </div>
+                            <div class="total" data-title="Tổng tiền: ">
+                                <div class="price">
+                                    @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                </div>
+                            </div>
+                            <div class="viewDetail">
+                                <a class="btn btn-collapse"
+                                   alt="Chi tiết"
+                                   title="Chi tiết"
+                                   href="#CanceledOrderDetail@(Html.Raw(item.Code))"
+                                   data-bs-toggle="collapse"
+                                   data-bs-target="#CanceledOrderDetail@(Html.Raw(item.Code))">
+                                    <span class="text">Chi tiết</span>
+                                    <i class="fa-regular fa-caret-down ms-1"></i>
+                                </a>
+                            </div>
+                            <div class="accordian-body collapse"
+                                 id="CanceledOrderDetail@(Html.Raw(item.Code))">
+                                <div class="bag-order">
+                                    <div class="order-item">
+                                        <div class="order-header">
+                                            <div class="tt">Gói @Html.Raw(item.ProductTitle)</div>
+                                        </div>
+                                        <div class="order-info">
+                                            <div class="form-group">
+                                                <span class="text-desc">Số lượng hồ sơ tối đa:</span><span class="fw-bold">@Html.Raw(item.UserLimit)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Công ty:</span><span class="fw-bold">@Html.Raw(item.CompanyName)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày đăng ký:</span><span class="fw-bold">@Html.Raw(item.RegisterDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày hết hạn:</span><span class="fw-bold">@Html.Raw(item.ExpiredDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Kỳ thanh toán:</span><span class="fw-bold">@Html.Raw(item.Months) tháng</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-total">
+                                            <div class="desc fs-14">Thành tiền:</div>
+                                            <div class="price">
+                                                @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-download">
+                                            @*<a class="btn btn-primary"
+               alt="Quản lý gói "
+               title="Quản lý gói "
+               href="orderDetail.html">
+                <span>Quản lý gói </span><i class="far fa-caret-right ms-1"></i>
+            </a>*@
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="manageOutdated">
+            <div class="cardOrder">
+                <div class="OrderHeader">
+                    <div class="code">Mã đơn hàng</div>
+                    <div class="dateOrder">Ngày đặt</div>
+                    <div class="status">Tình trạng</div>
+                    <div class="statusPayment">Thanh toán</div>
+                    <div class="total">Tổng tiền</div>
+                    <div class="viewDetail">Xem</div>
+                </div>
+                <div class="OrderBody">
+                    @if (orderInActive.Count == 0)
+                    {
+                        <div class="OrderBodyItem">
+                            <div class="empty-block">
+                                Bạn chưa có đơn hàng nào
+                            </div>
+                        </div>
+                    }
+                    @foreach (var item in orderInActive)
+                    {
+                        string badge = "badge-outdated";
+                        string badgeText = "Đã hết hạn";
+                        string text = "";
+                        if (item.IsPayment == "Đã thanh toán")
+                        {
+                            text = "text-success";
+                        }
+
+                        <div class="OrderBodyItem">
+                            <div class="code" data-title="Mã đơn hàng: ">
+                                <span>#@Html.Raw(item.Code)</span>
+                            </div>
+                            <div class="dateOrder" data-title="Ngày đặt: ">
+                                <span>@Html.Raw(item.OrderDate)</span>
+                            </div>
+                            <div class="status" data-title="Tình trạng: ">
+                                <span class="badge @badge">@badgeText</span>
+                            </div>
+                            <div class="statusPayment" data-title="Thanh toán: ">
+                                <span class="@text">@Html.Raw(item.IsPayment)</span>
+                            </div>
+                            <div class="total" data-title="Tổng tiền: ">
+                                <div class="price">
+                                    @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                </div>
+                            </div>
+                            <div class="viewDetail">
+                                <a class="btn btn-collapse"
+                                   alt="Chi tiết"
+                                   title="Chi tiết"
+                                   href="#InActiveOrderDetail@(Html.Raw(item.Code))"
+                                   data-bs-toggle="collapse"
+                                   data-bs-target="#InActiveOrderDetail@(Html.Raw(item.Code))">
+                                    <span class="text">Chi tiết</span>
+                                    <i class="fa-regular fa-caret-down ms-1"></i>
+                                </a>
+                            </div>
+                            <div class="accordian-body collapse"
+                                 id="InActiveOrderDetail@(Html.Raw(item.Code))">
+                                <div class="bag-order">
+                                    <div class="order-item">
+                                        <div class="order-header">
+                                            <div class="tt">Gói @Html.Raw(item.ProductTitle)</div>
+                                        </div>
+                                        <div class="order-info">
+                                            <div class="form-group">
+                                                <span class="text-desc">Số lượng hồ sơ tối đa:</span><span class="fw-bold">@Html.Raw(item.UserLimit)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Công ty:</span><span class="fw-bold">@Html.Raw(item.CompanyName)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày đăng ký:</span><span class="fw-bold">@Html.Raw(item.RegisterDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Ngày hết hạn:</span><span class="fw-bold">@Html.Raw(item.ExpiredDateString)</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="text-desc">Kỳ thanh toán:</span><span class="fw-bold">@Html.Raw(item.Months) tháng</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-total">
+                                            <div class="desc fs-14">Thành tiền:</div>
+                                            <div class="price">
+                                                @Html.Raw(item.TotalString)<span class="unit">₫</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-download">
+                                            @*<a class="btn btn-primary"
+               alt="Quản lý gói "
+               title="Quản lý gói "
+               href="orderDetail.html">
+                <span>Quản lý gói </span><i class="far fa-caret-right ms-1"></i>
+            </a>*@
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

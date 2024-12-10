@@ -1,0 +1,79 @@
+extends template/template
+block vars
+	- title= 'Republican Dean Esposito wins Danbury mayoral race after Roberto Alves concedes'
+	- wrapperClass = ''
+	- menuActive = ''
+	- homeSlider = false
+	- bannerAll = false
+	- breadcrumb = true
+	- navigate = true
+
+block breadcrumb 
+	+breadcrumb('container', {'news.html':'Blog'})
+block mainer
+	main.mainer
+		.container
+			.block-sidebar(data-wrapper)
+				.mainbody.mb-4(data-mainbody)
+					.content-master
+						h1.tt-xl.fw-semibold.tt-post= title
+						hr
+						.desc.fs-18.mb-4.text-dark
+							| DANBURY — Republican Dean Esposito will be the city’s next mayor after his Democratic opponent Roberto Alves conceded Tuesday night in what was a tight race. This will mark 11 straight terms for the GOP in the city’s top elected office.
+						.content-post
+							p: +img('news/large-01.jpg')
+							div &nbsp;
+							p Hầu hết những thay đổi chính của Windows 11 mà Microsoft đã giới thiệu vào tuần trước đều sẽ có trong phiên bản Preview này. Do đó, bạn có thể trải nghiệm tất cả những giao diện và tính năng mới, bao gồm cả Microsoft Store đã được đại tu.
+							p Thay đổi chính về giao diện thiết kế của Windows 11 là thanh Taskbar được đặt ở chính giữa, gần giống với thanh Dock của macOS. Menu Start cũng được làm mới với giao diện đơn giản hơn. Các cửa sổ có các góc bo tròn, logo và icon mới. Trung tâm thông báo cũng được thay đổi và không thể thiếu là những bộ sưu tập hình nền mới của Windows 11.
+							div &nbsp;
+							p: +img('news/large-02.jpg')
+							div &nbsp;
+							p: Tuy nhiên tính năng mà người dùng rất mong đợi được trải nghiệm, đó là chạy các ứng dụng Android trên Windows 11, thì lại chưa có trong phiên bản Preview này. Ứng dụng Microsoft Team cũng chưa được tích hợp. Các tính năng này vẫn đang được Microsoft thử nghiệm và có thể sẽ ra mắt trong các phiên bản Windows 11 Preview sau này. 
+							div &nbsp;
+							p: +img('news/large-03.jpg')
+							div &nbsp;
+							p Microsoft cũng đại tu phần Settings chính của Windows 11. Bản Preview này bao gồm những thay đổi giúp người dùng dễ dàng tìm được những cài đặt cần thiết. Phần Settings sẽ có menu bên trái được cố định, giúp chuyển đổi qua lại giữa các phần cài đặt nhanh chóng hơn.
+							p Bên cạnh bản Preview của Windows 11 ra mắt ngày hôm nay, Microsoft cũng giới thiệu bản Preview của bộ phần mềm Office mới. Giao diện của bộ phần mềm Office mới cũng có thay đổi, các góc cũng được bo tròn để giống với các cửa sổ của Windows 11. 
+							p Nếu bạn muốn tải về phiên bản Windows 11 Preview này, bạn có thể đăng ký chương trình Windows Insiders tại đây. Sau đó trên Windows 10, vào phần  Settings > Update & Security > Windows Insider Program. Nếu chiếc PC của bạn đáp ứng được yêu cầu của Microsoft, sẽ có tùy chọn để tải về bản Windows 11 Preview này.
+							p Bạn có thể tải ứng dụng PC Health Check của Microsoft tại đây, để kiểm tra xem chiếc PC của bạn có đáp ứng được yêu cầu tối thiểu để cài đặt Windows 11 hay không.
+							p: strong: em Tham khảo: theverge
+						
+						.social-share.social-stick
+							span.label Share on
+							a(href="#" class="btn rounded-circle bg-gradient text-white btn-twitter fab fa-twitter fs-20" title="" alt="" target="_blank")
+							a(href="#" class="btn rounded-circle bg-gradient text-white btn-linkedin fab fa-linkedin-in fs-18" title="" alt="" target="_blank")
+							a(href="#" class="btn rounded-circle bg-gradient text-white btn-facebook fab fa-facebook-f fs-20" title="" alt="" target="_blank")
+							a(href="news.html" class="btn rounded-circle fs-18 btn-primary bg-gradient far fa-arrow-left d-none d-md-flex")
+					.tags
+						+a('#', 'mr-1', 'Technology')
+						+a('#', 'mr-1', 'Apple')
+						+a('#', 'mr-1', 'Cong nghe')
+						+a('#', 'mr-1', 'Internet')
+						+a('#', 'mr-1', 'Smartphone')
+						+a('#', 'mr-1', 'Facebook')
+
+					.other-post.mt-45
+						.heading-ux.d-flex.mb-3
+							.tt-xs.text-uppercase Tin tức khác
+							+a('news.html', 'text-link-more text-decoration-none')
+								| Xem thêm
+								i.far.fa-chevron-right
+						ul.list-news-text
+							li: +a('news-detail.html','','Chiều 18/1, Hà Nội và Đà Nẵng có 2 ca mắc mới COVID-19')
+							li: +a('news-detail.html','','Tập huấn các văn bản pháp luật về lĩnh vực y tế cho gần 1.500 học viên')
+							li: +a('news-detail.html','','Mạng lưới khám chữa bệnh bằng y dược cổ truyền ngày càng phát triển')
+							li: +a('news-detail.html','','Đình chỉ lưu hành, thu hồi mỹ phẩm không đạt chất lượng')
+							li: +a('news-detail.html','','Thu hồi lô thuốc tiêm B – COMEN do vi phạm chất lượng mức độ 2')
+							li: +a('news-detail.html','','Đồng Nai đạt nhiều kết quả quan trọng về phòng chống rốt rét')
+							li: +a('news-detail.html','','Đà Nẵng và TP Hồ Chí Minh có 5 ca mắc mới COVID-19')
+							li: +a('news-detail.html','','Việt Nam sẽ thử nghiệm vắc xin COVID-19 thứ 2 trên người trong tháng 1/2021')
+
+				.sidebar.mb-4(data-sidebar)
+					div(data-stick data-width-fill)
+						.pane.pane-menu.mb-4
+							.tt-xs.pane-tt
+								i.bi.bi-square-half.mr-2.text-danger
+								| Danh mục tin
+							+menu_vertical_news()
+						.pane.pane-qc
+							+a('#', 'mb-2 block'): +img('news/banner-sidebar.jpg')

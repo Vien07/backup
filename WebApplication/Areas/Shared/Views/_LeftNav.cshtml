@@ -1,0 +1,318 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Areas.Admin;
+@inject ITranslateServices _translate;
+@inject IAdminRepository _repAdmin;
+
+@{
+    List<string> permissions = _repAdmin.GetPermissionForUser();
+}
+
+@section styles{
+
+}
+
+<nav id="nav-left-nav" class="hk-nav hk-nav-light">
+    <a href="javascript:void(0);" id="hk_nav_close" class="hk-nav-close"><span class="feather-icon"><i data-feather="x"></i></span></a>
+    <div class="nicescroll-bar">
+        <div class="navbar-nav-wrap">
+            <ul class="navbar-nav flex-column">
+                <li id="dashboard" class="nav-item bizmac-left-nav">
+                    <a id="a-dashboard" class="nav-link" href="/b-admin/Dashboard/Index">
+                        <span class="feather-icon">
+                            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 255 255" xml:space="preserve">
+                            <path class="st0" d="M232 121.2c0 3.3-1.4 5.5-4.3 6.6-1.9.7-15.7 2-41.3 3.9.6 3.9 2.8 7.3 6.5 10 3.6 2.6 7.4 3.9 11.5 3.9 7 0 13.5-2.3 19.4-6.8.7-.6 1.4-1.2 2.1-1.7.3 0 .6 0 .7.1.1.1.9 1.6 2.5 4.6 1.6 3 2.3 4.6 2.3 4.9 0 .3-.4.8-1.1 1.5-6.5 7-14.9 10.4-25.1 10.4-10.4 0-18.6-3.1-24.7-9.2-6.1-6.1-9.2-14.3-9.2-24.7 0-9.1 3-17.1 8.9-23.9 6.2-7.1 13.7-10.7 22.7-10.7 8.3 0 15.4 3.1 20.9 9.2 5.4 6.1 8.2 13.3 8.2 21.9m-15.9-4.1c0-3.7-1.4-7-4.4-9.8-2.9-2.9-6.2-4.3-9.8-4.3-4.1 0-7.7 1.6-10.9 5-3.2 3.3-4.8 7-4.8 11.1 0 .9.8 1.4 2.4 1.4 6.6 0 14.5-.7 23.6-2 2.6-.4 3.9-.9 3.9-1.4M165.9 124.8c0 8.9-2.7 16.5-8.2 23.1-5.8 6.9-13.1 10.4-21.8 10.4-5.7 0-10.9-1.5-15.3-4.4-1.8-1.5-3.5-3-5.3-4.4-.5.1-.8 1.5-1 4-.2 2.5-.5 3.8-1.1 3.8h-14c-.5 0-.8-.3-.8-.8 0 0 0-.4.1-1.3.7-7 1.1-20.7 1.1-40.8 0-8.2-.4-20.3-1.1-36.2-.4-10.2-.7-14.6-.7-13.3 0-1.2.6-1.8 1.8-2 1.6 0 3.9-.1 7.1-.2.6 0 1.9-.2 3.8-.5 1.6-.3 2.9-.4 3.9-.4.8 0 1.1.5 1.1 1.6 0 1.5-.1 3.8-.3 6.9-.2 3.1-.3 5.5-.3 7 0 2.3-.1 5.8-.3 10.4-.2 4.7-.3 8.1-.3 10.4 0 1.7.3 2.6.9 2.6.3 0 .7-.3 1-.8 4.9-6.1 11.4-9.1 19.4-9.1 9.2 0 16.6 3.4 22.3 10.4 5.4 6.3 8 14.2 8 23.6m-15.1-.6c0-5.3-1.7-10-5-14-3.6-4.3-7.9-6.5-13.2-6.5-5.3 0-9.8 2.1-13.3 6.3-3.4 4-5.1 8.7-5.1 14.1 0 5.5 1.7 10.3 5.1 14.3 3.6 4.2 8.1 6.3 13.5 6.3 5.2 0 9.6-2.2 13.1-6.5 3.3-4 4.9-8.7 4.9-14M92.4 94.4c0 4.9-.3 9.3-1 13.3-.1 1-.6 1.5-1.3 1.5-.9 0-2.3-.1-4.2-.3-1.9-.2-3.3-.3-4.3-.3-5.6 0-9.1 1.6-10.7 4.7-.9 1.9-1.4 6-1.4 12v7.3c0 2.5.1 6.3.3 11.4.2 5.1.3 8.8.3 11.3 0 1.2-.5 1.8-1.5 1.8-1.4 0-3.5 0-6.3-.1H56c-1 0-1.6-.5-1.6-1.7 0-3.6 0-9 .2-16.3.1-7.3.2-12.7.2-16.4 0-10.9-1-19.8-3.1-26.5-.1-.4-.1-.6-.1-.8 0-.5.3-.9.8-1.1 1.7-.2 4-.4 6.9-.8 4.8-.8 7-1.3 6.7-1.3.7 0 1.2 1.3 1.4 3.9.2 2.6.6 3.9 1.2 3.9.1 0 .2 0 .3-.1 1.8-1.1 3.6-2.3 5.5-3.4 2-1.2 4-2.1 6.1-2.7 1.8-.5 4-.8 6.7-.8 3.5.1 5.2.5 5.2 1.5"></path><path class="st1" d="M127.5 5.2c67.6 0 122.3 54.7 122.3 122.4 0 67.5-54.7 122.3-122.3 122.3S5.1 195.1 5.1 127.6C5.2 59.9 59.9 5.2 127.5 5.2m0 5c64.8 0 117.4 52.5 117.4 117.4 0 64.8-52.6 117.3-117.4 117.3-64.8 0-117.4-52.6-117.4-117.3.1-64.9 52.6-117.4 117.4-117.4"></path><path class="st1" d="M209.8 200.6c-6.9 7.8-15.6 14.9-25.6 21.2-44.4-40.9-164 23.4-166.5-93.3C17.9 20.6 156.3-26.4 220 68 150.7-2.6 37.6 31 35.4 124.6c1.1 122.9 149.7-8.4 174.4 76"></path><path class="st1" d="M166.5 230.5c-37.2-30.9-90.4-1.2-124.2-33.4 29.4 38.2 80.4 49.2 124.2 33.4"></path></svg>
+                        </span>
+                        <span class="nav-link-text">@Html.Raw(_translate.GetStringAdmin("left-menu.dashboard"))</span>
+                    </a>
+                </li>
+            </ul>
+            <hr @(!permissions.Contains("Dashboard") ? "hidden" : "" ) class="nav-separator">
+            <div class="nav-header">
+                <span>Website Modules</span>
+                <span>UI</span>
+            </div>
+            <ul class="navbar-nav flex-column">
+                <li @((!permissions.Contains("HomePage") && !permissions.Contains("About") && !permissions.Contains("FAQ") && !permissions.Contains("Partner") && !permissions.Contains("Convenience") && !permissions.Contains("Comment")) ? "hidden" : "" ) id="li-infopage" class="nav-item ">
+                    <a id="a-infopage" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#infopage">
+                        <span class="feather-icon"><i data-feather="layout"></i></span>
+                        <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.overview")</span>
+                    </a>
+
+                    <ul id="infopage" class="nav flex-column collapse collapse-level-1 ">
+                        <li class="nav-item">
+                            <ul class="nav flex-column ">
+                                <li @(!permissions.Contains("HomePage") ? "hidden" : "" ) id="nav-left-homepage" parent-left-nav="infopage" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-homepage" class="nav-link" href="/b-admin/HomePageIntro/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.home"))">@Html.Raw(_translate.GetStringAdmin("left-menu.home"))</a>
+                                </li>
+                                @*<li @(!permissions.Contains("HomePage") ? "hidden" : ''} id="nav-left-homepage" parent-left-nav="infopage" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-homepage" class="nav-link" href="/b-admin/HomePage/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.home"))">@Html.Raw(_translate.GetStringAdmin("left-menu.home"))</a>
+                                    </li>*@
+                                <li @(!permissions.Contains("About") ? "hidden" : "" ) id="nav-left-about" parent-left-nav="infopage" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-about" class="nav-link" href="/b-admin/About/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.about"))">@Html.Raw(_translate.GetStringAdmin("left-menu.about"))</a>
+                                </li>
+                                <li @(!permissions.Contains("FAQ") ? "hidden" : "" ) id="nav-left-faq" parent-left-nav="infopage" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-faq" class="nav-link" href="/b-admin/FAQ/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.faq"))">@Html.Raw(_translate.GetStringAdmin("left-menu.faq"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Convenience") ? "hidden" : "" ) id="nav-left-convenience" parent-left-nav="infopage" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-convenience" class="nav-link" href="/b-admin/Convenience/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.convenience"))">@Html.Raw(_translate.GetStringAdmin("left-menu.convenience"))</a>
+                                </li>
+                                @*<li @(!permissions.Contains("Partner") ? "hidden" : "" ) id="nav-left-partner" parent-left-nav="infopage" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-partner" class="nav-link" href="/b-admin/Partner/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.partner"))">@Html.Raw(_translate.GetStringAdmin("left-menu.partner"))</a>
+                                </li>*@
+                                @*<li @(!permissions.Contains("Comment") ? "hidden" : "" ) id="nav-left-comment" parent-left-nav="infopage" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-comment" class="nav-link" href="/b-admin/comment/" title="@_translate.GetStringAdmin("left-menu.comment")">@_translate.GetStringAdmin("left-menu.comment")</a>
+                                    </li>*@
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li @(!permissions.Contains("Feature") ? "hidden" : "" ) id="feature" class="nav-item bizmac-left-nav">
+                    <a id="a-feature" class="nav-link" href="/b-admin/Feature/">
+                        <span class="feather-icon"><i data-feather="star"></i></span>
+                        <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.feature")</span>
+                    </a>
+                </li>
+                <li @(!permissions.Contains("News") ? "hidden" : "" ) id="news" class="nav-item bizmac-left-nav">
+                    <a id="a-news" class="nav-link" href="/b-admin/News/">
+                        <span class="feather-icon"><i data-feather="file-text"></i></span>
+                        <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.news")</span>
+                    </a>
+                </li>
+                @*<li @((!permissions.Contains("NewsCate") && !permissions.Contains("News")) ? "hidden" : "" ) id="li-news" class="nav-item ">
+                        <a id="a-posts" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#news">
+                            <span class="feather-icon"><i data-feather="file-text"></i></span>
+                            <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.news")</span>
+                        </a>
+                        <ul id="news" class="nav flex-column collapse collapse-level-1 ">
+                            <li class="nav-item">
+                                <ul class="nav flex-column ">
+                                    <li @(!permissions.Contains("NewsCate") ? "hidden" : "" ) id="nav-left-newscate" parent-left-nav="news" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-newscate" class="nav-link" href="/b-admin/NewsCate/Index" title="@Html.Raw(_translate.GetStringAdmin("left-menu.cate"))">@Html.Raw(_translate.GetStringAdmin("left-menu.cate"))</a>
+                                    </li>
+                                    <li @(!permissions.Contains("News") ? "hidden" : "" ) id="nav-left-news" parent-left-nav="news" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-news" class="nav-link" href="/b-admin/News/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.news"))">@Html.Raw(_translate.GetStringAdmin("left-menu.news"))</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>*@
+
+                @*<li @((!permissions.Contains("GalleryCate") && !permissions.Contains("Gallery")) ? "hidden" : "" ) id="li-gallery" class="nav-item ">
+                        <a id="a-posts" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#gallery">
+                            <span class="feather-icon"><i data-feather="image"></i></span>
+                            <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.gallery")</span>
+                        </a>
+                        <ul id="gallery" class="nav flex-column collapse collapse-level-1 ">
+                            <li class="nav-item">
+                                <ul class="nav flex-column ">
+                                    <li @(!permissions.Contains("GalleryCate") ? "hidden" : "" ) id="nav-left-gallerycate" parent-left-nav="gallery" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-gallerycate" class="nav-link" href="/b-admin/GalleryCate/Index" title="@Html.Raw(_translate.GetStringAdmin("left-menu.cate"))">@Html.Raw(_translate.GetStringAdmin("left-menu.cate"))</a>
+                                    </li>
+                                    <li @(!permissions.Contains("Gallery") ? "hidden" : "" ) id="nav-left-gallery" parent-left-nav="gallery" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-gallery" class="nav-link" href="/b-admin/Gallery/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.gallery"))">@Html.Raw(_translate.GetStringAdmin("left-menu.gallery"))</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>*@
+
+                @*<li @(!permissions.Contains("Product") ? "hidden" : "" ) id="product" class="nav-item bizmac-left-nav">
+                        <a id="a-product" class="nav-link" href="/b-admin/product/">
+                            <span class="feather-icon"><i data-feather="briefcase"></i></span>
+                            <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.product")</span>
+                        </a>
+                    </li>*@
+                <li @((!permissions.Contains("ProductCate") && !permissions.Contains("Product")) ? "hidden" : "" ) id="li-product" class="nav-item ">
+                    <a id="a-product" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#product">
+                        <span class="feather-icon"><i data-feather="briefcase"></i></span>
+                        <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.product")</span>
+                    </a>
+                    <ul id="product" class="nav flex-column collapse collapse-level-1 ">
+                        <li class="nav-item">
+                            <ul class="nav flex-column ">
+                                @*<li id="nav-left-productcolor" parent-left-nav="product" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-productcolor" class="nav-link" href="/b-admin/ProductColor/Index" title="Màu sắc">Màu sắc</a>
+                                    </li>
+                                    <li id="nav-left-productoption" parent-left-nav="product" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-productoption" class="nav-link" href="/b-admin/ProductOption/Index" title="Tùy chọn">Tùy chọn</a>
+                                    </li>*@
+                                <li @(!permissions.Contains("ProductCate") ? "hidden" : "" ) id="nav-left-productcate" parent-left-nav="product" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-productcate" class="nav-link" href="/b-admin/ProductCycle/Index" title="Chu kỳ">Chu kỳ</a>
+                                </li>
+                                <li @(!permissions.Contains("Product") ? "hidden" : "" ) id="nav-left-product" parent-left-nav="product" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-product" class="nav-link" href="/b-admin/Product/" title="@_translate.GetStringAdmin("left-menu.product")">@_translate.GetStringAdmin("left-menu.product")</a>
+                                </li>
+                                @*<li id="nav-left-productcomment" parent-left-nav="product" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-productcomment" class="nav-link" href="/b-admin/ProductComment/" title="Bình luận">Bình luận</a>
+                                    </li>*@
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li @((!permissions.Contains("Promotion") && !permissions.Contains("DiscountCode")) ? "hidden" : "" ) id="li-promotion" class="nav-item ">
+                        <a id="a-posts" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#promotion">
+                            <span class="feather-icon"><i data-feather="gift"></i></span>
+                            <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.promotion")</span>
+                        </a>
+                        <ul id="promotion" class="nav flex-column collapse collapse-level-1 ">
+                            <li class="nav-item">
+                                <ul class="nav flex-column ">
+                                    @*<li @(!permissions.Contains("Promotion") ? "hidden" : "" ) id="nav-left-promotion" parent-left-nav="promotion" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-promotion" class="nav-link" href="/b-admin/Promotion/Index" title="@Html.Raw(_translate.GetStringAdmin("left-menu.promotion"))">@Html.Raw(_translate.GetStringAdmin("left-menu.promotion"))</a>
+                                    </li>*@
+                                    <li @(!permissions.Contains("DiscountCode") ? "hidden" : "" ) id="nav-left-discountCode" parent-left-nav="promotion" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-discountCode" class="nav-link" href="/b-admin/DiscountCode/" title="@Html.Raw(_translate.GetStringAdmin("left-menu.discountCode"))">@Html.Raw(_translate.GetStringAdmin("left-menu.discountCode"))</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                <li @((!permissions.Contains("Customer") && !permissions.Contains("Order")) ? "hidden" : "" ) id="li-order" class="nav-item ">
+                    <a id="a-order" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#order">
+                        <span class="feather-icon"><i data-feather="grid"></i></span>
+                        <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.order")</span>
+                    </a>
+                    <ul id="order" class="nav flex-column collapse collapse-level-1 ">
+                        <li class="nav-item">
+                            <ul class="nav flex-column ">
+                                <li @(!permissions.Contains("Customer") ? "hidden" : "" ) id="nav-left-customer" parent-left-nav="order" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-customer" class="nav-link" href="/b-admin/Customer/Index" title="@_translate.GetStringAdmin("left-menu.customer")">@_translate.GetStringAdmin("left-menu.customer")</a>
+                                </li>
+                                <li @(!permissions.Contains("Order") ? "hidden" : "" ) id="nav-left-order" parent-left-nav="order" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-order" class="nav-link" href="/b-admin/Order/Index" title="@_translate.GetStringAdmin("left-menu.order")">@_translate.GetStringAdmin("left-menu.order")</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <!--<li @((!permissions.Contains("Recruitment") && !permissions.Contains("Candidate")) ? "hidden" : "" ) id="li-recruitment" class="nav-item ">
+                    <a id="a-recruitment" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#recruitment">
+                        <span class="feather-icon"><i data-feather="twitter"></i></span>
+                        <span class="nav-link-text">@_translate.GetStringAdmin("left-menu.recruitment")</span>
+                    </a>
+
+                    <ul id="recruitment" class="nav flex-column collapse collapse-level-1 ">
+                        <li class="nav-item">
+                            <ul class="nav flex-column ">-->
+                @*<li id="nav-left-recruitment-cate" parent-left-nav="recruitment" class="nav-item bizmac-left-nav">
+                        <a id="a-nav-left-recruitment-cate" class="nav-link" href="/b-admin/RecruitmentCate/" title="Danh mục">Danh mục</a>
+                    </li>*@
+                <!--<li @(!permissions.Contains("Recruitment") ? "hidden" : "" ) id="nav-left-recruitment" parent-left-nav="recruitment" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-recruitment" class="nav-link" href="/b-admin/Recruitment/" title="@_translate.GetStringAdmin("left-menu.recruitment")">@_translate.GetStringAdmin("left-menu.recruitment")</a>
+                                </li>
+                                <li @(!permissions.Contains("Candidate") ? "hidden" : "" ) id="nav-left-recruitmentlist" parent-left-nav="recruitment" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-recruitmentlist" class="nav-link" href="/b-admin/Candidate/" title="@_translate.GetStringAdmin("left-menu.candidate")">@_translate.GetStringAdmin("left-menu.candidate")</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>-->
+
+                <li @((!permissions.Contains("Slide") && !permissions.Contains("Banner") && !permissions.Contains("Advertisement") && !permissions.Contains("Popup") && !permissions.Contains("Calendar")) ? "hidden" : "" ) class="nav-item" id="li-ultity">
+                    <a id="a-ultity" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#ultity">
+                        <span class="feather-icon"><i data-feather="type"></i></span>
+                        <span class="nav-link-text">@Html.Raw(_translate.GetStringAdmin("left-menu.ultity"))</span>
+                    </a>
+                    <ul id="ultity" class="nav flex-column collapse collapse-level-1">
+                        <li class="nav-item">
+                            <ul class="nav flex-column">
+                                <li @(!permissions.Contains("Slide") ? "hidden" : "" ) id="nav-left-slide" parent-left-nav="ultity" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-slide" class="nav-link" href="/b-admin/Slide/Index" title="@_translate.GetStringAdmin("left-menu.slide")">@Html.Raw(_translate.GetStringAdmin("left-menu.slide"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Banner") ? "hidden" : "" ) id="nav-left-banner" parent-left-nav="ultity" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-banner" class="nav-link" href="/b-admin/Banner/Index" title="@_translate.GetStringAdmin("left-menu.banner")">@Html.Raw(_translate.GetStringAdmin("left-menu.banner"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Advertisement") ? "hidden" : "" ) id="nav-left-advertisement" parent-left-nav="ultity" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-advertisement" class="nav-link" href="/b-admin/Advertisement/Index" title="@_translate.GetStringAdmin("left-menu.advertisement")">@Html.Raw(_translate.GetStringAdmin("left-menu.advertisement"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Popup") ? "hidden" : "" ) id="nav-left-popup" parent-left-nav="ultity" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-popup" class="nav-link" href="/b-admin/Popup/Index" title="@_translate.GetStringAdmin("left-menu.popup")">@Html.Raw(_translate.GetStringAdmin("left-menu.popup"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Calendar") ? "hidden" : "" ) id="nav-left-calendar" parent-left-nav="ultity" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-calendar" class="nav-link" href="/b-admin/Calendar/Index" title="@_translate.GetStringAdmin("left-menu.calendar")">@Html.Raw(_translate.GetStringAdmin("left-menu.calendar"))</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li @((!permissions.Contains("Contact") && !permissions.Contains("ContactList") && !permissions.Contains("EnquireList") && !permissions.Contains("Branch")) ? "hidden" : "" ) id="li-contact" class="nav-item">
+                    <a id="a-contact" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#contact">
+                        <span class="feather-icon"><i data-feather="at-sign"></i></span>
+                        <span class="nav-link-text">@Html.Raw(_translate.GetStringAdmin("left-menu.contact"))</span>
+                    </a>
+                    <ul id="contact" class="nav flex-column collapse collapse-level-1">
+                        <li class="nav-item">
+                            <ul class="nav flex-column">
+                                <li @(!permissions.Contains("Contact") ? "hidden" : "" ) id="nav-left-contact-info" parent-left-nav="contact" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-contact-info" class="nav-link" href="/b-admin/Contact/Index" title="@_translate.GetStringAdmin("left-menu.contact-info")">@Html.Raw(_translate.GetStringAdmin("left-menu.contact-info"))</a>
+                                </li>
+                                @*<li @(!permissions.Contains("Branch") ? "hidden" : "" ) id="nav-left-contact-branch" parent-left-nav="contact" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-contact-branch" class="nav-link" href="/b-admin/Branch/Index" title="@_translate.GetStringAdmin("left-menu.branch")">@Html.Raw(_translate.GetStringAdmin("left-menu.branch"))</a>
+                                    </li>*@
+                                <li @(!permissions.Contains("ContactList") ? "hidden" : "" ) id="nav-left-contact-list" parent-left-nav="contact" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-contact-list" class="nav-link " href="/b-admin/ContactList/Index" title="@_translate.GetStringAdmin("left-menu.inbox")">@Html.Raw(_translate.GetStringAdmin("left-menu.inbox"))</a>
+                                </li>
+                                @*<li @(!permissions.Contains("EnquireList") ? "hidden" : "" ) id="nav-left-contact-enquire" parent-left-nav="contact" class="nav-item bizmac-left-nav">
+                                        <a id="a-nav-left-contact-enquire" class="nav-link " href="/b-admin/EnquireList/Index" title="@_translate.GetStringAdmin("left-menu.enquire-list")">@Html.Raw(_translate.GetStringAdmin("left-menu.enquire-list"))</a>
+                                    </li>*@
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <hr class="nav-separator">
+            <div class="nav-header">
+                <span>Website Setting</span>
+                <span>GS</span>
+            </div>
+            <ul class="navbar-nav flex-column">
+                <li @((!permissions.Contains("GeneralConfiguration")) ? "hidden" : "" ) id="generalSetting" class="nav-item bizmac-left-nav">
+                    <a id="a-generalSetting" class="nav-link" href="/b-admin/GeneralConfiguration/Index">
+                        <span class="feather-icon"><i data-feather="settings"></i></span>
+                        <span class="nav-link-text">@Html.Raw(_translate.GetStringAdmin("left-menu.config"))</span>
+                    </a>
+                </li>
+                <li @((!permissions.Contains("Translation") && !permissions.Contains("Group") && !permissions.Contains("Users") && !permissions.Contains("Log") && !permissions.Contains("Trash")) ? "hidden" : "" ) id="li-permissions" class="nav-item">
+                    <a id="a-permissions" class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#permissions">
+                        <span class="feather-icon"><i data-feather="users"></i></span>
+                        <span class="nav-link-text">@Html.Raw(_translate.GetStringAdmin("left-menu.system"))</span>
+                    </a>
+                    <ul id="permissions" class="nav flex-column collapse collapse-level-1">
+                        <li class="nav-item">
+                            <ul class="nav flex-column">
+                                <li @(!permissions.Contains("Translation") ? "hidden" : "" ) id="nav-left-translation" parent-left-nav="permissions" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-translation" class="nav-link" href="/b-admin/Translation/Index" title="@_translate.GetStringAdmin("left-menu.translation")">@Html.Raw(_translate.GetStringAdmin("left-menu.translation"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Group") ? "hidden" : "" ) id="nav-left-group" parent-left-nav="permissions" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-group" class="nav-link" href="/b-admin/Group/Index" title="@_translate.GetStringAdmin("left-menu.group")">@Html.Raw(_translate.GetStringAdmin("left-menu.group"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Users") ? "hidden" : "" ) id="nav-left-member" parent-left-nav="permissions" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-member" class="nav-link" href="/b-admin/Users/Index" title="@_translate.GetStringAdmin("left-menu.member")">@Html.Raw(_translate.GetStringAdmin("left-menu.member"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Log") ? "hidden" : "" ) id="nav-left-log" parent-left-nav="permissions" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-log" class="nav-link" href="/b-admin/Log/Index" title="@_translate.GetStringAdmin("left-menu.log")">@Html.Raw(_translate.GetStringAdmin("left-menu.log"))</a>
+                                </li>
+                                <li @(!permissions.Contains("Trash") ? "hidden" : "" ) id="nav-left-trash" parent-left-nav="permissions" class="nav-item bizmac-left-nav">
+                                    <a id="a-nav-left-trash" class="nav-link" href="/b-admin/Trash/Index" title="@_translate.GetStringAdmin("left-menu.trash")">@Html.Raw(_translate.GetStringAdmin("left-menu.trash"))</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://support.bizmac.com.vn/submitticket.php?step=2&deptid=10" alt="Hỗ trợ" title="Hỗ trợ" target="_blank">
+                        <span class="feather-icon"><i data-feather="headphones"></i></span>
+                        <span class="nav-link-text">Hỗ trợ</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>

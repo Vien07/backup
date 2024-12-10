@@ -1,0 +1,138 @@
+﻿@using CmsModels;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+<!-- Container -->
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Lỗi</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <div class="row pb-20">
+                    <div class="col-sm">
+                        <div class="row">
+                            <!--filter action-->
+                            <div class="form-inline align-items-center pb-10">
+                                <div class="col-auto form-group">
+                                    <select class="form-control select2 form-control-sm border mr-5 mb-5">
+                                        <option selected>—@_translate.GetStringAdmin("log.select-all")</option>
+                                        <option value="2">@_translate.GetStringAdmin("log.select-login")</option>
+                                        <option value="3">@_translate.GetStringAdmin("log.select-action") </option>
+                                    </select>
+                                    <input type="search" id="key" class="form-control form-control-sm mr-5 mb-5" placeholder="Keyword search">
+                                    <button onclick="Search(0)" type="button" class="btn btn-sm btn-light mr-5 mb-5" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-search")"><i class="fal fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div><!--end filter action-->
+                        <div class="table-responsive ">
+                            <table class="table table-hover table-sm mb-0">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col" width="resizeable">@_translate.GetStringAdmin("Hàm")</th>
+                                        <th scope="col" class="resizeable">@_translate.GetStringAdmin("Lỗi")</th>
+                                        <th scope="col" class="resizeable">@_translate.GetStringAdmin("Thời gian")</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyData">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="my-1 mr-auto form-inline">
+                        <label class="my-1 mr-2 d-none d-md-block" for="show-data">@_translate.GetStringAdmin("log.lbl-show")</label>
+                        <select onchange="ChangePageNumber()" id="pageNumber" class="form-control select2 form-control-sm border mr-5">
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <div class="my-1 ml-auto" id="divPaging">
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+
+<!-- /Container -->
+@section Scripts{
+    <script>
+        var pageNumber = $('#pageNumber').val();
+        var page = 1;
+        $('#key').on("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                Search(0);
+            }
+        });
+
+        $(function () {
+            GetListData();
+        })
+        function GetListData() {
+
+            $.ajax({
+                url: '/b-admin/Log/GetListError',
+                method: 'GET',
+                data: {
+                    Page: page,
+                    pageNumber: pageNumber
+                }
+            }).done(function (data) {
+                // console.log(data.jsData);
+                LoadGrid(data.jsData, data.paging);
+            })
+        }
+        function LoadGrid(jsString, paging) {
+            var data = JSON.parse(jsString)
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                html += `<tr>
+                                              <td><a >${data[i].Trace}</a></td>
+                                            <td><a >${data[i].Message}</a></td>
+                                                <td>${moment(data[i].CreateDate).format('@ViewBag.DateFormat HH:mm:ss')}</td>
+                                            </tr>`
+            }
+            $("#tbodyData").html(html)
+            var pageHtml = Paging(paging.curentpage, paging.lastpage);
+            $("#divPaging").html(pageHtml)
+        }
+        function Search(currentPage) {
+
+            if (currentPage > 0) {
+                page = currentPage;
+            }
+            $.ajax({
+                url: '/b-admin/Log/GetListError',
+                method: 'GET',
+                data: {
+                    Page: page,
+                    PageNumber: pageNumber,
+                    Key: $('#key').val()
+                }
+            }).done(function (data) {
+                page = page;
+                //console.log(data.jsData);
+                LoadGrid(data.jsData, data.paging);
+            })
+        }
+        function ChangePageNumber() {
+            pageNumber = $('#pageNumber').val();
+            Search(page)
+        }
+    </script>
+}

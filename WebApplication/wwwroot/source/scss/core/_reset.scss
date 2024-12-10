@@ -1,0 +1,343 @@
+html,body {
+	width: 100%;
+	height: 100%;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: initial;
+	&.overflow-hidden {
+		height: auto;
+	}
+}
+body {
+	font-family: 	$font-family;
+	font-size: 		$font-size;
+	line-height: 	$line-height;
+	overflow-y: 	auto;
+	letter-spacing: -.1px;
+}
+input,
+button {
+	&:focus,
+	&:active {
+		outline: none;
+	}
+}
+button {
+	border: none;
+	background-color: transparent;
+	padding: 0;
+	color: inherit;
+}
+a {
+	text-decoration: none;
+	&[href^="mailto"],
+	&[href^="http"] {
+		word-wrap: break-word;
+	}
+	&.hover-link:hover {
+		text-decoration: underline !important;
+	}
+}
+[role="button"] {
+	cursor: pointer;
+}
+p {
+	margin-bottom: 10px;
+}
+img {
+	max-width: 100%;
+	.mainbody & {
+		display: block;
+	}
+}
+blockquote {
+	margin: 35px 0;
+	padding: 5px 20px;
+	border-left: 3px solid $primary;
+}
+[role="button"] {
+	cursor: pointer;
+}
+.font-unsmooth {
+	-webkit-font-smoothing: initial;
+	-moz-osx-font-smoothing: initial;
+}
+.block {
+	display: block;
+	position: relative;
+	z-index: 1;
+}
+.block-bg {
+	@extend %bg-image;
+	position: relative;
+	backface-visibility: hidden;
+	>.container,
+	>.container-fluid {
+		position: relative;
+		z-index: 10;
+	}
+}
+.bg-fixed {
+	@extend %bg-image;
+	background-attachment: fixed;
+}
+.bg-contain {
+	@extend %bg-image;
+	background-size: contain;
+}
+.bg-cover {
+	@extend %bg-image;
+	background-size: cover;
+}
+.absolute {
+	@extend %absolute-all;
+	z-index: 10;
+}
+a.absolute {
+	z-index: 99;
+}
+.bg-overlay {
+	@include fixed(0,0,0,0);
+	z-index: 800;
+	background-color: rgba(#000, .5);
+	display: none;
+}
+.text-underline {
+	text-decoration: underline !important;
+}
+.text-initial {
+	text-transform: initial !important;
+}
+.text-justify {
+	text-align: justify;
+}
+.desc {
+	line-height: $line-height-desc;
+}
+%ellipsis {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+}
+@for $i from 2 through 5 {
+	.ellipsis-#{$i} {
+		@extend %ellipsis;
+		-webkit-line-clamp: $i !important;
+	}
+}
+// Bootstrap Add 
+.offcanvas-backdrop {
+	@include fixed(0,0,0,0);
+    background: #000;
+    opacity: .5;
+    z-index: 700;
+}
+
+// My Custom
+.thumb-res {
+	--thumb-res-wide: 52.5%;
+	--thumb-res-wide-lg: 70%;
+	--thumb-res-square: 100%;
+	--thumb-res-tall: 125%;
+	--thumb-res-a4: 141.666667%;
+
+	@extend %bg-image;
+	overflow: hidden;
+	display: block;
+	position: relative;
+	margin-bottom: 1rem;
+	
+	$thumb-res: (
+	    "wide" 	   var(--thumb-res-wide),
+	    "wide-lg"  var(--thumb-res-wide-lg),
+	    "square"   var(--thumb-res-square),
+	    "tall" 	   var(--thumb-res-tall),
+		"a4"       var(--thumb-res-a4)
+	);
+	@each $name, $val in $thumb-res {
+		&.#{$name} {
+			padding-bottom: $val;
+		}
+	}
+	&:before,
+	>.absolute,
+	img {
+		@extend %absolute-all;
+		transition: all 0.4s ease;
+	}
+	&:before {
+		content: '';
+		pointer-events: none;
+		z-index: 44;
+	}
+	>.absolute {
+		@extend %bg-image;
+	}
+	img {
+		max-height: 100%;
+		margin: auto;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.block:hover &,
+	.d-flex:hover &,
+	&:hover {
+		&:before {
+			background-color: rgba(#fff, .25);
+		}
+	}
+}
+.avatar {
+	--avatar: 50px;
+	--avatar-xs: 32px;
+	--avatar-sm: 44px;
+	--avatar-md: 68px;
+	--avatar-lg: 85px;
+	--avatar-xl: 95px;
+
+	@extend %bg-image;
+	@extend %inline-flex-center;
+	width: var(--avatar);
+	height: var(--avatar);
+	flex: 0 0 auto;
+
+	$avatar: (
+        xs var(--avatar-xs),
+        sm var(--avatar-sm),
+        md var(--avatar-md),
+        lg var(--avatar-lg),
+        xl var(--avatar-xl),
+	);
+	@each $class, $size in $avatar {
+		&-#{$class} {
+			width: $size;
+			height: $size;
+		}
+	}
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+.overlay-dark,
+.overlay-white {
+	--bg-overlay: #000;
+	--opacity: .6;
+	@extend %bg-image;
+	@extend %absolute-all;
+	opacity: var(--opacity);
+	background-color: var(--bg-overlay);
+	pointer-events: none;
+}
+.overlay-dark {
+    --bg-overlay: #000;
+}
+.overlay-white {
+	--bg-overlay: #fff;
+}
+.preloader {
+	$loader-icon-width: 200px;
+
+	@include fixed(0,null,0,0);
+	z-index: 9123456678;
+	background: #fff;
+	display: flex;
+	width: 0;
+	align-items: center;
+	justify-content: center;
+	transition: width .85s cubic-bezier(0.5, 0.01, 0.17, 0.97);
+
+	&.active {
+		left: auto;
+		right: 0;
+		width: 100%;
+		.preloader-in {
+			opacity: 1;
+		}
+		&.already {
+			width: 0;
+			left: 0;
+			right: auto;
+			pointer-events: none;
+			.preloader-in {
+				opacity: 0;
+			}
+		}
+	}
+	.shape {
+        @extend %absolute-all;
+        transform: translateX(-100%);
+        background-color: #f9f3eb;
+        + .shape {
+        	transform: translateX(100%);
+        }
+	}
+	&-in {
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: contain;
+		width: $loader-icon-width;
+		height: 90px;
+		overflow: hidden;
+		position: relative;
+		transition: opacity .85s ease;
+		animation: beatload 1s ease 0.2s infinite;
+		text-align: center;
+		opacity: 0;
+		img {
+			display: block;
+			margin: auto;
+			max-height: 100%;
+		}
+		&:before {
+			content: '';
+			@include absolute(0,null,0);
+			width: 110px;
+			height: 100%;
+			background: linear-gradient(90deg,rgba(#fff,0),#fff,rgba(#fff,0));
+			transform: translateX(-$loader-icon-width - 20px);
+			animation: lightmove 1.1s ease infinite;
+		}
+	}
+	@keyframes lightmove {
+		100% {
+			transform: translateX($loader-icon-width + 20px);
+		}
+	}
+	@keyframes beatload {
+		30% {
+			transform: scale(.92);
+		}
+		50% {
+			transform: scale(1.05);
+		}
+		100% {
+			transform: scale(1.05);
+		}
+	}
+}
+.wrapper:not(.login-page) {
+	overflow: hidden;
+	opacity: 0;
+	transition: opacity 1s cubic-bezier(0.44, 0.01, 0.38, 0.98), margin .95s cubic-bezier(0.46, 0.04, 0.25, 1);
+	margin-top: 3rem;
+	&.already {
+		opacity: 1;
+		margin-top: 0;
+	}
+}
+.mainer {
+	margin: auto;
+	min-height: 300px;
+	z-index: 9;
+}
+[data-fancybox] {
+	outline: none !important;
+}
+.d-width {
+	width: 36px;
+	flex: 0 0 auto;
+	height: 0;
+}

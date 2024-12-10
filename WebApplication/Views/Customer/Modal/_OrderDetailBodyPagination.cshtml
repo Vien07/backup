@@ -1,0 +1,71 @@
+﻿@using DTO.Cart
+@model NameCardPaginationModel
+@{
+    Layout = null;
+}
+
+@if (Model is not null)
+{
+    int countCurrentItems = Model.PagedList.LastItemOnPage;
+    int pageIndex = Model.PagedList.PageNumber;
+    int pageSize = Model.PagedList.PageSize;
+    int totalItems = Model.PagedList.TotalItemCount;
+    int blockPage = 5;
+
+    int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+    int currentBlock = (int)Math.Ceiling(pageIndex / (double)blockPage);
+    int startPage = (currentBlock - 1) * blockPage + 1;
+    int endPage = Math.Min(startPage + blockPage - 1, totalPages);
+
+
+    @if (pageIndex > 1)
+    {
+        <div class="page-item prev">
+            <a onclick="Search(@(pageIndex - 1))" href="javascript: void(0);" data-value="@(pageIndex - 1)" aria-label="Previous" title="Trước" alt="Trước">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        </div>
+    }
+
+    @if (startPage > 1)
+    {
+        <div class="page-item">
+            <a onclick="Search(1)" class="page-counter" href="javascript: void(0);" data-value="1" alt="1" title="1">1</a>
+        </div>
+        @if (startPage > 2)
+        {
+            <div class="page-item">
+                <a class="page-counter" href="javascript: void(0);">...</a>
+            </div>
+        }
+    }
+
+    @for (int i = startPage; i <= endPage; i++)
+    {
+        <div class="page-item @(i == pageIndex ? "active" : "")">
+            <a onclick="Search(@i)" class="page-counter" href="javascript: void(0);" data-value="@i" alt="@i" title="@i">@i</a>
+        </div>
+    }
+
+    @if (endPage < totalPages)
+    {
+        @if (endPage < totalPages - 1)
+        {
+            <div class="page-item">
+                <a class="page-counter" href="javascript: void(0);">...</a>
+            </div>}
+        <div class="page-item">
+            <a onclick="Search(@totalPages)" class="page-counter" data-value="@totalPages" href="javascript: void(0);" alt="@totalPages" title="@totalPages">@totalPages</a>
+        </div>
+    }
+
+    @if (pageIndex < totalPages)
+    {
+        <div class="page-item next">
+            <a onclick="Search(@(pageIndex + 1))" href="javascript: void(0);" data-value="@(pageIndex + 1)" aria-label="Next" title="Sau" alt="Sau">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </div>
+    }
+
+}

@@ -1,0 +1,90 @@
+﻿@using System.Web
+@using CMS.Services
+@using CMS.Services.TranslateServices
+@using DTO.Customer;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+@using CMS.Repository
+
+@inject ITranslateServices _translate
+@inject IContact_Repository _repContact
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string banner = ViewBag.Banner as string;
+    var customer = ViewBag.Customer as CustomerDto;
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    string reCapchaSiteKey = ViewBag.reCapchaSiteKey as string;
+    dynamic data = _repContact.GetContactInfo(lang);
+}
+
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+    @section Banner{
+    <div class="banner-lg block-bg" style="background-image: url(@banner)">
+        <div class="container d-flex align-items-center h-100">
+            <div class="text-banner">
+                <h1 class="tt-md text-uppercase">@Html.Raw(_translate.GetString("menu.cart"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@_translate.GetUrl("url.home")" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item active"><a href="#" title="@Html.Raw(_translate.GetString("menu.cart"))" alt="@Html.Raw(_translate.GetString("menu.cart"))" target="_self">@Html.Raw(_translate.GetString("menu.cart"))</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+}
+    <div class="block-bg">
+        <div class="container py-5">
+            <div class="row gy-3">
+                <div class="col-md-7 col-lg-8">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-3">
+                        <div class="tt-icon text-primary tt-lg fw-medium">Sản phẩm của bạn</div>
+                        <div class="desc text-desc text-right mb-4"><span id="totalItem">0</span> sản phẩm</div>
+                    </div>
+                    <div id="cart-table"></div>
+                </div>
+                <div class="col-md-5 col-lg-4">
+                    <div class="block-color block-cart">
+                        <div class="d-sm-flex justify-content-between mb-3">
+                            <div class="tt-ball tt-xs text-primary fw-medium">Đơn hàng</div>
+@*                            <div class="text-desc">#12345</div>
+*@                        </div>
+                        <div class="d-flex align-items-start justify-content-between mb-3">
+                            <div class="tt text-body fw-medium">Thành tiền</div>
+                            <div class="right text-right">
+                                <div class="price-origin fs-24 fw-medium"><span id="totalTableCart">0</span><u>đ</u></div>
+                                <div class="text-desc">(Giá trên chưa tính phí vận chuyển và VAT)</div>
+                            </div>
+                        </div>
+                        <div class="text-center mb-3">
+                            <a class="btn btn-secondary w-100" alt="Mua hàng" title="Mua hàng" href="@_translate.GetUrl("url.check-out")">Mua hàng</a>
+                        </div>
+                        <div class="block block-note">
+                            <div class="text-center">
+                                Lưu ý: Sau khi thanh toán thành công, nếu bạn không nhận được e-mail xác nhận đơn hàng, bạn vui lòng liên hệ với Nitecare qua số hotline:
+                                <div class="fw-medium fs-24">@Html.Raw(data["contact-tel"])</div> để được hỗ trợ ngay nhé!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <partial name="/Views/Shared/Convenience.cshtml" />
+
+    @section Scripts {
+    <script>
+        loadTableCart(lang);
+    </script>
+}

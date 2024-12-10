@@ -1,0 +1,92 @@
+.menu-vertical {
+	margin: 0;
+	padding: 0;
+	li {
+		list-style: none;
+		margin: 0;
+	}
+	a {
+		text-decoration: none !important;
+		padding: 1px 0;
+		line-height: 1.35;
+		color: $color-body;
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		vertical-align: top;
+		&:before {
+			content: '\f105';
+			font-family: 'Font Awesome 5 Pro';
+			margin-right: 8px;
+			opacity: .65;
+		}
+	}
+	> li {
+		position: relative;
+		margin-bottom: 1px;
+		> a {
+			color: darken($color-body, 5%);
+			position: relative;
+			padding: 6px 0;
+			display: flex;
+			align-items: center;
+			border-radius: 5px;
+			overflow: hidden;
+			letter-spacing: -.2px;
+
+			&:before {
+				content: '\f105';
+				font-family: 'font awesome 5 pro';
+                margin: 0 8px 0 2px;
+                opacity: .4;
+                font-weight: 400;
+			}
+		}
+		&:hover > a,
+		&.active > a {
+			color: darken($primary, 10%);
+			&:after {
+				transition: width 0.3s cubic-bezier(0.71, 0.01, 0.21, 0.99);
+				width: 100%;
+				left: 0;
+				right: auto;
+			}
+		}
+		&.active > a {
+			font-weight: bold;
+		}
+	}
+	ul {
+		display: none;
+		padding: 0;
+        margin: 3px 0 8px 20px;
+		a {
+			margin-bottom: 5px;
+			&:before {
+				display: none;
+			}
+		}
+	}
+	// hover
+	li:hover > a,
+	li.active > a {
+		color: $primary;
+		&:after {
+			opacity: 1;
+			width: 100%;
+		}
+	}
+	li.active > ul {
+		display: block;
+	}
+}
+@include media-breakpoint-up(md) {
+	.menu-vertical {
+		font-size: 15px;
+	}
+}
+@include media-breakpoint-up(lg) {
+	.menu-vertical {
+		font-size: 16px;
+	}
+}

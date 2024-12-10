@@ -1,0 +1,443 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@using System.Web;
+@using DTO.Recruitment;
+@using DTO.News;
+@using Microsoft.AspNetCore.Http;
+@using DTO.Website;
+
+@inject IHttpContextAccessor _httpContextAccessor;
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    RecruitmentDto data = ViewBag.Data as RecruitmentDto;
+    string content = HttpUtility.UrlDecode(data.Content);
+    string description = Convert.ToString(data.Description);
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    var url = Context.Request.Host.Value;
+    var share = url + _translate.GetUrl("url.recruitment") + data.Slug + ".html";
+    var lang = _httpContextAccessor.HttpContext.Session.GetString("WebsiteLang");
+    string banner = ViewBag.Banner as string;
+    string titleBanner = ViewBag.TitleBanner as string;
+    string reCapchaSiteKey = ViewBag.reCapchaSiteKey as string;
+    string recapcha = ViewBag.Recaptcha as string;
+    var relateList = ViewBag.RelateList;
+    var preNext = ViewBag.PreNext as Dictionary<string, RecruitmentDto>;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <div class="banner-lg banner-prm " style="background-image:url(@banner)">
+        <div class="container d-flex align-items-end h-100">
+            <div class="text-banner my-3">
+                <div class="tt-md mt-3 mb-5">
+                    @Html.Raw(titleBanner)
+                </div>
+                <div class="breadcumb d-flex justify-content-center">
+                    <div class="breadcumb-items">
+                        <a href="@_translate.GetUrl("url.home")" title="@Html.Raw(_translate.GetString("menu.home"))" class="breadcumb-link text-uppercase" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                    </div>
+                    <div class="breadcumb-items">
+                        <a href="@_translate.GetUrl("url.news")" title="@Html.Raw(_translate.GetString("menu.news"))" alt="@Html.Raw(_translate.GetString("menu.news"))" class="breadcumb-link text-uppercase">@Html.Raw(_translate.GetString("menu.news"))</a>
+                    </div>
+                    <div class="breadcumb-items">
+                        <a href="@_translate.GetUrl("url.recruitment")@(data.Slug + ".html")" title="@Html.Raw(data.Title)" alt="@Html.Raw(data.Title)" class="breadcumb-link active text-uppercase">@Html.Raw(data.Title)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (data != null)
+{
+    <div class="block-bg block-second section-news-recruitment">
+        <div class="container py-3">
+            <div class="block-sidebar" data-wrapper>
+                <div class="sidebar" data-sidebar>
+                    <div data-stick data-width-fill>
+                        <div class="header-section">
+                            <h2 class="tt-lg text-third mb-0">@Html.Raw(_translate.GetString("label.news-and-event"))</h2>
+                        </div>
+                        <div class="pane mb-4">
+                            <ul class="menu-vertical">
+                                <li>
+                                    <div class="block">
+                                        <a href="@_translate.GetUrl("url.recruitment")" title="@Html.Raw(_translate.GetString("menu.recruitment"))" alt="@Html.Raw(_translate.GetString("menu.recruitment"))" target="_self">
+                                            @Html.Raw(_translate.GetString("menu.recruitment"))
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+                        @if (advertisements != null && advertisements.Any())
+                        {
+                            @foreach (var item in advertisements)
+                            {
+                                <div class="pane bannerqc">
+                                    <a class="block" href="@item.Link" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="@(item.TargetLink == "_blank" ? "_blank" : "")">
+                                        <img class="fit-cover" src="@item.Image" alt="@Html.Raw(item.TitleAlt)" title="@Html.Raw(item.TitleAlt)" />
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="mainbody mb-4 mb-md-0" data-mainbody>
+                    <div class="content-master">
+                        <div class="social-share">
+                            <span class="label fs-14">@Html.Raw(_translate.GetString("label.share")):</span>
+                            <a class="btn rounded-circle btn-transprent-green fab fa-linkedin-in" href="https://www.linkedin.com/sharing/share-offsite/?url=@Html.Raw(share)" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+                            <a class="btn rounded-circle btn-transprent-green bi bi-twitter" href="https://twitter.com/intent/tweet?original_referer=@Html.Raw(share)&amp;via=" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+                            <a class="btn rounded-circle btn-transprent-green fab fa-facebook-f" href="https://www.facebook.com/sharer/sharer.php?u=@Html.Raw(share)" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+                        </div>
+                        <div class="header-content">
+                            <h3 class="tt-xl tt-post fw-bold tt-line black bold">@Html.Raw(data.Title)</h3>
+                            <div class="desc fs-14 mb-4 ">
+                                @Html.Raw(data.Description)
+                            </div>
+                        </div>
+                        <img class="fit-cover" src="@data.PicFull" alt="@Html.Raw(data.Title)" title="@Html.Raw(data.Title)">
+                        <div class="card-recruitment">
+                            <div class="row row-cols-2 row-cols-lg-4">
+                                @if (data.Type != "")
+                                {
+                                    <div class="col">
+                                        <div class="picon">
+                                            <span class="fa fa-user-friends"></span>@Html.Raw(_translate.GetString("label.type-recruit"))
+                                        </div>
+                                        <div class="desc type-job">
+                                            <div class="type">@Html.Raw(data.Type)</div>
+                                        </div>
+                                    </div>
+                                }
+                                @if (data.Salary != "")
+                                {
+                                    <div class="col">
+                                        <div class="picon">
+                                            <span class="fa fa-dollar-sign"></span>@Html.Raw(_translate.GetString("label.salary"))
+                                        </div>
+                                        <div class="desc">
+                                            @Html.Raw(data.Salary)
+                                        </div>
+                                    </div>
+                                }
+                                @if (data.Exp != "")
+                                {
+                                    <div class="col">
+                                        <div class="picon">
+                                            <span class="fa fa-briefcase"></span>@Html.Raw(_translate.GetString("label.exp"))
+                                        </div>
+                                        <div class="desc">
+                                            @Html.Raw(data.Exp)
+                                        </div>
+                                    </div>
+                                }
+
+                                <div class="col">
+                                    <div class="picon">
+                                        <span class="far fa-clock"></span>@Html.Raw(_translate.GetString("label.expire-date"))
+                                    </div>
+                                    <div class="desc time">
+                                        @Html.Raw(data.ExpiredDate)
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="content-post">
+                            @Html.Raw(data.Content)
+                        </div>
+                        <div class="modal" id="modal-success">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content block-second px-5 py-4">
+                                    <div class="modal-header">
+                                        <button onclick="close2()" class="btn-close"></button>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="tt-lg text-third">
+                                            @Html.Raw(_translate.GetString("label.success-title"))
+                                        </div>
+                                        <div class="desc"> @Html.Raw(_translate.GetString("label.success-content"))</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-recruitment">
+                            <div class="tt-md tt-line text-third mb-5">@Html.Raw(_translate.GetString("label.apply-now"))</div>
+                            <form class="form-validate" id="frmApplyCV" onsubmit="Apply(); return false;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="name">@Html.Raw(_translate.GetString("label.fullname")):</label>
+                                            <input type="text" class="form-control" name="FullName" id="FullName" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="phone">@Html.Raw(_translate.GetString("label.phone-number")):</label>
+                                            <input data-parsley-phone type="text" class="form-control" name="PhoneNumber" id="PhoneNumber">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="email">@Html.Raw("Email"):</label>
+                                            <input type="email" class="form-control" name="Email" id="Email" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <div class="form-group mb-3">
+                                                <label for="label">@Html.Raw(_translate.GetString("label.title")):</label>
+                                                <input type="text" class="form-control" name="Title" id="Title" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group mb-3">
+                                            <label for="content">@Html.Raw(_translate.GetString("label.content")):</label>
+                                            <textarea class="form-control" rows="5" name="Content" id="Content" required></textarea>
+                                        </div>
+                                    </div>
+                                    <input type="text" hidden name="NameRecruit" value="@data.Title" />
+                                    <div class="col-12 mb-3">
+                                        <div class="form-group form-group-dash">
+                                            <input class="input--file" type="file" name="File" id="file_cv" data-multiple-caption="{count} files selected" multiple>
+                                            <label class="label_file fs-14" for="file_cv">
+                                                <span>@Html.Raw("CV")</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <label>
+                                        <span id="test"></span>
+                                    </label>
+                                    <div class="col-12 text-center">
+                                        <div class="d-flex flex-wrap align-items-center justify-content-left">
+                                            <div @(recapcha == "off" ? "hidden" : "") class="g-recaptcha my-2 mr-3" data-sitekey="@reCapchaSiteKey"></div>
+                                            <button class="btn btn-primary btn-recruitment-form" type="submit">@Html.Raw(_translate.GetString("label.apply"))</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <div class="news-next-prev row row-cols-1 row-cols-md-2 py-3 mb-5">
+                            @if (preNext != null)
+                            {
+                                if (preNext["pre"] != null)
+                                {
+                                    <div class="news-prev col wow fadeInRight">
+                                        <div class="block">
+                                            <a class="absolute" href="@_translate.GetUrl("url.recruitment")@(preNext["pre"].Slug + ".html")" title="@Html.Raw(preNext["pre"].Title)" alt="@Html.Raw(preNext["pre"].Title)">
+                                            </a>
+                                            <div class="flexbox d-flex">
+                                                <i class="fa fa-angle-left"></i>
+                                                <div class="block block-post">
+                                                    <div class="tt text-primary">@Html.Raw(_translate.GetString("label.pre-news"))</div>
+                                                    <div class="tt-md text-third">@Html.Raw(preNext["pre"].Title)</div>
+                                                    <div class="info fs-14">
+                                                        @Html.Raw(preNext["pre"].Description)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                }
+
+                                if (preNext["next"] != null)
+                                {
+                                    <div class="news-next col wow fadeInLeft">
+                                        <div class="block">
+                                            <a class="absolute" href="@_translate.GetUrl("url.recruitment")@(preNext["next"].Slug + ".html")" title="@Html.Raw(preNext["next"].Title)" alt="@Html.Raw(preNext["next"].Title)">
+                                            </a>
+                                            <div class="flexbox d-flex">
+                                                <div class="block block-post">
+                                                    <div class="tt text-primary">@Html.Raw(_translate.GetString("label.next-news"))</div>
+                                                    <div class="tt-md text-third">@Html.Raw(preNext["next"].Title)</div>
+                                                    <div class="info fs-14">
+                                                        @Html.Raw(preNext["next"].Description)
+                                                    </div>
+                                                </div>
+                                                <i class="fa fa-angle-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div style="margin-top:25px" class="text-center">@_translate.GetString("common.infoisupdating")</div>
+}
+
+
+
+
+
+@section Scripts {
+    <script src="/css/plugins/parsley.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+
+        function close2() {
+            $("#modal-success").removeClass("active");
+        }
+        var recapchaStatus = '@ViewBag.Recaptcha';
+        var title = '@_translate.GetString("label.success-title")';
+        var content = '@_translate.GetString("label.success-content")';
+        var recruitmentUrl = "@_translate.GetUrl("url.recruitment")";
+        'use strict';
+        ; (function (document, window, index) {
+        var inputs = document.querySelectorAll('.input--file');
+        Array.prototype.forEach.call(inputs, function (input) {
+        var label = input.nextElementSibling,
+        labelVal = label.innerHTML;
+        input.addEventListener('change', function (e) {
+        var fileName = '';
+        if (this.files && this.files.length > 1)
+        fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
+        else
+        fileName = e.target.value.split('\\').pop();
+
+        if (fileName)
+        document.querySelector('#test').innerHTML = fileName;
+        else
+        label.innerHTML = labelVal;
+        });
+        input.addEventListener('focus', function () { input.classList.add('has-focus'); });
+        input.addEventListener('blur', function () { input.classList.remove('has-focus'); });
+        });
+        }(document, window, 0));
+        // Validate
+        $(function () {
+        $(".form-validate").parsley();
+        window.Parsley.addValidator('phone', {
+        requirementType: 'string',
+        validateString: function (value) {
+        return /([+84|0|84])+([0-9]{9})\b/.test(value);
+        },
+        messages: {
+        en: 'This value should be a multiple of %s',
+        vi: 'Đây không phải là một số điện thoại hợp lệ'
+        }
+        });
+
+        Parsley.addMessages('vi', {
+        defaultMessage: "Giá trị này có vẻ không hợp lệ.",
+        type: {
+        email: "Email không hợp lệ",
+        },
+        notblank: "Giá trị này không được bỏ trống.",
+        required: "Vui lòng không để trống.",
+        });
+
+        Parsley.addMessages('en', {
+        defaultMessage: "This value does not appear to be valid.",
+        type: {
+        email: "Invalid email",
+        },
+        notblank: "This value cannot be left blank.",
+        required: "Please do not leave it blank.",
+        });
+        Parsley.setLocale('@lang');
+        });
+        function ValidateRecaptcha() {
+        if (recapchaStatus == "on") {
+        var recaptcha = $("#g-recaptcha-response").val();
+        if (recaptcha === "") {
+        $("#parsley-id-recCatcha").removeAttr("hidden")
+        return false;
+
+        } else {
+        $("#parsley-id-recCatcha").attr("hidden", "true")
+        return true;
+        }
+        } else {
+        return true;
+        }
+        }
+        function Apply(e) {
+        var $selector = $('.form-validate'),form = $selector.parsley();
+        var validate = form.validate();
+        //console.log(validate);
+        if (validate == true) {
+
+        if (ValidateRecaptcha()) {
+        var formData = new FormData($("#frmApplyCV").get(0));
+        formData.append('RecruitmentDetailPid', '@data.Pid');
+        $.ajax({
+        url: "/Recruitment/SendCV",
+        method: "POST",
+        data: formData,
+        processData: false,
+        contentType: false
+        }).done(function (data) {
+        if (data) {
+        $('#FullName').val("");
+        $('#Email').val("");
+        $('#PhoneNumber').val("");
+        $('#file_cv').val("");
+        $('#Content').val("");
+        $("#success_mess").removeAttr("hidden");
+        $("#send-fail").attr("hidden");
+
+        $("#modal-success").addClass("active");
+        setTimeout(function () { window.location.replace(recruitmentUrl) }, 2000);
+        } else {
+        $("#send-fail").removeAttr("hidden");
+        $("#success_mess").attr("hidden");
+        }
+        })
+        }
+
+        }
+        }
+    </script>
+}

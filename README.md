@@ -1,4 +1,4 @@
-# PartitionModuleCMS
+# Temp - Products
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/canh.cd/partitionmodulecms.git
+git remote add origin https://git.bizmac.io/web.client/temp-products.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/canh.cd/partitionmodulecms/-/settings/integrations)
+- [ ] [Set up project integrations](https://git.bizmac.io/web.client/temp-products/-/settings/integrations)
 
 ## Collaborate with your team
 

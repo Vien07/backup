@@ -1,0 +1,49 @@
+﻿@using System.Web
+@using DTO.About;
+@using CMS.Services.TranslateServices
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    AboutDto data = ViewBag.Data as AboutDto;
+
+    var url = Context.Request.Host.Value;
+    string banner = ViewBag.Banner as string;
+    
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+
+}
+
+@section Banner{
+    <nav class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+            </li>
+            <li class="breadcrumb-item active">@Html.Raw(_translate.GetString("menu.about"))</li>
+        </ol>
+    </nav>
+}
+
+
+@if (data != null)
+{
+    <div class="container">
+        <section class="banner-main block-bg d-flex align-items-center mb-5" style="background-image:url('@banner')">
+            <div class="text-banner">
+                <div class="tt-lg fw-semibold">@Html.Raw(_translate.GetString("menu.about"))</div>
+            </div>
+        </section>
+        @Html.Raw(data.Content)
+    </div>
+}
+else
+{
+    <div style="margin-top:25px" class="text-center">@Html.Raw(_translate.GetString("common.infoisupdating"))</div>
+}

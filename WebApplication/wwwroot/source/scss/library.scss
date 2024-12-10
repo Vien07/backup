@@ -1,0 +1,61 @@
+@charset "UTF-8";
+/*! 
+ * BizMaC Content Management System
+ * Copyright (c) Rainbow E-Commerce., Ltd
+ ***************************************************************************
+ * (h)(028)-7300-6461 / (e)info@bizmac.com.vn / (w)www.bizmac.com
+ * Web Design, E-Commerce, Domain Hosting, Cloud Product & Business Services
+ ***************************************************************************
+ * This library is not free software; you can't redistribute it and/or
+ * modify it under the terms of the BizMaC Team!
+ * License as published by the Rainbow E-Commerce., Ltd
+ */
+@import "custom";
+
+@import "../bootstrap/bootstrap";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css");
+@import "../publish/css/fonts/Awesome/fontawesome-all";
+@import "mixin";
+
+@import "plugins/fancybox/fancybox";
+@import "plugins/flickity/flickity-install";
+@import "plugins/niceselect/nice-select";
+@import "plugins/parsley/parsley";
+
+@import "core/fonts";
+@import "core/reset";
+@import "core/title";
+@import "core/buttons";
+@import "core/table";
+@import "core/form-search";
+@import "core/modal";
+@import "core/animation";
+@import "core/block-sidebar-stick";
+@import "core/dd-hover";
+@import "core/social";
+
+@import "layout/form";
+@import "layout/404";
+@import "layout/search";
+@import "layout/menu-vertical";
+@import "layout/header";
+@import "layout/menu";
+@import "layout/footer";
+@import "layout/banner-all";
+@import "layout/pagination";
+
+
+// Main Page
+@import "pages/block-section";
+@import "pages/index";
+
+@import "pages/products/products";
+@import "pages/rating/rate";
+@import "pages/wishlist";
+
+@import "pages/member/login";
+
+@import "pages/news";
+@import "pages/feedback";
+@import "pages/contact";
+@import "pages/help";

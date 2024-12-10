@@ -1,0 +1,235 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+@section styles{
+    <!-- Bootstrap Dropzone CSS -->
+    <link href="/b-admin/vendors/dropzone/dist/dropzone.css" rel="stylesheet" type="text/css" />
+}
+
+<!-- Container -->
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Khách hàng</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <!--Discription table-->
+                @*<p class="mb-20">
+                        @_translate.GetStringAdmin("table-desc.news-cate")
+                    </p>*@
+                <!--filter action-->
+                <div class="form-inline align-items-center">
+                    <div class="col-auto form-group pl-0 pr-2 mb-3">
+                        <select onchange="Search()" id="selectActive" class="form-control select2 form-control-sm">
+                            <option value="" selected>—@_translate.GetStringAdmin("group.select-all")</option>
+                            <option value="1">@_translate.GetStringAdmin("group.select-active")</option>
+                            <option value="0">@_translate.GetStringAdmin("group.select-inactive")</option>
+                        </select>
+                    </div>
+                    <div class="col-auto form-group px-2 mb-3 ">
+                        <input id="key" type="search" class="form-control form-control-sm" placeholder="Keyword search">
+                        <div class="input-group-append">
+                            <button onclick="Search()" class="btn btn-sm btn-light ml-2" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-search")" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-auto mb-3 px-2">
+                        <a href="~/b-admin/Customer/CreateOrUpdate" class="btn btn-sm btn-success waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a">
+                            <i class="fas fa-layer-plus mr-1"></i>@_translate.GetStringAdmin("group.btn-add")
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive">
+                                <table id="tableData" class="table table-sm table-hover mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="py-2" width="5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input onclick="CheckAll()" type="checkbox" class="custom-control-input" id="customcheck-all">
+                                                    <label class="custom-control-label position-static" for="customcheck-all"></label>
+                                                </div>
+                                            </th>
+                                            <th class="py-2">Khách hàng</th>
+                                            <th class="py-2 text-center" width="120">Ngày tạo</th>
+                                            <th class="py-2 text-center" width="200">Kích hoạt</th>
+                                            <th class="py-2 text-center" width="100">
+                                                @_translate.GetStringAdmin("label.action")
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyData"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="my-1 mr-auto">
+                                <button type="button" onclick="Enable(0,true)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="active"><i class="fas fa-eye"></i></button>
+                                <button type="button" onclick="Enable(0,false)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="inactive"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" onclick="DeleteMulti()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fal fa-trash-alt"></i></button>
+                            </div>
+                            <div class="my-1 ml-auto" id="divPaging">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+
+<!-- /Container -->
+<!-- Custom Modal -->
+<div class="modal fade" id="imageModel" tabindex="-1" role="dialog" aria-labelledby="modal-modi" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hình ảnh</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex">
+                    <div class="mr-3">
+                        <div class="avatar avatar-xl rounded">
+                            <img id="modalImages" src="/b-admin/dist/img/avatar3.jpg" class="avatar-img rounded">
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="form-group mb-2 pb-1">
+                            <textarea id="caption" type="text" class="form-control form-control-sm" placeholder="Mô tả"></textarea>
+                        </div>
+                        <div class="form-group mb-2 pb-1 px-0 col-5">
+                            <button id="btnDeleteImages" class="btn btn-danger">Xóa</button>
+                            <button id="btnSaveImages" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Custom Modal -->
+
+
+
+
+@section Scripts{
+    <script type="text/javascript">
+        //define
+        var actionUrl = "/b-admin/Customer/"
+        var lang = "@ConstantStrings.DefaultLangAdmin";
+
+        $(function () {
+            LoadData(lang);
+        })
+
+
+
+        //grid action
+function LoadGrid(jsString, paging) {
+            var data = JSON.parse(jsString)
+            $("#tbodyData").html("")
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                let address = ``;
+                let phone = ``;
+                if (data[i].StringAddress) {
+                    if (data[i].StringAddress != "") {
+                        address = `<li><p class="text-desc">Địa chỉ: ${data[i].StringAddress}</p></li>`
+                    }
+                }
+                if (data[i].PhoneNumber) {
+                    if (data[i].PhoneNumber != "") {
+                        phone = `<li><p class="text-desc">Điện thoại: ${data[i].PhoneNumber}</p></li>`
+                    }
+                }
+                html = ` <tr class="${!data[i].Enabled ? "inactive" : ""}">
+                                 <td>
+                                  <div class="custom-control custom-checkbox">
+                                      <input  onclick="KtCheckbox()" type="checkbox" class="custom-control-input" id="customCheck-${data[i].Pid}" name="Chk" value="${data[i].Pid}">
+                                      <label class="custom-control-label" for="customCheck-${data[i].Pid}">&nbsp;</label>
+                                  </div>
+                                </td>
+                                <td>
+                                <div class="d-flex align-items-center gap-2">
+                                  <div class="avatar avatar-sm rounded rounded-circle mr-3" style="background-image: url('${data[i].PicThumb}');"></div>
+                                  <div class="group-info">
+                                    <a class="" alt="edit" title="edit" href="/b-admin/Customer/CreateOrUpdate?pid=${data[i].Pid}"}" data-toggle="tooltip" data-original-title="edit">${data[i].FullName}</a>
+                                    <ul class="group-info font-13">
+                                      <li><p class="text-desc">Email: ${data[i].Email}</p></li> ` + phone + address +
+
+                                   ` </ul>
+                                  </div>
+                                </div>
+                              </td>
+                                <td class="text-center"><p>${moment(data[i].CreateDate).format('@ViewBag.DateFormat HH:mm:ss')}</p></td>
+                                <td class="text-center">
+                                    <span class="toggle-wrap">
+                                        <div id="toggle_${data[i].Pid}" class="toggle toggle-sm toggle-simple toggle-light toggle-bg-success toggle1 mt-5"></div>
+                                    </span>
+                                </td>
+                                <td class="text-center text-nowrap">
+                                  <a style="cursor:pointer" href="/b-admin/Customer/CreateOrUpdate?pid=${data[i].Pid}" class="mx-2" data-toggle="tooltip" data-original-title="orders"><i class="fas fa-shopping-cart text-dark"></i></a>
+                                  <a style="cursor:pointer" onclick="Delete(${data[i].Pid})" class=""  data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a>
+                            </tr>`   ;
+                $("#tbodyData").append(html)
+                InitToggle(data[i]);
+            }
+            var pageHtml = Paging(paging.curentpage, paging.lastpage);
+            $("#divPaging").html(pageHtml)
+            ToolTip();
+        }
+        function GetAddress(provinceValue, districtValue, wardValue) {
+            try {
+                const province = getNameByCode('/data/VietNam/province.json', provinceValue);
+                const district = getNameByCode(`/data/VietNam/district/${provinceValue}.json`, districtValue);
+                const ward = getNameByCode(`/data/VietNam/ward/${districtValue}.json`, wardValue);
+
+                return `${ward}, ${district}, ${province}`;
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+        }
+
+        function getNameByCode(url, code) {
+            try {
+                let returnValue = '';
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    async: false,
+                    success: function (data) {
+                        returnValue = data[code].name_with_type;
+                    },
+                    error: function (err) {
+                        console.error(err)
+                    }
+                });
+                return returnValue;
+            } catch (error) {
+                console.error(`Error fetching data: ${error}`);
+                throw error;
+            }
+        }
+
+    </script>
+}
+

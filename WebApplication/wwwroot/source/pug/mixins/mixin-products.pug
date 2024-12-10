@@ -1,0 +1,59 @@
+mixin product_item(imgsrc, tt, label, btn)
+    .block
+        +a("product-detail.html", "absolute",)
+        .thumb-res.a4: img(src=path+'products/'+imgsrc alt="")
+        .info
+            if label == 'hot'
+                .tt
+                    b.badge.bg-danger.bg-gradient.text-uppercase.rounded-1.px-1.mr-1.fs-13 Hot
+                    =tt
+            else if label == 'new'
+                .tt
+                    b.badge.bg-instagram.bg-gradient.text-uppercase.rounded-1.px-1.mr-1.fs-13 New 
+                    =tt
+            else
+                .tt=tt
+            .text-muted.tg Ram Charan 
+            .star-rate
+                +star('5')
+    if btn == 'button'
+        .button: +a('#/', 'btn btn-wishlist', 'Add to Wishlist')
+
+mixin list_products(className, img1, img2, img3, img4, img5)
+    div(class=className)
+        +product_item(img1, 'Tư duy lại lợi thế cạnh tranh', '', 'button')
+    div(class=className)
+        +product_item(img2, 'Bộ công cụ chiến lược nội dung', '', 'button')
+    div(class=className)
+        +product_item(img3, 'Dậy thì không xì trét', '', 'button')
+    div(class=className)
+        +product_item(img4, 'Phụ nữ thành công dám có tất cả', '', 'button')
+    div(class=className)
+        +product_item(img5, 'Mặt trời lúc nửa đêm', '', 'button')
+
+
+mixin star(point)
+    if point == '4.9'
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star-half-alt
+    else if point == '4'
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star 
+        span.far.fa-star 
+    else if point == '3'
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star
+        span.far.fa-star
+        span.far.fa-star 
+    else 
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star
+        span.fa.fa-star

@@ -1,0 +1,187 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services
+@using DTO.News;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<NewsCateDto, List<NewsDto>> list = ViewBag.Data as Dictionary<NewsCateDto, List<NewsDto>>;
+    List<NewsDto> listHighView = ViewBag.HighViewList as List<NewsDto>;
+    string banner = ViewBag.Banner as string;
+
+    List<NewsCateDto> listCate = ViewBag.NewsCateList as List<NewsCateDto>;
+
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    PopupDto popup = ViewBag.Popup; int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+
+    <div class="banner-lg block-bg" style="background-image: url(@banner)">
+        <div class="container d-flex align-items-center h-100">
+            <div class="text-banner">
+                <h1 class="tt-md text-uppercase">@Html.Raw(_translate.GetString("menu.news"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="@_translate.GetUrl("url.home")" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a></li>
+                        <li class="breadcrumb-item active"><a href="@_translate.GetUrl("url.news")" title="@Html.Raw(_translate.GetString("menu.news"))" alt="@Html.Raw(_translate.GetString("menu.news"))" target="_self">@Html.Raw(_translate.GetString("menu.news"))</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+}
+
+<div class="block-bg block-primary">
+    @if (listHighView.Any())
+    {
+        <div class="container py-5">
+            <div class="tt-lg tt-icon text-primary">Tin nổi bật</div>
+            <div class="grid-news my-lg-3">
+
+                @for (int i = 0; i < listHighView.Count; i++)
+                {
+                    var pic = listHighView[i].PicThumb;
+                    if (i == 0)
+                    {
+                        pic = listHighView[i].PicFull;
+                    }
+                    <div class="grid-news-item">
+                        <a class="absolute" alt="@Html.Raw(listHighView[i].Title)" title="@Html.Raw(listHighView[i].Title)" href="@Html.Raw(_translate.GetUrl("url.news"))@(listHighView[i].Slug + ".html")"></a>
+                        <div class="thumb-res wide">
+                            <img class="fit-cover" src="@pic">
+                        </div>
+                        <div class="info">
+                            <div class="tt">
+                                @Html.Raw(listHighView[i].Title)
+                            </div>
+                            <div class="desc text-desc">
+                                @Html.Raw(listHighView[i].Description)
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@if (list.Any())
+{
+    <div class="block-bg">
+        <div class="container py-5">
+            <div class="block-sidebar" data-wrapper>
+                <div class="mainbody mb-4 mb-md-0 order-md-2" data-mainbody>
+
+                    @for (int i = 0; i < list.Count; i++)
+                    {
+                        var news = list.ElementAt(i);
+                        @if (news.Value.Any())
+                        {
+                            <div class="block-bg mb-5">
+                                <div class="d-flex align-items-center justify-content-sm-between">
+                                    <div class="tt-md tt-icon text-primary">@Html.Raw(news.Key.Title)</div>
+                                    <a class="btn btn-outline-primary d-none d-lg-inline-block" alt="Xem thêm" title="Xem thêm" href="@Html.Raw(_translate.GetUrl("url.news"))@(news.Key.Slug)/">Xem thêm</a>
+                                </div>
+                                <div class="list-news row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3 my-2">
+
+                                    @foreach (var item in news.Value)
+                                    {
+                                        <div class="col wow fadeIn">
+                                            <div class="block">
+                                                <a class="absolute" href="@Html.Raw(_translate.GetUrl("url.news"))@(item.Slug + ".html")" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="_self"></a>
+                                                <div class="thumb-res wide">
+                                                    <img class="fit-cover" src="@item.PicThumb" alt="@item.PicThumb" />
+                                                </div>
+                                                <div class="info">
+                                                    <div class="tt">@Html.Raw(item.Title)</div>
+                                                    <div class="desc">
+                                                        @Html.Raw(item.Description)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                                <div class="text-center mb-3 d-lg-none">
+                                    <a class="btn btn-outline-primary " alt="Xem thêm" title="Xem thêm" href="@Html.Raw(_translate.GetUrl("url.news"))">Xem thêm</a>
+                                </div>
+                            </div>
+
+                        }
+
+                    }
+
+                </div>
+                <div class="sidebar order-md-1" data-sidebar>
+                    <div data-stick data-width-fill>
+                        <div class="pane pane-menu pane-menu-news mb-4">
+                            @if (listCate.Any())
+                            {
+                                <div class="tt-sm tt-ball text-primary">Danh mục</div>
+                                <ul class="menu-vertical">
+                                    @foreach (var item in listCate)
+                                    {
+                                        <li>
+                                            <a href="@_translate.GetUrl("url.news")@(item.Slug)/" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="_self">@Html.Raw(item.Title)</a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                        @if (advertisements.Any())
+                        {
+                            foreach (var item in advertisements)
+                            {
+                                <div class="pane bannerqc mb-3">
+                                    <a class="block" href="@item.Link" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="@(item.TargetLink == "_blank" ? "_blank" : "")"><img src="@item.Image" alt="@item.Image" /></a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<partial name="/Views/Shared/Convenience.cshtml" />
+
+@section Scripts{
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+    </script>
+}

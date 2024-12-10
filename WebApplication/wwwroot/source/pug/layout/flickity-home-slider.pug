@@ -1,0 +1,20 @@
+block mixins 
+	include ../mixins/mixins
+
+block layers
+	.main-slider
+		.home-slider.wow.fadeInUp
+			+home_slider('carousel-cell')
+		.home-banner
+			figure.home-banner-item.block.wow.fadeInUp
+				+a('#', 'absolute bg-cover')
+				+img('slider/banner-1.jpg')
+				.banner-overlay.absolute
+					.badge.bg-warning.rounded-1 eBooks
+					.tt 10 New Books We Recommend This Week 
+			figure.home-banner-item.block.wow.fadeInUp
+				+a('#', 'absolute bg-cover')
+				+img('slider/banner-2.jpg')
+				.banner-overlay.absolute
+					.badge.bg-facebook.rounded-1 Audiobook
+					.tt Thomas Mallon on the Career of Jonathan Franzen

@@ -1,0 +1,176 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services;
+@using CMS.Repository;
+@using DTO.Customer;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+
+@inject ICustomer_Repository _rep
+@inject ITranslateServices _translate
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Customer/Layout/_LayoutCustomer.cshtml";
+    CustomerDto customer = ViewBag.CustomerInfo as CustomerDto;
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    string banner = ViewBag.Banner as string;
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("menu.setting-account"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.setting-account"))" title="@Html.Raw(_translate.GetString("menu.setting-account"))" alt="@Html.Raw(_translate.GetString("menu.setting-account"))" target="_self">@Html.Raw(_translate.GetString("menu.setting-account"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.setting-account"))" title="@Html.Raw(_translate.GetString("menu.setting-account"))" alt="@Html.Raw(_translate.GetString("menu.setting-account"))" target="_self">@Html.Raw(_translate.GetString("menu.setting-account"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+<div class="mainbody mb-4 mb-md-0 order-md-2" data-mainbody>
+    <div class="tt-lg tt-ss text-gradient mb-4">
+        @Html.Raw(_translate.GetString("menu.setting-account"))
+    </div>
+    <div class="d-flex align-items-start form-uploadImg">
+        <div class="left">
+            <div class="form-groupUpload mb-3 mb-lg-0">
+                <div class="img-review avatar rounded-circle">
+                    <img id="imgPicThumb" class="rounded-circle"
+                         src="@(!String.IsNullOrEmpty(customer.PicThumb) ? Html.Raw(customer.PicThumb) : "/css/skin/user-default.png")" />
+                    <!-- <a
+                      class="btn-close"
+                      alt=""
+                      title=""
+                      href="javascript:void(0)"
+                      onClick=""
+                    ></a> -->
+                </div>
+                <input type="file" name="Image" id="Image" onchange="readURLImage(this,'#imgPicThumb',0);" />
+                <label for="Image">Chọn ảnh</label>
+                <!-- <div class="afterImg">
+                  <div class="label-text">Messenger.png</div>
+                  <label for="imgPreview">Thay đổi</label>
+                </div> -->
+            </div>
+        </div>
+        <div class="right">
+            <form class="form-validate material-form form-edit form-validate-profile">
+                <div class="row g-2 gx-3">
+                    <div class="col-12">
+                        <div class="tt-xs mb-1">@Html.Raw(_translate.GetString("user.personal-info"))</div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input class="form-control" type="text" required="" value="@Html.Raw(customer.FirstName)" id="FirstName" name="FirstName" data-parsley-required-message="Vui lòng nhập họ"/>
+                            <label for="FirstName" class="label-text">Họ</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <input class="form-control" type="text" required="" value="@Html.Raw(customer.LastName)" id="LastName" name="LastName" data-parsley-required-message="Vui lòng nhập tên" />
+                            <label for="LastName" class="label-text">Tên</label>
+                        </div>
+                    </div>
+                    @*<div class="col-md-6">
+                        <div class="form-group">
+                            <input class="form-control" type="text" value=" @Html.Raw(customer.FullName)" id="FullName" name="FullName" />
+                            <label for="FullName" class="label-text">Họ và tên</label>
+                        </div>
+                    </div>*@
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input class="form-control" type="tel" value="@Html.Raw(customer.PhoneNumber)" name="PhoneNumber" id="PhoneNumber" data-parsley-required-message="Vui lòng nhập số điện thoại"/>
+                            <label for="PhoneNumber" class="label-text">Số điện thoại</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <input class="form-control" type="email" value="@Html.Raw(customer.Email)" disabled />
+                            <label class="label-text">Email</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="tt-xs mt-3 mb-0">Địa chỉ</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-select">
+                            <select id="Province" name="Province" class="form-select">
+                            </select>
+                            <label for="Province" class="label-text">Tỉnh / Thành phố</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-select">
+                            <select id="District" name="District" class="form-select">
+                            </select>
+                            <label for="District" class="label-text">Quận / Huyện</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-group-select">
+                            <select id="Ward" name="Ward" class="form-select">
+                            </select>
+                            <label class="label-text">Phường / Xã</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input class="form-control" type="text" required="" value="@Html.Raw(customer.Address)" id="Address" name="Address" />
+                            <label for="Address" class="label-text">Số nhà</label>
+                        </div>
+                    </div>
+                    <div class="col-12 text-end mt-4">
+                        <a onclick="saveProfile()" class="btn btn-primary px-4"
+                           href="javascript:void(0)"
+                           alt="Lưu thay đổi"
+                           title="Lưu thay đổi"><span>Lưu thay đổi</span></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        initParsley(".form-validate-profile", "@lang");
+        getSelectProvince('Province', 'District', 'Ward', '@customer.Province', '@customer.District', '@customer.Ward');
+        function readURLImage(input, divImages, id) {
+            try {
+                if (FileReader) {
+                    var reader = new FileReader();
+                    //console.log(FileReader)
+                    reader.readAsDataURL(input.files[0]);
+                    reader.onload = function (e) {
+                        var image = new Image();
+                        image.src = e.target.result;
+                        image.onload = function () {
+                            $(divImages).attr("src", image.src);
+                        };
+                    }
+                }
+                else {
+                    // Not supported
+                }
+            } catch (e) {
+
+            }
+        }
+    </script>
+}

@@ -1,0 +1,204 @@
+@mixin a-hover-underline($color) {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    &:after {
+        content: '';
+        height: 1px;
+        @include absolute(null,0,0);
+        background: $color;
+        width: 0;
+        transition: width 0.4s ease;
+    }
+    &:hover {
+        color: $color;
+        &:after {
+            width: 100%;
+            left: 0;
+        }
+    }
+}
+.picon {
+    margin-bottom: 10px;
+    line-height: 1.4;
+    position: relative;
+    padding-left: 26px;
+    #{$fa-all} {
+        position: absolute;
+        left: 0;
+        top: 3px;
+        opacity: .7;
+    }
+    a {
+        color: inherit;
+        &:hover {
+            color: $primary;
+        }
+    }
+}
+.list-style-angle {
+    &, li {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        position: relative;
+        padding-left: 18px;
+        &:before {
+            content: '\f105';
+            font-family: 'font awesome 5 pro';
+            @include absolute(5px,null,null,2px);
+            line-height: 1;
+            opacity: .5;
+        }
+    }
+    a {
+        @include a-hover-underline($primary);
+        margin-bottom: 6px;
+        color: inherit;        
+        #{$fa-all} {
+            margin: 2px 8px 0 2px;
+            opacity: .8;
+        }
+    }
+}
+// Footer
+.footer {
+    $footer-background: linear-gradient(to bottom, #f4f1ea,#fff);
+    $footer-color: #464969;
+    --footer-font-size: 15px;
+
+    background: $footer-background;
+    color: $footer-color;
+    font-size: var(--footer-font-size);
+    position: relative;
+    z-index: 1;
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+
+    &-bg {
+        @extend %bg-image;
+        @extend %absolute-all;
+        z-index: -1;
+        pointer-events: none;
+        opacity: .2;
+    }
+    &-tt {
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+    &-news {
+        .thumb-res {
+            width: 72px;
+            flex: 0 0 auto;
+            height: 50px;
+            margin: 0 12px 0 0;
+        }
+        .block {
+            + .block {
+                margin-top: 13px;
+            }
+        }
+        .info {
+            @include ellips(2);
+        }
+    }
+    &-col {
+        margin-top: 20px;
+    }
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+    .list-icon-social {
+        display: grid;
+        grid-template-columns: auto auto;
+        margin: 0;
+        grid-gap: 8px;
+        .btn {
+            margin: 0 6px 0 0;
+        }
+    }
+    .hline {
+        height: 1px;
+        background: linear-gradient(to right, rgba(#000,0), rgba(#000,.1), rgba(#000,0));
+        margin: 0 0 1.25rem 0;
+    }
+    .copyr {
+        padding: .75rem 0 1.25rem;
+        border-bottom: 10px solid $primary;
+    }
+}
+@include media-breakpoint-up(md) {
+    .footer {
+        padding-top: .5rem;
+        &-col {
+            margin-bottom: 1.5rem;
+        }
+        .list-icon-social {
+            grid-template-columns: 100%;
+        }
+    }
+}
+@include media-breakpoint-up(lg) {
+    .footer {
+        margin-top: 3.5rem;
+        &-tt {
+            margin-bottom: 1.25rem;
+        }
+        .copyr {
+            padding-top: 0;
+        }
+    }
+}
+@include media-breakpoint-up(xl) {
+    .footer {
+        margin-top: 4.25rem;
+    }
+}
+/// only mobile
+@include media-breakpoint-down(md) {
+    .footer {
+        .row {
+            --bs-gutter-x: 0;
+            padding: 0 10px;
+        }
+        .content {
+            display: none;
+        }
+        &-tt {
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            &:after {
+                content: '\f067';
+                font-family: 'font awesome 5 pro';
+                font-weight: 300;
+                font-size: 90%;
+            }
+        }
+        &-col {
+            margin: 0;
+            padding-top: .875rem;
+            padding-bottom: .875rem;
+            + .footer-col {
+                border-top: 1px solid rgba(#000,.1);
+            }
+            &.active {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+                .footer-tt {
+                    margin-bottom: 1rem;
+                    &:after {
+                        content: '\f068';
+                    }
+                }
+                .content {
+                    display: block;
+                }
+            }
+        }
+    }
+}

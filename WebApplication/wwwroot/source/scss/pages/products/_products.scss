@@ -1,0 +1,81 @@
+.star-rate {
+    color: #fe9c02;
+    letter-spacing: 2px;
+}
+.btn-wishlist {
+    background: #f4e8db;
+    color: #6a5d4e;
+    font-size: 14px;
+    border-radius: 3px;
+    padding: .375rem 1.125rem;
+    &:hover {
+        background: $danger;
+        color: #fff;
+    }
+}
+.list-products {
+    --tt: .9375rem;
+    .tt {
+        font-weight: 400;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 3px;
+    }
+    .tg {
+        font-size: 80%;
+    }
+    .star-rate {
+        margin-top: 7px;
+        font-size: 12px;
+    }
+    .button {
+        margin-top: 1rem;
+    }
+    .btn-wishlist {
+        font-size: .75rem;
+    }
+    img,
+    .thumb-res {
+        border-radius: 3px 8px 8px 3px;
+    }
+    // effect
+    img {
+        transition: all 0.3s ease;
+        transform-origin: left center;
+    }
+    .thumb-res {
+        transition: all 0.4s ease;
+    }
+    .block {
+        padding-top: 5px;
+    }
+    .block:hover {
+        .thumb-res {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px -5px rgba(#000,.1);
+        }
+    }
+    &.carousel-c2md5,
+    &.carousel-c2md4 {
+        margin-top: -.375rem;
+    }
+}
+@include media-breakpoint-up(lg) {
+    .list-products {
+        --tt: 1rem;
+        .btn-wishlist {
+            font-size: .875rem;
+        }
+        .tg {
+            font-size: 14px;
+        }
+    }
+}
+@include media-breakpoint-up(xl) {
+    .list-products {
+        --bs-gutter-x: 2rem;
+    }
+}
+
+@import "product-detail";

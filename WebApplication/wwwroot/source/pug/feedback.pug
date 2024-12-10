@@ -1,0 +1,85 @@
+block feedback 
+	.nav-feedback
+		button.nav-feedback-btn(type="button" data-bs-toggle="modal" data-bs-target="#modal-feedback-group") Feedback
+
+	//- 
+	.modal.fade.modal-feedback-group#modal-feedback-group(tabindex="-1" aria-hidden="true" data-bs-backdrop="static")
+		.modal-dialog.modal-dialog-centered.modal-md
+			.modal-content
+				button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+				.row.row-cols-1.row-cols-md-3.gx-3.modal-list-box 
+					.col 
+						.block 
+							.icon.bi.bi-megaphone
+							.tt-xs Thông tin phản hồi
+							.desc.text-desc Chúng tôi luôn tìm kiếm phản hồi và đề xuất của bạn về cách chúng tôi có thể cải thiện.
+							.d-grid
+								button.btn.btn-primary(type="button" data-bs-toggle="modal" data-bs-target="#modal-feedback" data-bs-dismiss="modal") Gửi phản hồi
+					.col 
+						.block 
+							.icon.bi.bi-gear
+							.tt-xs Trợ giúp
+							.desc.text-desc Tìm kiếm Hướng dẫn sử dụng và các bước xử lý sự cố cho các sản phẩm và dịch vụ của chúng tôi?
+							.d-grid
+								+a('help.html', 'btn btn-primary', 'Tới trang trợ giúp')
+					.col 
+						.block 
+							.icon.bi.bi-mailbox
+							.tt-xs Gửi yêu cầu
+							.desc.text-desc Không thể giải quyết vấn đề của bạn? Gửi yêu cầu cho bộ phận chăm sóc khách hàng nhận trợ giúp.
+							.d-grid
+								+a('contact.html', 'btn btn-primary', 'Gửi yêu cầu')
+
+	//- feedback
+	.modal.modal-feedback.fade#modal-feedback(tabindex="-1" aria-hidden="true" data-bs-backdrop="static")
+		.modal-dialog.modal-dialog-centered
+			.modal-content
+				button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+				.modal-header
+					.tt-md.fw-semibol.mb-3.text-center Thông tin phản hồi chung
+					.desc Chúng tôi luôn tìm cách cải thiện. Nếu bạn nhận được phản hồi hoặc đề xuất về cách chúng tôi có thể làm tốt hơn, chúng tôi rất muốn nghe ý kiến ​​của bạn.
+				.modal-body
+					form.form-validate.form-feedback
+						.row.mb-3
+							.mb-2.col-md-5.lh-base Mục đích ghé thăm Website của bạn là gì?
+							.mb-2.col-md-7 
+								.form-group
+									select.form-select
+										option(disabled selected) Lựa chọn
+										option Đọc sách
+										option Mua sách
+										option Tìm kiếm cửa hàng
+						.row.mb-3
+							.mb-2.col-md-5.lh-base Bạn đã đạt được mục tiêu của mình chưa?
+							.mb-2.col-md-7 
+								.form-group
+									.form-check.d-inline-block.mr-4
+										input.form-check-input#radioCk1(type="radio" name="radioDefault")
+										label.form-check-label(for="radioCk1") Rồi
+									.form-check.d-inline-block
+										input.form-check-input#radioCk2(type="radio" name="radioDefault")
+										label.form-check-label(for="radioCk2") Chưa
+						.row.mb-3
+							.mb-2.col-md-5.lh-base Mục cần cải thiện?
+							.mb-2.col-md-7 
+								.form-group
+									select.form-select
+										option(disabled selected) Lựa chọn
+										option Tìm kiếm sách
+										option Bố cục, điều hướng Website
+										option Khác
+						.row.mb-3
+							.mb-2.col-md-5.lh-base Ý kiến đóng góp
+							.mb-2.col-md-7 
+								.form-group
+									textarea.form-control(rows="5" placeholder="Nhập ý kiến đóng góp của bạn")
+						.row.mb-3 
+							.mb-2.col-md-5.lh-base.d-none.d-md-block
+							.mb-2.col-md-7.d-grid
+								.lh-base.mb-4 Chúng tôi rất biết ơn phản hồi của bạn, nhưng chúng tôi sẽ không thể trả lời trực tiếp nhận xét của bạn.
+								button.btn.btn-danger(type="submit") Gửi thông tin phản hồi
+				.modal-footer 
+					| Nếu bạn đang tìm cách giải quyết vấn đề với LaVieBook, hãy  
+					+a('help.html', 'text-link', 'truy cập trang Trợ giúp')
+					|  của chúng tôi hoặc 
+					+a('contact.html', 'text-link', 'gửi yêu cầu trợ giúp trực tuyến.')

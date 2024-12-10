@@ -1,0 +1,249 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using CMS.Repository;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+@using DTO.Feature;
+@inject IHome_Repository _repHome;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+@inject ICommonServices _mtc;
+@inject IContact_Repository _repContact;
+@inject ITranslateServices _translate
+@{
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    //var linkPolicy = _mtc.GetConfigValue(ConstantStrings.KeyLinkPolicy);
+    //var googleLoginActive = _mtc.GetConfigValue(ConstantStrings.KeyGoogleLoginActive);
+    //var facebookLoginActive = _mtc.GetConfigValue(ConstantStrings.KeyFacebookLoginActive);
+    string ShareZalo = _mtc.GetConfigValue(ConstantStrings.KeyShareZalo);
+    //string ShareFacebook = _mtc.GetConfigValue(ConstantStrings.KeyShareFacebook);
+    string ShareWhatsApp = _mtc.GetConfigValue(ConstantStrings.KeyShareWhatsApp);
+    string ShareTelegram = _mtc.GetConfigValue(ConstantStrings.KeyShareTelegram);
+    string ShareViber = _mtc.GetConfigValue(ConstantStrings.KeyShareViber);
+    string ShareSkype = _mtc.GetConfigValue(ConstantStrings.KeyShareSkype);
+    dynamic data = _repContact.GetContactInfo(lang);
+
+    //int popupdelaytime = Convert.ToInt32(_mtc.GetConfigValue(ConstantStrings.KeyPopupDelayTime).ToString());
+    //if (popupdelaytime < 0) popupdelaytime = 0;
+    //List<ServiceDto> services = await _repHome.GetServiceListForForm(lang);
+    //var reCaptchaStatus = _mtc.GetConfigValue(ConstantStrings.Keyrecaptcha);
+    //var reCaptchaSiteKey = _mtc.GetConfigValue(ConstantStrings.KeyreCapchaSiteKey);
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @RenderSection("Meta", required: false)
+
+    <link asp-append-version="true" href="~/css/library.min.css" rel="stylesheet">
+
+    <script src="/vendors/modules/jquery/jquery-3.5.1.min.js"></script>
+    <script src="/vendors/modules/jqueryui/jquery-ui-1.12.1.min.js"></script>
+    <!-- Sweet alert CSS -->
+    <link href="/vendors/modules/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <link href="/vendors/modules/toast/jquery.toast.min.css" rel="stylesheet" />
+    <link href="/vendors/site.css" rel="stylesheet" />
+
+    @Html.Raw(_mtc.GetConfigValue(ConstantStrings.KeyCodeHeader))
+    <link rel="shortcut icon" href="@ConstantStrings.UrlConfigurationImages@(_mtc.GetConfigValue(ConstantStrings.KeyFavicon))">
+    <script src="/vendors/site.js"></script>
+</head>
+<body>
+    <div class="preloader">
+        <div class="preloader-in"><img src="@ConstantStrings.UrlConfigurationImages@(_mtc.GetConfigValue(ConstantStrings.KeyLogo))" alt="@Html.Raw(_translate.GetString("common.loading"))"></div>
+    </div>
+    <div class="wrapper home-page" id="home-page">
+        @await Html.PartialAsync("/Views/Shared/_TopNav.cshtml")
+        @*Khong xoa section nay*@
+        <section>
+            <div class="modal fade" id="popupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-di modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content border-0">
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        @RenderSection("Popup", required: false)
+                    </div>
+                </div>
+            </div>
+        </section>
+        @RenderSection("Banner", required: false)
+        <main class="mainer">
+            @RenderBody()
+        </main>
+        @await Html.PartialAsync("/Views/Shared/_Footer.cshtml")
+    </div>
+    <div class="icon-stick">
+        <div class="icon-stick">
+            <div class="group-stick">
+                <div class="ball-show">
+                    <i class="fa-solid fa-grid-2"></i>
+                </div>
+                <div class="pane-toggle">
+                    <div class="list-icon-social">
+                        @if (!string.IsNullOrEmpty(ShareWhatsApp))
+                        {
+                            <a class="btn rounded-circle btn-whatsapp"
+                               href="https://wa.me/@Html.Raw(ShareWhatsApp)"
+                               title="@Html.Raw(ShareWhatsApp)"
+                               alt="@Html.Raw(ShareWhatsApp)"
+                               target="_blank"
+                               data-title="WhatsApp">
+                                <span class="fab fa-whatsapp"></span>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(ShareTelegram))
+                        {
+                            <a class="btn rounded-circle btn-telegram"
+                               href="https://t.me/@Html.Raw(ShareTelegram)"
+                               title="@Html.Raw(ShareTelegram)"
+                               alt="@Html.Raw(ShareTelegram)"
+                               target="_blank"
+                               data-title="Telegram">
+                                <span class="fab fa-telegram"></span>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(ShareViber))
+                        {
+                            <a class="btn rounded-circle btn-viber"
+                               href="viber://add?number=@Html.Raw(ShareViber)"
+                               title="@Html.Raw(ShareViber)"
+                               alt="@Html.Raw(ShareViber)"
+                               target="_blank"
+                               data-title="Viber">
+                                <span class="fab fa-viber"></span>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(ShareSkype))
+                        {
+                            <a class="btn rounded-circle btn-skype"
+                               href="skype:@(Html.Raw(ShareSkype))?chat"
+                               title="@Html.Raw(ShareSkype)"
+                               alt="@Html.Raw(ShareSkype)"
+                               target="_blank"
+                               data-title="Skype">
+                                <span class="fab fa-skype"></span>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(Convert.ToString(data["contact-hotline"])))
+                        {
+                            <a class="btn rounded-circle btn-phone"
+                               href="tel:@Html.Raw(data["contact-hotline"])"
+                               title="@Html.Raw(data["contact-hotline"])"
+                               alt="@Html.Raw(data["contact-hotline"])"
+                               target="_blank"
+                               data-title="Hotline">
+                                <span class="fa-light fa-phone-volume"></span>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(ShareZalo))
+                        {
+                            <a class="btn rounded-circle btn-zalo"
+                               href="https://zalo.me/@Html.Raw(ShareZalo)"
+                               title="@Html.Raw(ShareZalo)"
+                               alt="@Html.Raw(ShareZalo)"
+                               target="_blank"
+                               data-title="Zalo">
+                                <span class="iconify" data-icon="simple-icons:zalo"></span>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <button class="fa-solid fa-angle-up"
+                    id="backtop"
+                    role="button"></button>
+        </div>
+    </div>
+
+
+
+
+    <!-- Modal -->
+
+    <script src="/vendors/modules/bootstrap/bootstrap.bundle.min.js"></script>
+    <!-- Flickity -->
+    <script src="/css/plugins/flickity.pkgd.min.js"></script>
+    <!-- Fancybox -->
+    <script src="/css/plugins/fancybox.umd.js"></script>
+    <!-- Icon zalo,tiktok... -->
+    <script src="/css/plugins/iconify.min.js"></script>
+    <!-- Select Form -->
+    <!--<script src="/css/plugins/nice-select2.js"></script>-->
+    <!-- Select2 -->
+    <script src="/css/plugins/select2.min.js"></script>
+    @*<script src="/css/plugins/swiper-bundle.min.js"></script>*@
+    <!-- Animation Scroll -->
+    <script src="/css/plugins/wow.min.js"></script>
+
+
+    <script asp-append-version="true" src="~/css/js/main.min.js"></script>
+    <script asp-append-version="true" src="~/css/js/_extension.js"></script>
+
+    <script src="/vendors/modules/toast/jquery.toast.min.js"></script>
+    <script src="/vendors/modules/sweetalert2/sweetalert2.min.js"></script>
+    <script src="/vendors/modules/parsley/parsley.min.js"></script>
+
+    <script>
+        new WOW().init();
+
+        var lang = "@lang";
+        @*var notificationString = "@Html.Raw(_translate.GetString("common.notification"))";*@
+        var signInUrl = '@_translate.GetUrl("url.sign-in")';
+
+        @*initParsley(".form-validate", "@lang");*@
+
+
+
+        @*var recapchaStatus = '@reCaptchaStatus';
+        var homeUrl = "@_translate.GetUrl("url.home")";*@
+        var settingAccountUrl = '@_translate.GetUrl("url.order-management")';
+        var notificationString = "@Html.Raw(_translate.GetString("common.notification"))";
+    </script>
+
+
+    <script asp-append-version="true" src="~/vendors/controllers/customercontroller.js"></script>
+
+
+
+    @*<script>
+                getCartTopNav('@lang');
+        </script>*@
+
+    @* @if (googleLoginActive == "on")
+        {
+            <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+            <!-- GOOGLE-->
+            <script>
+                window.onload = function () {
+                    google.accounts.id.initialize({
+                        client_id: '@_mtc.GetConfigValue(ConstantStrings.KeyGoogleSignInKey)',
+                        callback: handleCredentialResponse
+                    });
+
+                    google.accounts.id.renderButton(
+                        document.getElementById("btnGoogle"), // Ensure the element exist and it is a div to display correcctly
+                        { theme: "outline", size: "large", type: "icon" }  // Customization attributes
+                    );
+                };
+            </script>
+            <script src="/vendors/controllers/googleController.js"></script>
+            <!-- GOOGLE-->
+        }*@
+
+    @*  @if (facebookLoginActive == "on")
+        {
+            <!-- Facebook-->
+            <script>
+                var facebookAppId = "@_mtc.GetConfigValue(ConstantStrings.KeyFacebookAppId)";
+            </script>
+            <script src="/vendors/controllers/facebookController.js"></script>
+            <!-- Facebook-->
+        }*@
+    @RenderSection("Scripts", required: false)
+    @Html.Raw((_mtc.GetConfigValue(ConstantStrings.KeyCodeBody)))
+</body>
+</html>
+
+
+

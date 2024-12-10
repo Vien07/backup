@@ -1,0 +1,635 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+<!-- Container -->
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Khách hàng</h5>
+    </div>
+    <!-- Compose -->
+    <div id="compose" class="col-xl-12">
+        <section>
+            <div style="display: none" class="row" id="summary">
+                <div class="col-xl-12">
+                    <section class="hk-sec-wrapper">
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="row mb-20">
+                                    <div class="col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="card shadow-sm shadow-hover-lg pa-10">
+                                                    <div class="card-header card-header-action border-bottom border-light mb-10">
+                                                        <h6 class="text-light text-uppercase">Thông Tin Chung</h6>
+                                                        <div class="d-flex align-items-center card-action-wrap">
+                                                            <a style="cursor:pointer" id="btn_edit" class="mx-2" data-toggle="tooltip" data-original-title="Edit info">
+                                                                <i class="far fa-sliders-h text-dark"></i>
+                                                                Edit
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-2"></div>
+                                                        <div class="col-12 col-sm-2 d-flex justify-content-center">
+                                                            <img id="avatar" src="/img/customers/default-avatar.png" class="rounded-3" style="width: 120px; height: auto"
+                                                                 alt="Avatar" />
+                                                        </div>
+                                                        <div class="col-12 col-sm-8">
+                                                            <div class="row gx-3 flex-nowrap">
+                                                                <div class="col-3 col-md-1 col-lg-2 my-1">Họ tên</div>
+                                                                <div class="col-9 col-md-11 col-lg-10 my-1 fw-medium" id="SMFullName"></div>
+                                                            </div>
+                                                            <div class="row gx-3 flex-nowrap">
+                                                                <div class="col-3 col-md-1 col-lg-2 my-1">Email</div>
+                                                                <div class="col-9 col-md-11 col-lg-10 my-1 fw-medium" id="SMEmail"></div>
+                                                            </div>
+                                                            <div class="row gx-3 flex-nowrap">
+                                                                <div class="col-3 col-md-1 col-lg-2 my-1">Điện thoại</div>
+                                                                <div class="col-9 col-md-11 col-lg-10 my-1 fw-medium" id="SMPhoneNumber"></div>
+                                                            </div>
+                                                            <div class="row gx-3 flex-nowrap">
+                                                                <div class="col-3 col-md-1 col-lg-2 my-1">Địa chỉ</div>
+                                                                <div class="col-9 col-md-11 col-lg-10 my-1 fw-medium" id="SMAddress"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /End row-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="table-wrap">
+                                    <h6 class="text-primary text-uppercase pa-5"><i class="fas fa-file-invoice-dollar"></i> Đơn hàng</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover mb-0">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th class="py-2" width="100">Order ID </th>
+                                                    <th class="py-2 text-center" width="200">Ngày tạo đơn hàng</th>
+                                                    <th class="py-2 text-center" width="200">Thanh toán</th>
+                                                    <th class="py-2 text-center" width="200">Phương thức</th>
+                                                    <th class="py-2 text-center" width="200">Trạng thái</th>
+                                                    <th class="py-2 text-center" width="200">Tổng</th>
+                                                    <th class="py-2 text-center" width="100">@_translate.GetStringAdmin("label.action")</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tBodyOrder"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <a style="margin-top:15px" href="/b-admin/Customer/Index" class="btn btn-dark mr-1"><i class="fas fa-window-close"></i> @_translate.GetStringAdmin("button.close") </a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div style="display: none" id="edit" class="row">
+                <div class="col-sm">
+                    <form id="formInput" onsubmit="return false;">
+                        <div id="bodyCompose">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <div class="hk-sec-wrapper">
+                                        <div class="row ">
+                                            <div class="col-sm">
+                                                <div class="row mb-20">
+                                                    <div class="col-md-5">
+                                                        <h6 class="form-group text-primary mb-20">Thông Tin Tài Khoản</h6>
+                                                        <div class="form-row ">
+                                                            <div class="col-md-6 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fas fa-address-book"></i></span>
+                                                                    </div>
+                                                                    <input name="FirstName" id="FirstName" type="text" class="form-control raw" placeholder="Họ">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fas fa-address-book"></i></span>
+                                                                    </div>
+                                                                    <input name="LastName" id="LastName" type="text" class="form-control raw" placeholder="Tên">
+                                                                </div>
+                                                            </div>
+                                                            <div hidden class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fas fa-address-book"></i></span>
+                                                                    </div>
+                                                                    <input name="FullName" id="FullName" type="text" class="form-control raw" placeholder="Họ và tên">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fas fa-at"></i></span>
+                                                                    </div>
+                                                                    <input type="text" name="Email" id="Email" class="form-control raw" placeholder="Email truy cập">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="far fa-key"></i></span>
+                                                                    </div>
+                                                                    <input type="password" name="Password" autocomplete="new-password" id="Password" class="form-control raw" placeholder="Password">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fab fa-facebook"></i></span>
+                                                                    </div>
+                                                                    <input type="text" name="Facebook" id="Facebook" class="form-control raw" placeholder="Facebook">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fab fa-twitter"></i></span>
+                                                                    </div>
+                                                                    <input type="text" name="Twitter" id="Twitter" class="form-control raw" placeholder="Twitter">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fab fa-linkedin"></i></span>
+                                                                    </div>
+                                                                    <input type="text" name="LinkedIn" id="LinkedIn" class="form-control raw" placeholder="LinkedIn">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fa fa-link"></i></span>
+                                                                    </div>
+                                                                    <input type="text" name="Website" id="Website" class="form-control raw" placeholder="Website">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span style="width:45px" class="input-group-text" id=""><img src="/img/configuration/zalo-chat.svg" /></span>
+                                                                    </div>
+                                                                    <input type="text" name="Zalo" id="Zalo" class="form-control raw" placeholder="Zalo">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-7 ">
+                                                        <h6 class="mb-3 text-primary mb-20">Thông Tin Cá Nhân</h6>
+                                                        <div class="row">
+                                                            <div class="col-md-12 mb-12">
+                                                                <div class="d-flex flex-wrap align-items-center">
+                                                                    <div id="imgPicThumb" style="background-image: url('/img/customers/default-avatar.png');" class="avatar avatar-lg border rounded mr-3 mb-4 p-1">
+                                                                    </div>
+                                                                    <div class="col-md-5 form-group">
+                                                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                                                <span class="fileinput-filename"></span>
+                                                                            </div>
+                                                                            <span class="input-group-append">
+                                                                                <span class=" btn btn-primary btn-file">
+                                                                                    <span class="fileinput-new">@_translate.GetStringAdmin("label.choose-file")</span>
+                                                                                    <span class="fileinput-exists">@_translate.GetStringAdmin("label.change")</span>
+                                                                                    <input onchange="readURLAvatar(this,'#imgPicThumb',0);" type="file" name="Images">
+                                                                                </span>
+                                                                                <a role="button" href="#" onclick="ClearAvatar('#imgPicThumb')" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">@_translate.GetStringAdmin("label.delete")</a>
+                                                                            </span>
+                                                                        </div>
+                                                                        <small class="form-text text-muted">@_translate.GetStringAdmin("label.format-images") (.gif, .png, .jpg, .jpeg)</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fas fa-tty"></i></span>
+                                                                    </div>
+                                                                    <input type="text" name="PhoneNumber" id="PhoneNumber" class="form-control raw" placeholder="Điện thoại">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id=""><i class="fas fa-search-location"></i></span>
+                                                                    </div>
+                                                                    <input type="text" name="Address" id="Address" class="form-control raw" placeholder="Số nhà, số đường">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mt-10 mb-10">
+                                                                <div class="row">
+                                                                    <div class="col-md-5 mb-10">
+                                                                        <label for="country">Tỉnh/Thành phố</label>
+                                                                        <select class="form-control custom-select d-block w-100 raw" name="Province" id="Province"></select>
+                                                                    </div>
+                                                                    <div class="col-md-4 mb-10">
+                                                                        <label for="state">Quận/Huyện</label>
+                                                                        <select class="form-control custom-select d-block w-100 raw" name="District" id="District"></select>
+                                                                    </div>
+                                                                    <div class="col-md-3 mb-10">
+                                                                        <label for="state">Phường/Xã</label>
+                                                                        <select class="form-control custom-select d-block w-100 raw" name="Ward" id="Ward"></select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12 mb-10">
+                                                                <div class="input-group mb-10">
+                                                                    <textarea name="Note" rows="8" id="Note" class="form-control raw" placeholder="Ghi chú"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group d-flex align-items-center">
+                                            <div id="toggle_enable_customer" value="true" class="toggle  toggle-simple toggle-light toggle-bg-success toggle1 mr-5 raw"></div>
+                                            <button id="btnSave" onclick="SaveCustomer()" class="btn btn-primary mr-2"><i class="fas fa-vote-yea mr-5"></i>C&#x1EAD;p nh&#x1EAD;t</button>
+                                            <button type="button" onclick="ClearCustomer()" class="btn btn-dark mr-1"><i class="fas fa-window-close"></i> &#x110;&#xF3;ng </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        let isEdit = '@ViewBag.Pid' == '' ? false : true;
+        let actionUrl = "/b-admin/Customer/";
+        let customerAddress = "";
+        let customer = {
+            pid: 0,
+            email: "",
+            password: "",
+            lastName: "",
+            firstName: "",
+            fullName: "",
+            phoneNumber: "",
+            address: "",
+            picThumb:"/img/customers/default-avatar.png",
+            province: "",
+            district: "",
+            facebook: "",
+            linkedIn: "",
+            twitter: "",
+            website: "",
+            zalo: "",
+            ward: "",
+            note: "",
+            enabled: true
+        }
+        let avatar = null;
+
+
+        $(function () {
+            InitCustomer();
+            LoadCustomer(customer);
+            LoadTableOrder();
+            if ('@ViewBag.Pid' != '') {
+                $("#edit").hide();
+                $("#summary").show();
+            } else {
+                $("#summary").hide();
+                $("#edit").show();
+            }
+        });
+
+        $('.raw').change(function () {
+            SaveRawCustomer();
+        })
+
+        document.getElementById("btn_edit").addEventListener("click", () => {
+            $("#summary").hide();
+            $("#edit").show();
+        });
+
+        //--------ACTION--------------
+        async function LoadCustomer(data) {
+            //console.log(data)
+            $("#avatar").attr("src", data.picThumb);
+            $('#SMFullName').text(data.firstName + " " + data.lastName)
+            $('#SMPhoneNumber').text(data.phoneNumber)
+            $('#SMEmail').text(data.email)
+            let address = data.address + ', ' + await GetAddress(data.province, data.district, data.ward);
+            $('#SMAddress').text(address),
+            $('#Facebook').text(data.facebook)
+            $('#LinkedIn').text(data.linkedIn)
+            $('#Twitter').text(data.twitter)
+            $('#Website').text(data.website)
+            $('#Zalo').text(data.zalo)
+        }
+
+        function GetAddress(provinceValue, districtValue, wardValue) {
+            return new Promise((resolve, reject) => {
+                let ward = "";
+                let district = "";
+                let province = "";
+                $.ajax({
+                    url: '/data/VietNam/province.json',
+                    method: 'GET',
+                    success: function (data) {
+                        let rs = [];
+
+                        Object.keys(data).forEach((i) => {
+                            rs.push(data[i])
+                        });
+
+                        rs = rs.sort(function (a, b) {
+                            return ('' + a.name_with_type).localeCompare(b.name_with_type);
+                        });
+
+                        data = {};
+
+                        for (let i in rs) {
+                            data[i] = rs[i]
+                        }
+                        Object.keys(data).forEach((i) => {
+                            if (provinceValue == data[i].code) {
+                                province = data[i].name_with_type;
+                                return;
+                            }
+                        });
+                        $.ajax({
+                            url: `/data/VietNam/district/${provinceValue}.json`,
+                            method: 'GET',
+                            success: function (data) {
+                                Object.keys(data).forEach((i) => {
+                                    if (districtValue == data[i].code) {
+                                        district = data[i].name_with_type;
+                                        return;
+                                    }
+                                });
+                                $.ajax({
+                                    url: `/data/VietNam/ward/${districtValue}.json`,
+                                    method: 'GET',
+                                    success: function (data) {
+                                        Object.keys(data).forEach((i) => {
+                                            if (wardValue == data[i].code) {
+                                                ward = data[i].name_with_type;
+                                                return;
+                                            }
+                                        });
+                                        resolve(ward + ', ' + district + ', ' + province);
+                                    },
+                                    error: function (err) {
+                                        //console.log(err);
+                                        reject(error);
+                                    }
+                                })
+                            },
+                            error: function (err) {
+                                //console.log(err);
+                                reject(error);
+                            }
+                        });
+                    },
+                    error: function (err) {
+                        //console.log(err);
+                        reject(error);
+                    }
+                });
+            });
+        }
+
+        function ShowRawCustomer() {
+            $('#Facebook').val(customer.facebook);
+            $('#LinkedIn').val(customer.linkedIn);
+            $('#Website').val(customer.website);
+            $('#Twitter').val(customer.twitter);
+            $('#Zalo').val(customer.zalo);
+            $('#imgPicThumb').attr('style', `background-image: url('${customer.picThumb}')`);
+            $('#FirstName').val(customer.firstName);
+            $('#LastName').val(customer.lastName);
+            $('#FullName').val(customer.fullName);
+            $('#Email').val(customer.email);
+            $('#PhoneNumber').val(customer.phoneNumber);
+            $('#Address').val(customer.address);
+            $('#Note').val(customer.note);
+            GetSelectProvince('Province', 'District', 'Ward', customer.province, customer.district, customer.ward);
+            SetToggleCustomer("#toggle_enable_customer", customer.enabled);
+        }
+        function SaveRawCustomer() {
+            customer.facebook = $('#Facebook').val();
+            customer.linkedIn = $('#LinkedIn').val();
+            customer.website = $('#Website').val();
+            customer.twitter = $('#Twitter').val();
+            customer.zalo = $('#Zalo').val();
+
+            customer.firstName = $('#FirstName').val();
+            customer.lastName = $('#LastName').val();
+            customer.fullName = $('#FullName').val();
+            customer.email = $('#Email').val();
+            customer.password = $('#Password').val();
+            customer.phoneNumber = $('#PhoneNumber').val();
+            customer.address = $('#Address').val();
+            customer.note = $('#Note').val();
+            customer.province = $('#Province').val();
+            customer.district = $('#District').val();
+            customer.ward = $('#Ward').val();
+        }
+        function InitCustomer() {
+            if ("@ViewBag.Pid" != "") {
+                $.ajax({
+                    url: actionUrl + 'Edit',
+                    type: 'GET',
+                    async: false,
+                    data: {
+                        pid: '@ViewBag.Pid',
+                    },
+                    success: function (response) {
+                        customer = response;
+                    },
+                    error: function (e) {
+                        console.error(e)
+                    }
+                })
+            }
+            ShowRawCustomer();
+        }
+        @*function LoadOrders() {
+            $.ajax({
+                url: actionUrl + 'LoadOrders',
+                type: 'GET',
+                async: false,
+                data: {
+                    pid: '@ViewBag.Pid',
+                },
+                success: function (response) {
+                    orders = response;
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }*@
+        function LoadTableOrder() {
+            $.ajax({
+                url: actionUrl + 'LoadOrders',
+                type: 'GET',
+                data: {
+                    pid: '@ViewBag.Pid',
+                },
+                success: function (response) {
+                    if (response) {
+                        var data = JSON.parse(response);
+                        if (data) {
+                            $('#tBodyOrder').html(``);
+                            var html = ``;
+                            for (let item of data) {
+                                html += `  <tr>
+                                <td class="text-mute"><a href="/b-admin/Order/CreateOrUpdate?pid=${item.Pid}" data-toggle="tooltip" data-original-title="edit">#${item.Pid}</a></td>
+                                <td class="text-center text-mute">${moment(item.CreateDate).format('@ViewBag.DateFormat HH:mm:ss')}</td>
+                                <td class="text-center text-muted"><span class="${item.IsPayment == "Đã thanh toán" ? 'text-success' : ''}">${item.IsPayment}</span></td>
+                                <td class="text-center text-mute">${item.PaymentMethod}</td>
+                                <td class="text-center text-mute">${renderStatus(item.StatusId, item.Status)}</td>
+                                <td class="text-center text-mute">${item.TotalString}đ</td>
+                                <td class="text-center text-mute">
+                                    <a href="/b-admin/Order/CreateOrUpdate?pid=${item.Pid}" class="mx-2" data-toggle="tooltip" data-original-title="Edit"><i class="far fa-sliders-h text-dark"></i></a>
+                                </td>
+                            </tr>`
+                            }
+                            $('#tBodyOrder').html(html);
+                            ToolTipCustom("tBodyOrder")
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+
+        function renderStatus(value, text) {
+            if (value == 0) {
+                return `<span class="badge bg-info text-white px-2">${text}</span>`
+            }
+            //else if (value == 1) {
+            //    return `<span class="badge bg-primary text-white px-2">${text}</span>`
+            //}
+            else if (value == 2) {
+                return `<span class="badge bg-danger text-white px-2">${text}</span>`
+            }
+            else if (value == 1) {
+                return `<span class="badge bg-success text-white px-2">${text}</span>`
+            }
+            //else if (value == 2) {
+            //    return `<span class="badge bg-secondary text-white px-2">${text}</span>`
+            //}
+        }
+
+        function ValidateCustomer() {
+            if ($('#FirstName').val() == "") {
+                AlertToast('Thông báo', "Chưa nhập tên", 'warning')
+                return false;
+            }
+            if ($('#LastName').val() == "") {
+                AlertToast('Thông báo', "Chưa nhập họ", 'warning')
+                return false;
+            }
+            //if ($('#FullName').val() == "") {
+            //    AlertToast('Thông báo', "Chưa nhập họ và tên", 'warning')
+            //    return false;
+            //}
+            if ($('#Email').val() == "") {
+                AlertToast('Thông báo', "Chưa nhập email", 'warning')
+                return false;
+            }
+            if ($('#Password').val() == "" && !isEdit) {
+                AlertToast('Thông báo', "Chưa nhập password", 'warning')
+                return false;
+            }
+            return true;
+        }
+        function GetFormDataCustomer() {
+            var formData = new FormData();
+            formData.append("customer", JSON.stringify(customer))
+            formData.append('avatar', avatar);
+            return formData;
+        }
+        function SaveCustomer() {
+            if (ValidateCustomer()) {
+                $('#btnSave').prop('disabled', true);
+                let action = isEdit ? "Update" : "Insert";
+                $.ajax({
+                    url: actionUrl + action,
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: GetFormDataCustomer(),
+                    success: function (response) {
+                        if (response.error.status) {
+                            ClearCustomer();
+                        } else {
+                            $('#btnSave').prop('disabled', false);
+                            SweetAlert('Thông báo', response.error.mess, 'error')
+                        }
+                    },
+                    error: function (e) {
+                        $('#btnSave').prop('disabled', false);
+                    }
+                })
+            }
+        }
+        function ClearCustomer() {
+            window.location.href = "/b-admin/Customer/Index"
+        }
+        function SetToggleCustomer(div, value) {
+            $(div).toggles({
+                drag: false,
+                click: true,
+                text: {
+                    on: 'On',
+                    off: 'Off'
+                },
+                on: value,
+                animate: 250,
+                easing: 'swing',
+                type: 'compact'
+            }).on('toggle', function (e, active) {
+                customer.enabled = active;
+                if (active) {
+                    $(div).attr('value', 'true');
+                } else {
+                    $(div).attr('value', 'false');
+                }
+
+            });
+        }
+        function readURLAvatar(input) {
+            if (input.files && input.files[0]) {
+                avatar = input.files[0];
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imgPicThumb').attr('style', `background-image: url('${e.target.result}')`);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        function ClearAvatar(div) {
+            $(div).removeAttr('style');
+            avatar = null;
+        }
+    </script>
+}

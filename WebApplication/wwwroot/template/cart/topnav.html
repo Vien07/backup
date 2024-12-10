@@ -1,0 +1,19 @@
+﻿<div class="drop-item">
+    <div class="d-flex align-items-center">
+        <div class="thumb-res">
+            <a href="{{slug}}" title="{{title}}" alt="{{title}}">
+                <img src="{{picture}}" alt="{{picture}}">
+            </a>
+        </div>
+        <div class="info">
+            <div class="d-flex gap-3">
+                <a class="tt" href="{{slug}}" title="{{title}}" alt="{{title}}">{{title}}</a>
+                <span class="text-gray ml-auto">x{{quantity}}</span>
+            </div>
+            {{htmlPrice}}
+        </div>
+        <a onclick="deleteItemInCart('{{id}}')" class="text-danger trash" role="button">
+            <i class="far fa-trash"></i>
+        </a>
+    </div>
+</div>

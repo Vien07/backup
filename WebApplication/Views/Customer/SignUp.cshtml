@@ -1,0 +1,94 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using Microsoft.AspNetCore.Http
+@inject ITranslateServices _translate
+@inject ICommonServices _common
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    if (string.IsNullOrEmpty(lang))
+    {
+        lang = ConstantStrings.DefaultLang;
+    }
+    var linkPolicy = _common.GetConfigValue(ConstantStrings.KeyLinkPolicy);
+    var googleLoginActive = _common.GetConfigValue(ConstantStrings.KeyGoogleLoginActive);
+    var facebookLoginActive = _common.GetConfigValue(ConstantStrings.KeyFacebookLoginActive);
+}
+
+@section Meta {
+    @Html.Raw(ViewBag.Meta)
+}
+
+
+<section class="block-bg block-register">
+    <div class="container container-content">
+        <div class="card-register">
+            <div class="title-box mb-4">
+                <div class="tt-lg text-gradient text-uppercase">đăng ký</div>
+            </div>
+            <form id="formInput" class="material-form form-validate form-sign-up-validate" novalidate="">
+                <div class="row">
+                    @*<div class="col-12">
+                        <div class="form-group mb-2">
+                            <input type="text" class="form-control" name="FullName" id="FullName" required="" />
+                            <label for="FullName" class="label-text">Họ tên</label>
+                        </div>
+                    </div>*@
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <input type="text" class="form-control" name="FirstName" id="FirstName" required="" data-parsley-required-message="Vui lòng điền họ" />
+                            <label for="FirstName" class="label-text">Họ</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <input type="text" class="form-control" name="LastName" id="LastName" required="" data-parsley-required-message="Vui lòng điền tên" />
+                            <label for="LastName" class="label-text">Tên</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <input class="form-control" name="Email" id="Email" type="email" required data-parsley-required-message="Vui lòng nhập email">
+                            <label for="Email" class="label-text">Email</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <input autocomplete="new-password" name="Password" id="Password" class="form-control" type="password" required  data-parsley-required-message="Vui lòng nhập mật khẩu">
+                            <label for="Password" class="label-text">Mật khẩu</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <input autocomplete="new-password" data-parsley-equalto="#Password" id="RePassword" name="RePassword" class="form-control" type="password" required  data-parsley-required-message="Vui lòng xác nhận mật khẩu">
+                            <label for="RePassword" class="label-text">Xác nhận mật khẩu</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-center mt-2 mb-3">
+                            <button id="btn_resgister" type="submit" class="btn btn-primary d-block w-100 text-center rounded-2">
+                                Đăng ký
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="border-0 border-top border-top-2 border-dashed"></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-center mt-3">
+                            <span class="me-1">Bạn đã có tài khoản? </span><a class="link" alt="@Html.Raw(_translate.GetString("menu.sign-in"))" tilte="@Html.Raw(_translate.GetString("menu.sign-in"))" href="@Html.Raw(_translate.GetUrl("url.sign-in"))">@Html.Raw(_translate.GetString("menu.sign-in"))</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script type="text/javascript">
+        initParsley(".form-sign-up-validate", "@lang");
+    </script>
+}

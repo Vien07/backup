@@ -1,0 +1,74 @@
+﻿@using CMS.Services.TranslateServices;
+@using CmsModels;
+@inject ITranslateServices _translate
+
+<h4 class="no-margin">Available merge fields</h4>
+<hr class="hr-panel-heading" />
+<div class="row">
+    <div class=" col-md-12">
+        <div class="alert alert-warning">If ticket is imported with email piping and the contact does not exists in the CRM the fields won't be replaced.</div>
+    </div>
+    <div class="col-md-12">
+        <div class="row available_merge_fields_container">
+            <div class="col-md-6 merge_fields_col">
+                <h5 class="bold">Client</h5>
+                <p>Contact Firstname<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{contact_firstname}</a></span></p>
+                <p>Contact Lastname<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{contact_lastname}</a></span></p>
+                <p>Contact Phone Number<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{contact_phonenumber}</a></span></p>
+                <p>Contact Title<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{contact_title}</a></span></p>
+                <p>Contact Email<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{contact_email}</a></span></p>
+                <p>&nbsp;</p>
+                <p>Client Company<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_company}</a></span></p>
+                <p>Client Phone Number<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_phonenumber}</a></span></p>
+                <p>Client Country<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_country}</a></span></p>
+                <p>Client City<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_city}</a></span></p>
+                <p>Client Zip<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_zip}</a></span></p>
+                <p>Client State<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_state}</a></span></p>
+                <p>Client Address<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_address}</a></span></p>
+                <p>Client Vat Number<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_vat_number}</a></span></p>
+                <p>Client ID<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{client_id}</a></span></p>
+            </div>
+            <div class="col-md-6 merge_fields_col">
+                <h5 class="bold">Ticket</h5>
+                <p>Ticket ID<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_id}</a></span></p>
+                <p>Ticket URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_url}</a></span></p>
+                <p>Ticket Public URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_public_url}</a></span></p>
+                <p>Department<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_department}</a></span></p>
+                <p>Department Email<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_department_email}</a></span></p>
+                <p>Date Opened<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_date}</a></span></p>
+                <p>Ticket Subject<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_subject}</a></span></p>
+                <p>Ticket Message<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_message}</a></span></p>
+                <p>Ticket Status<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_status}</a></span></p>
+                <p>Ticket Priority<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_priority}</a></span></p>
+                <p>Ticket Service<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{ticket_service}</a></span></p>
+                <p>Project name<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{project_name}</a></span></p>
+            </div>
+            <div class="col-md-6 merge_fields_col">
+                <h5 class="bold">Other</h5>
+                <p>Logo URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{logo_url}</a></span></p>
+                <p>Logo image with URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{logo_image_with_url}</a></span></p>
+                <p>Dark logo image with URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{dark_logo_image_with_url}</a></span></p>
+                <p>CRM URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{crm_url}</a></span></p>
+                <p>Admin URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{admin_url}</a></span></p>
+                <p>Main Domain<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{main_domain}</a></span></p>
+                <p>Company Name<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{companyname}</a></span></p>
+                <p>Email Signature<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{email_signature}</a></span></p>
+                <p>(GDPR) Terms &amp; Conditions URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{terms_and_conditions_url}</a></span></p>
+                <p>(GDPR) Privacy Policy URL<span class="pull-right"><a class="add_merge_field" href="https://perfexcrm.com/demo/admin/emails/email_template/3">{privacy_policy_url}</a></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="form-group ">
+    <label class="mb-1 text-primary" for="Content">@_translate.GetStringAdmin("label.content")</label>
+    <textarea id="Content"></textarea>
+</div>
+
+
+
+

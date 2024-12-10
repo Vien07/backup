@@ -1,0 +1,283 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using CMS.Services.TranslateServices
+@using CMS.Services.WebsiteServices
+@using CMS.Services.CommonServices
+@using CMS.Repository
+@using DTO;
+@using DTO.News;
+@using DTO.About;
+
+@inject IContact_Repository _repContact;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+@inject ICommonServices _common;
+@inject IWebsiteServices _website;
+@inject ITranslateServices _translate
+@inject IHome_Repository _repHome
+@{
+    var lang = _httpContextAccessor.HttpContext.Session.GetString("WebsiteLang");
+    dynamic data = _repContact.GetContactInfo(lang);
+    //var vistitor = await _website.GetVisitor();
+    string ShareFacebook = _common.GetConfigValue(ConstantStrings.KeyShareFacebook);
+    string ShareTwitter = _common.GetConfigValue(ConstantStrings.KeyShareTwitter);
+    string ShareZalo = _common.GetConfigValue(ConstantStrings.KeyShareZalo);
+    string ShareLinkedin = _common.GetConfigValue(ConstantStrings.KeyShareLinkedin);
+    string ShareTelegram = _common.GetConfigValue(ConstantStrings.KeyShareTelegram);
+    string ShareInstagram = _common.GetConfigValue(ConstantStrings.KeyShareInstagram);
+    string ShareTiktok = _common.GetConfigValue(ConstantStrings.KeyShareTiktok);
+    string ShareYoutube = _common.GetConfigValue(ConstantStrings.KeyShareYoutube);
+    List<AboutDto> abouts = await _repHome.GetAboutFooterList(lang);
+    string domain = _common.GetConfigValue(ConstantStrings.KeyRootDomain);
+    string linkBct = _common.GetConfigValue(ConstantStrings.KeyLinkBCT);
+    string linkCertificate = _common.GetConfigValue(ConstantStrings.KeyLinkCertificate);
+    string taxCode = _common.GetConfigValue(ConstantStrings.KeyTaxCode);
+}
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="footer-col col-md-6 col-lg-3 col-xl-4 footer-logo">
+                <a class="logo-full" href="@Html.Raw(_translate.GetUrl("url.home"))" title="logo" alt="logo">
+                    <img class="logo" src="@ConstantStrings.UrlConfigurationImages@(_common.GetConfigValue(ConstantStrings.KeyLogoFooter))" alt="logo" title="logo" />
+                </a>
+                <div class="group-info">
+                    @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-companyName"])))
+                    {
+                        <div class="brandnames font-primary text-uppercase fw-semibold mb-2">
+                            @Html.Raw(data["contact-companyName"])
+                        </div>
+                    }
+                    @if (!String.IsNullOrEmpty(taxCode))
+                    {
+                        <div class="group mb-2">
+                            <div class="text">Mã số thuế: @Html.Raw(taxCode)</div>
+                        </div>
+                    }
+                    @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-address"])))
+                    {
+                        <div class="group mb-2">
+                            <div class="text">
+                                @Html.Raw(data["contact-address"])
+                            </div>
+                        </div>
+                    }
+                    @if (!String.IsNullOrEmpty(linkCertificate) || !String.IsNullOrEmpty(linkBct))
+                    {
+
+
+                        <div class="list-icon-social mt-2">
+                            @if (!String.IsNullOrEmpty(linkCertificate))
+                            {
+                                <a class="btn btn-card" alt="Chứng chỉ" title="Chứng chỉ" href="@Html.Raw(linkCertificate)" target="_blank">
+                                    <img src="/css/skin/ncsc.png" alt="Chứng chỉ" />
+                                </a>
+                            }
+                            @if (!String.IsNullOrEmpty(linkBct))
+                            {
+                                <a class="btn btn-card" alt="Bộ công thương" title="Bộ công thương" href="@Html.Raw(linkBct)" target="_blank">
+                                    <img src="/css/skin/thongbao-bct.png" alt="Bộ công thương" />
+                                </a>
+
+                            }
+
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+            <div class="footer-col col-md-6 col-lg-4 col-xl-4 footer-info">
+                <div class="tt-xs fs-20 text-white">Bạn cần hỗ trợ?</div>
+                @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-hotline"])) || !String.IsNullOrEmpty(Convert.ToString(data["contact-time"])))
+                {
+                    <div class="group-info phoneCall">
+                        @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-hotline"])))
+                        {
+                            <i class="fal fa-phone-volume"></i>
+
+
+                        }
+                        <div class="info">
+                            @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-hotline"])))
+                            {
+                                <a href="tel:@Html.Raw(data["contact-hotline"])" title="@Html.Raw(data["contact-hotline"])" alt="@Html.Raw(data["contact-hotline"])" target="_self">@Html.Raw(data["contact-hotline"])</a>
+                            }
+                            @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-time"])))
+                            {
+                                @Html.Raw(data["contact-time"])
+                            }
+
+                        </div>
+                    </div>
+                }
+
+                @if (!String.IsNullOrEmpty(Convert.ToString(data["contact-email"])))
+                {
+
+                    <div class="picon">
+                        <i class="fal fa-envelope"></i>
+                        <a href="mailto:@Html.Raw(data["contact-email"])"
+                           title="@Html.Raw(data["contact-email"])"
+                           alt="@Html.Raw(data["contact-email"])"
+                           target="_self">@Html.Raw(data["contact-email"])</a>
+                    </div>
+
+                }
+                <div class="list-icon-social mt-1">
+                    @if (!String.IsNullOrEmpty(ShareTwitter))
+                    {
+                        <a class="btn rounded-circle btn-twitter"
+                           href="@Html.Raw(ShareTwitter)"
+                           title="Twitter"
+                           alt="Twitter"
+                           target="_blank"
+                           data-title="Twitter">
+                            <span class="fab fa-x-twitter"></span>
+                        </a>
+                    }
+
+                    @if (!String.IsNullOrEmpty(ShareFacebook))
+                    {
+                        <a class="btn rounded-circle btn-facebook"
+                           href="@Html.Raw(ShareFacebook)"
+                           title="Facebook"
+                           alt="Facebook"
+                           target="_blank"
+                           data-title="Fanpage">
+                            <span class="fab fa-facebook-f"></span>
+                        </a>
+                    }
+                    @if (!String.IsNullOrEmpty(ShareZalo))
+                    {
+                        <a class="btn rounded-circle btn-zalo"
+                           href="https://zalo.me/@Html.Raw(ShareZalo)"
+                           title="Zalo"
+                           alt="Zalo"
+                           target="_blank"
+                           data-title="Zalo">
+                            <span class="iconify" data-icon="simple-icons:zalo"></span>
+                        </a>
+                    }
+                    @if (!String.IsNullOrEmpty(ShareLinkedin))
+                    {
+                        <a class="btn rounded-circle btn-linkedin"
+                           href="@Html.Raw(ShareLinkedin)"
+                           title="LinkedIn"
+                           alt="LinkedIn"
+                           target="_blank"
+                           data-title="LinkedIn">
+                            <span class="fab fa-linkedin-in"></span>
+                        </a>
+                    }
+                    @if (!String.IsNullOrEmpty(ShareTelegram))
+                    {
+                        <a class="btn rounded-circle btn-telegram"
+                           href="https://t.me/@Html.Raw(ShareTelegram)"
+                           title="Telegram"
+                           alt="Telegram"
+                           target="_blank"
+                           data-title="Telegram">
+                            <span class="fab fa-telegram"></span>
+                        </a>
+                    }
+                    @if (!String.IsNullOrEmpty(ShareInstagram))
+                    {
+                        <a class="btn rounded-circle btn-instagram"
+                           href="@Html.Raw(ShareInstagram)"
+                           title="Instagram"
+                           alt="Instagram"
+                           target="_blank"
+                           data-title="Instagram">
+                            <span class="fab fa-instagram"></span>
+                        </a>
+                    }
+                    @if (!String.IsNullOrEmpty(ShareTiktok))
+                    {
+                        <a class="btn rounded-circle btn-tiktok"
+                           href="@Html.Raw(ShareTiktok)"
+                           title="Tiktok"
+                           alt="Tiktok"
+                           target="_blank"
+                           data-title="Tiktok">
+                            <span class="fab fa-tiktok"></span>
+                        </a>
+                    }
+                    @if (!String.IsNullOrEmpty(ShareYoutube))
+                    {
+                        <a class="btn rounded-circle btn-youtube"
+                           href="@Html.Raw(ShareYoutube)"
+                           title="Youtube"
+                           alt="Youtube"
+                           target="_blank"
+                           data-title="Youtube">
+                            <span class="fab fa-youtube"></span>
+                        </a>
+                    }
+
+                </div>
+            </div>
+            <div class="footer-col col-md-6 col-lg-2 footer-menu-list">
+                <div class="footer-tt tt-xs">Thông tin</div>
+                <div class="group-toggle-footer">
+                    <ul class="list-style-angle">
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.about"))" title="@Html.Raw(_translate.GetString("menu.about"))" alt="@Html.Raw(_translate.GetString("menu.about"))" target="_self">
+                                @Html.Raw(_translate.GetString("menu.about"))
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.feature"))" title="@Html.Raw(_translate.GetString("menu.feature"))" alt="@Html.Raw(_translate.GetString("menu.feature"))">
+                                @Html.Raw(_translate.GetString("menu.feature"))
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.product"))" title="@Html.Raw(_translate.GetString("menu.product"))" alt="@Html.Raw(_translate.GetString("menu.product"))">
+                                @Html.Raw(_translate.GetString("menu.product"))
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.news"))" title="@Html.Raw(_translate.GetString("menu.news"))" alt="@Html.Raw(_translate.GetString("menu.news"))" target="_self">
+                                @Html.Raw(_translate.GetString("menu.news"))
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Html.Raw(_translate.GetUrl("url.contact"))" title="@Html.Raw(_translate.GetString("menu.contact"))" alt="@Html.Raw(_translate.GetString("menu.contact"))" target="_self">
+                                @Html.Raw(_translate.GetString("menu.contact"))
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            @if (abouts.Any())
+            {
+
+                <div class="footer-col col-md-6 col-lg-3 col-xl-2 footer-menu-list">
+                    <div class="footer-tt tt-xs">@Html.Raw(_translate.GetString("home.customer-support"))</div>
+                    <div class="group-toggle-footer">
+                        <ul class="list-style-angle">
+                            @foreach (var item in abouts)
+                            {
+
+                                <li>
+                                    <a href="@Html.Raw(_translate.GetUrl("url.about"))@(item.Slug).html" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="_self">
+                                        @Html.Raw(item.Title)
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+    <div class="copyr">
+        <div class="container">
+            <div class="text-center">
+                © 2024 <b>Green eCard</b>.
+                <span class="text-nowrap">Powered by Vina Aspire </span>
+            </div>
+        </div>
+    </div>
+</footer>

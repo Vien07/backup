@@ -1,0 +1,31 @@
+extends layout/email-template
+block vars
+	- title = "Email Customer"
+	- heading = "Yêu cầu đặt lại mật khẩu của bạn"
+	- social = true
+	- header = true
+block email-main
+	.e-body
+		p !{sitename} đã nhận được yêu cầu đặt lại mật khẩu của bạn với email đã được đăng ký là !{'<b>nguyenvana@demo.com.</b>'}
+		p Click vào liên kết bên dưới để đặt lại mật khẩu của bạn.
+		p: a(href="https://pixabay.com/vi/photos/echiums-hoa-nh%e1%bb%afng-b%c3%b4ng-hoa-t%c3%adm-6760621/" target="_blank") https://pixabay.com/vi/photos/echiums-hoa-nh%e1%bb%afng-b%c3%b4ng-hoa-t%c3%adm-6760621/
+		p Liên kết sẽ hết hạn sau 1 giờ.
+		p 
+			| Nếu bạn không thực hiện hành động này, vui lòng bỏ qua thư này.
+			br
+			| Trân trọng!	
+		hr
+		.small.text-muted.note.mb-2 * Đây là email trả lời tự động, vui lòng không trả lời thư này.
+		p.fs-15.mb-1 Thông tin Liên hệ:
+		table.table-icontact
+			tbody 
+				tr
+					td: img.icon-contact(src='imgs/email.png')
+					td: a(href="mailto:support@domainname.com") support@domainname.com
+				tr
+					td: img.icon-contact(src='imgs/call.png')
+					td: a(href="tel:84-1900-1009") 84-1900-1009 
+				tr
+					td: img.icon-contact(src='imgs/web.png')
+					td: a(href="//www.websitedemo.com") www.websitedemo.com
+				

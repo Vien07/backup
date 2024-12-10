@@ -1,0 +1,43 @@
+﻿@using CMS.Repository
+@using DTO;
+@using Microsoft.AspNetCore.Http;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@inject IHome_Repository _rep
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+@{
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    var qualities = await _rep.GetConvenienceList(lang);
+}
+@if (qualities.Any())
+{
+    <section class="block-bg py-5 py-xl-6">
+        <div class="container">
+            <div class="title-box text-center mb-3">
+                <div class="tt-lg text-uppercase text-gradient">
+                    @Html.Raw(_translate.GetString("home.quality"))
+                </div>
+            </div>
+            <div class="desc text-center mb-45 text-desc w-lg-75 mx-auto">
+                @Html.Raw(_translate.GetString("home.quality-desc"))
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 w-xxl-90 list-features__v2 mx-auto">
+                @foreach (var item in qualities)
+                {
+                    <div class="col">
+                        <div class="block">
+                            <div class="avatar">
+                                <img src="@item.PicThumb" />
+                            </div>
+                            <div class="info">
+                                <div class="tt-xs">@Html.Raw(item.Title)</div>
+                                <div class="desc">@Html.Raw(item.Link)</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}

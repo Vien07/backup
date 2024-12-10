@@ -1,0 +1,532 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase">
+            <span class="pg-title-icon">
+                <i class="fas fa-layer-group">
+                </i>
+            </span>@_translate.GetStringAdmin("left-menu.calendar")
+        </h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="calendarapp-wrap calendarapp-sidebar-toggle">
+                @*<div class="calendarapp-sidebar">
+                        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">
+                            <div class="nicescroll-bar" tabindex="-50" style="overflow: hidden; width: auto; height: 100%; outline: none;">
+                                <a id="close_calendarapp_sidebar" href="javascript:void(0)" class="close-calendarapp-sidebar">
+                                    <span class="feather-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg></span>
+                                </a>
+                                <button onclick="OpenAddPopup()" type="button" class="btn btn-primary btn-block mt-50 mb-20" data-toggle="modal" data-target="#inputModal">
+                                    Add event
+                                </button>
+                            </div><div class="slimScrollBar" tabindex="-50" style="background: rgb(214, 217, 218); width: 6px; position: absolute; top: 0px; opacity: 0.8; display: none; border-radius: 0px; z-index: 99; right: 1px; height: 643px; outline: none;"></div><div class="slimScrollRail" style="width: 6px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
+                        </div>
+                    </div>*@
+
+                <div class="calendar-wrap">
+                    <div id="calendar">
+                    </div>
+                </div>
+                <!-- compose email -->
+                <!--<div class="modal fade modalform" id="inputmodal" tabindex="-1" role="dialog" aria-labelledby="inputmodal" aria-hidden="true">
+                    <div class="modal-dialog modal-sm" role="admin">
+                        <form class="modal-content needs-validation" id="forminput" name="forminput" novalidate onsubmit="return false">
+                            <div class="modal-header bg-grey-dark-5">
+                                <h6 class="modal-title text-white" id="examplemodalpopoverslabel">add new event</h6>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <ul class="nav nav-tabs" id="langtab" role="tablist">
+                                        <li style="cursor:pointer" lang="vi" class="nav-item">
+                                            <a class="nav-link active show" data-toggle="tab" role="tab" aria-controls="info" aria-selected="true"><i class="flag-icon flag-icon-vn"></i> tiếng việt</a>
+                                        </li>
+                                        <li style="cursor:pointer" lang="en" class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="img" aria-selected="false"><i class="flag-icon flag-icon-us"></i> english</a>
+                                        </li>
+                                    </ul>
+                                    <hr class="hr-light mt-0">
+                                </div>
+                                <div id="modalbody">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>-->
+                <!-- /compose email -->
+            </div>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+<!-- Custom Modal -->
+<div class="modal fade ModalForm" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModal" aria-hidden="true">
+    <div class="modal-dialog" role="admin">
+        <form class="modal-content needs-validation" id="formInput" name="formInput" novalidate onsubmit="return false">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white text-uppercase">
+                    <i class="fas fa-layer-plus pr-10 bg-transparent"></i>Thông tin sự kiện
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <ul class="nav nav-tabs" id="langTab" role="tablist">
+                        <li style="cursor:pointer" lang="vi" class="nav-item">
+                            <a class="nav-link active show" data-toggle="tab" role="tab" aria-controls="info" aria-selected="true"><i class="flag-icon flag-icon-vn"></i> Tiếng việt</a>
+                        </li>
+                        <li style="cursor:pointer" lang="en" class="nav-item">
+                            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="img" aria-selected="false"><i class="flag-icon flag-icon-us"></i> English</a>
+                        </li>
+                    </ul>
+                    <hr class="hr-light mt-0">
+                </div>
+                <div id="bodyModal">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times mr-5"></i>
+                    @_translate.GetStringAdmin("group.btn-close")
+                </button>
+                <button id="btnDelete" onclick="Delete()" type="button" class="btn btn-danger">
+                    <i class="fas fa-backspace"></i>
+                    Xóa
+                </button>
+                <button id="btnSave" onclick="Save()" type="submit" class="btn btn-primary">
+                    <i class="fas fa-save mr-5"></i>
+                    @_translate.GetStringAdmin("group.btn-save")
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Custom Modal -->
+@section Scripts{
+    <script type="text/javascript">
+        //define
+        var actionUrl = "/b-admin/Calendar/"
+        var state = "";
+        var lang = "@ConstantStrings.DefaultLangAdmin";
+        var localStorgaNameObjs = "rawCalendarObjs";
+        var localStorgaNameMultiLang_Obj = "rawCalendarMultiLang_Obj";
+
+        var imagesObj = {
+            base64: '',
+            type: ''
+        }
+        var obj = {
+            pid: 0,
+            picThumb: '',
+            //link: '',
+            startDate: "",
+        };
+
+        var objLang = {
+            Pid: 0,
+            Title: '',
+            //Description: '',
+            LangKey: '',
+        }
+
+        var multiLang_obj = []
+
+        var calendarData = [];
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth();
+        var year = date.getFullYear();
+
+        function LoadData(langKey) {
+            $.ajax({
+                url: actionUrl + 'LoadData',
+                method: 'GET',
+                data: {
+                    //Page: page,
+                    //pageNumber: pageNumber,
+                    LangKey: lang
+                },
+                success: function (response) {
+                    calendarData = response.data;
+                    InitCalendar();
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+
+        function ReloadData(langKey) {
+            $.ajax({
+                url: actionUrl + 'LoadData',
+                method: 'GET',
+                data: {
+                    //Page: page,
+                    //pageNumber: pageNumber,
+                    LangKey: lang
+                },
+                success: function (response) {
+                    calendarData = response.data;
+                    $('#calendar').fullCalendar('refetchEvents');
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }       
+
+        function InitCalendar() {
+            $('#calendar').fullCalendar({
+                locale: 'vi',
+                buttonText: {
+                    list: "Danh sách"
+                },
+                selectable: true,
+                disableDragging: true,
+                select: function (date) {
+                    obj.startDate = date.format();
+                    state = "add";
+                    localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                    OpenAddPopup();
+                },
+                eventClick: function (calEvent) {
+                    state = "edit";
+                    OpenEditModal(calEvent.id);
+                },
+                displayEventTime: false,
+                themeSystem: 'bootstrap4',
+                customButtons: {
+                    calendarSidebar: {
+                        text: 'icon',
+                    }
+                },
+                header: {
+                    //left: 'calendarSidebar ,today',
+                    left: 'today',
+                    center: 'prev,title,next',
+                    //right: 'month,agendaWeek,agendaDay,listMonth'
+                    right: 'month,listMonth',
+                },
+                droppable: true,
+                editable: false,
+                height: 'parent',
+                eventLimit: true, // allow "more" link when too many events
+                windowResizeDelay: 500,
+                //events: JSON.parse(calendarData),
+                eventSources: [
+                    // You can define multiple sources here
+                    function (start, end, timezone, callback) {
+                        // Your logic to fetch events from a source
+                        var events = JSON.parse(calendarData);
+                        // Call the callback with the fetched events
+                        callback(events);
+                    }
+                ],
+                //drop: function () {
+                //    if ($("#remove_event").is(':checked'))
+                //        $(this).remove();
+                //}
+            });
+
+            setTimeout(function () {
+                $('.fc-left .fc-calendarSidebar-button').attr("id", "calendarapp_sidebar_move").html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>');
+                $('.fc-left .fc-today-button').removeClass('btn-primary').addClass('btn-outline-secondary btn-sm');
+                $('.fc-center .btn').removeClass('btn-primary').addClass('btn-outline-light btn-sm');
+                $('.fc-right .btn-group').addClass('btn-group-sm');
+                $('.fc-right .btn').removeClass('btn-primary').addClass('btn-outline-secondary');
+            }, 100);
+        }
+
+        function Update(data) {
+            $('#btnSave').prop('disabled', true);
+            if (Validate()) {
+                var formData = new FormData();
+                formData = GetFormData();
+
+                $.ajax({
+                    url: actionUrl + 'Update',
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        if (response.error.status) {
+                            Clear();
+
+                            ReloadData(lang);
+
+                            AlertToast('Thông tin', "Thành công", "success")
+
+                        } else {
+                            $('#btnSave').prop('disabled', false);
+
+                            SweetAlert('Thông tin', response.error.mess, 'error')
+                        }
+                    },
+                    error: function (e) {
+                        console.error(e)
+                    }
+                })
+            } else {
+                $('#btnSave').prop('disabled', false);
+
+            }
+        }
+        function Insert() {
+            $('#btnSave').prop('disabled', true);
+            if (Validate()) {
+                var formData = new FormData();
+                formData = GetFormData();
+                $.ajax({
+                    url: actionUrl + 'Insert',
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        updateState = true;
+                        if (response.error.status) {
+                            Clear();
+
+                            ReloadData(lang);
+
+
+                            AlertToast('Thông báo', 'Thành công', 'success')
+
+                        } else {
+                            $('#btnSave').prop('disabled', false);
+
+                            SweetAlert('Thông báo', response.error.mess, 'error')
+                        }
+                    },
+                    error: function (e) {
+                        $('#btnSave').prop('disabled', false);
+                    }
+                })
+            } else {
+                $('#btnSave').prop('disabled', false);
+
+            }
+        }
+
+        function Delete() {
+            let Pid = obj.pid;
+            Swal.fire({
+                title: 'Bạn có muốn xóa?',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: actionUrl + "Delete",
+                        method: "POST",
+                        data: {
+                            Pid: Pid
+                        }
+                    }).done(function (data) {
+                        if (data.isError) {
+                            Clear();
+                            ReloadData(lang);
+                            AlertToast('Thông báo', "Thành công", "success")
+                        } else {
+                            SweetAlert('Thông báo', data.messError, 'error')
+                        }
+                    })
+                }
+            })
+
+        }
+
+        $(function () {
+            //GetSelectPageSearch('#selectPage', lang);
+            LoadData(lang);
+        })
+
+
+        //raw data action
+        function CustomSetDataEdit(data) {
+            obj = data.detail;
+            multiLang_obj = data.list;
+        }
+
+        function ShowRawData() {
+            if (state === "add") {
+                // get raw data in localStorage
+                var rawObjs = localStorage.getItem(localStorgaNameObjs);
+                if (rawObjs != null && typeof rawObjs != "undefined" && rawObjs != "null") {
+                    obj = JSON.parse(rawObjs);
+                }
+                var rawMultiLang_Obj = localStorage.getItem(localStorgaNameMultiLang_Obj);
+                if (rawMultiLang_Obj != null && typeof rawMultiLang_Obj != "undefined" && rawMultiLang_Obj != "null") {
+                    multiLang_obj = JSON.parse(rawMultiLang_Obj);
+                }
+                $("#btnDelete").hide();
+            }
+            else if (state === "edit") {
+                $("#imgPicThumb").css("background-image", "url('" + obj.picThumb + "'");
+                $("#btnDelete").show();
+            }
+
+            if (imagesObj.type == "new") {
+                $("#imgPicThumb").css("background-image", "url('" + imagesObj.base64 + "'");
+            }
+
+            //SetToggle('#toggle_enable', obj.enabled);
+            if (multiLang_obj.length > 0) {
+                tobjLang = multiLang_obj.filter(x => x.LangKey == lang)[0];
+                if (tobjLang != null && typeof tobjLang != "undefined" && tobjLang != "null") {
+                    objLang = tobjLang;
+                }
+            }
+            if(objLang) {
+                $('#Title').val(objLang.Title);
+                //$('#Description').val(objLang.Description);
+            } else {
+                $('#Title').val("");
+                //$('#Description').val("");
+            }
+            //$('#Link').val(obj.link);
+        }
+        function SaveRawData() {
+            //obj.link = $("#Link").val();
+            var tempObjLang = {};
+            tempObjLang.Title = $('#Title').val();
+            //tempObjLang.Description = $('#Description').val();
+            tempObjLang.LangKey = lang;
+            var tempMultiLang_obj = multiLang_obj.filter(x => x.LangKey == lang);
+            if (tempMultiLang_obj.length > 0) {
+                tempMultiLang_obj[0].Title = tempObjLang.Title;
+                //tempMultiLang_obj[0].Description = tempObjLang.Description;
+            }
+            else {
+                multiLang_obj.push(tempObjLang);
+            }
+            if (state == "add") {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+            }
+        }
+        function GetFormData() {
+            var formData = new FormData();
+            if (imagesObj.type == "new") {
+                var blob = dataURItoBlob(imagesObj.base64);
+                formData.append('PicThumb', blob, 'fileName.jpeg');
+            }
+            formData.append("stringObj", JSON.stringify(obj));
+            formData.append("stringMultiLangObj", JSON.stringify(multiLang_obj));
+            return formData;
+        }
+        function Validate() {
+            SaveRawData();
+            var rs = false;
+            if ($('#Title').val() == "") {
+                AlertToast('Thông báo', "Chưa nhập tiêu đề", 'warning')
+                return false;
+            }
+            //if (!imagesObj.base64 && state == "add") {
+            //    AlertToast('Thông báo', "Chưa nhập hình ảnh", 'warning')
+            //    return false;
+            //}
+            return true;
+        }
+
+        //Initinput Action
+        function InitInput() {
+            $('.raw').keyup(function () {
+
+                SaveRawData();
+            });//event raw
+        }
+        function ClearInputPopup() {
+            obj = {
+                pid: 0,
+                picThumb: '',
+                startDate: ''
+            };
+            objLang = {
+                Pid: 0,
+                Title: '',
+                //Description: '',
+                LangKey: '',
+            }
+            multiLang_obj = [];
+            cate = [];
+            ClearImages();
+        }
+        function Clear() {
+            ClearInputPopup();
+            if (state == 'add') {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+            }
+            else if (state = "edit") {
+
+            }
+
+            state = "";
+            $('#btnSave').prop('disabled', false);
+            $('#formInput').removeClass("was-validated")
+            $("#inputModal").modal("hide");
+        }
+
+        //grid action
+        function LoadGrid(jsString, paging) {
+            var data = JSON.parse(jsString)
+            $("#tbodyData").html("")
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                html = `<tr class="${!data[i].Enabled ? "inactive" : ""}" tabIndex="${i}" slot="${data[i].Order}"  id="${data[i].Pid}">
+                              <td  class="align-middle pr-0">
+                                  <div class="custom-control custom-checkbox">
+                                      <input  onclick="KtCheckbox()" type="checkbox" class="custom-control-input" id="customCheck-${data[i].Pid}" name="Chk" value="${data[i].Pid}">
+                                      <label class="custom-control-label" for="customCheck-${data[i].Pid}">&nbsp;</label>
+                                  </div>
+                                  </td>                                     <td>
+                                        <a role="button" href="#" data-src="${data[i].Images}" onmouseover="tooltipImg(this)" onclick="OpenEditModal(${data[i].Pid})" class="${!data[i].Enabled ? "inactive" : ""} avatar avatar-xs rounded" style="background-image: url('${data[i].Images}');">
+                                        </a>
+                                      </td>
+                                    <td><a  data-toggle="tooltip" data-original-title="edit" style="cursor:pointer"  onclick="OpenEditModal(${data[i].Pid})"  class="${data[i].Enabled == false ? "text-mute" : "text-primary"}">${data[i].Title}</a></td>
+                                    <td class="align-middle text-md-center">
+                                    <span class="toggle-wrap">
+                                    <div id="toggle_${data[i].Pid}" class="toggle toggle-sm toggle-simple toggle-light toggle-bg-success toggle1 mt-5"></div>
+                                    </span>
+                                    </td>
+                                  <td class="text-center text-nowrap">
+                        <input id="orderInput-${data[i].Pid}" onfocusout="UpdateOrder(${data[i].Pid})" type="text" tabindex="${100 + i}" class="form-control form-control-sm d-inline mr-2 text-right border" placeholder="" value="${data[i].Order}" style="width:45px;height:25px ">
+                        <a    style="cursor:pointer"  data-toggle="tooltip" data-original-title="move"><i class="fas fa-arrows-alt text-dark handle"></i></a>
+
+                                      <a style="cursor:pointer" onclick="OpenEditModal(${data[i].Pid})" class="mx-2" data-toggle="tooltip" data-original-title="edit"><i class="far fa-calendarrs-h text-dark"></i></a>
+                                      <a style="cursor:pointer" onclick="Delete(${data[i].Pid})"data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a>
+                                  </td>
+                                </tr>`;
+                $("#tbodyData").append(html)
+                InitToggle(data[i]);
+            }
+            var pageHtml = Paging(paging.curentpage, paging.lastpage);
+            $("#divPaging").html(pageHtml)
+            ToolTip();
+            InitDragDropTable();
+        }
+    </script>
+}

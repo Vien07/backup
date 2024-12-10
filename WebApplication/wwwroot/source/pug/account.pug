@@ -1,0 +1,70 @@
+extends template/template
+block vars
+	- title= 'Cài đặt tài khoản'
+	- wrapperClass = ''
+	- menuActive = ''
+	- homeSlider = false
+	- bannerAll = false
+	- breadcrumb = false
+	- login = true
+	- navigate = true
+
+block breadcrumb 
+	+breadcrumb('container', {})
+
+block mainer
+	main.mainer
+		.container.account-page.py-5
+			.nav.nav-tab-detail
+				+a('#tb01', 'nav-link fw-bold active', 'Thông tin tài khoản')(data-bs-toggle="tab" area-seleced="true")
+				+a('#tb02', 'nav-link fw-bold', 'Đổi mật khẩu')(data-bs-toggle="tab" area-selected="false")
+			.tab-content
+				.tab-pane.fade.active.show#tb01 
+					h1.tt.text-desc.fw-semibold.mb-4.text-uppercase Thay đổi thông tin
+					form.form-validate.material-form.form-sm
+						.form-group.mb-3
+							input.form-control.fw-semibold(type="text" value="nguyenvana@user.com" disabled required)
+							label.label-text Email
+						.row.row-cols-2.gx-3
+							.col
+								.form-group.mb-3
+									input.form-control.fw-semibold(type="text" value="Tư" required)
+									label.label-text Họ
+							.col 
+								.form-group.mb-3
+									input.form-control.fw-semibold(type="text" value="Mã Ý" required)
+									label.label-text Tên
+						.text-muted.fw-bold.fs-13.text-uppercase Sinh nhật
+						.d-flex.birthday-group 
+							.item.year
+								.form-group.mb-3
+									input.form-control.fw-semibold(type="text" value="")
+									label.label-text Năm
+							.item.month
+								.form-group.mb-3
+									input.form-control.fw-semibold(type="text" value="")
+									label.label-text Tháng
+							.item.day
+								.form-group.mb-3
+									input.form-control.fw-semibold(type="text" value="")
+									label.label-text Ngày
+						.form-group.button 
+							button.btn.btn-primary.px-4 Cập nhật
+				.tab-pane.fade#tb02
+					h1.tt.text-desc.fw-semibold.mb-4.text-uppercase Thay đổi thông tin
+					form.form-validate.material-form.form-sm
+						.form-group.mb-3
+							input.form-control.fw-semibold#newpassw(type="password" required)
+							span.passw-toggle-view.far.fa-eye-slash
+							label.label-text Nhập mật khẩu cũ
+						.form-group.mb-3
+							input.form-control.fw-semibold#newpassw(type="password" required)
+							span.passw-toggle-view.far.fa-eye-slash
+							label.label-text Nhập mật khẩu mới
+						.form-group.mb-3
+							input.form-control.fw-semibold(type="password" required data-parsley-equalto="#newpassw")
+							span.passw-toggle-view.far.fa-eye-slash
+							label.label-text Nhập lại mật khẩu mới
+						.form-group.button 
+							button.btn.btn-primary.px-4 Lưu thay đổi
+		+validateJs()

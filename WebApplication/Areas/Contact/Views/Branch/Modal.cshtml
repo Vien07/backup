@@ -1,0 +1,53 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+
+<div class="row">
+    <!-- Tiêu đề -->
+    <div class="col-12 col-md-6 pr-md-1">
+        <div class="form-group mb-3">
+            <label class="tt-label">Tiêu đề</label>
+            <input class="form-control raw"
+                   id="Title"
+                   name="Title"
+                   placeholder="Nhập tiêu đề"
+                   value=""
+                   required
+                   type="text" />
+        </div>
+    </div>
+    <div class="col-12 col-md-6 pl-md-1">
+        <div class="form-group mb-3">
+            <label class="tt-label">Số điện thoại</label>
+            <input class="form-control raw"
+                   id="PhoneNumber"
+                   name="PhoneNumber"
+                   placeholder="Nhập số điện thoại"
+                   value=""
+                   type="text" />
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group mb-3">
+            <label class="tt-label">Địa chỉ</label>
+            <input class="form-control raw"
+                   id="Address"
+                   name="Address"
+                   placeholder="Nhập địa chỉ"
+                   value=""
+                   type="text" />
+        </div>
+    </div>
+    <!-- Editor -->
+    <div class="col-12">
+        <div class="form-group mb-3">
+            <label class="tt-label">Bản đồ</label>
+            <textarea class="form-control raw"
+                      id="Link"
+                      name="Link"
+                      placeholder="Nhập bản đồ"
+                      value=""
+                      type="text"
+                      rows="5"></textarea>
+        </div>
+    </div>
+</div>

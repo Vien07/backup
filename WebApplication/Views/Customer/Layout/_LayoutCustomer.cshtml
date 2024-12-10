@@ -1,0 +1,87 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using CMS.Repository;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+@inject IHome_Repository _repHome;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+@inject ICommonServices _mtc;
+@inject IContact_Repository _repContact;
+@inject ICustomer_Repository _repCustomer;
+@inject ITranslateServices _translate
+@{
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var customer = _repCustomer.GetProfile();
+}
+
+@section Meta {
+    @RenderSection("Meta", required: false)
+}
+
+@section Banner {
+    @RenderSection("Banner", required: false)
+}
+<section class="block-bg py-5 py-xl-6">
+    <div class="container">
+        <div class="block-sidebar block-user mb-md-5" data-wrapper>
+
+            @RenderBody()
+
+            <div class="sidebar order-md-1" data-sidebar>
+                <div data-stick data-width-fill>
+                    <div class="pane pane-menu-list">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar rounded-circle">
+                                <img class="rounded-circle"
+                                     src="@(!String.IsNullOrEmpty(customer.PicThumb) ? Html.Raw(customer.PicThumb) : "/css/skin/user-default.png")"
+                                     alt="@Html.Raw(customer.FirstName)"
+                                     title="@Html.Raw(customer.FirstName)" />
+                            </div>
+                            <div class="info">
+                                <div class="text-desc">Chào,</div>
+                                <div class="tt">@Html.Raw(customer.FirstName) @Html.Raw(customer.LastName)</div>
+                            </div>
+                        </div>
+                        <ul class="menu-vertical">
+                            <li class="mene-inside">
+                                <a alt="@Html.Raw(_translate.GetString("menu.setting-account"))" title="@Html.Raw(_translate.GetString("menu.setting-account"))" href="@_translate.GetUrl("url.setting-account")">@Html.Raw(_translate.GetString("menu.setting-account"))</a>
+                            </li>
+                            <li class="mene-inside">
+                                <a alt="@Html.Raw(_translate.GetString("menu.order-management"))" title="@Html.Raw(_translate.GetString("menu.order-management"))" href="@Html.Raw(_translate.GetUrl("url.order-management"))">@Html.Raw(_translate.GetString("menu.order-management"))</a>
+                            </li>
+                            <li class="mene-inside">
+                                <a alt="@Html.Raw(_translate.GetString("menu.change-password"))" title="@Html.Raw(_translate.GetString("menu.change-password"))" href="@Html.Raw(_translate.GetUrl("url.change-password"))">@Html.Raw(_translate.GetString("menu.change-password"))</a>
+                            </li>
+                            <li class="mene-inside">
+                                <a alt="@Html.Raw(_translate.GetString("menu.log-out"))" title="@Html.Raw(_translate.GetString("menu.log-out"))" href="/Customer/LogOut">@Html.Raw(_translate.GetString("menu.log-out"))</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@RenderSection("Modal", required: false)
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+    <script>
+        (function () {
+            var menu = $('li.mene-inside');
+            menu && menu.each(function (i, ele) {
+                $(ele).removeClass('active');
+                var pathName = location.pathname.replace(/\//g, '');
+                var href = $(ele).find('a').attr('href').replace(/\//g, '');
+                if (pathName == href) {
+                    $(ele).addClass('active');
+                }
+                if (pathName == "chi-tiet-don-hang.html" && href == "quan-ly-don-hang.html") {
+                    $(ele).addClass('active');
+                }
+            });
+        })();
+    </script>
+
+}

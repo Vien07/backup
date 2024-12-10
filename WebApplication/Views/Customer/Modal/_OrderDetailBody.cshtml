@@ -1,0 +1,29 @@
+﻿@using DTO.Cart;
+@model IEnumerable<NameCard>
+@{
+    Layout = null;
+    var index = 0;
+}
+
+    @if (Model.Count() == 0)
+    {
+        <tr class="table-empty">
+            <td colspan="4">
+                <span class="text-desc">Bạn chưa có hồ sơ nào.</span>
+            </td>
+        </tr>
+
+    }
+    @foreach (var profile in Model)
+    {
+        index++;
+        <tr>
+            <td><span>@index</span></td>
+            <td><span>@profile.FullName</span></td>
+            <td><span>@profile.Position</span></td>
+            <td class="text-center">
+                <a class="btn-edit" data-bs-toggle="modal" data-bs-target="#editProfile" onclick="OpenEditModalCard(@profile.Pid)">Chỉnh sửa <i class="fa fa-caret-right ms-1"></i></a>
+            </td>
+        </tr>
+    }
+

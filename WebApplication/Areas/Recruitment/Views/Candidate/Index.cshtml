@@ -1,0 +1,258 @@
+﻿@using CMS.Services.TranslateServices
+@using static CMS.Services.WebsiteServices.WebsiteServices
+@using static DTO.ConstantStrings
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+    string filePath = "/docs/CandidateList.csv";
+}
+
+@section styles{
+    <style>
+        .can-read:hover {
+            cursor: pointer;
+        }
+    </style>
+}
+
+<!-- Container -->
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Danh sách ứng tuyển</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <!--Discription table-->
+                @*<p class="mb-20">
+                        @_translate.GetStringAdmin("table-desc.contact-list")
+                    </p>*@
+                <!--filter action-->
+                <div class="form-inline align-items-center">
+                    <div class="col-auto form-group px-0 mb-3">
+                        <select onchange="Search()" id="select-enabled" name="select-enabled" class="form-control select2 form-control-sm">
+                            <option value="" selected>—@_translate.GetStringAdmin("log.select-all")</option>
+                            <option value="1">Đã xem</option>
+                            <option value="0">Chưa xem</option>
+                        </select>
+                    </div>
+                    <div class="col-auto form-group px-1 mb-3 d-flex">
+                        <input id="key" type="search" class="form-control form-control-sm" placeholder="Keyword search">
+                        <div class="input-group-append">
+                            <button onclick="Search()" class="btn btn-sm btn-light ml-2" title="@_translate.GetStringAdmin("group.tooltip-search")" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive">
+                                <table id="tableData" class="table table-sm table-hover mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="py-2" width="5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input onclick="CheckAll()" type="checkbox" class="custom-control-input" id="customcheck-all">
+                                                    <label class="custom-control-label position-static" for="customcheck-all"></label>
+                                                </div>
+                                            </th>
+                                            <th class="py-2">Công việc</th>
+                                            <th class="py-2" width="450">Ứng viên</th>
+                                            <th class="py-2 text-center" width="150">CV</th>
+                                            <th class="py-2 text-center" width="200">Ngày gửi</th>
+                                            @*<th class="py-2 text-center" width="100">
+                                                    @_translate.GetStringAdmin("label.action")
+                                                </th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyData"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="my-1 mr-auto">
+                                <button onclick="NotSeen()" type="button" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="active"><i class="fas fa-eye"></i></button>
+                                <button onclick="Seen()" type="button" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="inactive"><i class="fas fa-eye-slash"></i></button>
+                                <button onclick="Delete()" type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fal fa-trash-alt"></i></button>
+                            </div>
+                            <div class="my-1 ml-auto" id="divPaging">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+<!-- /Container -->
+
+@section Scripts{
+    <script>
+        var pageNumber = 25;// $('#pageNumber').val();
+        var page = 1;
+        $('#key').on("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                Search(0);
+            }
+        });
+        $(function () {
+            GetListData();
+        })
+        function GetListData() {
+            $.ajax({
+                url: '/b-admin/Candidate/GetData',
+                method: 'GET',
+                data: {
+                    Page: page,
+                    pageNumber:pageNumber
+                }
+            }).done(function (data) {
+                //console.log(data.jsData);
+                LoadList(data.jsData,data.paging);
+            })
+        }
+        function LoadList(jsString,paging) {
+            var data = JSON.parse(jsString)
+            //console.log(data)
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                let cv = data[i].CV ? data[i].CV : '';
+                html += `<tr id="span-row-${data[i].Pid}" class="${!data[i].IsRead ? "alert-warning" : ""} can-read">
+                              <td>
+                                  <div class="custom-control custom-checkbox">
+                                      <input onclick="KtCheckbox()" type="checkbox" class="custom-control-input" id="customCheck-${data[i].Pid}" name="Chk" value="${data[i].Pid}">
+                                      <label class="custom-control-label" for="customCheck-${data[i].Pid}">&nbsp;</label>
+                                  </div>
+                              </td>
+                            <td onclick="ReadContact(${data[i].Pid}, ${data[i].IsRead})">
+                                <h6 class="text-primary mb-1 font-weight-400">${data[i].Title}</h6>
+                                <blockquote class="blockquote d-inline-block px-3 py-1 mb-0 font-13"><p>${data[i].Content}</p></blockquote>
+                            </td>
+                              <td onclick="ReadContact(${data[i].Pid}, ${data[i].IsRead})">
+                                <p>${data[i].FullName}</p>
+                                <ul class="group-info font-13">
+                                  <li><p class="text-desc">Tiêu đề: ${data[i].Title1}</p></li>
+                                  <li><p class="text-desc">Điện thoại: ${data[i].PhoneNumber}</p></li>
+                                  <li><p class="text-desc">Email: ${data[i].Email}</p>
+                                  </li>
+                                </ul>
+                                </td>
+                                <td onclick="ReadContact(${data[i].Pid}, ${data[i].IsRead})" class="text-center"><a downloaded href="${cv}">Tải CV</a></td>
+                              <td onclick="ReadContact(${data[i].Pid}, ${data[i].IsRead})" class="text-center"><p>${moment(data[i].RecivedDate).format('@ViewBag.DateFormat HH:mm:ss')}</p></td>
+                          </tr>`;
+            }
+            $("#tbodyData").html(html)
+                        //console.log(paging)
+            var pageHtml = Paging( paging.curentpage, paging.lastpage);
+            $("#divPaging").html(pageHtml)
+        }
+        function Search(currentPage) {
+            if (currentPage > 0) {
+                page = currentPage;
+            }
+             $.ajax({
+                 url: '/b-admin/Candidate/GetData',
+                method: 'GET',
+                data: {
+                    Page: page,
+                    PageNumber: pageNumber,
+                    Key: $('#key').val(),
+                    Enable: ConvertIntToBool($("#select-enabled").val())
+                }
+             }).done(function (data) {
+                 page = page;
+                //console.log(data.jsData);
+                LoadList(data.jsData,data.paging);
+            })
+        }
+        function ChangePageNumber() {
+            pageNumber = $('#pageNumber').val();
+            Search(page)
+        }
+
+        function ReadContact(Pid, IsRead) {
+            if (IsRead === true) return;
+            $.ajax({
+                url: '/b-admin/Candidate/ReadContact',
+                method: 'GET',
+                data: {
+                    Pid: Pid
+                }
+            }).done(function (data) {
+                $("#span-row-" + Pid).removeClass("alert-warning");
+            });
+        }
+
+        function Delete() {
+            var listPid = GetListItemChecked("Chk");
+              $.ajax({
+                  url: '/b-admin/Candidate/Delete',
+                method: 'POST',
+                data: {
+                    Pid: listPid,
+                    Page: page,
+                    pageNumber:pageNumber
+                }
+            }).done(function (data) {
+                if (data.error) {
+               AlertToast('@_translate.GetStringAdmin("alert.infomation")', "@_translate.GetStringAdmin("alert.success")", "success")
+               LoadList(data.listData.jsData,data.listData.paging)
+                }
+                else {
+               SweetAlert('@_translate.GetStringAdmin("alert.infomation")',"@_translate.GetStringAdmin("alert.fail")", 'error')
+           }
+            })
+        }
+
+        function Seen() {
+            var listPid = GetListItemChecked("Chk");
+              $.ajax({
+                  url: '/b-admin/Candidate/Seen',
+                method: 'POST',
+                data: {
+                    Pid: listPid,
+                    Page: page,
+                    pageNumber:pageNumber
+                }
+            }).done(function (data) {
+                         if (data.error) {
+               AlertToast('@_translate.GetStringAdmin("alert.infomation")', "@_translate.GetStringAdmin("alert.success")", "success")
+               LoadList(data.listData.jsData,data.listData.paging)
+                }
+                else {
+               SweetAlert('@_translate.GetStringAdmin("alert.infomation")',"@_translate.GetStringAdmin("alert.fail")", 'error')
+           }
+            })
+        }
+        function NotSeen() {
+            var listPid = GetListItemChecked("Chk");
+              $.ajax({
+                  url: '/b-admin/Candidate/NotSeen',
+                method: 'POST',
+                data: {
+                    Pid: listPid,
+                    Page: page,
+                    pageNumber:pageNumber
+                }
+            }).done(function (data) {
+                if (data.error) {
+               AlertToast('@_translate.GetStringAdmin("alert.infomation")', "@_translate.GetStringAdmin("alert.success")", "success")
+               LoadList(data.listData.jsData,data.listData.paging)
+                }
+                else {
+               SweetAlert('@_translate.GetStringAdmin("alert.infomation")',"@_translate.GetStringAdmin("alert.fail")", 'error')
+           }
+            })
+        }
+
+    </script>
+}
+

@@ -1,0 +1,291 @@
+$font-family        : "Proxima Nova", sans-serif; // Proxima Nova
+$font-tt            : $font-family;
+$font-size          : 16px;
+$line-height        : 1.65;
+$line-height-desc   : 1.5;
+$medium             : 500;
+$semibold           : 600;
+$bold               : 700;
+$body-bg            : #fff;
+$color-body         : #524e6f; //4e5563
+$body-color         : $color-body;
+$border-radius      : 6px;
+$primary            : #362112;
+$secondary          : #fed766;
+$desc               : #696879;
+$dark               : #232330;
+$light              : #eeeff1;
+$gray               : #bfbdc1;
+$danger             : #de0c0c;
+$success            : #13b265;
+
+$fa-all: ".fa", ".far", ".fas", ".fab", ".bi";
+$h-all : "h1", "h2", "h3", "h4", "h5";
+$tt-all: ".tt", ".tt-xs", ".tt-sm", ".tt-md", ".tt-lg", ".tt-xl", ".tt-xxl";
+
+// Pagination
+$pagination-color                       : darken($primary, 10%);
+$pagination-border-width                : 1px;
+$pagination-border-radius               : $border-radius;
+$pagination-border-color                : rgba($primary, .15);
+$pagination-focus-bg                    : #fff;
+$pagination-focus-box-shadow            : none;
+$pagination-hover-bg                    : rgba($primary, .07);
+$pagination-hover-border-color          : rgba($primary, .5);
+$pagination-margin-start                : 5px;
+$pagination-disabled-color              : rgba($primary, .6);
+$pagination-disabled-border-color       : rgba($primary, .1);
+// $pagination-active-color:           $component-active-color;
+// $pagination-active-bg:              $component-active-bg;
+// $pagination-active-border-color:    $pagination-active-bg;
+
+$breadcrumb-font-size                   : 14px;
+$breadcrumb-padding-y                   : .875rem;
+$breadcrumb-margin-bottom               : 1rem;
+$breadcrumb-active-color                : $primary;
+// $breadcrumb-divider-color               : #fff;
+//
+$table-cell-vertical-align              : middle;
+$table-bg                               : #ffffff;
+// conatiner-gutter
+$grid-gutter-width                      : 1.875rem;
+
+// Components
+$accordion-button-active-bg             : #fff;
+$accordion-button-focus-border-color    : #fff;
+$accordion-button-focus-box-shadow      : none !important;
+$accordion-padding-x                    : 0;
+$offcanvas-border-width                 : 0;
+$enable-negative-margins                : true;
+$input-btn-padding-y                    : 8px;
+$input-btn-focus-color-opacity          : .15;
+
+$modal-inner-padding:               1.5rem;
+$modal-content-border-width:        0;
+$modal-content-border-radius:       $border-radius;
+$modal-backdrop-opacity:            1;
+$modal-md:                          720px;
+$modal-fade-transform:              scale(.9);
+$modal-transition:                  transform .2s ease-out;
+
+$progress-border-radius:            0;
+
+@import "../bootstrap/functions";
+@import "../bootstrap/variables";
+@import "../bootstrap/mixins";
+
+$custom-colors:           (
+  "dark-primary"          : darken($primary, 10%),
+  "dark"                  : $dark,
+  "gray"                  : $gray,
+  "lighter"               : #f3f4f8,
+  "phone"                 : #13b27a,
+  "desc"                  : $desc,
+  "facebook"              : #1777f2,
+  "youtube"               : #de1111,
+  "twitter"               : #1dacff,
+  "pinterest"             : #e11151,
+  "envelope"              : #FFBB00,
+  "linkedin"              : #114eab,
+  "instagram"             : #780cdf,
+  "facebook-messenger"    : #1d82ff,
+  "yellow"                : #ffe81f,
+);
+// Merge the maps
+$theme-colors: map-merge($theme-colors, $custom-colors);
+$list-all-colors: (
+  1 : $primary,
+  2 : $secondary,
+  3 : $success,
+  4 : $warning,
+  5 : $info,
+  6 : $dark,
+  7 : map-get($custom-colors, "facebook"),
+  8 : map-get($custom-colors, "youtube"),
+  9 : map-get($custom-colors, "instagram"),
+  10: map-get($custom-colors, "twitter"),
+  11: map-get($custom-colors, "pinterest"),
+  12: map-get($custom-colors, "envelope"),
+  13: map-get($custom-colors, "linkedin"),
+  14: map-get($custom-colors, "phone"),
+);
+
+$btn-border-width   : 1px;
+$btn-font-weight    : 600;
+$btn-white-space    : nowrap;
+$btn-border-radius  : 6px;
+$btn-close-width    : 14px;
+$btn-close-color    : $body-color;
+$min-contrast-ratio:   1.5;
+$btn-hover-bg-shade-amount:       15% - 6;
+$btn-hover-bg-tint-amount:        15% - 6;
+$btn-hover-border-shade-amount:   20% - 6;
+$btn-hover-border-tint-amount:    10% - 6;
+$btn-active-bg-shade-amount:      20% - 6;
+$btn-active-bg-tint-amount:       20% - 6;
+$btn-active-border-shade-amount:  25% - 6;
+$btn-active-border-tint-amount:   10% - 6;
+
+$badge-font-size:                   .75em;
+$badge-padding-y:                   .35em;
+$badge-padding-x:                   .65em;
+$badge-border-radius:               4px;
+
+$container-max-widths: (
+  sm: 100%, //540
+  md: 720px,
+  lg: 940px,
+  xl: 1140px,
+  xxl: 1320px
+);
+// $text-muted:                  $gray-600;
+$line-height-base:                1.4;
+$spacers: (
+  0:  0,
+  1:  $spacer / 4,
+  2:  $spacer / 2,
+  3:  $spacer,
+  4:  $spacer * 1.5,
+  45: $spacer * 2,
+  5:  $spacer * 3,
+  6:  $spacer * 4,
+);
+$form-floating-padding-x:         0;
+$form-floating-padding-y:         1rem;
+$form-floating-input-padding-t:   1.5rem;
+$form-floating-input-padding-b:   0;
+$form-floating-label-opacity:     .65;
+$form-floating-label-transform:   scale(.85) translateY(-.5rem) translateX(0);
+
+// Utilities
+@import "../bootstrap/utilities";
+
+$utilities: map-merge(
+  $utilities,
+  (
+    // modify
+    "font-weight": map-merge(
+      map-get($utilities, "font-weight"),
+      (values: map-merge(
+          map-get(map-get($utilities, "font-weight"), "values"),
+          (medium: 500, semibold: 600),
+        ),
+      ),
+    ),
+    // modify
+    "max-width": map-merge(
+      map-get($utilities, "max-width"),
+      (values: map-merge(
+          map-get(map-get($utilities, "max-width"), "values"),
+          (15:15%, 20:20%, 25:25%, 30:30%, 50:50%, 60:60%),
+        ), responsive: true,
+      ),
+    ),
+    // modify
+    "text-align": map-merge(
+      map-get($utilities, "text-align"),
+      (values: map-merge(
+          map-get(map-get($utilities, "text-align"), "values"),
+          (left:left, right:right),
+        ),
+      ),
+    ),
+    // add more margin
+    "margin-left": (
+      responsive: true,
+      property: margin-left,
+      class: ml,
+      values: map-merge($spacers, (auto: auto))
+    ),
+    "margin-right": (
+      responsive: true,
+      property: margin-right,
+      class: mr,
+      values: map-merge($spacers, (auto: auto))
+    ),
+    // add more padding
+    "padding-left": (
+      responsive: true,
+      property: padding-left,
+      class: pl,
+      values: $spacers
+    ),
+    "padding-right": (
+      responsive: true,
+      property: padding-right,
+      class: pr,
+      values: $spacers
+    ),
+    // float
+    "float": map-merge(
+      map-get($utilities, "float"),
+      (values: map-merge(
+          map-get(map-get($utilities, "float"), "values"),
+          (left:left, right:right),
+        ),
+      ),
+    ),
+    // add opacity
+    "opacity": (
+      responsive: true,
+      property: opacity,
+      values: (
+        0: 0,
+        10: .1,
+        20: .2,
+        25: .25,
+        50: .5,
+        75: .75,
+        100: 1,
+      )
+    ),
+    // add z-index
+    "z-index": (
+      property: z-index,
+      values: (
+        n1: -1,
+        1: 1,
+        10: 10,
+        100: 100,
+        1000: 1000,
+      )
+    ),
+    // letter-spacing
+    "letter-spacing": (
+      //responsive: true,
+      property: letter-spacing,
+      values: (
+        n1:   -1px,
+        n075: -.75px,
+        n05:  -.5px,
+        0:    0,
+        1:    1px,
+        2:    2px,
+      )
+    ),
+    // modify
+    "rounded": map-merge(
+      map-get($utilities, "rounded"),
+      (values: map-merge(
+          map-get(map-get($utilities, "rounded"), "values"),
+          (4:1rem, 5:1.5rem, 6:2.5rem,),
+        ),
+      ),
+    ),
+    // add table row display
+    "table-display": (
+      responsive: true,
+      property: display,
+      class: d,
+      values: (tb: table, tb-row: table-row, tb-cell: table-cell)
+    ),
+    "font-size": map-merge(
+      map-get($utilities, "font-size"),
+      (values: map-merge(
+          map-get(map-get($utilities, "font-size"), "values"),
+          (12:12px, 13:13px, 14:14px, 15:15px, 16:16px, 17:17px, 18:18px, 20:20px, 22:22px, 24:24px, 26:26px, 28:28px, 30:30px, 32:32px, 34:34px, 36:36px, 38:38px, 40:40px, 50:50px),
+        ),
+      ),
+    ),
+  )
+);

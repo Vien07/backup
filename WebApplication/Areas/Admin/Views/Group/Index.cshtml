@@ -1,0 +1,363 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase">
+            <span class="pg-title-icon">
+                <i class="fas fa-layer-group">
+                </i>
+            </span>@_translate.GetStringAdmin("left-menu.group")
+        </h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <!--Discription table-->
+                @*<p class="mb-20">
+                    @_translate.GetStringAdmin("table-desc.group")
+                </p>*@
+                <!--filter action-->
+                <div class="form-inline align-items-center">
+                    <div class="col-auto form-group pl-0 pr-2 mb-3">
+                        <select onchange="Search()" id="selectActive" class="form-control select2 form-control-sm">
+                            <option value="" selected>—@_translate.GetStringAdmin("group.select-all")</option>
+                            <option value="1">@_translate.GetStringAdmin("group.select-active")</option>
+                            <option value="0">@_translate.GetStringAdmin("group.select-inactive")</option>
+                        </select>
+                    </div>
+                    <div class="col-auto form-group px-2 mb-3 ">
+                        <input id="key" type="search" class="form-control form-control-sm" placeholder="Keyword search">
+                        <div class="input-group-append">
+                            <button onclick="Search()" class="btn btn-sm btn-light ml-2" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-search")" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-auto mb-3 px-2">
+                        <a onclick="OpenAddModal()" href="javascript:void(0)" class="btn btn-sm btn-success waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a"><i class="fas fa-layer-plus mr-1"></i>@_translate.GetStringAdmin("group.btn-add")</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive">
+                                <table id="tableData" class="table table-sm table-hover mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="py-2" width="5">#</th>
+                                            <th class="py-2">@_translate.GetStringAdmin("group.table-header-role")</th>
+                                            <th class="py-2 text-center" width="100">@_translate.GetStringAdmin("group.table-header-member")</th>
+                                            <th class="py-2 text-center" width="200">@_translate.GetStringAdmin("group.table-header-active")</th>
+                                            <th class="py-2 text-center" width="100">
+                                                @_translate.GetStringAdmin("label.action")
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyData"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-3">
+                            @*<div class="my-1 mr-auto">
+                                <button type="button" onclick="Enable(0,true)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="active"><i class="fas fa-eye"></i></button>
+                                <button type="button" onclick="Enable(0,false)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="inactive"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" onclick="Coppy()" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="copy clone row"><i class="fas fa-copy"></i></button>
+                                <button type="button" onclick="DeleteMulti()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fal fa-trash-alt"></i></button>
+                                <button type="button" onclick="LoadData()" class="btn btn-sm btn-primary " data-toggle="tooltip" data-placement="top" title="save order" data-original-title=""><i class="fal fa-save"></i></button>
+                            </div>*@
+                            <div class="my-1 ml-auto" id="divPaging">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+<!-- Custom Modal -->
+<div class="modal fade" id="inputModalGroup" tabindex="-1" role="dialog" aria-labelledby="inputModalGroup" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="admin">
+
+        <form class="modal-content needs-validation" name="formInput" id="formInput" novalidate onsubmit="return false">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white"><i class="fas fa-layer-plus pr-10"></i>@_translate.GetStringAdmin("group.modal-grouptitle")</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <input required type="text" class="form-control " name="Name" id="Name" aria-describedby="text" placeholder="@_translate.GetStringAdmin("group.placeholder-name")">
+                    <small id="Name" class="form-text text-muted"><i class="fal fa-users mr-5"></i>@_translate.GetStringAdmin("group.note-grouptitle")</small>
+
+                </div>
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input name="Role" value="Admin" type="checkbox" class="custom-control-input" id="customCheck-admin">
+                        <label class="custom-control-label" for="customCheck-admin">role Admin!</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" id="btnSave" onclick="Save()" class="btn btn-primary"><i class="fas fa-save mr-5"></i>@_translate.GetStringAdmin("group.btn-save")</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Custom Modal -->
+@section Scripts{
+    <script>
+        $(function () {
+            GetList();
+        });
+
+        $('#key').on("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                Search();
+            }
+        });
+        function ResetInput() {
+            $("#formInput").removeClass("was-validated")
+            $("#Name").val("");
+            $("#customCheck-admin").prop("checked", false)
+            $("#btnSave").attr('onclick', 'Save()');
+        }
+        function GetList() {
+            $.ajax({
+                url: '/b-admin/Group/GetData',
+                method: "GET",
+
+            }).done(function (data) {
+
+                LoadList(data.jsData)
+            })
+        }
+        function LoadList(data) {
+            data = JSON.parse(data);
+            var body = "";
+            $('#tbodyData').html("");
+            for (let i = 0; i < data.length; i++) {
+                body = `<tr>
+                                    <td>${i + 1}</th>
+                                    <td class="align-middle">
+                                    <i class="fal fa-users mr-5"></i>${data[i].Role} — ${data[i].Name}
+                                    </td>
+                                    <td class="text-center"><p>${data[i].CountUser}</p></td>
+                                    <td class="text-md-center">
+                                    <span class="toggle-wrap">
+                                    <div id="toggle_${data[i].Code}" class="toggle toggle-sm toggle-simple toggle-light toggle-bg-success toggle1 mt-5"></div>
+                                    </span>
+                                    </td>
+                                    <td class="text-center text-nowrap">                                    
+                                    <a ><i onclick="OpenEditModal(${data[i].Code})" style="cursor:pointer" class="far fa-sliders-h text-dark" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-edit")"></i></a>
+                                    <a class="mx-2"><i onclick="Delete(${data[i].Code})" style="cursor:pointer" class="fas fa-trash-alt text-danger" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-delete")"></i></a>
+                                    <a ><i onclick="Permit(${data[i].Code})" style="cursor:pointer" class="fas fa-lock" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("Phân quyền cho nhóm")"></i></a>                                  
+                                    </td>
+                                </tr>`;
+                $('#tbodyData').append(body);
+                //$('#_navPaging').html(Paging())
+                $(`#toggle_${data[i].Code}`).toggles({
+                    drag: true,
+                    click: true,
+                    text: {
+                        on: '',
+                        off: ''
+                    },
+                    on: data[i].Enabled,
+                    animate: 250,
+                    easing: 'swing',
+                    checkbox: null,
+                    clicker: null,
+
+                    type: 'compact'
+                }).on('toggle', function (e, active) {
+                    if (active) {
+                        Enable(data[i].Code, active);
+                    } else {
+                        Enable(data[i].Code, active);
+                    }
+                });
+                //$('#toggle_Admin').
+            }
+            ToolTipCustom("tbodyData");
+
+        }
+        function OpenAddModal() {
+            //GetSelectGroupUser("#GroupUserCode", "");
+            //$('select').niceSelect('update');
+            $("#inputModalGroup").modal("show");
+            ResetInput();
+
+        }
+        function Save() {
+            var forms = $('#formInput');
+            var formData = new FormData($("#formInput").get(0));
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                //console.log(form.checkValidity())
+                if (form.checkValidity() === false) {
+
+                } else {
+                    form.classList.add('was-validated');
+                    $.ajax({
+                        url: '/b-admin/Group/Insert',
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false
+
+                    }).done(function (data) {
+
+                        if (data.error) {
+                            $("#inputModalGroup").modal("hide")
+                            AlertToast('Thông báo', "Thành công", "success")
+                            LoadList(data.jsData)
+                        } else {
+                            SweetAlert('Thông báo', data.messError, 'error')
+                            $('#formInput').removeClass("was-validated")
+                        }
+
+                    })
+                }
+            });
+        }
+        function OpenEditModal(code) {
+            ResetInput();
+            $("#btnSave").attr('onclick', `Update(${code})`);
+            $.ajax({
+                url: '/b-admin/Group/Edit',
+                method: "POST",
+                data: { code: code }
+
+            }).done(function (data) {
+                //console.log(data.jsData)
+                data = JSON.parse(data.jsData);
+                $("#Name").val(data.Name);
+
+                if (data.Role == "Admin") {
+                    $("#customCheck-admin").prop("checked", true);
+                } else {
+                    $("#customCheck-admin").prop("checked", false);
+
+                }
+                $("#inputModalGroup").modal("show")
+            })
+
+        }
+        function Update(code) {
+
+            var forms = $('#formInput');
+            var formData = new FormData($("#formInput").get(0));
+            formData.append('Code', code);
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                //console.log(form.checkValidity())
+                if (form.checkValidity() === false) {
+
+                } else {
+                    form.classList.add('was-validated');
+                    $.ajax({
+                        url: '/b-admin/Group/Update',
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false
+
+                    }).done(function (data) {
+                        if (data.error) {
+                            $("#inputModalGroup").modal("hide")
+                            AlertToast('@_translate.GetStringAdmin("alert.infomation")', '@_translate.GetStringAdmin("alert.success")', 'success')
+                            LoadList(data.jsData)
+                        } else {
+                            SweetAlert('@_translate.GetStringAdmin("alert.infomation")', data.messError, 'error')
+                            $('#formInput').removeClass("was-validated")
+                        }
+
+                    })
+
+                }
+
+
+            });
+        }
+        function Enable(code, active) {
+            $.ajax({
+                url: '/b-admin/Group/Enable',
+                method: "POST",
+                data: { code: code, active: active }
+
+            }).done(function (data) {
+                if (data.error) {
+                    AlertToast('@_translate.GetStringAdmin("alert.infomation")', '@_translate.GetStringAdmin("alert.success")', 'success')
+                    //console.log(data.Error)
+                } else {
+                    AlertToast('@_translate.GetStringAdmin("alert.infomation")', '@_translate.GetStringAdmin("alert.fail")', 'error')
+
+                }
+                //data = JSON.parse(data.jsData);
+                //console.log(data)
+                //LoadList(data)
+            })
+        }
+        function Delete(code) {
+            Swal.fire({
+                title: '@_translate.GetStringAdmin("alert.do-you-want-delete")',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '@_translate.GetStringAdmin("alert.confirmButtonText")'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '/b-admin/Group/Delete',
+                        method: "POST",
+                        data: { code: code }
+
+                    }).done(function (data) {
+                        if (data.error) {
+                    AlertToast('@_translate.GetStringAdmin("alert.infomation")', '@_translate.GetStringAdmin("alert.success")', 'success')
+                            LoadList(data.jsData)
+                        } else {
+                            SweetAlert('@_translate.GetStringAdmin("alert.infomation")', data.messError, 'error')
+                            $('#formInput').removeClass("was-validated")
+                        }
+                    })
+                }
+            })
+
+
+        }
+        function Search() {
+            var isActive = $('#selectActive').val();
+            var keySearch = $('#key').val();
+
+            $.ajax({
+                url: '/b-admin/Group/Search',
+                method: "GET",
+                data: {
+                    Enable: ConvertIntToBool(isActive),
+                    Key: keySearch
+                }
+
+            }).done(function (data) {
+
+                LoadList(data.jsData)
+            })
+        }
+        function Permit(code) {
+            location.href = '/b-admin/Permit/GroupIndex?id=' + unicodeBase64Encode(code);
+        }
+    </script>
+}

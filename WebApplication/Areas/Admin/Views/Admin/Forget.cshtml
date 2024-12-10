@@ -1,0 +1,128 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Dashboard Powered by BizMaC</title>
+    <meta name="description" content="A responsive bootstrap 4 admin dashboard template by hencework" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- Custom CSS -->
+    <link href="/b-admin/dist/css/style.css" rel="stylesheet" type="text/css">
+    <link href="/b-admin/vendors/jquery-toast-plugin/dist/jquery.toast.min.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+    <!-- Preloader -->
+    @*<div class="preloader-it">
+            <div class="loader-pendulums"></div>
+        </div>*@
+    <!-- /Preloader -->
+    <!-- HK Wrapper -->
+    <div class="hk-wrapper">
+        <!-- Main Content -->
+        <div class="hk-pg-wrapper hk-auth-wrapper">
+            <header class="d-flex align-items-center">
+                <a class="d-flex auth-brand ml-lg-auto mr-xl-60" href="//bizmac.com.vn">
+                    <img class="brand-img" width="150" src="/b-admin/dist/img/logo/bizmac-logo.svg" alt="Dashboard Powered by BizMaC" />
+                </a>
+            </header>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-5 pa-0 d-none d-lg-block">
+                        <div class="d-flex align-items-center justify-content-center w-100 h-100 bg-blue">
+                            <img class="w-100 w-md-70" src="/b-admin/dist/img/login/bg_cover.svg" alt="Cover">
+                        </div>
+                    </div>
+                    <div class="col-lg-7 pa-0">
+                        <div class="py-50 d-lg-none"></div>
+                        <div class="auth-form-wrap py-50">
+                            <div class="auth-form w-xxl-40 w-sm-50 w-xs-100">
+                                <form id="formData" onsubmit="RecoveryPass(); return false;">
+                                    <h1 class="display-5 font-weight-bold mb-10">Khôi phục mật khẩu</h1>
+                                    <p class="mb-30">Quên mật khẩu? Nhập địa chỉ email của bạn vào bên dưới để khôi phục lại mật khẩu.</p>
+                                    <div class="form-group">
+                                        <input name="email" class="form-control" placeholder="Email" type="email" required>
+                                    </div>
+                                    <button class="btn btn-primary px-4 mr-2" type="submit">Gửi yêu cầu</button>
+                                    <a href="/b-admin/">Đăng nhập</a>
+                                </form>
+                                <div class="mt-50 font-13"><span>Powered by <a target="_blank" rel="noopener noreferrer" href="//bizmac.com.vn">BizMaC</a></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Main Content -->
+
+    </div>
+    <!-- /HK Wrapper -->
+    <!-- jQuery -->
+    <script src="/b-admin/vendors/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/b-admin/vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/b-admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Slimscroll JavaScript -->
+    <script src="/b-admin/dist/js/jquery.slimscroll.js"></script>
+
+    <!-- Fancy Dropdown JS -->
+    <script src="/b-admin/dist/js/dropdown-bootstrap-extended.js"></script>
+
+    <!-- Owl JavaScript -->
+    <script src="/b-admin/vendors/owl.carousel/dist/owl.carousel.min.js"></script>
+
+    <!-- FeatherIcons JavaScript -->
+    <script src="/b-admin/dist/js/feather.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="/b-admin/vendors/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+    <script src="/b-admin/vendors/sweetalert2/sweetalert2.min.js"></script>
+
+    <!-- Init JavaScript -->
+    <script src="/b-admin/dist/js/init.js"></script>
+    <script src="/b-admin/dist/js/login-data.js"></script>
+    <script src="/b-admin/vendors/bizmac-customjs/customJS.js"></script>
+
+    <script>
+        function RecoveryPass() {
+            var formData = $('#formData');
+            $.ajax({
+                url: '/b-admin/Admin/SendMailValidate',
+                type: 'POST',
+                data: formData.serialize(),
+            }).done(function (data) {
+                //console.log(data)
+                if (data.error) {
+
+                    AlertToast('Thông báo', "Một email đã được gửi tới email của bạn!", "success")
+                }
+                else {
+                    AlertToast('Thông báo', "Tài khoản không tồn tại!", "danger")
+                }
+            })
+        }
+        $(function () {
+            //var path = window.location.pathname;
+            //if (path != "/b-admin/") {
+            //    var new_url = "/b-admin/";
+            //    window.history.pushState("data", "Title", new_url);
+            //} else {
+            //    return
+            //}
+
+        })
+
+
+    </script>
+</body>
+
+</html>

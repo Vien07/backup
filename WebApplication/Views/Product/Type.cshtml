@@ -1,0 +1,233 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services
+@using DTO.Product;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<ProductDto> list = ViewBag.Data as List<ProductDto>;
+    int currentPage = ViewBag.CurrentPage;
+    int lastpage = ViewBag.PageTotal;
+    string banner = ViewBag.Banner as string;
+    List<ProductCateDto> listCate = ViewBag.ProductCateList as List<ProductCateDto>;
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    ProductCateDto currenCate = ViewBag.CurrentCate as ProductCateDto;
+
+    var productTypeList = ViewBag.ProductTypeList as List<ProductCateDto>;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+
+}
+
+@if (list.Any())
+{
+
+}
+<div class="container py-4 py-xl-45">
+    <div class="container pb-3 pt-5">
+        <div class="text-center mb-3">
+            <div class="tt-lg text-uppercase mb-0">@Html.Raw(_translate.GetString("menu.product"))</div>
+            <nav arial-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center">
+                    <li class="breadcrumb-item">
+                        <a href="@_translate.GetUrl("url.home")" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">
+                            @Html.Raw(_translate.GetString("menu.home"))
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">@Html.Raw(currenCate.Title)</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="container section-category py-4 py-xl-45">
+        <div class="d-flex align-items-center flex-wrap header-section mb-3">
+            <div class="tt-md tt-icon text-uppercase txt-body mb-0">Mua Sắm theo không gian</div>
+            <div class="group-info-carousel d-flex align-items-center">
+                <a class="btn btn-next-previous button--previous txt-body p-0 fs-20" alt="" title=""
+                   href="javascript:void(0)"><span class="far fa-angle-left"></span></a>
+                <span class="slide-present"></span>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="50%" aria-valuemin="0"
+                         aria-valuemax="100" style="width:50%;">
+                    </div>
+                </div>
+                <span class="numb-slide"></span>
+                <a class="btn btn-next-previous button--next txt-body p-0 fs-20" alt="" title=""
+                   href="javascript:void(0)"><span class="far fa-angle-right"></span></a>
+            </div>
+        </div>
+        <div class="carousel-category-o">
+            <div class="carousel-category carousel list-category">
+                @foreach (var item in productTypeList)
+                {
+                    <div class="carousel-cell">
+                        <div class="block">
+                            <a class="absolute" alt="@Html.Raw(item.TitleAlt)" href=" @_translate.GetUrl("url.product-type")@(item.Slug)/" title="@Html.Raw(item.TitleAlt)"></a>
+                            <div class="thumb-res square mb-0">
+                                <img class="fit-cover" src="@item.PicThumb">
+                                <div class="overlay-blur">
+                                    <div class="info">
+                                        <div class="tt">@Html.Raw(item.Title)</div>
+                                        <div class="desc">
+                                            @Html.Raw(item.Description)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (list.Any())
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 list-products my-3 g-3">
+            @foreach (var item in list)
+            {
+                <div class="col wow fadeIn">
+                    <div class="block h-100">
+                        <a class="absolute" alt="@Html.Raw(item.TitleAlt)" href="@Html.Raw(_translate.GetUrl("url.product"))@(item.Slug).html" title="@Html.Raw(item.TitleAlt)"></a>
+                        <div class="thumb-res square">
+                            <img src="@item.PicThumb">
+                            <div class="group-badge">
+                                @if (item.IsNew)
+                                {
+                                    <div class="badge badge-new">NEW</div>
+                                }
+
+                                @if (item.IsHot)
+                                {
+                                    <div class="badge badge-hot">HOT</div>
+                                }
+
+                                @if (item.PriceDiscount != 0)
+                                {
+                                    <div class="badge badge-sale">-@(Math.Floor(100 - (item.PriceDiscount / item.Price) * 100))%</div>
+                                }
+                            </div>
+                            <div class="overlay-blur">
+                                <div class="info">
+                                    <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="tt fw-normal">@Html.Raw(item.Title)</div>
+                            @if (item.Price == 0)
+                            {
+                                <div class="price">Liên hệ</div>
+                            }
+                            else if (item.PriceDiscount == 0)
+                            {
+                                <div class="price">@Html.Raw(item.PriceString)<u>đ</u></div>
+                            }
+                            else
+                            {
+                                <div class="price">@Html.Raw(item.PriceDiscountString)<u>đ</u><del>@Html.Raw(item.PriceString)<u>đ</u></del></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        var block = 5;
+        int nextPage = currentPage + 1;
+        int perPage = currentPage - 1;
+        if (perPage == 0)
+        {
+            perPage = 1;
+        }
+        if (nextPage >= lastpage)
+        {
+            nextPage = lastpage;
+        }
+        int tempcurrentPage = currentPage + (currentPage / block);
+        int currentBlock = currentPage / block;
+        int startPage = 0;
+        int endPage = 0;
+
+
+        if (currentBlock == 0)
+        {
+            startPage = 1;
+            endPage = block;
+
+
+        }
+        else
+        {
+            endPage = block * (currentBlock + 1);
+            startPage = endPage - block;
+        }
+        if (endPage > lastpage)
+        {
+            endPage = lastpage;
+        }
+        <nav class="pagination my-3">
+            <div class="page-item prev @(currentPage == 1 ? "disabled" : "")">
+                <a class="prev-page" href="?page=@(currentPage - 1)" title="Trước" alt="Trước" target="_self"><i class="far fa-angle-left mr-2"></i>Trước</a>
+            </div>
+            @for (int i = startPage; i <= endPage; i++)
+            {
+                <a href="?page=@i" class="page-item page-counter @(currentPage == i ? "active" : "")">@i</a>
+            }
+            @if (currentPage < lastpage - block)
+            {
+                <a class="page-item page-counter">...</a>
+                <a href="?page=@lastpage" title="@lastpage" alt="@lastpage" class="page-item page-counter">@lastpage</a>
+            }
+            else
+            {
+
+            }
+            <div class="page-item prev @(currentPage == lastpage ? "disabled" : "")">
+                <a class="next-page" href="?page=@(currentPage + 1)" title="Sau" alt="Sau" target="_self">Sau<i class="far fa-angle-right ml-2"></i></a>
+            </div>
+        </nav>
+    }
+    else
+    {
+        <div style="margin:50px" class="text-center">@Html.Raw(_translate.GetString("common.infoisupdating"))</div>
+    }
+</div>
+
+@section Scripts{
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+    </script>
+}

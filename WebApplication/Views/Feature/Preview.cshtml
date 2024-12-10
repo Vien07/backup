@@ -1,0 +1,208 @@
+﻿@using CMS.Services.TranslateServices;
+@using System.Web
+@using CMS.Services
+@using DTO.Feature;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    FeatureDto data = ViewBag.Data as FeatureDto;
+    string content = HttpUtility.UrlDecode(data.Content);
+    string description = Convert.ToString(data.Description);
+    List<FeatureDto> relateList = ViewBag.RelateList as List<FeatureDto>;
+    var url = Context.Request.Host.Value;
+    var share = url + _translate.GetUrl("url.feature") + data.Slug + ".html";
+    string banner = ViewBag.Banner as string;
+    List<FeatureCateDto> listCate = ViewBag.Cate as List<FeatureCateDto>;
+    string[] listTagkey = data.TagKey.Split(",");
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+}
+
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+
+}
+
+@section Banner{
+
+}
+
+<div class="container py-5">
+    <div class="text-center mb-3">
+        <div class="tt-lg text-uppercase mb-0">Tin tức và sự kiện</div>
+        <nav arial-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item">
+                    <a href="index.html" title="" alt="" target="_self">
+                        Trang
+                        chủ
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="feature.html" title="" alt="" target="_self">
+                        Tin tức và sự
+                        kiện
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="list-feature.html" title="" alt="" target="_self">
+                        Cảm
+                        hứng
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">
+                    To quash vaccine misinformation, this doctor opts for
+                    facts over fighting fiction.
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="block-sidebar py-5" data-wrapper="">
+        <div class="mainbody mb-4 mb-md-0" data-mainbody="">
+            <!-- Type -->
+            <div class="thumb-res wide thumb-125 thumb-big">
+                <img class="fit-cover" src="/css/skin/theme/Image4.png" alt="">
+            </div>
+            <div class="list-social-share">
+                <a class="btn btn-facebook btn-social"><span class="fab fa-facebook-f"></span></a>
+                <a class="btn btn-twitter btn-social"><span class="fab fa-twitter"></span></a>
+            </div>
+            <div class="tt-lg fw-bold">
+                To quash vaccine misinformation, this doctor opts for facts over
+                fighting fiction.
+            </div>
+            <div class="desc fs-14 text-justify text-muted">
+                Mi tincidunt elit, id quisque ligula ac diam,
+                amet. Vel etiam suspendisse morbi eleifend faucibus eget vestibulum felis. Dictum quis
+                montes, sit sit. Tellus aliquam enim urna, etiam. Mauris posuere vulputate arcu amet, vitae
+                nisi, tellus tincidunt. At feugiat sapien varius id.
+            </div>
+            <div class="content py-45">
+                <img class="fit-cover" src="/css/skin/theme/Image3.png">
+                <p class="text-justify">
+                    Dolor enim eu tortor urna sed duis nulla. Aliquam vestibulum, nulla odio nisl vitae. In
+                    aliquet pellentesque aenean hac vestibulum turpis mi bibendum diam. Tempor integer
+                    aliquam in vitae malesuada fringilla.
+                </p>
+                <p class="text-justify">
+                    Elit nisi in eleifend sed nisi. Pulvinar at orci, proin imperdiet commodo consectetur
+                    convallis risus. Sed condimentum enim dignissim adipiscing faucibus consequat, urna.
+                    Viverra purus et erat auctor aliquam. Risus, volutpat vulputate posuere purus sit congue
+                    convallis aliquet. Arcu id augue ut feugiat donec porttitor neque. Mauris, neque
+                    ultricies eu vestibulum, bibendum quam lorem id. Dolor lacus, eget nunc lectus in
+                    tellus, pharetra, porttitor.
+                </p>
+                <p class="text-justify">
+
+                    Ipsum sit mattis nulla quam nulla. Gravida id gravida ac enim mauris id. Non
+                    pellentesque congue eget consectetur turpis. Sapien, dictum molestie sem tempor. Diam
+                    elit, orci, tincidunt aenean tempus. Quis velit eget ut tortor tellus. Sed vel, congue
+                    felis elit erat nam nibh orci.
+                </p>
+
+                <p class="text-justify">
+                    Pharetra morbi libero id aliquam elit massa integer tellus. Quis
+                    felis aliquam ullamcorper porttitor. Pulvinar ullamcorper sit dictumst ut eget a,
+                    elementum eu. Maecenas est morbi mattis id in ac pellentesque ac.
+                </p>
+
+                <p class="text-justify">
+                    Sagittis et eu at elementum, quis in. Proin praesent volutpat
+                    egestas sociis sit lorem nunc nunc sit. Eget diam curabitur mi ac. Auctor rutrum lacus
+                    malesuada massa ornare et. Vulputate consectetur ac ultrices at diam dui eget fringilla
+                    tincidunt. Arcu sit dignissim massa erat cursus vulputate gravida id. Sed quis auctor
+                    vulputate hac elementum gravida cursus dis.
+                </p>
+                <img class="fit-cover" src="/css/skin/theme/Image5.png">
+
+                <p class="text-justify">
+                    Lectus leo massa amet posuere. Malesuada mattis non convallis
+                    quisque. Libero sit et imperdiet bibendum quisque dictum vestibulum in non. Pretium
+                    ultricies tempor non est diam. Enim ut enim amet amet integer cursus. Sit ac commodo
+                    pretium sed etiam turpis suspendisse at.
+                </p>
+
+                <p class="text-justify">
+                    Tristique odio senectus nam posuere ornare leo metus, ultricies. Blandit duis ultricies
+                    vulputate morbi feugiat cras placerat elit. Aliquam tellus lorem sed ac. Montes, sed
+                    mattis pellentesque suscipit accumsan. Cursus viverra aenean magna risus elementum
+                    faucibus molestie pellentesque. Arcu ultricies sed mauris vestibulum.
+                </p>
+
+
+            </div>
+            <div class="block-bg block-other-post">
+                <div class="tt-md tt-icon txt-body">Các bài tin khác</div>
+                <ul class="list-feature-other">
+                    <li>
+                        <a class="block" alt="" href="feature-detail.html" title="">
+                            <div class="info">
+                                <div class="tt mb-0">
+                                    To quash vaccine misinformation, this doctor opts for facts
+                                    over fighting fiction.
+                                </div>
+                                <div class="desc">
+                                    To quash vaccine misinformation, this doctor opts for facts over
+                                    fighting fiction.
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="block" alt="" href="feature-detail.html" title="">
+                            <div class="info">
+                                <div class="tt mb-0">Sports Jobs in Wisconsin</div>
+                                <div class="desc">
+                                    To quash vaccine misinformation, this doctor opts for facts over fighting fiction.
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="block" alt="" href="feature-detail.html" title="">
+                            <div class="info">
+                                <div class="tt mb-0">Presidential Transition Live Updates: Biden Tops 270 Electoral College Votes, Affirming His Presidential Win</div>
+                                <div class="desc">
+                                    To quash vaccine misinformation, this doctor opts for facts over fighting fiction.
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="sidebar order-md-first" data-sidebar="">
+            <div data-stick="" data-width-fill="">
+                <div class="pane mb-4">
+                    <div class="tt-xs tt-icon txt-body">Danh mục</div>
+                    <ul class="menu-vertical">
+                        <li>
+                            <a href="list-feature.html" title="" alt="" target="_self">Nổi bật</a>
+                        </li>
+                        <li>
+                            <a href="list-feature.html" title="" alt="" target="_self">Sự kiện</a>
+                        </li>
+                        <li>
+                            <a href="list-feature.html" title="" alt="" target="_self">Cảm hứng</a>
+                        </li>
+                        <li>
+                            <a href="list-feature.html" title="" alt="" target="_self">Tips</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="pane bannerqc">
+                    <a class="block mb-2 " href="#" title="" alt=""
+                       target="_self"><img class="fit-cover" src="/css/skin/theme/image 133.png" alt=""></a>
+                    <a class="block mb-2 " href="#" title="" alt="" target="_self">
+                        <img class="fit-cover"
+                             src="/css/skin/theme/image 134.png" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

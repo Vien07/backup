@@ -1,0 +1,218 @@
+.form-control:focus,
+.form-select:focus {
+    @include placeholder-focus;
+}
+.form-group {
+    position: relative;
+}
+// Custom Input File + jquery
+.custom-inputfile {
+    //position: relative;
+    max-width: 100%;
+}
+.input--file {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+}
+.button--file {
+    margin-bottom: 0;
+    svg {
+        margin-right: 5px;
+        fill: #fff;
+    }
+}
+// Bootstrap
+.form-floating {
+    .form-select,
+	.form-control {
+		border-radius: 0;
+		border-width: 0 0 1px;
+		&:focus {
+			box-shadow: none;
+			border-color: $primary;
+		}
+	}
+	.form-select {
+	    background-position: right center;
+	}
+}
+
+// Floating Custom
+//##############################
+// Form Floating Custom
+.form-floating-custom {
+    --fl-border-width: 2px;
+    --fl-border-radius: 6px;
+    --fl-padding-x: 12px;
+    --fl-padding-y: 8px;
+    --fl-height: 46px;
+    --label-height: 30px;
+    --icon-color: initial;
+    
+    position: relative;
+    margin-top: 1.25rem;
+
+    .form-select,
+    .form-control,
+    > label {
+        border-width: var(--fl-border-width);
+        border-radius: var(--fl-border-radius);
+    }
+    .form-control:not(textarea),
+    .form-select {
+        height: var(--fl-height);
+    }
+    .form-control,
+    .form-select {
+        line-height: $input-line-height;
+        padding: var(--fl-padding-y) var(--fl-padding-x);
+    }
+    > label {
+        position: absolute;
+        z-index: 7;
+        height: var(--label-height);
+        top: calc(var(--fl-height) * 0.165);
+        left: calc(var(--fl-padding-x) * 0.5 + 2px);
+        right: calc(var(--fl-padding-x) + 20px);
+        display: inline-block;
+        vertical-align: top;
+        pointer-events: none;
+        white-space: nowrap;
+        background: #fff;
+        line-height: 1.5;
+        padding: 3px calc(var(--fl-padding-x) * 0.5);
+        transform-origin: 0 0;
+        transition: opacity 0.1s ease, transform 0.1s ease;
+        color: #7e7b8b;
+        .fa,.far,.fas,.fab,.bi {
+            color: var(--icon-color);
+        }
+    }
+    .form-control,
+    .form-select {
+        &.has-focus,
+        &:focus {
+            box-shadow: none;
+            ~ label {
+                transform: translateY(calc(var(--fl-height) * -0.45)) scale(.75);
+                color: #898497;
+                right: auto;
+            }
+        }
+    }
+    .nice-select {
+        display: flex;
+        align-items: center;
+    }
+}
+
+
+// MATERIAL FORM
+//##############################
+.material-form {
+    $form-height: 44px;
+    $form-height-lg: 50px;
+    $fontsize: 16px;
+    $radius: $border-radius;
+    $border-color: #cecece;
+    
+    .form-group {
+        padding-top: 8px;
+    }
+    .label-text {
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+        margin: 0;
+        left: 8px;
+        top: $form-height * 0.46;
+        padding: 0 8px;
+        background: #fff;
+        line-height: 20px;
+        white-space: nowrap;
+        max-width: calc(100% - 16px);
+        transform-origin: left top;
+        transition: all 0.1s ease;
+    }
+    .form-control {
+        height: $form-height;
+        font-size: $fontsize;
+        transition: all 0.25s ease;
+        color: darken($color-body, 10%);
+        &:disabled {
+        	background: #fff;
+        	cursor: not-allowed;
+        }
+    }
+    textarea,
+    textarea.form-control {
+        height: auto;
+    }
+    .form-control:focus {
+        border: 2px solid $primary;
+        ~ .label-text {
+            color: $primary;
+        }
+    }
+    .form-control:focus,
+    .form-control.has-value {
+        box-shadow: none;
+        ~ .label-text {
+            transform: scale(.85) translateY(-$form-height-lg * 0.52);
+        }
+    }
+    // form-lg
+    .form-control-lg {
+        height: $form-height-lg;
+        font-size: $fontsize + 1;
+        ~ .label-text {
+            left: 12px;
+            top: $form-height-lg * 0.47;
+            font-size: $fontsize + 1;
+        }
+        &.form-control-lg:focus,
+        &.form-control-lg.has-value {
+            ~ .label-text {
+                transform: scale(.85) translateY(-$form-height-lg * 0.58);
+            }
+        }
+    }
+    // error validate
+    .form-control.parsley-error {
+        border-color: $danger;
+        &:focus ~ .label-text,
+        &.has-value ~ .label-text {
+            color: $danger;
+        }
+    }
+    // success validate
+    .form-control.parsley-success {
+        border-color: $success;
+        &:focus {
+            border-color: $primary;
+            ~ .label-text {
+                color: $primary;
+            }
+        }
+    }
+    // nice select
+    .form-control.nice-select {
+        border-radius: $radius;
+        height: $form-height;
+        &:after {
+            font-size: 14px;
+            opacity: .65;
+        }
+
+        &, &:hover {
+            border-color: $border-color;
+        }
+        &:focus {
+            border-color: $primary;
+        }
+    }
+}

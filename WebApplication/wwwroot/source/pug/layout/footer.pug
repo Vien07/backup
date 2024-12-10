@@ -1,0 +1,76 @@
+block footer 
+    footer.footer
+        svg.position-absolute.bottom-100.start-0(xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1920 85.6")
+            g
+                path.st0(style="fill:#A67C52", d="M1920,76.6H0v-63c0,0,78,25,127,34c166.5,30.6,519,0,677,0c137,0,156,29,156,29s19-29,145-29c152,0,492.1,23.1,654,0c91-13,161-48,161-48V76.6z")
+            g
+                path.st1(style="fill:#F4F1EA", d="M1920,85.6H0v-66c0,0,78,23,127,32c166.5,30.6,519-2,677-2c137,0,156,27,156,27s19-23,145-23c152,0,491.1,19.7,654,6c95-8,161-35,161-35V85.6z")
+        .container
+            .row
+                .footer-col.col-md-6.col-lg-3
+                    .footer-tt.tt-xs.text-uppercase Laviebook
+                    .content
+                        .desc.mb-3 Chances are your friends are discussing their favorite (and least favorite)
+                        +contact_info()
+                .footer-col.col-md-6.col-lg-2.cate-link 
+                    .footer-tt.tt-xs.text-uppercase Hợp tác
+                    .content
+                        ul.list-style-angle 
+                            li: +a('#', '', 'NXB Trẻ')
+                            li: +a('#', '', 'NXB Thanh niên')
+                            li: +a('#', '', 'Báo ABC')
+                            li: +a('#', '', 'NXB CDE')
+                            li: +a('#', '', 'EFS Channel')
+                .footer-col.col-md-6.col-lg-3.news
+                    .footer-tt.tt-xs.text-uppercase Bài viết mới
+                    .content.footer-news
+                        .block.d-flex
+                            +a('news-detail.html', 'absolute')
+                            +bg('thumb-res', 'news/1.jpg')
+                            .info Acme Turns to Japan to Season Its Latest Smoked Salmon
+                        .block.d-flex
+                            +a('news-detail.html', 'absolute')
+                            +bg('thumb-res', 'news/2.jpg')
+                            .info Review: ‘The Complete Stories,’ by Flannery O’Connor
+                        .block.d-flex
+                            +a('news-detail.html', 'absolute')
+                            +bg('thumb-res', 'news/3.jpg')
+                            .info Peeved, Irritated and Annoyed: Early Letters to the Editor
+                .footer-col.col-md-3.col-lg-2
+                    .footer-tt.tt-xs.text-uppercase Kết nối MXH
+                    .content
+                        .list-icon-social 
+                            +a('#', 'd-flex align-items-center')
+                                span(class="btn bg-gradient btn-facebook fab fa-facebook-f")
+                                | Facebook
+                            +a('#', 'd-flex align-items-center')
+                                span(class="btn bg-gradient btn-twitter bi bi-twitter")
+                                | Twitter
+                            +a('#', 'd-flex align-items-center')
+                                span(class="btn bg-gradient btn-youtube bi bi-youtube")
+                                | Youtube
+                            +a('#', 'd-flex align-items-center')
+                                span(class="btn bg-gradient btn-instagram fab fa-instagram")
+                                | Instagram
+                            +a('#', 'd-flex align-items-center')
+                                span(class="btn bg-gradient btn-pinterest fab fa-pinterest-p")
+                                | Pinterest
+                .footer-col.col-md-3.col-lg-2.cate-link 
+                    .footer-tt.tt-xs.text-uppercase Bộ sưu tập
+                    .content
+                        ul.list-style-angle 
+                            li: +a('#', '', 'Tiểu thuyết')
+                            li: +a('#', '', 'Khoa học')
+                            li: +a('#', '', 'Truyện tranh')
+                            li: +a('#', '', 'Y học sức khỏe')
+                            li: +a('#', '', 'Nghệ thuật, giải trí')
+                            li: +a('#', '', 'Lịch sử')
+
+                        +a('#', '.text-link-more text-primary')
+                            | Xem thêm !{'<i class="far fa-chevron-right"></i>'}
+        .copyr
+            .container.text-center
+                .hline
+                | © 2021 <b>!{companyName}</b>. All Rights Reserved. 
+                span.text-nowrap Powered by 
+                    a(href="//bizmac.com" title="BizMaC, Thiết kế website chuyên nghiệp" target="_blank") BizMaC

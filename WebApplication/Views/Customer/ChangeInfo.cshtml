@@ -1,0 +1,86 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services;
+@using CMS.Repository;
+@using DTO.Customer;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+
+@inject ICustomer_Repository _rep
+@inject ITranslateServices _translate
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Customer/Layout/_LayoutCustomer.cshtml";
+    CustomerDto customer = ViewBag.CustomerInfo as CustomerDto;
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+    @section Banner{
+
+}
+    <div class="mainbody mb-4 mb-md-0 order-md-2" data-mainbody>
+        <div class="tt-lg tt-icon fw-medium text-primary">Thông tin cá nhân</div>
+        <form class="form-validate material-form form-info form-validate-profile">
+            <div class="row gx-3">
+                <div class="col-12">
+                    <div class="tt-md text-primary fw-medium mb-3">Thông tin cá nhân</div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group mb-3">
+                        <input id="LastName" name="LastName" value="@Html.Raw(customer.LastName)" class="form-control" type="text" required data-parsley-required-message="Vui lòng nhập họ">
+                        <label class="label-text">Họ</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group mb-3">
+                        <input id="FirstName" name="FirstName" value="@Html.Raw(customer.FirstName)" class="form-control" type="text" required data-parsley-required-message="Vui lòng nhập tên">
+                        <label class="label-text">Tên</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group mb-3">
+                        <input class="form-control" value="@Html.Raw(customer.PhoneNumber)" name="PhoneNumber" id="PhoneNumber" type="text" required data-parsley-required-message="Vui lòng nhập số điện thoại">
+                        <label class="label-text">Số điện thoại</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="tt-md text-primary fw-medium mb-3">Địa chỉ</div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="form-group mb-3">
+                        <select id="Province" name="Province" class="form-select"></select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="form-group mb-3">
+                        <select id="District" name="District" class="form-select"></select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="form-group mb-3">
+                        <select id="Ward" name="Ward" class="form-select"></select>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="form-group mb-3">
+                        <input value="@Html.Raw(customer.Address)" required id="Address" name="Address" class="form-control" type="text">
+                        <label class="label-text">Số nhà, tên đường</label>
+                    </div>
+                </div>
+                <div class="col-12 text-right">
+                    <button onclick="saveProfile()" class="btn btn-secondary px-4" type="button">Lưu thay đổi</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @section Scripts {
+    <script>
+        initParsley(".form-validate-profile", "@lang");
+        getSelectProvince('Province', 'District', 'Ward', '@customer.Province', '@customer.District', '@customer.Ward');
+    </script>
+}

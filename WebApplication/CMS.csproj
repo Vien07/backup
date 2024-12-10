@@ -1,0 +1,136 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>6d8f5e49-249b-4140-a732-7e95614ff222</UserSecretsId>
+    <!--<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>-->
+
+    <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
+	<ServerGarbageCollection>false</ServerGarbageCollection>
+	  
+	<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+
+    <!--<RazorCompileOnPublish>false</RazorCompileOnPublish>-->
+
+
+
+    <!-- beauty into sub-directory, default is libs, quote with "" if contains space  -->
+    <BeautyLibsDir>dlls</BeautyLibsDir>
+    <!-- dlls that you don't want to be moved or can not be moved -->
+    <BeautyExcludes>ResponsiveFileManager.AspNetCore.dll;ResponsiveFileManager</BeautyExcludes>
+    <!-- set to True if you want to disable -->
+    <DisableBeauty>False</DisableBeauty>
+    <ForceBeauty>False</ForceBeauty>
+    <!-- <BeautyAfterTasks></BeautyAfterTasks> -->
+    <!-- set to True if you want to disable -->
+    <DisablePatch>False</DisablePatch>
+    <!-- valid values: Error|Detail|Info -->
+    <BeautyLogLevel>Error</BeautyLogLevel>
+    <!-- set to a repo mirror if you have troble in connecting github -->
+    <!-- <GitCDN>https://gitee.com/liesauer/HostFXRPatcher</GitCDN> -->
+    <!-- <GitTree>master</GitTree> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Components\**" />
+    <Compile Remove="Extensions\**" />
+    <Compile Remove="Helpers\**" />
+    <Content Remove="Components\**" />
+    <Content Remove="Extensions\**" />
+    <Content Remove="Helpers\**" />
+    <EmbeddedResource Remove="Components\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <None Remove="Components\**" />
+    <None Remove="Extensions\**" />
+    <None Remove="Helpers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Areas\Order\Views\Order\CustomerOrderList.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\.well-known\pki-validation\179A7149095E1D25D914CCF0CB2DD3C4.txt" />
+    <Content Include="wwwroot\.well-known\pki-validation\23F422D848D4A7B8ABA96C1E6B6777AC.txt" />
+    <Content Include="wwwroot\.well-known\pki-validation\55C3C7C8B89DCE99576E41C47FF29DE2.txt" />
+    <Content Include="wwwroot\.well-known\pki-validation\5B24B112A5BA141CC5530745372EDFAF.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Coravel" Version="4.1.0" />
+    <PackageReference Include="LazZiya.ImageResize" Version="4.1.0" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.17">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.17">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="MimeKit" Version="2.15.1" />
+    <PackageReference Include="nulastudio.NetCoreBeauty" Version="1.2.9.2" />
+    <PackageReference Include="Peachpie.AspNetCore.Web" Version="$(PeachpieVersion)" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
+    <PackageReference Include="Select.HtmlToPdf.NetCore" Version="22.1.0" />
+    <PackageReference Include="X.PagedList" Version="8.1.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\CmsUtilities\CmsUtilities.csproj" />
+    <ProjectReference Include="..\DTO\DTO.csproj" />
+    <ProjectReference Include="..\ResponsiveFileManager.AspNetCore\ResponsiveFileManager.AspNetCore.csproj" PrivateAssets="None" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Shared\Repository\" />
+    <Folder Include="wwwroot\b-admin\vendors\bootstrap-datatable\" />
+    <Folder Include="wwwroot\docs\recruitments\" />
+    <Folder Include="wwwroot\img\projects\origin\" />
+    <Folder Include="wwwroot\media\Thumbs\" />
+    <Folder Include="wwwroot\media\Uploads\" />
+    <Folder Include="wwwroot\publish\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Advertisement\Views\Advertisement\Index.cshtml" />
+    <None Include="Areas\Advertisement\Views\Advertisement\Modal.cshtml" />
+    <None Include="Areas\Comment\Views\Comment\Index.cshtml" />
+    <None Include="Areas\Comment\Views\Comment\Modal.cshtml" />
+    <None Include="Areas\Order\Views\Order\CustomerOrderList.cshtml" />
+    <None Include="Areas\Order\Views\Order\CreateOrUpdate.cshtml" />
+    <None Include="Areas\Order\Views\Order\Index.cshtml" />
+    <None Include="Areas\Popup\Views\Popup\Index.cshtml" />
+    <None Include="Areas\Popup\Views\Popup\Modal.cshtml" />
+    <None Include="Areas\Recruitment\Views\Candidate\Index.cshtml" />
+    <None Include="Areas\Recruitment\Views\RecruitmentCate\Index.cshtml" />
+    <None Include="Areas\Recruitment\Views\RecruitmentCate\Modal.cshtml" />
+    <None Include="Areas\Recruitment\Views\Recruitment\Compose.cshtml" />
+    <None Include="Areas\Recruitment\Views\Recruitment\Index.cshtml" />
+    <None Include="Areas\Slide\Views\Slide\Index.cshtml" />
+    <None Include="Areas\Slide\Views\Slide\Modal.cshtml" />
+    <None Include="Views\Recruitment\Cate.cshtml" />
+    <None Include="Views\Recruitment\Detail.cshtml" />
+    <None Include="Views\Recruitment\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,248 @@
+﻿@using CMS.Services.TranslateServices;
+@using System.Web
+@using CMS.Services
+@using CMS.Repository
+@using DTO.Product;
+@using DTO.Website;
+@*@using DTO.Comment;*@
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+
+@inject ITranslateServices _translate
+@*@inject IComment_Repository _repComment*@
+@*@inject ICustomer_Repository _repCustomer*@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+@{
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ProductDto data = ViewBag.Data as ProductDto;
+    //string content = HttpUtility.UrlDecode(data.Content);
+    //string description = Convert.ToString(data.Description);
+    List<ProductDto> relateList = ViewBag.RelateList as List<ProductDto>;
+    var url = Context.Request.Host.Value;
+    var share = url + _translate.GetUrl("url.product") + data.Slug + ".html";
+    string banner = ViewBag.Banner as string;
+    //List<ProductCateDto> listCate = ViewBag.Cate as List<ProductCateDto>;
+    //List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    //dynamic phone = ViewBag.Phone as dynamic;
+    //List<ProductCateDto> listCate = ViewBag.CateList as List<ProductCateDto>;
+
+    //string[] listTagkey = data.TagKey.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    //string[] listSlugTagkey = data.SlugTagKey.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+    //var listComment = await _repComment.GetList(lang, 1);
+
+    //decimal price = 0;
+    //decimal priceDiscount = 0;
+    //var priceString = "0";
+    //var priceDiscountString = "0";
+
+    //try
+    //{
+    //    price = data.Options[0].Price;
+    //    priceDiscount = data.Options[0].PriceDiscount;
+    //    priceString = data.Options[0].PriceString;
+    //    priceDiscountString = data.Options[0].PriceDiscountString;
+    //}
+    //catch
+    //{
+    //    price = 0;
+    //    priceDiscount = 0;
+    //}
+
+    //var customerInfo = _repCustomer.GetProfile();
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex align-items-center h-100">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(data.Title)</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))"
+                               title="@Html.Raw(_translate.GetString("menu.home"))"
+                               alt="@Html.Raw(_translate.GetString("menu.home"))"
+                               target="_self">
+                                @Html.Raw(_translate.GetString("menu.home"))
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.product"))"
+                               title="@Html.Raw(_translate.GetString("menu.product"))"
+                               alt="@Html.Raw(_translate.GetString("menu.product"))"
+                               target="_self">
+                                @Html.Raw(_translate.GetString("menu.product"))
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a href="@Html.Raw(_translate.GetUrl("url.product"))@(data.CateSlug)/"
+                               title="@Html.Raw(data.CateName)"
+                               alt="@Html.Raw(data.CateName)"
+                               target="_self">
+                                @Html.Raw(data.CateName)
+                            </a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+
+<section class="block-bg">
+    <div class="container py-5 py-xl-6">
+        <div class="row brief g-3 w-xxl-90 mx-auto">
+            <div class="col-12 col-lg-6">
+                @if (data.ImageList.Any())
+                {
+                    <div class="carousel-products-wrapper">
+                        @if (data.ImageList.Count > 1)
+                        {
+                            <div class="carousel-nav-products-o">
+                                <button class="carousel-buttons prev" type="button">
+                                    <span class="far fa-angle-up"></span>
+                                </button>
+                                <div class="carousel-nav-products">
+                                    @foreach (var item in data.ImageList)
+                                    {
+                                        <div class="carousel-cell">
+                                            <div class="thumb-res square">
+                                                <img class="fit-cover"
+                                                     src="@Html.Raw(item)" />
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <button class="carousel-buttons next" type="button">
+                                    <span class="far fa-angle-down"></span>
+                                </button>
+                            </div>
+                        }
+                        <div class="carousel-products">
+                            @foreach (var item in data.ImageList)
+                            {
+                                <div class="carousel-cell">
+                                    <a class="thumb-res square"
+                                       alt="@Html.Raw(data.Title)"
+                                       title="@Html.Raw(data.Title)"
+                                       href="@Html.Raw(item)"
+                                       data-fancybox="gallary-products">
+                                        <img src="@Html.Raw(item)" />
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="code fs-14 text-desc">@Html.Raw(data.Code)</div>
+                <h2 class="tt-md mb-3">@Html.Raw(data.Title)</h2>
+                <div class="desc mb-3">
+                    @Html.Raw(data.Description)
+                </div>
+                <div class="group-share mb-4">
+                    <div class="list-social-share">
+                        <a class="btn rounded-circle btn-facebook"
+                           href="https://www.facebook.com/sharer/sharer.php?u=@Html.Raw(share)"
+                           onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                           title="Facebook"
+                           alt="Facebook"
+                           target="_self">
+                            <span class="fab fa-facebook-f"></span>
+                        </a>
+                        <a class="btn rounded-circle btn-twitter"
+                           href="https://twitter.com/intent/tweet?original_referer=@Html.Raw(share)&via="
+                           onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                           title="Twitter"
+                           alt="Twitter"
+                           target="_self">
+                            <span class="fab fa-x-twitter"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="content-desc">
+                    <div class="title-content">@Html.Raw(_translate.GetString("product.detail-desc"))</div>
+                    <div class="content">
+                        @Html.Raw(data.Content)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@if (relateList.Any())
+{
+    <section class="block-bg block-other-products">
+        <div class="container py-5 py-xl-6">
+            <div class="text-center">
+                <div class="title-box">
+                    <div class="tt-lg no-bf fs-28">@Html.Raw(_translate.GetString("product.other-product"))</div>
+                </div>
+            </div>
+            <div class="list-products row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mt-0">
+                @foreach (var item in relateList)
+                {
+                    <div class="col">
+                        <div class="block">
+                            <a class="absolute"
+                               alt="@Html.Raw(item.TitleAlt)"
+                               title="@Html.Raw(item.TitleAlt)"
+                               href="@Html.Raw(_translate.GetUrl("url.product"))@(item.Slug).html"></a>
+                            <div class="thumb-res tall">
+                                <img src="@Html.Raw(item.PicThumb)" />
+                            </div>
+                            <div class="info">
+                                <div class="tt">@Html.Raw(item.Title)</div>
+                                <div class="code">@Html.Raw(item.Code)</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@section Scripts{
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+    </script>
+}

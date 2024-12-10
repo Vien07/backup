@@ -1,0 +1,9 @@
+//- mixin news
+mixin block_news(blockClass, img, title, desc)
+    .block(class=blockClass)
+        +a("news-detail.html", "absolute",)
+        .thumb-res.wide
+            +bg('absolute', 'news/'+img)
+        .info
+            .tt=title
+            .desc=desc

@@ -1,0 +1,103 @@
+.nav-feedback {
+    @include fixed(45%,0,0);
+    z-index: 888;
+    display: none;
+
+    &-btn {
+        width: 120px;
+        height: 40px;
+        padding: 5px 10px;
+        background: $danger;
+        color: #fff;
+        border-radius: 5px 5px 0 0;
+        transform: rotate(-90deg);
+        transform-origin: right bottom;
+        font-weight: $semibold;
+    }
+}
+@include media-breakpoint-up(md) {
+    .nav-feedback {
+        display: block;
+    }
+}
+// modal
+.text-link {
+    text-decoration: underline;
+}
+.modal-list-box {
+    --tt-xs: 1.5rem;
+    .block {
+        padding: 2rem;
+        text-align: center;
+    }
+    .icon {
+        font-size: 3rem;
+        color: lighten($primary, 15%);
+    }
+    .tt-xs {
+        font-weight: $semibold;
+        letter-spacing: -1px;
+    }
+    .btn {
+        margin-top: .75rem;
+    }
+}
+.modal-feedback {
+    .modal-header {
+        padding-top: 2.5rem;
+        padding-bottom: 1rem;
+    }
+    .modal-footer {
+        background: #f4f4f4;
+    }
+    .modal-header,
+    .modal-footer {
+        display: block;
+    }
+    .tt-md {
+        font-weight: $semibold;
+    }
+}
+@include media-breakpoint-up(md) {
+    .modal-list-box {
+        --tt-xs: 1.25rem;
+        .block {
+            padding: 1rem;
+        }
+        .desc {
+            font-size: 15px;
+        }
+        .btn {
+            margin-top: 1.25rem;
+        }
+    }
+    .modal-feedback {
+        --tt-md: 1.75rem;
+        .modal-dialog {
+            max-width: 650px;
+        }
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+            padding-left: 3rem;
+            padding-right: 3rem;
+        }
+        .modal-footer {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+    }
+}
+@include media-breakpoint-up(lg) {
+    .modal-feedback-group {
+        .modal-dialog {
+            max-width: 760px;
+        }
+        .modal-content {
+            padding: 1.25rem;
+        }
+    }
+    .modal-list-box {
+        --tt-xs: 1.5rem;
+    }
+}

@@ -1,0 +1,1776 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using DTO;
+@inject ITranslateServices _translate
+@inject ICommonServices _common
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+        .custom-modal-xl {
+            max-width: 1140px;
+        }
+    </style>
+}
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>@_translate.GetStringAdmin("left-menu.general-config")</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+
+    <section class="hk-sec-wrapper">
+        <form id="formInput">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">@_translate.GetStringAdmin("general-configuration.info")</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="img-tab" data-toggle="tab" href="#img" role="tab" aria-controls="img" aria-selected="false">@_translate.GetStringAdmin("general-configuration.image")</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="email-tab" data-toggle="tab" href="#email" role="tab" aria-controls="email" aria-selected="false">@_translate.GetStringAdmin("general-configuration.email")</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false">Thanh toán</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">@_translate.GetStringAdmin("general-configuration.other")</a>
+                </li>
+            </ul>
+            <hr class="hr-light mt-0">
+            <div class="tab-content bg-light" id="myTabContent">
+                <div class="tab-pane p-4 fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="website-Name"> @_translate.GetStringAdmin("general-configuration.website-name")</label>
+                                <input class="form-control" id="website-Name" name="website-Name" placeholder="BizMaC, Thiết kế website chuyên nghiệp" value="" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="email-Admin"> @_translate.GetStringAdmin("general-configuration.email-admin")</label>
+                                <input class="form-control" id="email-Admin" name="email-Admin" placeholder="webmaster@bizmac.com - địa chỉ nhận thông báo từ website" value="" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="root-domain">@_translate.GetStringAdmin("general-configuration.root-domain")</label>
+                                <input class="form-control" id="root-domain" name="root-domain" placeholder="bizmac.com.vn" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="link-policy"> Link chính sách</label>
+                                <input class="form-control" id="link-policy" name="link-policy" placeholder="bizmac.com.vn" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="link-bct"> Link bộ công thương</label>
+                                <input class="form-control" id="link-bct" name="link-bct" placeholder="http://online.gov.vn/Home/WebDetails/14455" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="link-certificate"> Link chứng chỉ</label>
+                                <input class="form-control" id="link-certificate" name="link-certificate" placeholder="https://tinnhiemmang.vn/" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="meta-Keywords"> @_translate.GetStringAdmin("general-configuration.meta-keywords")</label>
+                                <input class="form-control" id="meta-Keywords" name="meta-Keywords" placeholder="thiết kế web, hosting, cloud server, email server" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="meta-Description"> @_translate.GetStringAdmin("general-configuration.meta-description")</label>
+                                <textarea class="form-control" id="meta-Description" name="meta-Description" placeholder="BizMaC - Thiết kế Website Chuyên Nghiệp chuẩn SEO, giao diện Responsive di động và máy tính bảng" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="code-Header"> @_translate.GetStringAdmin("general-configuration.custom-headers-code")</label>
+                                <textarea id="code-Header" name="code-Header" class="form-control" rows="4" placeholder="Nội dung trước thẻ đóng head"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="code-Body"> @_translate.GetStringAdmin("general-configuration.custom-footer-code")</label>
+                                <textarea name="code-Body" id="code-Body" class="form-control" rows="4" placeholder="Nội dung trước thẻ đóng body"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <hr class="hr-light-10">
+                        </div>
+                        <div class="col-12">
+                            <label>
+                                <i class="fas fa-paper-plane"></i> @_translate.GetStringAdmin("general-configuration.socical-network-link")
+                            </label>
+
+                            <div class="row">
+                                <!-- Nếu có 1,2 cái thì col-12 col-md-6 -->
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fab fa-facebook-square  text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="share-facebook" name="share-facebook" placeholder="facebook">
+                                    </div>
+                                </div>
+                                <div hidden class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fa-brands fa-twitch"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="share-twitch" name="share-twitch" placeholder="twitch">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-10"><i class="fa-brands fa-x-twitter"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-twitter" id="share-twitter" placeholder="twitter">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-10"><i class="fab fa-youtube text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-youtube" id="share-youtube" placeholder="youtube">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fab fa-linkedin text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-linkedin" id="share-linkedin" placeholder="linkedin">
+                                    </div>
+
+                                </div>
+                                <div hidden class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fa fa-podcast text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-podcast" id="share-podcast" placeholder="Podcast">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fab fa-instagram text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-instagram" id="share-instagram" placeholder="Instagram">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span style="width:45px" class="input-group-text pr-15"><img src="/img/configuration/tiktok.svg"></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-tiktok" id="share-tiktok" placeholder="Tiktok">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span style="width:45px" class="input-group-text pr-15"><img src="/img/configuration/zalo-chat.svg"></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-zalo" id="share-zalo" placeholder="Zalo">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fab fa-skype text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-skype" id="share-skype" placeholder="Skype">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fab fa-viber text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-viber" id="share-viber" placeholder="Viber">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fa-brands fa-whatsapp"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" id="share-whatsapp" name="share-whatsapp" placeholder="whatsapp">
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fab fa-telegram-plane text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-telegram" id="share-telegram" placeholder="Telegram">
+                                    </div>
+                                </div>
+                                <div hidden class="col-12 col-md-6 col-lg-4">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text pr-15"><i class="fab fa-pinterest text-secondary"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="share-pinterest" id="share-pinterest" placeholder="Pinterest">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="tab-pane p-4 fade" id="img" role="tabpanel" aria-labelledby="img-tab">
+                    <!--tabcontent-->
+                    <div class="form-group row">
+                        <div class="col-12 col-lg-3 p3-2 pr-1">
+                            <div class="form-group">
+                                <label for="images-upload-prefix">@_translate.GetStringAdmin("general-configuration.image-upload-prefix")</label>
+                                <input type="text" class="form-control" id="images-upload-prefix" name="images-upload-prefix" placeholder="bizmac_">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 px-1">
+                            <div class="form-group">
+                                <label for="image-upload-min-width">@_translate.GetStringAdmin("general-configuration.min-width")</label>
+                                <input type="text" class="form-control" name="image-upload-min-width" id="image-upload-min-width" placeholder="Thumb size to 350px">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 px-1">
+                            <div class="form-group">
+                                <label for="image-upload-max-width">@_translate.GetStringAdmin("general-configuration.max-width")</label>
+                                <input type="text" class="form-control" name="image-upload-max-width" id="image-upload-max-width" placeholder="Max size to 800px">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3 pl-1 pl-3">
+                            <div class="form-group">
+                                <label for="banner-slide-upload-width">Slide & Banner width</label>
+                                <input type="text" class="form-control" name="banner-slide-upload-width" id="banner-slide-upload-width">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="title">@_translate.GetStringAdmin("general-configuration.logo")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="logo" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="hidden"><input id="file_logo" type="file" name="logo">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="logo-footer" class="title">@_translate.GetStringAdmin("general-configuration.logo-footer")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="logo-footer" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input id="file_logo_footer" type="file" name="logo-footer">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.favicon")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="favicon" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="favicon">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.default-og-image")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="default-og-image" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="default-og-image">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <hr class="hr-light-10">
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="faq-image" class="title">@_translate.GetStringAdmin("general-configuration.faq-image")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="faq-image" class="fileinput-filename"></span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="faq-image">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="home-image" class="title">@_translate.GetStringAdmin("general-configuration.home-image")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="home-image" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="home-image">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="home-image-mobile" class="title">@_translate.GetStringAdmin("general-configuration.home-image-mobile")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="home-image-mobile" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="home-image-mobile">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="feature-image" class="title">@_translate.GetStringAdmin("general-configuration.feature-image")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="feature-image" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="feature-image">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <hr class="hr-light-10">
+                        </div>
+                        <div hidden class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="bct-image" class="title">@_translate.GetStringAdmin("general-configuration.bct-image")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="bct-image" class="fileinput-filename"></span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="bct-image">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div hidden class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="certificate-image" class="title">@_translate.GetStringAdmin("general-configuration.certificate-image")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-3">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="certificate-image" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="certificate-image">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <hr class="hr-light-10">
+                        </div>
+                        <div class="col-12">
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.watermark-type")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group row align-items-center mb-0">
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input onclick="changeWatermarkType('watermark-type-image')" id="watermark-type-image" name="watermark-type" class="custom-control-input" value="image" type="radio">
+                                                <label class="custom-control-label" for="watermark-type-image">Image</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input onclick="changeWatermarkType('watermark-type-text')" id="watermark-type-text" name="watermark-type" class="custom-control-input" value="text" type="radio">
+                                                <label class="custom-control-label" for="watermark-type-text">Text</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" id="div-watermark-image">
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.watermark-image")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group mb-0">
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Upload</span>
+                                            </div>
+                                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                <span id="watermark-image" class="fileinput-filename">Choose file...</span>
+                                            </div>
+                                            <span class="input-group-append">
+                                                <span class="btn btn-dark btn-file">
+                                                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="watermark-image">
+                                                </span>
+                                                <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" id="div-watermark-text">
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.watermark-text")</label>
+                                </div>
+                                <div class="col-md-6 col-lg-3 col-xl-2">
+                                    <input type="text" class="form-control" name="watermark-text" id="watermark-text" placeholder="bizmac.com">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" id="div-watermark-opacity">
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.watermark-opacity")</label>
+                                </div>
+                                <div class="col-md-6 col-lg-3 col-xl-2">
+                                    <input type="text" class="form-control" name="watermark-opacity" id="watermark-opacity" placeholder="0 - 100">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.pos-watermark")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group row align-items-center flex-wrap">
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input id="watermark-position-1" name="watermark-position" class="custom-control-input" value="topLeft" checked="" type="radio">
+                                                <label class="custom-control-label" for="watermark-position-1">@_translate.GetStringAdmin("general-configuration.top-left")</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio mb-5">
+                                                <input id="watermark-position-2" name="watermark-position" class="custom-control-input" value="topRight" type="radio">
+                                                <label class="custom-control-label" for="watermark-position-2">@_translate.GetStringAdmin("general-configuration.top-right")</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input id="watermark-position-3" name="watermark-position" class="custom-control-input" value="center" type="radio">
+                                                <label class="custom-control-label" for="watermark-position-3">@_translate.GetStringAdmin("general-configuration.center")</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input id="watermark-position-4" name="watermark-position" class="custom-control-input" value="bottomLeft" type="radio">
+                                                <label class="custom-control-label" for="watermark-position-4">@_translate.GetStringAdmin("general-configuration.bottom-left")</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input id="watermark-position-5" name="watermark-position" class="custom-control-input" value="bottomRight" type="radio">
+                                                <label class="custom-control-label" for="watermark-position-5">@_translate.GetStringAdmin("general-configuration.bottom-right")</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div hidden class="col-12">
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.how-image-list-show")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group row align-items-center mb-0">
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input onclick="changeHowImageListShow('how-image-list-show-slide')" id="how-image-list-show-slide" name="how-image-list-show" class="custom-control-input" value="slide" type="radio">
+                                                <label class="custom-control-label" for="how-image-list-show-slide">@_translate.GetStringAdmin("general-configuration.slide")</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input onclick="changeHowImageListShow('how-image-list-show-scroll')" id="how-image-list-show-scroll" name="how-image-list-show" class="custom-control-input" value="scroll" type="radio">
+                                                <label class="custom-control-label" for="how-image-list-show-scroll">@_translate.GetStringAdmin("general-configuration.scroll")</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div hidden class="col-12">
+                            <div class="row align-items-center mb-3">
+                                <div class="col-md-2">
+                                    <label for="favicon" class="title">@_translate.GetStringAdmin("general-configuration.position-image-list-show")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="form-group row align-items-center mb-0">
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input id="position-image-list-show-top" name="position-image-list-show" class="custom-control-input" value="top" type="radio">
+                                                <label class="custom-control-label" for="position-image-list-show-top">@_translate.GetStringAdmin("general-configuration.top")</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="custom-control custom-radio">
+                                                <input id="position-image-list-show-bottom" name="position-image-list-show" class="custom-control-input" value="bottom" type="radio">
+                                                <label class="custom-control-label" for="position-image-list-show-bottom">@_translate.GetStringAdmin("general-configuration.bottom")</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+                <!--tabcontent-->
+                <div class="tab-pane p-4 fade" id="email" role="tabpanel" aria-labelledby="email-tab">
+                    <h6 class="form-group text-primary">Cấu hình tài khoản gửi mail</h6>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="email-fromName">@_translate.GetStringAdmin("email-setting.from-name")</label>
+                            <input class="form-control" id="email-fromName" name="email-fromName" placeholder="@_translate.GetStringAdmin("email-setting.plh-from-name")" value="" type="text">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="email-fromEmail">@_translate.GetStringAdmin("email-setting.from-email")</label>
+                            <input class="form-control" id="email-fromEmail" name="email-fromEmail" placeholder="@_translate.GetStringAdmin("email-setting.plh-from-email")" value="" type="text">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-10">
+                            <label for="email-SMTPServer">@_translate.GetStringAdmin("email-setting.smtp-server")</label>
+                            <input class="form-control" id="email-SMTPServer" name="email-SMTPServer" placeholder="@_translate.GetStringAdmin("email-setting.plh-smtp-server")" type="text">
+                        </div>
+                        <div class="col-md-3 mb-10">
+                            <label for="email-SMTPUser">@_translate.GetStringAdmin("email-setting.smtp-user")</label>
+                            <input class="form-control" id="email-SMTPUser" name="email-SMTPUser" placeholder="@_translate.GetStringAdmin("email-setting.plh-smtp-user")" type="text">
+                        </div>
+                        <div class="col-md-3 mb-10">
+                            <label for="email-SMTPPassword">@_translate.GetStringAdmin("email-setting.smtp-password")</label>
+                            <input class="form-control" id="email-SMTPPassword" name="email-SMTPPassword" placeholder="@_translate.GetStringAdmin("email-setting.plh-smtp-password")" type="password">
+                        </div>
+                        <div class="col-md-1 mb-10">
+                            <label for="email-port">@_translate.GetStringAdmin("email-setting.port")</label>
+                            <input class="form-control" id="email-port" name="email-port" placeholder="@_translate.GetStringAdmin("email-setting.plh-port")" type="text">
+                        </div>
+                        <div class="col-md-2 mb-10">
+                            <label for="email-SSLTLSEncryption">@_translate.GetStringAdmin("email-setting.ssl-tls")</label>
+                            <div class="form-group pl-0">
+                                <select id="email-SSLTLSEncryption" name="email-SSLTLSEncryption" class="form-control nice-select border">
+                                    <option value="" selected>None</option>
+                                    <option value="SSL">SSL</option>
+                                    <option value="TLS">TLS</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class="form-group text-primary mt-20">@_translate.GetStringAdmin("email-setting.email-display-config")</h6>
+                    <div class="form-group">
+                        <label for="email-GlobalEmailHeader">@_translate.GetStringAdmin("email-setting.email-global-email-header")</label>
+                        <textarea class="form-control" id="email-GlobalEmailHeader" name="email-GlobalEmailHeader" rows="6" placeholder="@_translate.GetStringAdmin("email-setting.plh-email-global-email-header")"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="email-GlobalEmailFooter">@_translate.GetStringAdmin("email-setting.email-global-email-footer")</label>
+                        <textarea class="form-control" id="email-GlobalEmailFooter" name="email-GlobalEmailFooter" rows="6" placeholder="@_translate.GetStringAdmin("email-setting.plh-email-global-email-footer")"></textarea>
+                    </div>
+                    <div id="list" class="">
+                        <h6 class="form-group text-primary">Email template</h6>
+                        <div class="form-group">
+                            <!--filter action-->
+                            <div class="form-inline align-items-center pb-10">
+                                <h5>
+                                    Khách hàng
+                                </h5>
+                                <div class="col-auto form-group">
+                                </div>
+                            </div>
+                            <!--end filter action-->
+                        </div>
+                        <div class="table-responsive bg-white">
+                            <div class="tooltip fade bs-tooltip-top"
+                                 role="tooltip"
+                                 id="tooltip573060">
+                                <div class="arrow"></div>
+                                <div class="tooltip-inner">edit</div>
+                            </div>
+                            <div class="tooltip fade bs-tooltip-top"
+                                 role="tooltip"
+                                 id="tooltip604619"
+                                 style="will-change: transform">
+                                <div class="arrow" style="left: 0px"></div>
+                                <div class="tooltip-inner">edit</div>
+                            </div>
+                            <div class="tooltip fade bs-tooltip-top"
+                                 role="tooltip"
+                                 id="tooltip715370"
+                                 style="will-change: transform">
+                                <div class="arrow" style="left: 0px"></div>
+                                <div class="tooltip-inner">edit</div>
+                            </div>
+                            <div class="tooltip fade bs-tooltip-top"
+                                 role="tooltip"
+                                 id="tooltip862695">
+                                <div class="arrow"></div>
+                                <div class="tooltip-inner">edit</div>
+                            </div>
+                            <div class="tooltip fade bs-tooltip-top"
+                                 role="tooltip"
+                                 id="tooltip776056"
+                                 style="will-change: transform">
+                                <div class="arrow" style="left: 0px"></div>
+                                <div class="tooltip-inner">edit</div>
+                            </div>
+                            <div class="tooltip fade bs-tooltip-top"
+                                 role="tooltip"
+                                 id="tooltip738167"
+                                 style="will-change: transform">
+                                <div class="arrow" style="left: 0px"></div>
+                                <div class="tooltip-inner">edit</div>
+                            </div>
+                        </div>
+                        <table class="table table-hover table-sm bg-white">
+                            <thead class="thead-light">
+                                <tr>
+                                    @*<th width="1">
+                            <div class="custom-control custom-checkbox">
+                            <input onclick="CheckAll()" type="checkbox" class="custom-control-input" id="customcheck-all">
+                            <label class="custom-control-label position-static" for="customcheck-all"></label>
+                            </div>
+                            </th>*@
+                                    <th scope="col" class="resizeable text-nowrap">Tiêu đề</th>
+                                    <th class="text-right text-nowrap resizeable" scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyData_contact">
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <!--filter action-->
+                            <div class="form-inline align-items-center pb-10">
+                                <h5>
+                                    Đơn hàng
+                                </h5>
+                                <div class="col-auto form-group">
+                                </div>
+                            </div>
+                            <!--end filter action-->
+                        </div>
+                        <table class="table table-hover table-sm bg-white">
+                            <thead class="thead-light">
+                                <tr>
+
+                                    <th scope="col" class="resizeable text-nowrap">Title</th>
+                                    <th class="text-right text-nowrap resizeable" scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyData_customer">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane p-4 fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label class="form-label">Mã số thuế</label>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input type="text" id="tax-code-company" name="tax-code-company" class="form-control" placeholder="Mã số thuế">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label for="ibanking-info" class="form-label">Thông tin Ibanking</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <textarea rows="5" class="form-control" id="ibanking-info" name="ibanking-info"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div hidden class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label class="form-label">Momo</label>
+                                    <p class="mb-10">(Register at <a href="https://business.momo.vn/" target="_blank">Momo Payment</a>)</p>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input class="form-control" id="momo-api" name="momo-api" placeholder="EndPoint" />
+                                            <div class="form-text font-13">
+                                                API
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <input class="form-control" id="momo-partner-code" name="momo-partner-code" placeholder="Momo Partner Code" />
+                                            <div class="form-text font-13">
+                                                Partner Code
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <input class="form-control" id="momo-access-key" name="momo-access-key" placeholder="Momo Access Key" />
+                                            <div class="form-text font-13">
+                                                Access Key
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <input class="form-control" id="momo-secrect-key" name="momo-secrect-key" placeholder="Momo Secret Key" />
+                                            <div class="form-text font-13">
+                                                Secret Key
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="input1" class="form-label">Tùy chọn</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" type="checkbox" class="custom-control-input" id="display-ibanking">
+                                        <label class="custom-control-label" for="display-ibanking">On/Off - Bật Ibanking</label>
+                                    </div>
+                                    <div hidden class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" type="checkbox" class="custom-control-input" id="display-momo">
+                                        <label class="custom-control-label" for="display-momo">On/Off - Hiện thanh toán Momo</label>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    @*<div hidden class="hk-sec-wrapper">
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Tax code</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="tax-code-company" name="tax-code-company" />
+                    </div>
+                </div>
+            </div>
+            <div hidden class="hk-sec-wrapper">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <div class="custom-control custom-checkbox">
+                            <input onclick="ChangeCheckBox(this.id)" type="checkbox" class="custom-control-input" id="display-ibanking">
+                            <label class="custom-control-label" for="display-ibanking">Show</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Display Name</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="ibanking-name" name="ibanking-name" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Account info</label>
+                    <div class="col-md-6">
+                        <textarea rows="6" class="form-control" id="ibanking-info" name="ibanking-info"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div hidden class="hk-sec-wrapper">
+                <p class="mb-10">Momo Plugin (Register at <a href="https://business.momo.vn/" target="_blank">Momo Payment</a>)</p>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <div class="custom-control custom-checkbox">
+                            <input onclick="ChangeCheckBox(this.id)" type="checkbox" class="custom-control-input" id="display-momo">
+                            <label class="custom-control-label" for="display-momo">Show</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">API</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="momo-api" name="momo-api" placeholder="EndPoint" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Partner Code</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="momo-partner-code" name="momo-partner-code" placeholder="Momo Partner Code" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Access Key</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="momo-access-key" name="momo-access-key" placeholder="Momo Access Key" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 col-form-label">Secret Key</label>
+                    <div class="col-md-6">
+                        <input class="form-control" id="momo-secrect-key" name="momo-secrect-key" placeholder="Momo Secret Key" />
+                    </div>
+                </div>
+            </div>*@
+
+
+                </div>
+                <div class="tab-pane p-4 fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-12">
+                                    <label class="form-label">Enable reCAPTCHA (Free register at <a href="https://www.google.com/recaptcha/admin" target="_blank">Google reCAPTCHA</a>)</label>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <input type="text" class="form-control" id="reCaptcha-site-key" name="reCaptcha-site-key" placeholder="reCAPTCHA Site Key">
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <input type="text" class="form-control" id="reCaptcha-secret-key" name="reCaptcha-secret-key" placeholder="reCAPTCHA Secret Key">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label class="form-label">Zalo Oaid</label>
+                                </div>
+                                <div class="col-md-4 col-lg-2">
+                                    <input class="form-control" id="zalo-oaid" name="zalo-oaid" placeholder="Zalo OAId" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label class="form-label">Định dạng ngày</label>
+                                </div>
+                                <div class="col-md-4 col-lg-2">
+                                    <select id="date-format" name="date-format" class="form-control">
+                                        <option value="DD/MM/YYYY" selected="">
+                                            dd/mm/yyyy
+                                        </option>
+                                        <option value="DD-MM-YYYY">dd-mm-yyyy</option>
+                                        <option value="DD.MM.YYYY">dd.mm.yyyy</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div hidden class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label for="input1" class="form-label">Currency Format</label>
+                                </div>
+                                <div class="col-md-4 col-lg-2">
+                                    <select id="money-format" name="money-format" class="form-control">
+                                        <option value="." selected="">1.123</option>
+                                        <option value=",">1,123</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label for="input1" class="form-label">Prefix mã sản phẩm</label>
+                                </div>
+                                <div class="col-md-6 col-lg-4">
+                                    <input name="product-code" class="form-control mr-10" id="product-code">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label for="input1" class="form-label">@_translate.GetStringAdmin("general-configuration.page-limit")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-6 col-md-2 col-xl-1">
+                                            <div class="form-group mb-3">
+                                                <input id="page-limit-admin" name="page-limit-admin" type="text" class="form-control">
+                                                <label for="page-limit-admin" class="form-label font-12 text-muted">Admin</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-md-2 col-xl-1">
+                                            <div class="form-group mb-3">
+                                                <input name="page-limit" id="page-limit" type="text" class="form-control">
+                                                <label for="page-limit" class="form-label font-12 text-muted">Client</label>
+                                            </div>
+                                        </div>
+                                        @*<div  class="col-6 col-md-2 col-xl-1">
+                                    <div class="form-group mb-3">
+                                        <input name="page-limit-detail" id="page-limit-detail" type="text" class="form-control">
+                                        <label for="page-limit-detail" class="form-label font-12 text-muted">Detail</label>
+                                    </div>
+                                </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label for="input1" class="form-label">@_translate.GetStringAdmin("general-configuration.hot-limit")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        @*<div class="col-6 col-md-2 col-xl-1">
+                                    <div class="form-group mb-3">
+                                        <input id="hot-service-limit" name="hot-service-limit" type="text" class="form-control">
+                                        <label for="hot-service-limit" class="form-label font-12 text-muted">@_translate.GetStringAdmin("left-menu.service")</label>
+                                    </div>
+                                </div>*@
+                                        <div class="col-6 col-md-2 col-xl-1">
+                                            <div class="form-group mb-3">
+                                                <input name="hot-product-limit" id="hot-product-limit" type="text" class="form-control">
+                                                <label for="hot-product-limit" class="form-label font-12 text-muted">@_translate.GetStringAdmin("left-menu.product")</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-md-2 col-xl-1">
+                                            <div class="form-group mb-3">
+                                                <input name="hot-news-limit" id="hot-news-limit" type="text" class="form-control">
+                                                <label for="hot-news-limit" class="form-label font-12 text-muted">@_translate.GetStringAdmin("left-menu.news")</label>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-6 col-md-2 col-xl-1">
+                                    <div class="form-group mb-3">
+                                        <input name="hot-project-limit" id="hot-project-limit" type="text" class="form-control">
+                                        <label for="hot-project-limit" class="form-label font-12 text-muted">@_translate.GetStringAdmin("left-menu.project")</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-2 col-xl-1">
+                                    <div class="form-group mb-3">
+                                        <input name="hot-faq-limit" id="hot-faq-limit" type="text" class="form-control">
+                                        <label for="hot-faq-limit" class="form-label font-12 text-muted">@_translate.GetStringAdmin("left-menu.faq")</label>
+                                    </div>
+                                </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group mb-3 row">
+                                <div class="col-md-2">
+                                    <label for="input1" class="form-label">@_translate.GetStringAdmin("general-configuration.relate-limit")</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div hidden class="col-6 col-md-2 col-xl-1">
+                                            <div class="form-group mb-3">
+                                                <input id="relate-product-limit" name="relate-product-limit" type="text" class="form-control">
+                                                <label for="relate-product-limit" class="form-label font-12 text-muted">@_translate.GetStringAdmin("left-menu.product")</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-md-2 col-xl-1">
+                                            <div class="form-group mb-3">
+                                                <input name="relate-news-limit" id="relate-news-limit" type="text" class="form-control">
+                                                <label for="relate-news-limit" class="form-label font-12 text-muted">@_translate.GetStringAdmin("left-menu.news")</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <hr class="hr-light-10">
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="input1" class="form-label">Tùy chọn</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" value="on" type="checkbox" class="custom-control-input" id="robots">
+                                        <label class="custom-control-label" for="robots">
+                                            Robots.txt - Cho phép công cụ tìm kiếm lập chỉ mục website
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" value="off" type="checkbox" class="custom-control-input" id="maintenance">
+                                        <label class="custom-control-label" for="maintenance">
+                                            On/Off - Bật thông báo tạm dừng website (bảo trì)
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" value="on" type="checkbox" class="custom-control-input" id="recaptcha">
+                                        <label class="custom-control-label" for="recaptcha">On/Off - Bật Recaptcha</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBoxWatermarkActive(this.id)" value="on" type="checkbox" class="custom-control-input" id="watermark-active">
+                                        <label class="custom-control-label" for="watermark-active">On/Off - Bật Watermark</label>
+                                    </div>
+                                    <div id="watermark-thumbnail" class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" value="on" type="checkbox" class="custom-control-input" id="watermark-picThumb-active">
+                                        <label class="custom-control-label" for="watermark-picThumb-active">On/Off - Bật Watermark Thumbnail</label>
+                                    </div>
+                                    <div hidden class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" value="off" type="checkbox" class="custom-control-input" id="google-login">
+                                        <label class="custom-control-label" for="google-login">On/Off - Turn on Google login</label>
+                                    </div>
+                                    <div hidden class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" value="off" type="checkbox" class="custom-control-input" id="facebook-login">
+                                        <label class="custom-control-label" for="facebook-login">On/Off - Turn on Facebook login</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mt-10">
+                                        <input onclick="ChangeCheckBox(this.id)" value="off" type="checkbox" class="custom-control-input" id="seo-config">
+                                        <label class="custom-control-label" for="seo-config">On/Off - Bật SEO config</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    @*<div  class="row">
+                <div hidden class="col-md-6 form-group">
+                    <label for="root-domain">Google sign in key</label>
+                    <input class="form-control" id="google-signin-key" name="google-signin-key" placeholder="297034968948-d417jn7fokdgbhdtfv6ff649tl9otaqm.apps.googleusercontent.com" type="text">
+                </div>
+                <div hidden class="col-md-6 form-group">
+                    <label for="root-domain">Facebook AppId</label>
+                    <input class="form-control" id="facebook-appid" name="facebook-appid" placeholder="1037622440303945" type="text">
+                </div>
+            </div>*@
+
+                </div>
+            </div>
+            <div class="form-group row mt-20 pl-15">
+                <a href="/b-admin/Dashboard/Index" class="btn btn-dark mr-2"><i class="fas fa-window-close"></i> @_translate.GetStringAdmin("button.close") </a>
+                <button type="button" onclick="UpdateSetting()" class="btn btn-primary"><i class="fas fa-vote-yea mr-5"></i>@_translate.GetStringAdmin("general-configuration.btn-update")</button>
+
+                @*<button type="button" onclick="Update()" class="btn btn-primary mr-10"><i class="fas fa-vote-yea"></i> Cập Nhật</button>*@
+                @*<button type="button" onclick="Cancel()" class="btn btn-dark"><i class="fas fa-times"></i></button>*@
+            </div>
+        </form>
+
+    </section>
+
+    <!-- /Row -->
+</div>
+<!-- Custom Modal -->
+<div class="modal fade" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModal" aria-hidden="true">
+    <div class="modal-dialog custom-modal-xl modal-dialog-centered" role="admin">
+        <form class="modal-content needs-validation" name="formInput" id="formInputEmailTemplate" novalidate onsubmit="return false">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white text-uppercase"><i class="fas fa-layer-plus pr-10"></i>Thông tin email template </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div hidden class="form-group">
+                    <ul class="nav nav-tabs" id="langTab" role="tablist">
+                        <li style="cursor:pointer" lang="vi" class="nav-item">
+                            <a class="nav-link active show" data-toggle="tab" role="tab" aria-controls="info" aria-selected="true"><i class="flag-icon flag-icon-vn"></i> Tiếng việt</a>
+                        </li>
+                        <li style="cursor:pointer" lang="en" class="nav-item">
+                            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="img" aria-selected="false"><i class="flag-icon flag-icon-us"></i> English</a>
+                        </li>
+                    </ul>
+                    <hr class="hr-light mt-0">
+                </div>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div id="bodyModal" class="form-group">
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <section class="hk-sec-wrapper sticky-top mr-0">
+                            <div id="body-info-email">
+                                <h4 class="no-margin">Các trường hợp nhất có sẵn</h4>
+                                <hr class="hr-panel-heading" />
+                                <div class="row">
+                                    <div class="col-md-12" style="font-size:12px">
+                                        <div id="email_key" class="row available_merge_fields_container">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                @*<button type="submit" id="btnSave" onclick="Save()" class="btn btn-primary"><i class="fas fa-save mr-5"></i>@_translate.GetStringAdmin("group.btn-save")</button>*@
+                <div class="form-group d-flex align-items-center">
+                    <div id="toggle_enable" value="true" class="toggle  toggle-simple toggle-light toggle-bg-success toggle1 mr-5 raw"></div>
+                    <button type="button" id="btnSave" onclick="Save()" class="btn btn-primary mr-2"><i class="fas fa-vote-yea mr-5"></i>@_translate.GetStringAdmin("button.update")</button>
+                    <button type="button" onclick="Clear()" class="btn btn-dark mr-1"><i class="fas fa-window-close"></i> @_translate.GetStringAdmin("button.close") </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Custom Modal -->
+@section Scripts{
+    <script>
+
+        //General configuration
+        var originData;
+
+        $(function () {
+            LoadData();
+        });
+
+        let changeHowImageListShow = (id) => {
+            id = "#".concat(id);
+            if ($(id).val() === "slide") {
+                $("#position-image-list-show").hide();
+            }
+            else if ($(id).val() === "scroll") {
+                $("#position-image-list-show").show();
+            }
+        }
+
+        let changeWatermarkType = (id) => {
+            id = "#".concat(id);
+            if ($(id).val() === "image") {
+                $("#div-watermark-image").show();
+                $("#div-watermark-text").hide();
+                $("#div-watermark-opacity").show();
+            }
+            else if ($(id).val() === "text") {
+                $("#div-watermark-image").hide();
+                $("#div-watermark-text").show();
+                $("#div-watermark-opacity").hide();
+            }
+        }
+
+        let CheckHowImageListShow = () => {
+            if ($('input[name=how-image-list-show]:checked').val() === "slide") {
+                $("#position-image-list-show").hide();
+            }
+            else if ($('input[name=how-image-list-show]:checked').val() === "scroll") {
+                $("#position-image-list-show").show();
+            }
+        }
+
+        let CheckWatermarkType = () => {
+            if ($('input[name=watermark-type]:checked').val() === "image") {
+                $("#div-watermark-image").show();
+                $("#div-watermark-text").hide();
+                $("#div-watermark-opacity").show();
+            }
+            else if ($('input[name=watermark-type]:checked').val() === "text") {
+                $("#div-watermark-image").hide();
+                $("#div-watermark-text").show();
+                $("#div-watermark-opacity").hide();
+            }
+        }
+
+        let CheckWatermarkActive = () =>{
+            let value = $('#watermark-active').prop('checked')
+            if (value == true) {
+                $("#watermark-thumbnail").show();
+            } else if (value == false) {
+                $("#watermark-thumbnail").hide();
+            }
+        }
+        function UpdateSetting() {
+            swal({
+                title: '@_translate.GetStringAdmin("text.doing")'
+            });
+            swal.showLoading();
+            var formData = new FormData($("#formInput").get(0));
+            formData.append('robots', $("#robots").val())
+            formData.append('maintenance', $("#maintenance").val())
+            formData.append('recaptcha', $("#recaptcha").val())
+            formData.append('watermark-active', $("#watermark-active").val())
+            formData.append('watermark-picThumb-active', $("#watermark-picThumb-active").val())
+            formData.append('google-login', $("#google-login").val())
+            formData.append('facebook-login', $("#facebook-login").val())
+            formData.append('seo-config', $("#seo-config").val())
+            formData.append('display-ibanking', $("#display-ibanking").val())
+            formData.append('display-momo', $("#display-momo").val())
+            $.ajax({
+                url: "/b-admin/GeneralConfiguration/UpdateSetting",
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false
+            }).done(function (data) {
+                swal.close();
+                //console.log(data.keyError)
+                var nameKey = data.keyError;
+                originData = JSON.parse(data.jsData);
+                //FillData(originData);
+                if (nameKey.length < 1) {
+                    AlertToast('Thông báo', 'Lưu thành công', 'success');
+                } else {
+                    AlertToast('Thông báo', 'Lưu thất bại', 'danger');
+                }
+            })
+        }
+        function LoadData() {
+            $.ajax({
+                url: "/b-admin/GeneralConfiguration/GetList",
+                method: "GET"
+            }).done(function (data) {
+                var data = JSON.parse(data.jsData);
+                FillData(data);
+                CheckWatermarkType();
+                CheckHowImageListShow();
+                CheckWatermarkActive();
+                //for (let i = 0; i < data.length; i++) {
+                //    try {
+                //        $('#' + data[i].Key).val(data[i].Value);
+
+                //    } catch (e) {
+
+                //    }
+                //}
+            })
+        }
+        function Cancel() {
+            Swal.fire({
+                title: 'Bạn có muốn hủy thao tác?',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Không đồng ý',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+                    for (let i = 0; i < originData.length; i++) {
+                        $('#' + originData[i].Key).val(originData[i].Value)
+                    }
+                    Swal.fire(
+                        'Thông báo!',
+                        'Đã phục hồi.',
+                        'success'
+                    )
+                }
+            })
+        }
+        function FillData(data) {
+            originData = data;
+            for (let i = 0; i < data.length; i++) {
+                try {
+                    if (data[i].Type == "text") {
+                        $('#' + data[i].Key).val(data[i].Value);
+                    } else if (data[i].Type == "select") {
+                        $('#' + data[i].Key).val(data[i].Value).change();
+                        $('#' + data[i].Key).niceSelect("update")
+                    } else if (data[i].Type == "file") {
+                        $('#' + data[i].Key).html(data[i].Value);
+                        $(data[i].Key).val(data[i].Value);
+                    } else if (data[i].Type == "check") {
+
+                        var value = data[i].Value;
+                        if (value == "on") {
+                            $('#' + data[i].Key).prop('checked', true);
+                            $('#' + data[i].Key).val('on');
+                        } else if (value == "off") {
+                            $('#' + data[i].Key).prop('checked', false);
+                            $('#' + data[i].Key).val('off');
+                        }
+                    } else if (data[i].Type == "radio") {
+                        var value = data[i].Value;
+                        var key = data[i].Key;
+                        $('input[name=' + key + ']').val([value]);
+                    }
+
+                } catch (e) {
+
+                }
+            }
+        }
+        function ChangeCheckBox(id) {
+            var value = $('#' + id).prop('checked')
+            if (value == true) {
+                $('#' + id).val('on');
+            } else if (value == false) {
+                $('#' + id).val('off');
+            }
+            //alert($('#' + id).val())
+        }
+        function ChangeCheckBoxWatermarkActive(id) {
+            var value = $('#' + id).prop('checked')
+            if (value == true) {
+                $('#' + id).val('on');
+                $("#watermark-thumbnail").show();
+            } else if (value == false) {
+                $('#' + id).val('off');
+                $("#watermark-thumbnail").hide();
+            }
+            //alert($('#' + id).val())
+        }
+
+
+        //Email template
+        //define
+        var actionUrl = "/b-admin/GeneralConfiguration/"
+        var state = "add";
+        var lang = "@ConstantStrings.DefaultLang";
+        var dateTimeNow = "@DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")";
+        var emailFromName = "@_common.GetConfigValue(ConstantStrings.KeyEmailFromName)";
+        var cursor = {
+            Id: '',
+            Type: ''
+        }
+        var localStorgaNameObjs = "rawEmailTemplateObjs";
+        var localStorgaNameMultiLang_Obj = "rawEmailTemplateMultiLang_Obj";
+
+        var obj = {
+            pid: 0,
+            Title: '',
+            enabled: true
+        };
+
+        var objLang = {
+            Pid: 0,
+            Subject: '',
+            FromName: '',
+            Content: '',
+            LangKey: '',
+        };
+
+        var multiLang_obj = []
+
+        $(function () {
+            LoadDataWithGroup("tbodyData_contact", "ContactToCustomer;ContactToAdmin;ActiveAccount;ForgotPassword;", lang);
+            LoadDataWithGroup("tbodyData_customer", "InvoiceInformation;CustomerOrder;OrderToAdmin;AdminOrder;", lang);
+        });
+
+        //raw data action
+        function CustomSetDataEdit(data) {
+            obj = data.detail;
+            multiLang_obj = data.list;
+            LoadEmailKey(data.emailKey);
+        }
+        function ShowRawData() {
+            if (state == "add") {
+                // get raw data in localStorage
+                var rawEmailTemplateObjs = localStorage.getItem(localStorgaNameObjs);
+                if (rawEmailTemplateObjs != null && typeof rawEmailTemplateObjs != "undefined" && rawEmailTemplateObjs != "null") {
+                    obj = JSON.parse(rawEmailTemplateObjs);
+                }
+                var rawEmailTemplateMultiLang_Obj = localStorage.getItem(localStorgaNameMultiLang_Obj);
+                if (rawEmailTemplateMultiLang_Obj != null && typeof rawEmailTemplateMultiLang_Obj != "undefined" && rawEmailTemplateMultiLang_Obj != "null") {
+                    multiLang_obj = JSON.parse(rawEmailTemplateMultiLang_Obj);
+                }
+            }
+            else if (state == "edit") { }
+            $('#Title').val(obj.title);
+            SetToggle('#toggle_enable', obj.enabled);
+            if (multiLang_obj.length > 0) {
+                objLang = multiLang_obj.filter(x => x.LangKey == lang)[0];
+            }
+
+            if (typeof objLang != "undefined") {
+                $('#FromName').val(objLang.FromName);
+                $('#Subject').val(objLang.Subject);
+                //LoadImages();
+                //setTimeout(function () {
+                //    tinymce.get("Content").setContent(objLang.Content);
+                //}, 200);
+                SetContentAsync("Content", objLang.Content)
+            }
+        }
+        function SaveRawData() {
+            obj.Title = $('#Title').val();
+            var tempObjLang = {};
+            tempObjLang.Subject = $('#Subject').val();
+            tempObjLang.FromName = $('#FromName').val();
+            tempObjLang.Content = tinymce.get("Content").getContent();
+            tempObjLang.LangKey = lang;
+            var tempMultiLang_obj = multiLang_obj.filter(x => x.LangKey == lang);
+            if (tempMultiLang_obj.length > 0) {
+                tempMultiLang_obj[0].Title = tempObjLang.Title;
+                tempMultiLang_obj[0].Content = tempObjLang.Content;
+                tempMultiLang_obj[0].FromName = tempObjLang.FromName;
+                tempMultiLang_obj[0].Subject = tempObjLang.Subject;
+            }
+            else {
+                multiLang_obj.push(tempObjLang);
+            }
+
+            if (state == "add") {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+            }
+        }
+        /////////
+
+        //common action
+        function GetFormData() {
+            var formData = new FormData();
+            formData.append("stringObj", JSON.stringify(obj));
+            formData.append("stringMultiLangObj", JSON.stringify(multiLang_obj));
+            return formData;
+        }
+
+        function Validate() {
+            SaveRawData();
+            return true;
+        }
+
+        function SetIntoEditor(data) {
+            try {
+                if (cursor.Type == "textarea") {
+                    tinymce.get(cursor.Id).insertContent(data);
+                }
+                else if (cursor.Type == "input") {
+                    var text = $("#" + cursor.Id).val();
+                    $("#" + cursor.Id).val(text + data)
+                }
+            } catch (e) { }
+        }
+
+        //Initinput Action
+        function InitInput() {
+            InitTinymcePromises('Content').then(function (response) {
+                if (response) {
+                    tinymce.get("Content").on('keyup', function (e) {
+                        SaveRawData();
+                    });//content
+                    tinymce.get("Content").on('click', function (e) {
+
+                        cursor.Id = this.id; cursor.Type = 'textarea';
+
+                    });
+                }
+            });
+
+            $('.raw').keyup(function () {
+                SaveRawData();
+            });//event raw
+            $(document).on('focusin', function (e) {
+                if ($(e.target).closest('.tox-tinymce-aux, .moxman-window, .tam-assetmanager-root').length !== 0) {
+                    e.stopImmediatePropagation();
+                }
+            });
+
+
+        }
+        function ClearInputPopup() {
+            obj = {
+                pid: 0,
+                enabled: true,
+                Title: ''
+            };
+            obConstantStringsLang = {
+                Pid: 0,
+                Subject: '',
+                FromName: '',
+                Content: '',
+                LangKey: '',
+            };
+            multiLang_obj = [];
+        }
+        function Clear() {
+            //state = "add";
+            //window.location.reload()
+            ClearInputPopup();
+            if (state == 'add') {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+            }
+            else if (state = "edit") { }
+            //$("#compose").attr("hidden", "true");
+            //$("#list").removeAttr("hidden");
+
+            state = "";
+            $('#btnSave').prop('disabled', false);
+            $('#formInputEmailTemplate').removeClass("was-validated")
+            $("#inputModal").modal("hide");
+        }
+
+        //grid action
+        function LoadDataWithGroup(div, group) {
+            $.ajax({
+                url: actionUrl + 'LoadData',
+                method: 'GET',
+                data: {
+                    Page: page,
+                    pageNumber: pageNumber,
+                    key: group,
+                    LangKey: lang
+                }
+            }).done(function (response) {
+                LoadGrid(div, response.data, response.paging);
+            })
+        }
+        function LoadGrid(div, jsString, paging) {
+            var data = JSON.parse(jsString)
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                html += ` <tr>
+                                             <td><a style="cursor:pointer"  onclick="OpenEditModal(${data[i].Pid})"  class="${data[i].Enabled == false ? "text-mute" : "text-primary"}">${data[i].Title}</a></td>
+                                  <td class="text-right text-nowrap">
+                                      <a style="cursor:pointer" onclick="OpenEditModal(${data[i].Pid})" class="mx-2" data-toggle="tooltip" data-original-title="edit"><i class="far fa-sliders-h text-dark"></i></a>
+
+                              </tr>`   ;
+            }
+            $("#" + div).html(html)
+            var pageHtml = Paging(paging.curentpage, paging.lastpage);
+            $("#divPaging_" + div).html(pageHtml)
+            ToolTip();
+        }
+        function LoadEmailKey(data) {
+            var contactData = LoadContactData(lang);
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                var key = "";
+                var div = ` <div class="col-md-12 merge_fields_col"><p>General key</p> `;
+                var generalKeys = ['Logo', 'Hotline', 'DatetimeNow', 'FromName'];
+                var generalList = data[i].listKey.filter(x => (generalKeys.includes(x.name)))
+                var diffKeys = data[i].listKey.filter(x => (!generalKeys.includes(x.name)))
+                for (let j = 0; j < generalList.length; j++) {
+                    var ele = generalList[j];
+                    if (ele.code == "{{CompanyName}}") {
+                        key += `<p  class="d-flex" >${ele.name} <span  class="pull-right">&nbsp;
+                                                    <a  onMouseOver="$(this).css('text-decoration','underline')" role="button" onMouseOut="$(this).css('text-decoration','none')"  class="add_merge_field text-primary " role="button"  ondblclick="SetIntoEditor('${ele.code}')"> ${ele.code} (${contactData["contact-companyName"]})
+                                                    </a></span></p>`;
+                    }
+                    else if (ele.code == "{{Hotline}}") {
+                        key += `<p  class="d-flex" >${ele.name} <span  class="pull-right">&nbsp;
+                                                    <a  onMouseOver="$(this).css('text-decoration','underline')" role="button" onMouseOut="$(this).css('text-decoration','none')"  class="add_merge_field text-primary " role="button"  ondblclick="SetIntoEditor('${ele.code}')"> ${ele.code} (${contactData["contact-hotline"]})
+                                                    </a></span></p>`;
+                    }
+                    else if (ele.code == "{{DatetimeNow}}") {
+                        key += `<p  class="d-flex" >${ele.name} <span  class="pull-right">&nbsp;
+                                                    <a  onMouseOver="$(this).css('text-decoration','underline')" role="button" onMouseOut="$(this).css('text-decoration','none')"  class="add_merge_field text-primary " role="button"  ondblclick="SetIntoEditor('${ele.code}')"> ${ele.code} (${dateTimeNow})
+                                                    </a></span></p>`;
+                    }
+                    else if (ele.code == "{{FromName}}") {
+                        key += `<p  class="d-flex" >${ele.name} <span  class="pull-right">&nbsp;
+                                                    <a  onMouseOver="$(this).css('text-decoration','underline')" role="button" onMouseOut="$(this).css('text-decoration','none')"  class="add_merge_field text-primary " role="button"  ondblclick="SetIntoEditor('${ele.code}')"> ${ele.code} (${emailFromName})
+                                                    </a></span></p>`;
+                    }
+                    else {
+                        key += `<p  class="d-flex" >${ele.name} <span  class="pull-right">&nbsp;
+                                                    <a  onMouseOver="$(this).css('text-decoration','underline')" role="button" onMouseOut="$(this).css('text-decoration','none')"  class="add_merge_field text-primary " role="button"  ondblclick="SetIntoEditor('${ele.code}')"> ${ele.code}
+                                                    </a></span></p>`;
+                    }
+                }
+
+                key += '<hr/><p>Difference key</p>'
+                for (let j = 0; j < diffKeys.length; j++) {
+                    var ele = diffKeys[j];
+                    key += `<p  class="d-flex" >${ele.name} <span  class="pull-right">&nbsp;
+                                                    <a  onMouseOver="$(this).css('text-decoration','underline')" role="button" onMouseOut="$(this).css('text-decoration','none')"  class="add_merge_field text-primary " role="button"  ondblclick="SetIntoEditor('${ele.code}')"> ${ele.code}
+                                                    </a></span></p>`;
+                }
+                html += div + key + `</div>`;
+            }
+            $("#email_key").html(html)
+        }
+        function LoadContactData(langKey) {
+            var result = { "contact-companyName": "", "contact-hotline": "" };
+            $.ajax({
+                url: actionUrl + 'LoadContactData',
+                method: 'GET',
+                async: false,
+                data: {
+                    lang: langKey
+                },
+                success: function (response) {
+                    var rs = JSON.parse(response);
+                    result["contact-companyName"] = rs["contact-companyName"];
+                    result["contact-hotline"] = rs["contact-hotline"];
+                },
+                error: function (err) {
+
+                }
+            })
+            return result;
+        }
+    </script>
+}

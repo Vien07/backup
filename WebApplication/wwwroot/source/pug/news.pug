@@ -1,0 +1,61 @@
+extends template/template
+block vars
+	- title= 'Blog'
+	- wrapperClass = ''
+	- menuActive = ''
+	- homeSlider = false
+	- bannerAll = false
+	- breadcrumb = true
+	- navigate = true
+
+block breadcrumb 
+	+breadcrumb('container', {})
+block mainer
+	main.mainer
+		.container
+			.block-sidebar(data-wrapper)
+				.mainbody.mb-4(data-mainbody)
+					.tt-xs.text-uppercase.text-primary.d-flex
+						img.mr-2(src="css/skin/theme/icon_news.png" alt="" height="20px")
+						| New & Hot Reads
+					.grid-news.mb-45
+						.grid-news-item
+							.block
+								+a('news-detail.html', 'absolute')
+								.thumb-res.wide 
+									+bg('absolute', 'news/large-01.jpg')
+								.info 
+									.tt The US could enter spring of 2022 with Covid-19 under control if enough people get vaccinated, Fauci says
+						.grid-news-item
+							.block
+								+a('news-detail.html', 'absolute')
+								.thumb-res.wide 
+									+bg('absolute', 'news/large-02.jpg')
+								.info 
+									.tt National Guard will be deployed in Kentucky to help overwhelmed hospitals. Healthcare workers high-fived
+						.grid-news-item
+							.block
+								+a('news-detail.html', 'absolute')
+								.thumb-res.wide 
+									+bg('absolute', 'news/large-03.jpg')
+								.info 
+									.tt He needed 72 operations, but Paralympian says 'body and mind is stronger than you can imagine'
+
+					.list-news-all
+						+block_news("d-flex hover-base", "1.jpg", "The Taliban will face a bleak economy, former Afghan central banker predicts", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+						+block_news("d-flex hover-base", "2.jpg", "Paralympic 'Rising Phoenix' Netflix documentary will make you laugh and cry", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+						+block_news("d-flex hover-base", "3.jpg", "'Black Widow' streaming numbers fire up the ScarJo vs Disney lawsuit", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+						+block_news("d-flex hover-base", "4.jpg", "From 'air-pocalypse' to blue skies: Rare victory for public dissent in Beijing", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+						+block_news("d-flex hover-base", "5.jpg", "Josephine Baker will be the first Black woman buried at the Panthéon in Paris", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+						+block_news("d-flex hover-base", "1.jpg", "US golfer wins first stage of PGA Tour's finale, his first victory in 1,975 days", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.")
+					+pagination('mt-4')
+
+				.sidebar.mb-4(data-sidebar)
+					div(data-stick data-width-fill)
+						.pane.pane-menu.mb-4
+							.tt-xs.pane-tt
+								i.bi.bi-square-half.mr-2.text-danger
+								| Danh mục tin
+							+menu_vertical_news()
+						.pane.pane-qc
+							+a('#', 'mb-2 block'): +img('news/banner-sidebar.jpg')

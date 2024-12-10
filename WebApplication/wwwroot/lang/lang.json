@@ -1,0 +1,852 @@
+[
+  {
+    "key": "menu",
+    "title": "Menu",
+    "value": [
+      {
+        "key": "about",
+        "title": "Menu - Giới thiệu",
+        "value": {
+          "vi": "Giới thiệu",
+          "en": "About"
+        }
+      },
+      {
+        "key": "feature",
+        "title": "Menu - Tính năng",
+        "value": {
+          "vi": "Tính năng",
+          "en": "Feature"
+        }
+      },
+      {
+        "key": "product",
+        "title": "Menu - Bảng giá",
+        "value": {
+          "vi": "Bảng giá",
+          "en": "Product"
+        }
+      },
+      {
+        "key": "contact",
+        "title": "Menu - Liên hệ",
+        "value": {
+          "vi": "Liên hệ",
+          "en": "Contact"
+        }
+      },
+      {
+        "key": "home",
+        "title": "Menu - Trang chủ",
+        "value": {
+          "vi": "Trang chủ",
+          "en": "Home"
+        }
+      },
+      {
+        "key": "news",
+        "title": "Menu - Tin tức",
+        "value": {
+          "vi": "Tin tức",
+          "en": "News"
+        }
+      },
+      {
+        "key": "search",
+        "title": "Menu - Tìm kiếm",
+        "value": {
+          "vi": "Tìm kiếm",
+          "en": "Search"
+        }
+      },
+      {
+        "key": "contact-info",
+        "title": "Menu - Thông tin liên hệ",
+        "value": {
+          "vi": "Thông tin liên hệ",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "sign-in",
+        "title": "Menu - Đăng nhập",
+        "value": {
+          "vi": "Đăng nhập",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "sign-up",
+        "title": "Menu - Đăng ký",
+        "value": {
+          "vi": "Đăng ký",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "setting-account",
+        "title": "Menu - Thông tin tài khoản",
+        "value": {
+          "vi": "Thông tin tài khoản",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "order-management",
+        "title": "Menu - Quản lý đơn hàng",
+        "value": {
+          "vi": "Quản lý đơn hàng",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "log-out",
+        "title": "Menu - Đăng xuất",
+        "value": {
+          "vi": "Đăng xuất",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "change-password",
+        "title": "Menu - Thay đổi mật khẩu",
+        "value": {
+          "vi": "Đổi mật khẩu",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "order-detail",
+        "title": "Menu - Chi tiết đơn hàng",
+        "value": {
+          "vi": "Chi tiết đơn hàng",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "forgot-password",
+        "title": "Menu - Quên mật khẩu",
+        "value": {
+          "vi": "Quên mật khẩu",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "check-out",
+        "title": "Menu - Thanh toán",
+        "value": {
+          "vi": "Thanh Toán",
+          "en": "Contact information"
+        }
+      },
+      {
+        "key": "check-out-success",
+        "title": "Menu - Đặt hàng thành công",
+        "value": {
+          "vi": "Đặt hàng thành công",
+          "en": "Contact information"
+        }
+      }
+    ]
+  },
+  {
+    "key": "home",
+    "title": "Trang chủ",
+    "value": [
+      {
+        "key": "learn-more",
+        "title": "Trang chủ - Nút Tìm hiểu thêm",
+        "value": {
+          "vi": "Tìm hiểu thêm",
+          "en": "Learn more"
+        }
+      },
+      {
+        "key": "info",
+        "title": "Trang chủ - Ecard",
+        "value": {
+          "vi": "Cách sử dụng Ecard",
+          "en": "Giới thiệu dịch vụ"
+        }
+      },
+      {
+        "key": "info-desc",
+        "title": "Trang chủ - Ecard mô tả",
+        "value": {
+          "vi": "Hướng dẫn cách sử dụng thẻ đối với điện thoại thông minh có tính năng hỗ trợ đọc chip NFC",
+          "en": "Tính năng"
+        }
+      },
+      {
+        "key": "faq",
+        "title": "Trang chủ - Faq",
+        "value": {
+          "vi": "Câu hỏi thường gặp",
+          "en": "Tính năng"
+        }
+      },
+      {
+        "key": "faq-desc",
+        "title": "Trang chủ - Faq mô tả",
+        "value": {
+          "vi": "Câu trả lời được thảo luận và tóm tắt từ đội chuyên gia của chúng tôi.",
+          "en": "Tính năng"
+        }
+      },
+      {
+        "key": "news-desc",
+        "title": "Trang chủ - Tin tức mô tả",
+        "value": {
+          "vi": "Cập nhật những tin tức mới nhất của chúng tôi về công ty, công nghệ, xu hướng phát triển ecard.",
+          "en": "Tính năng"
+        }
+      },
+      {
+        "key": "quality",
+        "title": "Trang chủ - Tiện ích",
+        "value": {
+          "vi": "CHUYÊN NGHIỆP - ĐẲNG CẤP - KẾT NỐI KHÔNG DÂY",
+          "en": "Tính năng"
+        }
+      },
+      {
+        "key": "quality-desc",
+        "title": "Trang chủ - Tiện ích mô tả",
+        "value": {
+          "vi": "Bảo vệ môi trường & Xây dựng kết nối. Chúng tôi tự hào là đơn vị tiên phong trong lĩnh vực ecard - danh thiếp thông minh ngoài thông điệp và ý nghĩa cao đẹp là bảo vệ môi trường, chúng tôi còn muốn tạo ra những kết nối nhanh chóng - hiệu quả - tiện lợi với mọi mô hình doanh nghiệp.",
+          "en": "Tính năng"
+        }
+      },
+      {
+        "key": "customer-support",
+        "title": "Trang chủ - Hỗ trợ",
+        "value": {
+          "vi": "Hỗ trợ khách hàng",
+          "en": "Tính năng"
+        }
+      }
+    ]
+  },
+  {
+    "key": "feature",
+    "title": "Trang tính năng",
+    "value": [
+      {
+        "key": "feature",
+        "title": "Tính năng - Tính năng",
+        "value": {
+          "vi": "Tính năng",
+          "en": "Tính năng"
+        }
+      },
+      {
+        "key": "other-feature",
+        "title": "Tính năng - Tính năng khác",
+        "value": {
+          "vi": "Tính năng khác",
+          "en": "Tính năng khác"
+        }
+      },
+      {
+        "key": "information",
+        "title": "Tính năng - Thông tin",
+        "value": {
+          "vi": "Thông tin",
+          "en": "Thông tin"
+        }
+      }
+    ]
+  },
+  {
+    "key": "product",
+    "title": "Trang sản phẩm",
+    "value": [
+      {
+        "key": "title",
+        "title": "Sản phẩm - Tên bảng",
+        "value": {
+          "vi": "Bảng giá dịch vụ",
+          "en": "Sản phẩm"
+        }
+      },
+      {
+        "key": "desc",
+        "title": "Sản phẩm - Mô tả bảng",
+        "value": {
+          "vi": "Bảng giá gói các dịch vụ và những tính năng tương ứng",
+          "en": "Sản phẩm"
+        }
+      },
+      {
+        "key": "contact",
+        "title": "Sản phẩm - Liên hệ",
+        "value": {
+          "vi": "Liên hệ",
+          "en": "Sản phẩm"
+        }
+      },
+      {
+        "key": "receive-best-price",
+        "title": "Sản phẩm - Nhận giá tốt",
+        "value": {
+          "vi": "Để được nhận giá tốt nhất!",
+          "en": "Sản phẩm"
+        }
+      },
+      {
+        "key": "buy-now",
+        "title": "Sản phẩm - Mua ngay",
+        "value": {
+          "vi": "Đăng ký ngay",
+          "en": "Sản phẩm"
+        }
+      },
+      {
+        "key": "contact-now",
+        "title": "Sản phẩm - Liên hệ ngay",
+        "value": {
+          "vi": "Liên hệ ngay",
+          "en": "Sản phẩm"
+        }
+      },
+      {
+        "key": "all",
+        "title": "Sản phẩm - Tất cả",
+        "value": {
+          "vi": "Tất cả",
+          "en": "All"
+        }
+      },
+      {
+        "key": "detail-desc",
+        "title": "Sản phẩm - Mô tả chi tiết",
+        "value": {
+          "vi": "Mô tả chi tiết",
+          "en": "Detailed description"
+        }
+      }
+    ]
+  },
+  {
+    "key": "news",
+    "title": "Trang tin tức",
+    "value": [
+      {
+        "key": "category",
+        "title": "Tin tức - Danh mục",
+        "value": {
+          "vi": "Danh mục",
+          "en": "Category"
+        }
+      },
+      {
+        "key": "news",
+        "title": "Tin tức - Tin tức",
+        "value": {
+          "vi": "Tin tức",
+          "en": "Tin tức"
+        }
+      },
+      {
+        "key": "popular-news",
+        "title": "Tin tức - Tin nổi bật",
+        "value": {
+          "vi": "Tin tức nổi bật",
+          "en": "Popular news"
+        }
+      },
+      {
+        "key": "other-news",
+        "title": "Tin tức - Bài viết khác",
+        "value": {
+          "vi": "Tin liên quan",
+          "en": "Other news"
+        }
+      },
+      {
+        "key": "share-now",
+        "title": "Tin tức - Chia sẻ ngay",
+        "value": {
+          "vi": "Chia sẻ ngay",
+          "en": "Other news"
+        }
+      }
+    ]
+  },
+  {
+    "key": "contact",
+    "title": "Trang liên hệ",
+    "value": [
+      {
+        "key": "contact-us",
+        "title": "Liên hệ - Liên hệ chúng tôi",
+        "value": {
+          "vi": "Liên hệ với chúng tôi",
+          "en": "Liên hệ chúng tôi"
+        }
+      },
+      {
+        "key": "send-contact",
+        "title": "Liên hệ - Gửi liên hệ",
+        "value": {
+          "vi": "Gửi yêu cầu",
+          "en": "Gửi liên hệ"
+        }
+      },
+      {
+        "key": "fullname",
+        "title": "Liên hệ - Họ tên",
+        "value": {
+          "vi": "Họ tên",
+          "en": "Họ tên"
+        }
+      },
+      {
+        "key": "phone",
+        "title": "Liên hệ - Điện thoại",
+        "value": {
+          "vi": "Điện thoại",
+          "en": "Điện thoại"
+        }
+      },
+      {
+        "key": "title",
+        "title": "Liên hệ - Tiêu đề",
+        "value": {
+          "vi": "Tiêu đề",
+          "en": "Tiêu đề"
+        }
+      },
+      {
+        "key": "content",
+        "title": "Liên hệ - Nội dung",
+        "value": {
+          "vi": "Nội dung",
+          "en": "Nội dung"
+        }
+      },
+      {
+        "key": "address",
+        "title": "Liên hệ - Địa chỉ",
+        "value": {
+          "vi": "Địa chỉ",
+          "en": "Địa chỉ"
+        }
+      },
+      {
+        "key": "hotline",
+        "title": "Liên hệ - Hotline",
+        "value": {
+          "vi": "Hotline",
+          "en": "Hotline"
+        }
+      },
+      {
+        "key": "email",
+        "title": "Liên hệ - Email",
+        "value": {
+          "vi": "Email",
+          "en": "Email"
+        }
+      },
+      {
+        "key": "contact-content",
+        "title": "Liên hệ - Thông báo liên hệ thành công",
+        "value": {
+          "vi": "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.",
+          "en": "Thank you for contacting! We will respond as soon as possible."
+        }
+      },
+      {
+        "key": "error-recaptcha",
+        "title": "Liên hệ - Thông báo lỗi recaptcha",
+        "value": {
+          "vi": "Vui lòng nhập recaptcha!",
+          "en": "Thank you for contacting! We will respond as soon as possible."
+        }
+      }
+    ]
+  },
+  {
+    "key": "search",
+    "title": "Trang tìm kiếm",
+    "value": [
+      {
+        "key": "search-result-for-keyword",
+        "title": "Tìm kiếm - Kết quả tìm kiếm từ khóa",
+        "value": {
+          "vi": "Kết quả tìm kiếm từ khóa",
+          "en": "Search result for keyword"
+        }
+      },
+      {
+        "key": "no-results-were-found",
+        "title": "Tìm kiếm - Không tìm thấy kết quả",
+        "value": {
+          "vi": "Không tìm thấy kết quả",
+          "en": "Không tìm thấy kết quả"
+        }
+      }
+    ]
+  },
+  {
+    "key": "common",
+    "title": "Thông tin chung",
+    "value": [
+      {
+        "key": "loading",
+        "title": "Thông tin chung - Đang tải",
+        "value": {
+          "vi": "Đang tải...",
+          "en": "Đang tải..."
+        }
+      },
+      {
+        "key": "infoisupdating",
+        "title": "Thông tin chung - Thông tin đang cập nhật",
+        "value": {
+          "vi": "Thông tin đang được cập nhật...",
+          "en": "Infomation is updating..."
+        }
+      },
+      {
+        "key": "enter-search-keyword",
+        "title": "Thông tin chung - Vui lòng nhập từ khóa từ tìm kiếm",
+        "value": {
+          "vi": "Vui lòng nhập từ khóa từ tìm kiếm",
+          "en": "Please enter search keyword"
+        }
+      },
+      {
+        "key": "information",
+        "title": "Thông tin chung - Thông tin",
+        "value": {
+          "vi": "Thông tin",
+          "en": "Thông tin"
+        }
+      },
+      {
+        "key": "notification",
+        "title": "Thông tin chung - Thông báo",
+        "value": {
+          "vi": "Thông báo",
+          "en": "Tính năng tư vấn"
+        }
+      }
+    ]
+  },
+  {
+    "key": "footer",
+    "title": "Footer",
+    "value": [
+      {
+        "key": "customer-support",
+        "title": "Footer - Hỗ trợ",
+        "value": {
+          "vi": "Hỗ trợ khách hàng",
+          "en": "Liên hệ"
+        }
+      }
+    ]
+  },
+  {
+    "key": "pagination",
+    "title": "Phân trang",
+    "value": [
+      {
+        "key": "previous",
+        "title": "Phân trang - Trước",
+        "value": {
+          "vi": "Trước",
+          "en": "Previous"
+        }
+      },
+      {
+        "key": "next",
+        "title": "Phân trang - Sau",
+        "value": {
+          "vi": "Sau",
+          "en": "Next"
+        }
+      }
+    ]
+  },
+  {
+    "key": "user",
+    "title": "Khách hàng",
+    "value": [
+      {
+        "key": "sign-in",
+        "title": "Khách hàng - Đăng nhập",
+        "value": {
+          "vi": "Đăng nhập",
+          "en": "Previous"
+        }
+      },
+      {
+        "key": "sign-up",
+        "title": "Khách hàng - Đăng ký",
+        "value": {
+          "vi": "Đăng ký",
+          "en": "Next"
+        }
+      },
+      {
+        "key": "forgot-password",
+        "title": "Khách hàng - Quên mật khẩu",
+        "value": {
+          "vi": "Quên mật khẩu",
+          "en": "Next"
+        }
+      },
+      {
+        "key": "no-account",
+        "title": "Khách hàng - Chưa có tài khoản",
+        "value": {
+          "vi": "Bạn chưa có tài khoản?",
+          "en": "Next"
+        }
+      },
+      {
+        "key": "old-password",
+        "title": "Khách hàng - Nhập mật khẩu cũ",
+        "value": {
+          "vi": "Nhập mật khẩu cũ",
+          "en": "Next"
+        }
+      },
+      {
+        "key": "new-password",
+        "title": "Khách hàng - Nhập mật khẩu mới",
+        "value": {
+          "vi": "Nhập mật khẩu mới",
+          "en": "Next"
+        }
+      },
+      {
+        "key": "confirm-password",
+        "title": "Khách hàng - Xác nhận mật khẩu",
+        "value": {
+          "vi": "Xác nhận mật khẩu mới",
+          "en": "Next"
+        }
+      },
+      {
+        "key": "personal-info",
+        "title": "Khách hàng - Thông tin cá nhân",
+        "value": {
+          "vi": "Thông tin cá nhân",
+          "en": "Next"
+        }
+      },
+      {
+        "key": "forgot-desc",
+        "title": "Khách hàng - Quên mật khẩu mô tả",
+        "value": {
+          "vi": "Nhập địa chỉ email đã liên kết với tài khoản của bạn để đặt lại mật khẩu mới.",
+          "en": "Login failed!"
+        }
+      },
+      {
+        "key": "order-success",
+        "title": "Khách hàng - Đặt hàng thành công",
+        "value": {
+          "vi": "Đặt hàng thành công",
+          "en": "Login failed!"
+        }
+      },
+      {
+        "key": "order-success-desc",
+        "title": "Khách hàng - Đặt hàng thành công mô tả",
+        "value": {
+          "vi": "Cảm ơn bạn đã tin tưởng sử dụng dịch vụ của chúng tôi. Trong quá trình sử dụng dịch vụ, nếu có thắc mắc hoặc gặp vấn đề vui lòng liên hệ hotline hoặc gửi email liên hệ để được hỗ trợ sớm nhất.",
+          "en": "Login failed!"
+        }
+      }
+    ]
+  },
+  {
+    "key": "cart",
+    "title": "Giỏ hàng",
+    "value": [
+      {
+        "key": "customer-info",
+        "title": "Giỏ hàng - Thông tin người nhận",
+        "value": {
+          "vi": "Thông tin người nhận",
+          "en": "Successful!"
+        }
+      },
+      {
+        "key": "process-payment",
+        "title": "Giỏ hàng - Tiến hành thanh toán",
+        "value": {
+          "vi": "Tiến hành thanh toán",
+          "en": "Login failed!"
+        }
+      },
+      {
+        "key": "choose-cycle",
+        "title": "Giỏ hàng - Chọn kỳ thanh toán",
+        "value": {
+          "vi": "Chọn kỳ thanh toán",
+          "en": "Login failed!"
+        }
+      },
+      {
+        "key": "payment-method",
+        "title": "Giỏ hàng - Phương thức thanh toán",
+        "value": {
+          "vi": "Phương thức thanh toán",
+          "en": "Login failed!"
+        }
+      },
+      {
+        "key": "company-info",
+        "title": "Giỏ hàng - Thông tin công ty",
+        "value": {
+          "vi": "Thông tin công ty",
+          "en": "Login failed!"
+        }
+      },
+      {
+        "key": "payment-info",
+        "title": "Giỏ hàng - Thông tin thanh toán",
+        "value": {
+          "vi": "Thông tin thanh toán:",
+          "en": "Login failed!"
+        }
+      },
+      {
+        "key": "issue-vat",
+        "title": "Giỏ hàng - Xuất hoá đơn công ty",
+        "value": {
+          "vi": "Xuất hoá đơn công ty",
+          "en": "Login failed!"
+        }
+      }
+    ]
+  },
+  {
+    "key": "code",
+    "title": "System",
+    "value": [
+      {
+        "key": "success",
+        "title": "System - Success",
+        "value": {
+          "vi": "Thành công!",
+          "en": "Successful!"
+        }
+      },
+      {
+        "key": "process-err",
+        "title": "System - Error",
+        "value": {
+          "vi": "Thất bại!",
+          "en": "Failed!"
+        }
+      },
+      {
+        "key": "not-current-password",
+        "title": "System - Not current password",
+        "value": {
+          "vi": "Mật khẩu không trùng khớp!",
+          "en": "Not current password!"
+        }
+      },
+      {
+        "key": "mail-success",
+        "title": "System - Send mail success",
+        "value": {
+          "vi": "Mail đã được gửi!",
+          "en": "Mail sent!"
+        }
+      },
+      {
+        "key": "not-customer",
+        "title": "System - Not customer",
+        "value": {
+          "vi": "Không có khách hàng với email này!",
+          "en": "No customer with this email!"
+        }
+      },
+      {
+        "key": "register",
+        "title": "System - Register success",
+        "value": {
+          "vi": "Đăng ký thành công! Vui lòng kiểm tra email",
+          "en": "Register completed! Please check your email"
+        }
+      },
+      {
+        "key": "duplicate",
+        "title": "System - Duplicate mail",
+        "value": {
+          "vi": "Email đã tồn tại!",
+          "en": "Email already exsist!"
+        }
+      },
+      {
+        "key": "login-success",
+        "title": "System - Login success",
+        "value": {
+          "vi": "Đăng nhập thành công!",
+          "en": "Login success!"
+        }
+      },
+      {
+        "key": "login-fail",
+        "title": "System - Login fail",
+        "value": {
+          "vi": "Login failed!",
+          "en": "Login failed!"
+        }
+      }
+    ]
+  },
+  {
+    "key": "card",
+    "title": "Card",
+    "value": [
+      {
+        "key": "desc",
+        "title": "Card - Mô tả",
+        "value": {
+          "vi": "Sharing with your friend, your customer by scan QR code below here.",
+          "en": "Successful!"
+        }
+      }
+    ]
+  },
+  {
+    "key": "error",
+    "title": "404",
+    "value": [
+      {
+        "key": "something-wrong",
+        "title": "404 - Mô tả 1",
+        "value": {
+          "vi": "It looks like the page you're looking for doesn't exist, has been moved or renamed.",
+          "en": "Successful!"
+        }
+      },
+      {
+        "key": "something-wrong-desc",
+        "title": "404 - Mô tả 2",
+        "value": {
+          "vi": "We apologize for the issue and will fix it as quickly as possible. Best regards!",
+          "en": "Successful!"
+        }
+      },
+      {
+        "key": "home",
+        "title": "404 - Về trang chủ",
+        "value": {
+          "vi": "Về trang chủ",
+          "en": "Successful!"
+        }
+      }
+    ]
+  }
+]

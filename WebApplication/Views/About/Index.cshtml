@@ -1,0 +1,80 @@
+﻿@using System.Web
+@using CMS.Services
+@using CMS.Services.TranslateServices
+@using DTO.Website;
+@inject ITranslateServices _translate
+@try
+{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    dynamic data = ViewBag.Data as dynamic;
+    //string content = HttpUtility.UrlDecode(data.Content);
+
+    //List<dynamic> relateList = ViewBag.RelateList as List<dynamic>;
+    //var url = Context.Request.Host.Value;
+    //var share = url + _translate.GetUrl("url.about") + data.Slug + ".html";
+    string banner = ViewBag.Banner as string;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+
+    @section Meta{
+        @Html.Raw(ViewBag.Meta)
+    }
+
+    @section Popup{
+        @if (popup != null)
+        {
+            <div class="modal-body p-0" id="popupModalBody">
+                @if (popup.DisplayType == "normal")
+                {
+                    <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+                }
+                else
+                {
+                    <div id="popupdiv"></div>
+                    <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                    </script>
+                }
+            </div>
+        }
+    }
+
+    @section Banner{
+        <nav class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                </li>
+                <li class="breadcrumb-item active">@Html.Raw(_translate.GetString("menu.about"))</li>
+            </ol>
+        </nav>
+    }
+
+    <div class="container">
+        <section class="banner-main block-bg d-flex align-items-center mb-5" style="background-image:url('@banner')">
+            <div class="text-banner">
+                <div class="tt-lg fw-semibold">@Html.Raw(_translate.GetString("menu.about"))</div>
+            </div>
+        </section>
+        @Html.Raw(data.Content)
+    </div>
+    @section Scripts{
+        <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+        </script>
+    }
+
+}
+catch (Exception)
+{
+
+    <div style="margin-top:25px" class="text-center">@Html.Raw(_translate.GetString("common.infoisupdating"))</div>
+}

@@ -1,0 +1,779 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+@section styles{
+    <!-- Bootstrap Dropzone CSS -->
+    <link href="/b-admin/vendors/dropzone/dist/dropzone.css" rel="stylesheet" type="text/css" />
+}
+
+<!-- Container -->
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Sản phẩm</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div id="list" class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                @*<p class="mb-20">
+                    @_translate.GetStringAdmin("table-desc.product")
+                </p>*@
+                <div class="form-inline align-items-center">
+                    <div class="col-auto form-group pl-0 pr-2 mb-3">
+                        <select onchange="Search()" id="selectActive" class="form-control select2 form-control-sm">
+                            <option value="" selected>—@_translate.GetStringAdmin("group.select-all")</option>
+                            <option value="1">@_translate.GetStringAdmin("group.select-active")</option>
+                            <option value="0">@_translate.GetStringAdmin("group.select-inactive")</option>
+                        </select>
+                    </div>
+                    <div hidden class="col-auto form-group px-2 mb-3">
+                        <select onchange="Search()" id="selectCate" class="form-control form-control-sm nice-select">
+                        </select>
+                    </div>
+                    <div class="col-auto form-group px-2 mb-3 ">
+                        <input type="search" id="key" class="form-control form-control-sm" placeholder="Keyword search" />
+                        <div class="input-group-append">
+                            <button onclick="Search(0)" type="button" class="btn btn-sm btn-light ml-2" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-search")">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-auto mb-3 px-2">
+                        <a onclick="OpenAddModal()" href="javascript:void(0)" class="btn btn-sm btn-success waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a"><i class="fas fa-layer-plus mr-1"></i>@_translate.GetStringAdmin("group.btn-add")</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive ">
+                                <table id="tableData" class="table table-hover table-sm mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="py-2" width="5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input onclick="CheckAll()" type="checkbox" class="custom-control-input" id="customcheck-all">
+                                                    <label class="custom-control-label position-static" for="customcheck-all"></label>
+                                                </div>
+                                            </th>
+                                            <th hidden class="py-2" width="100">@_translate.GetStringAdmin("label.images")</th>
+                                            <th class="py-2">@_translate.GetStringAdmin("label.title")</th>
+                                            <th class="py-2 text-center" width="5">Hot</th>
+                                            <th class="py-2 text-center" width="100" >Level</th>
+                                            @*<th class="py-2 text-center" width="100" >Chu kỳ gói</th>*@
+                                            @*<th class="py-2 text-center" width="5">New</th>*@
+                                            <th class="py-2 text-center" width="120">@_translate.GetStringAdmin("label.count-view")</th>
+                                            <th class="py-2 text-center" width="100">@_translate.GetStringAdmin("label.action")</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyData">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="my-1 mr-auto">
+                                <button type="button" onclick="Enable(0, true)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="active"><i class="fas fa-eye"></i></button>
+                                <button type="button" onclick="Enable(0, false)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="inactive"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" onclick="Coppy()" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="copy clone row"><i class="fas fa-copy"></i></button>
+                                <button type="button" onclick="DeleteMulti()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fal fa-trash-alt"></i></button>
+                                <button type="button" onclick="LoadData()" class="btn btn-sm btn-primary " data-toggle="tooltip" data-placement="top" title="save order" data-original-title=""><i class="fal fa-save"></i></button>
+                            </div>
+                            <div class="my-1 ml-auto" id="divPaging">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- Compose -->
+        <div hidden id="compose" class="col-xl-12">
+            <div id="formInput">
+                <section hidden class="hk-sec-wrapper pb-0 pt-1 px-1 mb-3">
+                    <div class="form-group mb-0">
+                        <ul class="nav nav-tabs" id="langTab" role="tablist">
+                            <li style="cursor: pointer" lang="vi" class="nav-item">
+                                <a class="nav-link active show" data-toggle="tab" role="tab" aria-controls="info" aria-selected="true"><i class="flag-icon flag-icon-vn"></i> Tiếng việt</a>
+                            </li>
+                            <li style="cursor: pointer" lang="en" class="nav-item">
+                                <a class="nav-link" data-toggle="tab" role="tab" aria-controls="img" aria-selected="false"><i class="flag-icon flag-icon-us"></i> English</a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <div id="bodyCompose">
+                </div>
+                <div class="form-group d-flex align-items-center justify-content-start my-2">
+                    <div class="form-group d-flex align-items-center border-right pr-2 mb-0 mr-2">
+                        <button type="button" onclick="Clear()" class="btn btn-dark mr-2"><i class="fas fa-window-close"></i> @_translate.GetStringAdmin("button.close") </button>
+                        <button type="button" id="btnSave" onclick="Save()" class="btn btn-primary mr-1"><i class="fas fa-vote-yea mr-5"></i>@_translate.GetStringAdmin("button.update")</button>
+                        <button hidden type="button" id="preview" onclick="Preview()" class="btn btn-cyan mr-1"><i class="far fa-eye"></i> @_translate.GetStringAdmin("button.preview") </button>
+                    </div>
+                    <div id="toggle_enable" value="true" class="toggle toggle-light toggle-bg-success toggle2 mr-2 raw"></div>
+                </div>
+            </div>
+        </div>
+        <!-- /Compose -->
+
+    </div>
+    <!-- /Row -->
+</div>
+
+<!-- /Container -->
+<!-- Custom Modal -->
+<div class="modal fade" id="imageModel" tabindex="-1" role="dialog" aria-labelledby="modal-modi" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hình ảnh</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex">
+                    <div class="mr-3">
+                        <div class="avatar avatar-xl rounded">
+                            <img id="modalImages" src="/b-admin/dist/img/avatar3.jpg" class="avatar-img rounded">
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="form-group mb-2 pb-1">
+                            <textarea id="caption" type="text" class="form-control form-control-sm" placeholder="Mô tả"></textarea>
+                        </div>
+                        <div class="form-group mb-2 pb-1 px-0 col-5">
+                            <button id="btnDeleteImages" class="btn btn-danger">Xóa</button>
+                            <button id="btnSaveImages" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Custom Modal -->
+@section Scripts{
+    <script type="text/javascript">
+        //define
+        var actionUrl = "/b-admin/Product/"
+        var state = "add";
+        var lang = "@ConstantStrings.DefaultLangAdmin";
+        var listImages = [];
+        var cate = [];
+        var cateColor = [];
+        //var cateType = [];
+        var myDropzone;
+        var imagesList = [];
+        var multiLangImagesList = [];
+        var localStorgaNameObjs = "rawProductObjs";
+        var localStorgaNameMultiLang_Obj = "rawProductMultiLang_Obj";
+        var localStorgaNameCate = "rawProductCates";
+        var localStorgaNameColor = "rawProductColors";
+        var localStorgaNameType = "rawProductType";
+        var localStorgaProductPrice = "rawProductPrice";
+
+        var productPriceList = []
+
+        var imagesObj = {
+            base64: '',
+            type: ''
+        }
+
+        var obj = {
+            pid: 0,
+            enabled: true,
+            picThumb: "",
+            tagKey: "",
+            code: "",
+            tiki: "",
+            lazada: "",
+            shopee: "",
+            size: "",
+            price: 0,
+            priceDiscount: 0,
+            stock: 0,
+            publishDate: "",
+            level: 0,
+            userAmount: 0,
+            cycle: 0,
+        };
+
+        var objLang = {
+            Pid: 0,
+            Title: '',
+            Content: '',
+            Content2: '',
+            Material: '',
+            Unit: '',
+            Origin: '',
+            ShortContent: '',
+            Description: '',
+            LangKey: '',
+            TitleSEO: '',
+            DescriptionSEO: '',
+        }
+
+
+        var multiLang_obj = []
+
+        function loadData(data) {
+            $('#tableProductPrice > tbody').html('')
+            if (data && data.length > 0) {
+                let html = ``;
+                data.forEach(function (item) {
+                    html += `<tr>
+                    <td>${item.code}</td>
+                    <td><input onchange="updateData(this.checked, 'status', ${item.optionId})" name="status" ${item.status == 1 ? 'checked' : ''}  type="checkbox"></td>
+                    <td><input class="form-control" onkeyup="ConvertNumberToMoney(this.id, this.value)" onchange="updateData(this.value, 'price', ${item.optionId})" id="Price_${item.optionId}" name="Price" value="${ConvertNumberToMoney2(item.price)}" type="text"> </td>
+                    <td><input class="form-control" onkeyup="ConvertNumberToMoney(this.id, this.value)" onchange="updateData(this.value, 'priceDiscount', ${item.optionId})" id="PriceDiscount_${item.optionId}" name="PriceDiscount" value="${ConvertNumberToMoney2(item.priceDiscount)}" type="text"></td>
+                    <td><a style="cursor:pointer" onclick="deletePrice(${item.optionId})" class="mx-2"  data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a></td>
+                    </tr>`;
+                })
+                $('#tableProductPrice > tbody').html(html);
+            }
+        }
+
+        function deletePrice(id) {
+            if(id == 1) {
+                AlertToast('Thông báo', "Không thể xóa giá mặc định", "error")
+                return;
+            }
+
+            productPriceList = productPriceList.filter(x=>x.optionId!=id)
+            loadData(productPriceList)
+        }
+
+        function updateData(value, type, id) {
+            for (var item of productPriceList) {
+                if (item.optionId == parseInt(id)) {
+                    if (type == 'status') {
+                        item.status = value;
+                    } else if (type == 'price') {
+                        item.price = ConvertMoneyToNumber(value)
+                    } else {
+                        item.priceDiscount = ConvertMoneyToNumber(value)
+                    }
+                }
+            }
+        }
+
+        $(function () {
+              if ("@ViewBag.EditPid" != "") {
+                Edit("@ViewBag.EditPid");
+            }
+            GetSelectProductCateSearch('#selectCate', lang, cate);
+            GetDataProductPrice();
+            LoadData(lang);
+        })
+
+        //-------------------SET GET DATA-------------
+        function CustomSetDataEdit(data) {
+            obj = data.detail;
+            multiLang_obj = data.list;
+            cate = data.listCates;
+            cateColor = data.listColors;
+            //cateType = data.listTypes;
+            imagesList = data.images;
+            multiLangImagesList = data.images_lang;
+
+            for (var item of data.productOptionList) {
+                productPriceList.push({ optionId: item.optionId, code: item.code, price: item.price, priceDiscount: item.priceDiscount, status: item.status })
+            }
+            var prices = JSON.parse(localStorage.getItem(localStorgaProductPrice));
+            if (prices && prices.length > 0) {
+                for (let i = 0; i < prices.length; i++) {
+                    for (let j = 0; j < data.listPrice.length; j++) {
+                        if (prices[i].Pid == data.listPrice[j].Pid) {
+                            let price = ConvertNumberToMoney2(data.listPrice[j].Price);
+                            prices[i].Price = price;
+                            prices[i].Enable = data.listPrice[j].Enable;
+                        }
+                    }
+                }
+            }
+            localStorage.setItem(localStorgaProductPrice, JSON.stringify(prices));
+
+        }
+        function ShowRawData() {
+            if (state == "add") {
+                // get raw data in localStorage
+                var rawProductObjs = localStorage.getItem(localStorgaNameObjs);
+                if (rawProductObjs != null && typeof rawProductObjs != "undefined" && rawProductObjs != "null") {
+                    obj = JSON.parse(rawProductObjs);
+                }
+
+                var rawProductCates = localStorage.getItem(localStorgaNameCate);
+                if (rawProductCates != null && typeof rawProductCates != "undefined" && rawProductCates != "null") {
+                    cate = JSON.parse(rawProductCates);
+                }
+
+                var rawProductColors = localStorage.getItem(localStorgaNameColor);
+                if (rawProductColors != null && typeof rawProductColors != "undefined" && rawProductColors != "null") {
+                    cateColor = JSON.parse(rawProductColors);
+                }
+
+                //var rawProductType = localStorage.getItem(localStorgaNameType);
+                //if (rawProductType != null && typeof rawProductType != "undefined" && rawProductType != "null") {
+                //    cateType = JSON.parse(rawProductType);
+                //}
+
+                var rawProductMultiLang_Obj = localStorage.getItem(localStorgaNameMultiLang_Obj);
+                if (rawProductMultiLang_Obj != null && typeof rawProductMultiLang_Obj != "undefined" && rawProductMultiLang_Obj != "null") {
+                    multiLang_obj = JSON.parse(rawProductMultiLang_Obj);
+                }
+            }
+            else if (state == "edit") {
+                $("#imgPicThumb").attr("src", obj.picThumb);
+            }
+
+            if (imagesObj.type == "new") {
+                $("#imgPicThumb").attr("src", imagesObj.base64);
+            }
+
+            $('#TagKey').val(obj.tagKey);
+            $('#Tiki').val(obj.tiki);
+            $('#Lazada').val(obj.lazada);
+            $('#Shopee').val(obj.shopee);
+            $('#Size').val(obj.size);
+            $('#Code').val(obj.code);
+            $('#Stock').val(obj.stock);
+            $('#Price').val(ConvertNumberToMoney2(obj.price));
+            $('#PriceDiscount').val(ConvertNumberToMoney2(obj.priceDiscount));
+            $('#Level').val(obj.level);
+            $('#UserAmount').val(obj.userAmount);
+            $('#Cycle').val(obj.cycle).trigger('change');
+
+            SetToggle('#toggle_enable', obj.enabled);
+
+            if (multiLang_obj.length > 0) {
+                objLang = multiLang_obj.filter(x => x.LangKey == lang)[0];
+            }
+
+            if (typeof objLang != "undefined") {
+                $('#Title').val(objLang.Title);
+                $('#Material').val(objLang.Material);
+                $('#Unit').val(objLang.Unit);
+                $('#Description').val(objLang.Description);
+                $('#Origin').val(objLang.Origin);
+                $('#DescriptionSEO').val(objLang.DescriptionSEO);
+                $('#TitleSEO').val(objLang.TitleSEO);
+                SetContentAsync('Content', objLang.Content);
+                SetContentAsync('Content2', objLang.Content2);
+                SetContentTinymceMinControl('ShortContent', objLang.ShortContent, 300);
+            } else {
+                $('#Title').val("");
+                $('#Material').val("");
+                $('#Unit').val("");
+                $('#Description').val("");
+                $('#Origin').val("");
+                $('#DescriptionSEO').val("");
+                $('#TitleSEO').val("");
+                SetContentAsync('Content', "");
+                SetContentAsync('Content2', "");
+                SetContentTinymceMinControl('ShortContent', "", 300);
+            }
+            LoadImages();
+            GetSelectProductCateMulti('#ProductCatePid', cate, lang);//cate
+            //GetSelectParentProduct('#ProductCatePid', cate, lang);//cate
+            GetSelectProductColorMulti('#ProductColorPid', cateColor, lang);//cate
+            //GetSelectProductTypeMulti('#ProductTypePid', cateType, lang);//cate
+        }
+        function SaveRawData() {
+            obj.tagKey = $("#TagKey").val();
+            obj.tiki = $("#Tiki").val();
+            obj.lazada = $("#Lazada").val();
+            obj.shopee = $("#Shopee").val();
+            obj.size = $("#Size").val();
+            obj.publishDate = $("#PublishDate").val();
+            obj.code = $("#Code").val();
+            obj.stock = $("#Stock").val();
+            obj.level = $("#Level").val();
+            obj.userAmount = $("#UserAmount").val();
+            obj.cycle = $("#Cycle").val();
+            cate = $('#ProductCatePid').val();
+            cateColor = $('#ProductColorPid').val();
+            cateType = $('#ProductTypePid').val();
+
+            var tempObjLang = {};
+            tempObjLang.Title = $('#Title').val();
+            tempObjLang.Material = $('#Material').val();
+            tempObjLang.Unit = $('#Unit').val();
+            tempObjLang.Description = $('#Description').val();
+            tempObjLang.TitleSEO = $('#TitleSEO').val();
+            tempObjLang.DescriptionSEO = $('#DescriptionSEO').val();
+            tempObjLang.Origin = $('#Origin').val();
+            tempObjLang.Content = tinymce.get("Content").getContent();
+            tempObjLang.Content2 = tinymce.get("Content2").getContent();
+            tempObjLang.ShortContent = tinymce.get("ShortContent").getContent({ format: 'raw' });
+            tempObjLang.LangKey = lang;
+            var tempMultiLang_obj = multiLang_obj.filter(x => x.LangKey == lang);
+            if (tempMultiLang_obj.length > 0) {
+                tempMultiLang_obj[0].Title = tempObjLang.Title;
+                tempMultiLang_obj[0].Material = tempObjLang.Material;
+                tempMultiLang_obj[0].Unit = tempObjLang.Unit;
+                tempMultiLang_obj[0].Description = tempObjLang.Description;
+                tempMultiLang_obj[0].TitleSEO = tempObjLang.TitleSEO;
+                tempMultiLang_obj[0].DescriptionSEO = tempObjLang.DescriptionSEO;
+                tempMultiLang_obj[0].Content = tempObjLang.Content;
+                tempMultiLang_obj[0].Content2 = tempObjLang.Content2;
+                tempMultiLang_obj[0].ShortContent = tempObjLang.ShortContent;
+                tempMultiLang_obj[0].Origin = tempObjLang.Origin;
+            } else {
+                multiLang_obj.push(tempObjLang);
+            }
+            if (state == "add") {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+                localStorage.setItem(localStorgaNameCate, JSON.stringify(cate));
+                localStorage.setItem(localStorgaNameColor, JSON.stringify(cateColor));
+            }
+        }
+
+
+        //---------------------ACTION-----------------
+        function GetFormData() {
+            var formData = new FormData();
+            if (imagesObj.type == "new") {
+                var blob = dataURItoBlob(imagesObj.base64);
+                formData.append('PicThumb', blob, 'fileName.jpeg');
+            }
+            formData.append("stringObj", JSON.stringify(obj));
+            formData.append("stringMultiLangObj", JSON.stringify(multiLang_obj));
+            //formData.append("listCates", cate.toString());
+            formData.append("listColors", cateColor.toString());
+            //formData.append("listTypes", cateType.toString());
+            formData.append("imagesList", JSON.stringify(imagesList));
+            formData.append("multiLangImagesList", JSON.stringify(multiLangImagesList));
+            formData.append("productOptionList", JSON.stringify(productPriceList));
+            formData.append("productPrices", JSON.stringify(ProcessDataProductPriceSave()));
+            if (state == "edit") {
+                formData.append("imagesDeleteList", JSON.stringify(imagesDeleteList));
+            }
+            return formData;
+        }
+        function Validate() {
+            SaveRawData();
+            if ($('#Title').val() == "") {
+                AlertToast('Thông báo', "Chưa nhập tiêu đề", 'warning')
+                return false;
+            }
+            //if ($('#Unit').val() == "") {
+            //    AlertToast('Thông báo', "Chưa nhập quy cách", 'warning')
+            //    return false;
+            //}
+
+            if ($('#Description').val() == "") {
+                AlertToast('Thông báo', "Chưa nhập mô tả", 'warning')
+                return false;
+            }
+            if ($('#Level').val() == "0") {
+                AlertToast('Thông báo', "Chưa nhập level", 'warning')
+                return false;
+            }
+            //if ($('#ProductCatePid').val() == null) {
+            //    AlertToast('Thông báo', "Chưa chọn danh mục sản phẩm", 'warning')
+            //    return false;
+            //}
+            //if (Number($('#Price').val()) == 0 && Number($('#PriceDiscount').val()) != 0) {
+            //    AlertToast('Thông báo', "Giá khuyến mãi phải bằng 0 nếu giá gốc bằng 0", 'warning')
+            //    return false;
+            //}
+            //if (Number($('#Price').val()) > 0) {
+            //    if (Number($('#PriceDiscount').val()) >= Number($('#Price').val())) {
+
+            //        AlertToast('Thông báo', "Giá khuyến mãi phải nhỏ hơn giá gốc", 'warning')
+            //        return false;
+            //    }
+            //}
+            //if ($('#Code').val() == "") {
+            //    AlertToast('Thông báo', "Chưa nhập code", 'warning')
+            //    return false;
+            //}
+
+            //if (!imagesObj.base64 && state == "add") {
+            //    AlertToast('Thông báo', "Chưa nhập hình ảnh", 'warning')
+            //    return false;
+            //}
+            return true;
+        }
+        function InitInput() {
+
+            try {
+                myDropzone = new Dropzone("#dropzoneImages", {
+                    addRemoveLinks: true
+                });
+            } catch (e) {
+
+            }
+
+            InitTinymce('Content');
+            InitTinymce('Content2');
+            InitTinymceMinControlWithHeight('ShortContent', 300);
+            InitTablePrice();
+            $('.raw').keyup(function () {
+                SaveRawData();
+            });//event raw
+            tinymce.get("Content").on('keyup', function (e) {
+                SaveRawData();
+            });//content
+            tinymce.get("Content2").on('keyup', function (e) {
+                SaveRawData();
+            });//content
+            tinymce.get("ShortContent").on('keyup', function (e) {
+                SaveRawData();
+            });//content
+            InitDatePicker("#PublishDate", obj.publishDate);
+            $('#PublishDate').change(function () {
+                SaveRawData();
+
+            });
+
+            $('#Price').keyup(function (e) {
+                e.preventDefault();
+                obj.price = ConvertMoneyToNumber($('#Price').val());
+                ConvertNumberToMoney(this.id, this.value)
+            })
+            $('#PriceDiscount').keyup(function (e) {
+                e.preventDefault();
+                obj.priceDiscount = ConvertMoneyToNumber($('#PriceDiscount').val());
+                ConvertNumberToMoney(this.id, this.value)
+            })
+
+            if (state == "add") {
+                $.ajax({
+                    url: actionUrl + 'GetProductOption',
+                    method: 'GET',
+                    success: function (response) {
+                        var data = JSON.parse(response)
+                        data && data.forEach(function (ele) {
+                            productPriceList.push({ optionId: ele.Pid, code: ele.Code, price: 0, priceDiscount: 0, status: 1 })
+                        })
+                        loadData(productPriceList);
+                    },
+                    error: function (e) {
+                        console.error(e)
+                    }
+                })
+
+                $.ajax({
+                    url: actionUrl + 'LoadProductCode',
+                    data: { lang: lang },
+                    method: 'GET',
+                    success: function (response) {
+                        $('#Code').val(response);
+                    },
+                    error: function (e) {
+                        console.error(e)
+                    }
+                })
+
+            } else {
+                loadData(productPriceList);
+            }
+        }
+        function Clear() {
+            localStorage.removeItem(localStorgaProductPrice);
+            GetDataProductPrice();
+            state = "add";
+            listImages = [];
+
+            imagesObj = {
+                base64: '',
+                type: ''
+            };
+
+            obj = {
+                pid: 0,
+                enabled: true,
+                picThumb: "",
+                tagKey: "",
+                size: "",
+                tiki: "",
+                lazada: "",
+                shopee: "",
+                code: "",
+                stock:0,
+                publishDate: "",
+                price: 0,
+                priceDiscount: 0,
+                level: 0,
+                userAmount: 0,
+                cycle: 0,
+            };
+
+            objLang = {
+                Pid: 0,
+                Title: '',
+                Material: '',
+                Unit: '',
+                Content: '',
+                Content2: '',
+                Origin: '',
+                ShortContent: '',
+                LangKey: '',
+                TitleSEO: '',
+                DescriptionSEO: '',
+            };
+            cate = [];
+            cateColor = [];
+            cateType = [];
+            multiLang_obj = [];
+            imagesList = [];
+            multiLangImagesList = [];
+            imagesDeleteList = [];
+
+            if (state == 'add') {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+                localStorage.setItem(localStorgaNameCate, JSON.stringify(cate));
+                localStorage.setItem(localStorgaNameColor, JSON.stringify(cateColor));
+                localStorage.setItem(localStorgaNameType, JSON.stringify(cateType));
+            }
+            else if (state = "edit") {
+
+            }
+            $("#compose").attr("hidden", "true");
+            $("#list").removeAttr("hidden");
+            productPriceList = []
+        }
+
+        function SaveStatus(e, id, type) {
+            var value = $(e).is(":checked");
+            $.ajax({
+                url: actionUrl + 'SaveStatus',
+                method: 'POST',
+                data: {
+                    pid: id,
+                    value: value,
+                    type: type
+                },
+                success: function (response) {
+                    response.isError ? AlertToast('Thông báo', "Thành công", "success") : SweetAlert('Thông báo', "Thất bại", 'error')
+                },
+                error: function (err) {
+                    SweetAlert('Thông báo', "Thất bại", 'error')
+                }
+            })
+        }
+
+        //grid action
+        function LoadGrid(jsString, paging) {
+            var data = JSON.parse(jsString)
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                html += ` <tr class="${!data[i].Enabled ? " inactive" : ""}" tabIndex="${i}" slot="${data[i].Order}" id="${data[i].Pid}">
+
+          <td>
+            <div class="custom-control custom-checkbox">
+              <input onclick="KtCheckbox()" type="checkbox" class="custom-control-input" id="customCheck-${data[i].Pid}" name="Chk" value="${data[i].Pid}">
+              <label class="custom-control-label" for="customCheck-${data[i].Pid}">&nbsp;</label>
+            </div>
+          </td>
+          @*<td class="align-middle text-center text-muted">#${data[i].Pid}</td>*@
+
+          <td hidden>
+            <a role="button" href="#" onclick="Edit(${data[i].Pid})" class="${!data[i].Enabled ? " inactive" : ""} avatar avatar-xs rounded" style="background-image: url('${data[i].PicThumb}');">
+            </a>
+          </td>
+          <td><a data-toggle="tooltip" data-original-title="edit" style="cursor:pointer" onclick="Edit(${data[i].Pid})" class="${data[i].Enabled == false ? " text-mute" : "text-primary"}">${data[i].Title}</a></td>
+
+
+          <td class="text-center">
+            <div class="custom-control custom-checkbox">
+              <input ${data[i].IsHot ? "checked" : ""} onclick="SaveStatus(this, ${data[i].Pid}, 'hot')" type="checkbox" name="hot-menu-${data[i].Pid}-home" id="hot-menu-${data[i].Pid}-home" class="custom-control-input">
+              <label class="custom-control-label" for="hot-menu-${data[i].Pid}-home">&nbsp;</label>
+            </div>
+          </td>
+          <td class="text-center">${data[i].Level}</td>
+          @*<td class="text-center">${data[i].Cycle == 0 ? "Tháng" : " Năm"}</td>*@
+
+
+          @*<td class="align-middle text-center pr-0">
+            <div class="custom-control custom-checkbox">
+              <input ${data[i].IsNew ? "checked" : ""} onclick="SaveStatus(this, ${data[i].Pid}, 'new')" type="checkbox" name="new-menu-${data[i].Pid}-home" id="new-menu-${data[i].Pid}-home" class="custom-control-input">
+              <label class="custom-control-label" for="new-menu-${data[i].Pid}-home">&nbsp;</label>
+          </td>*@
+
+          <td class="text-center">${data[i].CounterView}</td>
+          <td class="text-center text-nowrap">
+            <input id="orderInput-${data[i].Pid}" onfocusout="UpdateOrder(${data[i].Pid})" type="text" tabindex="${100 + i}" class="form-control form-control-sm d-inline mr-2 text-right border" placeholder="" value="${data[i].Order}" style="width:45px;height:25px ">
+            <a style="cursor:pointer" data-toggle="tooltip" data-original-title="move"><i class="fas fa-arrows-alt text-dark handle"></i></a>
+            <a style="cursor:pointer" onclick="Edit(${data[i].Pid})" class="mx-2" data-toggle="tooltip" data-original-title="edit"><i class="far fa-sliders-h text-dark"></i></a>
+            <a style="cursor:pointer" onclick="Delete(${data[i].Pid})" class="" data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a>
+          </td>
+          </tr>` ;
+            }
+            $("#tbodyData").html(html)
+            var pageHtml = Paging(paging.curentpage, paging.lastpage);
+            $("#divPaging").html(pageHtml)
+            ToolTip();
+            InitDragDropTable();
+        }
+        function InitTablePrice() {
+            var data = JSON.parse(localStorage.getItem(localStorgaProductPrice));
+            if (data && data.length > 0) {
+                var htmlTitle = `<th>Months</th>`;
+                var htmlPirce = ` <td>VND</td>`;
+                var htmlEnable = `<td>Enable</td>`;
+                for (let i = 0; i < data.length; i++) {
+                    htmlTitle += `<th>${data[i].Name}</th>`
+                    htmlPirce += `<td><input onkeyup="ConvertNumberToMoney(this.id, this.value)" id="price_${data[i].Pid}" onchange="SavePrice(this)" type="text" class="form-control-sm form-control" value="${data[i].Price}" /></td>`
+                    htmlEnable += `<td><input id="enable_${data[i].Pid}" onchange="SaveEnable(this)" type="checkbox" ${data[i].Enable == true ? "checked" : ""}/></td>`
+                }
+                $('#list_price_head').append(htmlTitle);
+                $('#list_price_body').append(htmlPirce);
+                $('#list_enable_body').append(htmlEnable);
+            }
+        }
+        function SavePrice(e) {
+            var data = JSON.parse(localStorage.getItem(localStorgaProductPrice));
+            if (data && data.length > 0) {
+                let id = e.id.split("_")[1];
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].Pid == parseInt(id)) {
+                        data[i].Price = e.value;
+                    }
+                }
+            }
+            localStorage.setItem(localStorgaProductPrice, JSON.stringify(data))
+        }
+        function SaveEnable(e) {
+            var data = JSON.parse(localStorage.getItem(localStorgaProductPrice));
+            if (data && data.length > 0) {
+                let id = e.id.split("_")[1];
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].Pid == parseInt(id)) {
+                        data[i].Enable = $(e).is(":checked");
+                    }
+                }
+            }
+            localStorage.setItem(localStorgaProductPrice, JSON.stringify(data))
+        }
+        function ProcessDataProductPriceSave() {
+            var data = JSON.parse(localStorage.getItem(localStorgaProductPrice));
+            if (data && data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                    data[i].Price = ConvertMoneyToNumber(data[i].Price)
+                }
+            }
+            return data;
+        }
+        function GetDataProductPrice() {
+            $.ajax({
+                url: actionUrl + 'GetProductType',
+                method: 'GET',
+                data: {
+                    lang: lang
+                }
+            }).done(function (response) {
+                localStorage.setItem(localStorgaProductPrice, JSON.stringify(response));
+            })
+        }
+    </script>
+}
+

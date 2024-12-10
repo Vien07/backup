@@ -1,0 +1,216 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Thông tin liên hệ</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <div class="row">
+                    <div class="col-sm">
+                        <form id="formInput">
+                            <ul hidden class="nav nav-tabs" id="langTab" role="tablist">
+                                <li style="cursor:pointer" lang="vi" class="nav-item">
+                                    <a class="nav-link active show" data-toggle="tab" role="tab" aria-controls="info" aria-selected="true"><i class="flag-icon flag-icon-vn"></i> Tiếng việt</a>
+                                </li>
+                                <li style="cursor:pointer" lang="en" class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" role="tab" aria-controls="img" aria-selected="false"><i class="flag-icon flag-icon-us"></i> English</a>
+                                </li>
+                            </ul>
+                            <hr hidden class="hr-light mt-0">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label class="mb-1 text-primary" id="label-companyName" for="contact-companyName">Tên công ty</label>
+                                    <input class="form-control" id="contact-companyName" name="contact-companyName" placeholder="nhập tên công ty" value="" type="text">
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <label class="mb-1 text-primary" id="label-address" for="contact-address">Địa chỉ</label>
+                                    <input class="form-control" id="contact-address" name="contact-address" placeholder="nhập địa chỉ" value="" type="text">
+                                </div>
+                                <div class="col-md-3 mb-10">
+                                    <label class="mb-1 text-primary" id="label-hotline" for="contact-hotline">Đường dây nóng </label>
+                                    <input class="form-control" id="contact-hotline" name="contact-hotline" placeholder="nhập số hotline" type="text">
+                                </div>
+                                <div class="col-md-3 mb-10">
+                                    <label class="mb-1 text-primary" id="label-email" for="contact-email">Email</label>
+                                    <input class="form-control" id="contact-email" name="contact-email" placeholder="nhập email" type="text">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div hidden class="col-md-3 mb-10">
+                                    <label class="mb-1 text-primary" id="label-tel" for="contact-tel">Số điện thoại công ty </label>
+                                    <input class="form-control" id="contact-tel" name="contact-tel" placeholder="nhập số điện thoại" type="text">
+                                </div>
+                                <div hidden class="col-md-3 mb-10">
+                                    <label class="mb-1 text-primary" id="label-fax" for="contact-fax">Fax</label>
+                                    <input class="form-control" id="contact-fax" name="contact-fax" placeholder="nhập số fax" type="text">
+                                </div>
+
+                                <div class="col-md-12 mb-10">
+                                    <label class="mb-1 text-primary" id="label-time" for="contact-email">Thời gian làm việc</label>
+                                    <textarea class="form-control" id="contact-time" name="contact-time" placeholder="nhập thời gian làm việc"></textarea>
+                                </div>
+                                <div hidden class="col-md-6 mb-10">
+                                    <label class="mb-1 text-primary" id="label-intro" for="contact-email">Giới thiệu</label>
+                                    <input class="form-control" id="contact-intro" name="contact-intro" placeholder="nhập giới thiệu" type="text">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="mb-1 text-primary" id="label-map" for="contact-map">Bản đồ</label>
+                                <textarea class="form-control" id="contact-map" name="contact-map" rows="6" placeholder="map"></textarea>
+                            </div>
+
+                            <div class="text-left mt-3">
+                                <a href="/b-admin/Dashboard/Index" class="btn btn-dark mr-2"><i class="fas fa-window-close"></i> @_translate.GetStringAdmin("button.close") </a>
+                                <button type="button" onclick="Update()" class="btn btn-primary"><i class="fas fa-vote-yea mr-5"></i>Cập Nhật</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+@section Scripts{
+    <script>
+        var originData;
+        var dataLang;
+        var actionUrl = "/b-admin/Contact/";
+        var lang = "@ConstantStrings.DefaultLangAdmin";
+        $(function () {
+            InitTinymceMinControlWithHeight2('contact-time', 200);
+            GetDataLang();
+            LoadDataByLang('@ConstantStrings.DefaultLangAdmin');
+            $("ul[id=langTab] li").click(function () {
+                
+                var langKey = $(this)[0].lang
+                //console.log(langKey);
+                LoadDataByLang(langKey);
+                lang = langKey;
+                GetDataLang();
+                setTimeout(function () {
+                    SetMultiLang();
+                }, 300);
+            });
+        })
+        function Update() {
+            $('#contact-time').val(tinymce.get("contact-time").getContent({ format: 'raw' }));
+            var formData = new FormData($("#formInput").get(0));
+            formData.append('langKey', lang)
+            $.ajax({
+                url: "/b-admin/Contact/Update",
+                method: "POST",
+                data: formData,
+                processData: false,
+                contentType: false
+            }).done(function (data) {
+                if (data.keyError) {
+                    AlertToast('@_translate.GetStringAdmin("alert.infomation")', '@_translate.GetStringAdmin("alert.success")', 'success')
+                } else {
+                    AlertToast('@_translate.GetStringAdmin("alert.infomation")', '@_translate.GetStringAdmin("alert.fail")', 'error')
+                }
+            })
+        }
+        function LoadDataByLang(langKey) {
+            $.ajax({
+                url: "/b-admin/Contact/GetData",
+                data: { langKey:langKey },
+                method: "GET"
+            }).done(function (data) {
+                var data = JSON.parse(data.jsData);
+                originData = data;
+                FillData(data);
+            })
+        }
+        function Cancel() {
+            Swal.fire({
+                title: 'Bạn có muốn hủy thao tác?',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Không đồng ý',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+                    for (let i = 0; i < originData.length; i++) {
+                        $('#' + originData[i].Key).val(originData[i].Value)
+                    }
+                    Swal.fire(
+                        'Thông báo!',
+                        'Đã phục hồi.',
+                        'success'
+                    )
+                }
+            })
+        }
+        function FillData(data) {
+            originData = data;
+            for (let i = 0; i < data.length; i++) {
+                try {
+                    if (data[i].Type == "text") {
+                        if (data[i].Key == "contact-time") {
+                            SetContentTinymceMinControl2('contact-time', data[i].Value, 200);
+                        }
+                        else {
+                            $('#' + data[i].Key).val(data[i].Value);
+
+                        }
+                    } else if (data[i].Type == "select") {
+                        $('#' + data[i].Key).val(data[i].Value).change();
+                        $('#' + data[i].Key).niceSelect("update")
+                    } else if (data[i].Type == "file") {
+                        $('#' + data[i].Key).html(data[i].Value);
+                        $(data[i].Key).val(data[i].Value);
+                    } else if (data[i].Type == "check") {
+
+                        var value = data[i].Value;
+                        if (value == "on") {
+                            $('#' + data[i].Key).prop('checked', true);
+                        } else if (value == "off") {
+                            $('#' + data[i].Key).prop('checked', false);
+                        }
+                    } else if (data[i].Type == "radio") {
+                        var value = data[i].Value;
+                        var key = data[i].Key;
+                        $('input:radio[name=' + key + ']').val([value]);
+                    }
+
+                } catch (e) {
+
+                }
+            }
+        }
+        function SetMultiLang() {
+            //$("#label-companyName").html(dataLang["label"]["company-name"]);
+            //$("#label-address").html(dataLang["label"]["address"]);
+            //$("#label-tel").html(dataLang["label"]["tel"]);
+            //$("#label-fax").html(dataLang["label"]["fax"]);
+            //$("#label-hotline").html(dataLang["label"]["hot-line"]);
+            //$("#label-map").html(dataLang["label"]["map"]);
+            //$("#btnSave").html(dataLang["button"]["update"]);
+        }
+        function GetDataLang() {
+            var url = '/b-admin/lang/' + lang + '.json';
+            $.getJSON(url, function (rsJson) {
+                var rs = JSON.parse(JSON.stringify(rsJson));
+                dataLang = rs;
+            });
+        }
+    </script>
+}
+
+

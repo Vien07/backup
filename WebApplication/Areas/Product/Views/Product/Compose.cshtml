@@ -1,0 +1,275 @@
+﻿
+@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using DTO;
+
+@inject ITranslateServices _translate
+@inject ICommonServices _common
+
+@{
+    bool havePublishDate = false;
+}
+
+<div class="row rowPageCRUD">
+    <div class="col-12">
+        <section class="hk-sec-wrapper">
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label class="mb-1 text-primary" for="Title">@_translate.GetStringAdmin("label.title")</label>
+                        <input class="form-control raw" id="Title" name="Title" placeholder="@_translate.GetStringAdmin("placeholder.title")" required value="" type="text">
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="form-group">
+                        <label class="mb-1 text-primary">Mã sản phẩm</label>
+                        <input type="text" class="form-control" id="Code" name="Code" placeholder="Mã sản phẩm">
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="form-group">
+                        <label class="mb-1 text-primary">Số người dùng</label>
+                        <input type="number" class="form-control" id="UserAmount" name="UserAmount" placeholder="Số người dùng">
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <div class="form-group">
+                        <label class="mb-1 text-primary">Level</label>
+                        <input type="number" class="form-control" id="Level" name="Level" placeholder="Level">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="mb-1 text-primary" for="Description">@_translate.GetStringAdmin("label.short-description")</label>
+                <textarea class="form-control raw" id="Description" name="Description" rows="5" placeholder="@_translate.GetStringAdmin("placeholder.short-description")"></textarea>
+                <small class="form-text text-muted">Mô tả ngắn cho bài viết và không quá 200 từ.</small>
+            </div>
+            <div hidden class="form-group">
+                <div class="row">
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="d-block mb-1 text-primary">Chu kỳ gói</label>
+                            <select id="Cycle" name="Cycle" class="form-control custom-select d-block w-100">
+                                <option value="0">Tháng</option>
+                                <option value="1">Năm</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="d-block mb-1 text-primary">@_translate.GetStringAdmin("label.cate")</label>
+                            <select plac id="ProductCatePid" name="ProductCatePid" class="form-control custom-select d-block w-100">
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div hidden class="form-group">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="d-block mb-1 text-primary" for="ProductColorPid">Màu sắc</label>
+                            <select plac multiple id="ProductColorPid" name="ProductColorPid" class="form-control custom-select d-block w-100">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div hidden class="form-group">
+                <div class="row">
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Số lượng</label>
+                            <input type="text" class="form-control" id="Stock" name="Stock" placeholder="Số lượng">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Kích thước</label>
+                            <input type="text" class="form-control" id="Size" name="Size" placeholder="Kích thước">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Quy cách</label>
+                            <input type="text" class="form-control" id="Unit" name="Unit" placeholder="Quy cách">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-4">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Shopee</label>
+                            <input type="text" class="form-control" id="Shopee" name="Shopee" placeholder="Shopee">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-4">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Lazada</label>
+                            <input type="text" class="form-control" id="Lazada" name="Lazada" placeholder="Lazada">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-4">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Shopee</label>
+                            <input type="text" class="form-control" id="Tiki" name="Tiki" placeholder="Tiki">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Giá khuyến mãi</label>
+                            <input type="text" class="form-control" id="PriceDiscount" name="PriceDiscount" placeholder="Giá khuyến mãi">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Chất liệu</label>
+                            <input type="text" class="form-control" id="Material" name="Material" placeholder="Chất liệu">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Giá</label>
+                            <input type="text" class="form-control" id="Price" name="Price" placeholder="Giá">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="frmProductCate" class="col-md-12 form-group">
+                    <label for="list_price" class="mb-1 text-primary">Bảng giá</label>
+                    <table id="list_price" class="table table-bordered text-center">
+                        <thead>
+                            <tr id="list_price_head"></tr>
+                        </thead>
+                        <tbody>
+                            <tr id="list_price_body"></tr>
+                            <tr id="list_enable_body"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div hidden class="my-3">
+                <label class="mb-1 text-primary">Nội dung ngắn</label>
+                <div class="row">
+                    <div class="col-sm">
+                        <textarea class="raw" id="ShortContent"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="my-3">
+                <label class="mb-1 text-primary">@_translate.GetStringAdmin("label.content")</label>
+                <div class="row">
+                    <div class="col-sm">
+                        <textarea class="raw" id="Content"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div hidden class="my-3">
+                <label class="mb-1 text-primary">Thông tin chi tiết</label>
+                <div class="row">
+                    <div class="col-sm">
+                        <textarea class="raw" id="Content2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mb-0">
+                <div class="row">
+                    @if (_common.GetConfigValue(ConstantStrings.KeySEOConfig) == "on")
+                    {
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="mb-1 text-primary" for="TitleSEO">SEO Title</label>
+                                <input class="form-control raw" id="TitleSEO" name="TitleSEO" placeholder="nhập SEO title" value="" type="text">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="mb-1 text-primary" for="DescriptionSEO">SEO Description</label>
+                                <input class="form-control raw" id="DescriptionSEO" name="DescriptionSEO" placeholder="nhập SEO description" value="" type="text" />
+                            </div>
+                        </div>
+                    }
+
+                    <div class="col-lg-6 @(havePublishDate ? "col-lg-7 col-xxl-8" : "")">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary" for="TagKey">@_translate.GetStringAdmin("label.tag-key")</label>
+                            <input class="form-control raw" id="TagKey" name="TagKey" placeholder="@_translate.GetStringAdmin("placeholder.tag-key")" />
+                        </div>
+                    </div>
+                    <div @(!havePublishDate ? "hidden" : "") class="col-12 col-lg-5 col-xxl-4">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary" for="PublishDate">@_translate.GetStringAdmin("label.publish-date")</label>
+                            <div class="form-group position-relative">
+                                <input id="PublishDate" name="PublishDate" type="text" class="form-control datetimepicker-control" placeholder="Choose Date">
+                                <span class="position-absolute far fa-calendar-alt" style="top: 9px; right: 12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div hidden class="col-12 col-md-5 col-sub">
+        <section class="hk-sec-wrapper avatarWrapper px-0 py-0">
+            <div class="hk-sec-title font-17 text-body p-3 border-bottom mb-0">
+                @_translate.GetStringAdmin("label.avatar")
+            </div>
+            <div class="hk-sec-body p-3">
+                <div>
+                    <div class="avatar avatar-lg" id="">
+                        <img id="imgPicThumb" src="/b-admin/dist/img/avatar3.jpg" alt="Images" class="avatar-img rounded">
+                    </div>
+                    <div class="form-group mb-0">
+                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                <span class="fileinput-filename"></span>
+                            </div>
+                            <span class="input-group-append">
+                                <span class="btn btn-primary btn-file">
+                                    <span class="fileinput-new">@_translate.GetStringAdmin("label.choose-file")</span>
+                                    <span class="fileinput-exists">@_translate.GetStringAdmin("label.change")</span>
+                                    <input onchange="readURLImage(this,'#imgPicThumb',0);" type="file" name="Images">
+                                </span>
+                                <a role="button" href="#" onclick="ClearImagesImage('#imgPicThumb')" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">@_translate.GetStringAdmin("label.delete")</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="hk-sec-wrapper px-0 py-0">
+            <div class="hk-sec-title font-17 text-body p-3 border-bottom mb-0">
+                Thư viện ảnh (Tối đa 10 ảnh)
+            </div>
+            <div class="hk-sec-body p-3">
+                <div class="form-group">
+                    <form action="#" style="min-height: 50px !important" class="dropzone dz-clickable" id="dropzoneImages">
+                        <div class="dz-default dz-message text-center">
+                            <span>Drop files here to upload</span>
+                        </div>
+                    </form>
+                    <button type="button" onclick="UploadImages()" class="btn btn-circle mt-2 w-100">
+                        <i class="far fa-upload"></i> Upload
+                    </button>
+                </div>
+                <div class="form-group mb-0" id="listImagesUpload"></div>
+            </div>
+        </section>
+        <section hidden class="hk-sec-wrapper">
+            <div class="table-wrap">
+                <table id="tableProductPrice" class="table table-hover w-100 display pb-30">
+                    <thead>
+                        <tr>
+                            <th>Options</th>
+                            <th>Hiển thị</th>
+                            <th>Giá</th>
+                            <th>Giá khuyến mãi</th>
+                        </tr>
+                    </thead>
+                    <tbody> </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>

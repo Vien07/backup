@@ -1,0 +1,1490 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+    long Pid = 0;
+    if (!String.IsNullOrEmpty(ViewBag.Pid))
+    {
+        Pid = Convert.ToInt64(ViewBag.Pid);
+    }
+}
+<!-- Container -->
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Đơn hàng</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <!-- Compose -->
+        <div id="compose" class="col-xl-12">
+            <section>
+                <div class="row">
+                    <div class="col-sm">
+                        <div id="formInput">
+                            <div id="bodyCompose">
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <section class="hk-sec-wrapper">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row mb-20">
+                                                        <div class="col-lg-4">
+                                                            <div class="card  bg-primary">
+                                                                <div class="card-header pb-0 text-white font-14 mb-3">Khách hàng</div>
+                                                                <div class="card-body pt-5 pb-5 mb-3">
+                                                                    <select id="Email" name="Email" class="form-control form-control-sm raw">
+                                                                    </select>
+                                                                </div>
+                                                                <ul class="list-group list-group-flush">
+                                                                    <li class="list-group-item"><span><i class="fas fa-user-tag text-light-20 mr-10"></i></span><span class="text-primary font-weight-700" id="FullName"></span></li>
+                                                                    <li class="list-group-item"><span><i class="fas fa-envelope-open-text text-light-20 mr-10"></i><u>Email</u></span><span class="ml-5 text-dark" id="EmailInfo"></span></li>
+                                                                    <li class="list-group-item"><span><i class="fas fa-calendar-check text-light-20 mr-10"></i><u>Đăng ký</u></span><span class="ml-5 text-dark" id="CreateDate"></span></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="card  bg-primary">
+                                                                <div class="card-header pb-0 text-white font-14 mb-3"> Công ty</div>
+
+                                                                <ul class="list-group list-group-flush">
+
+                                                                    <li class="list-group-item">
+                                                                        <span>
+                                                                            <i class="fas fa-building text-light-20 mr-10"></i>
+                                                                            <u>Tên công ty</u>
+                                                                        </span>
+                                                                        <input name="CompanyName" id="CompanyName" type="text" class="form-control raw" placeholder="Tên công ty">
+
+
+                                                                    </li>
+                                                                    <li class="list-group-item"><span><i class="fas fa-id-card-alt text-light-20 mr-10"></i><u>Mã số thuế</u></span><input class="form-control raw" id="TaxCode" placeholder="MST"></li>
+                                                                    <li class="list-group-item"><span><i class="fas fa-map-marker-alt text-light-20 mr-10"></i><u>Địa chỉ công ty</u></span><input class="form-control raw" id="CompanyAddress" placeholder="Địa chỉ công ty"></li>
+                                                                    <li class="list-group-item">
+                                                                        <span>
+                                                                            <i class="fas fa-image text-light-20 mr-10"></i>
+                                                                            <u>Ảnh background</u>
+                                                                        </span>
+                                                                        <div class="hk-sec-body p-3">
+                                                                            <div>
+                                                                                <div class="avatar avatar-lg" id="">
+                                                                                    <img id="imgPicThumb" src="/b-admin/dist/img/avatar3.jpg" alt="Images" class="avatar-img rounded">
+                                                                                </div>
+                                                                                <div class="form-group mb-0">
+                                                                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                                                        <div class="form-control text-truncate" data-trigger="fileinput">
+                                                                                            <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                                                            <span class="fileinput-filename"></span>
+                                                                                        </div>
+                                                                                        <span class="input-group-append">
+                                                                                            <span class="btn btn-primary btn-file">
+                                                                                                <span class="fileinput-new">@_translate.GetStringAdmin("label.choose-file")</span>
+                                                                                                <span class="fileinput-exists">@_translate.GetStringAdmin("label.change")</span>
+                                                                                                <input id="Background" onchange="readURLImage(this,'#imgPicThumb',0);" type="file" name="Images" accept=".jpg, .jpeg, .png">
+                                                                                            </span>
+                                                                                            <a role="button" href="#" onclick="ClearImagesImage('#imgPicThumb')" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">@_translate.GetStringAdmin("label.delete")</a>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                    </li>
+
+                                                                </ul>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8">
+                                                            <div class="row">
+                                                                <div class="col-sm">
+                                                                    <div class="card shadow-sm pa-15 bg-light">
+                                                                        <div class="card-header border-bottom border-light-10 mb-10">
+                                                                            <h6 class="text-uppercase text-light"><i class="fas fa-cube"></i> Thông tin đơn hàng</h6>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Product/Service</div>
+                                                                            <div class="col-8 col-sm-9 my-1">
+                                                                                <select name="Product" id="Product" class="form-control form-control-sm text-primary font-weight-700 raw"></select>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Kỳ thanh toán</div>
+                                                                            <div class="col-8 col-sm-9 my-1 ">
+                                                                                <select name="ProductCate" id="ProductCate" class="form-control form-control-sm raw"></select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Chi phí đơn hàng</div>
+                                                                            <div class="col-8 col-sm-9 my-1 ">
+                                                                                <input id="Price" name="Price" type="text" class="form-control form-control-sm w-120p text-danger" value="0" aria-label="type Order ID" aria-describedby="basic-addon2" onkeyup="ConvertNumberToMoney(this.id, this.value)">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Chi phí định kỳ</div>
+                                                                            <div class="col-8 col-sm-9 my-1 ">
+                                                                                <input id="PriceOrigin" name="PriceOrigin" type="text" class="form-control form-control-sm w-120p text-primary" value="0" disabled>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Mã giảm giá</div>
+                                                                            <div class="col-8 col-sm-9 my-1 d-flex">
+                                                                                <input id="DiscountCode" name="DiscountCode" type="text" class="form-control form-control-sm w-120p" value="" placeholder="B7X9A4C2QK">
+                                                                                <button id="btnApplyDiscountCode" onclick="ApplyDiscountCode()" type="button" class="btn btn-sm btn-primary ml-2">
+                                                                                    <i class="fal fa-clipboard-check"></i> Áp dụng
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr class="hr-white mt-5 mb-10">
+
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Đăng ký</div>
+                                                                            <div class="col-8 col-sm-9 my-1 pb-0">
+                                                                                <input type="text" id="RegisterDate" name="RegisterDate" class="form-control form-control-sm datetimepicker-control w-150p raw" placeholder="Choose Date">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Hết hạn</div>
+                                                                            <div class="col-8 col-sm-9 my-1 ">
+                                                                                <input type="text" id="ExpiredDate" name="ExpiredDate" class="form-control form-control-sm datetimepicker-control w-150p raw" placeholder="Choose Date">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Thanh toán</div>
+                                                                            <div class="col-8 col-sm-9 my-1 ">
+                                                                                <select name="PaymentMethod" id="PaymentMethod" class="form-control  form-control-sm raw"></select>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 flex-nowrap pt-0">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Trạng thái thanh toán</div>
+                                                                            <div class="col-4 col-sm-4 my-1 ">
+                                                                                <select name="isPayment" id="PaymentStatus" class="form-control  form-control-sm raw">
+                                                                                    <option value="0">Chưa thanh toán</option>
+                                                                                    <option value="1">Đã thanh toán</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 flex-nowrap pt-0">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Trạng thái</div>
+                                                                            <div class="col-4 col-sm-4 my-1 ">
+                                                                                <select name="OrderStatus" id="OrderStatus" class="form-control  form-control-sm raw">
+                                                                                    @*<option value="0">Đang chờ xử lý</option>
+                    <option value="1">Đã kích hoạt</option>
+                    <option value="2">Đã hủy</option>*@
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap pt-0">
+                                                                            <div class="col-4 col-sm-3 my-10 text-right">Xuất hóa đơn công ty</div>
+                                                                            <div class="col-4 col-sm-4 my-1">
+                                                                                <input type="checkbox" name="VAT" id="VAT" class="form-check-input ml-1 mt-2">
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group d-flex align-items-center">
+                                                                <button type="button" id="btnSave" onclick="SaveOrder()" class="btn btn-primary mr-2"><i class="fas fa-vote-yea mr-5"></i>Cập Nhật</button>
+                                                                <button type="button" onclick="Clear()" class="btn btn-dark mr-1"><i class="fas fa-window-close"></i> Đóng </button>
+                                                            </div>
+                                                            <!-- /End row-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- /Compose -->
+
+    </div>
+    <!-- /Row -->
+
+    <div @(Convert.ToInt32(ViewBag.Pid) == 0 ? "hidden" : "") class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Quản lý card </h5>
+    </div>
+    <!-- Row -->
+    <div @(Convert.ToInt32(ViewBag.Pid) == 0 ? "hidden" : "") class="row">
+        <div id="list" class="col-xl-12">
+            <section class="hk-sec-wrapper">
+
+                <div class="form-inline align-items-center">
+                    <div class="col-auto form-group pl-0 pr-2 mb-3 ">
+                        <input type="search" id="key" class="form-control form-control-sm" placeholder="Keyword search" />
+                        <div class="input-group-append">
+                            <button onclick="SearchCard(0, @ViewBag.Pid)" type="button" class="btn btn-sm btn-light ml-2" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-search")">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="input-group-append ml-2">
+                            <div class="input-group-append ml-2">
+                                <button type="button" class="btn btn-sm btn-light" data-toggle="tooltip" data-placement="top" title="Upload CSV" onclick="$('#csvFileInput').click()">
+                                    <i class="fal fa-upload"></i>
+                                </button>
+                                <input type="file" id="csvFileInput" style="display: none;" accept=".csv" />
+                            </div>
+                        </div>
+                        <div class="input-group-append ml-2">
+                            <div class="input-group-append ml-2">
+                                <a class="btn btn-sm btn-light" id="exampleCSV" href="\data\example-card-upload.csv" download data-toggle="tooltip" data-placement="top" title="Tải file CSV mẫu"><i class="fal fa-download"></i></a>
+                            </div>
+                        </div>
+                        <div class="input-group-append ml-2">
+                            <div class="input-group-append ml-2">
+                                <button type="button" class="btn btn-sm btn-light" data-toggle="tooltip" data-placement="top" title="Export CSV" onclick="ExportCSV()">
+                                    <i class="fal fa-file-csv"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto mb-3 px-2">
+                        <button onclick="OpenAddPopupCard()" class="btn btn-sm btn-success waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a">
+                            <i class="fas fa-layer-plus"></i> @_translate.GetStringAdmin("group.btn-add")
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive ">
+                                <table id="tableData" class="table table-hover table-sm mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="py-2" width="5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input onclick="CheckAll()" type="checkbox" class="custom-control-input" id="customcheck-all">
+                                                    <label class="custom-control-label position-static" for="customcheck-all"></label>
+                                                </div>
+                                            </th>
+                                            <th class="py-2" width="100">@_translate.GetStringAdmin("label.images")</th>
+                                            <th class="py-2">Họ và tên</th>
+                                            <th class="py-2 text-center">Url</th>
+                                            <th class="py-2 text-center" width="100">@_translate.GetStringAdmin("label.action")</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyData">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="my-1 mr-auto">
+                                <button type="button" onclick="DeleteMultiCard()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fal fa-trash-alt"></i></button>
+                            </div>
+                            <div class="my-1 ml-auto" id="divPaging">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- Compose -->
+        @*<div id="compose" class="col-xl-12">
+                <div id="formInput">
+                    <section hidden class="hk-sec-wrapper pb-0 pt-1 px-1 mb-3">
+                        <div class="form-group mb-0">
+                            <ul class="nav nav-tabs" id="langTab" role="tablist">
+                                <li style="cursor: pointer" lang="vi" class="nav-item">
+                                    <a class="nav-link active show" data-toggle="tab" role="tab" aria-controls="info" aria-selected="true"><i class="flag-icon flag-icon-vn"></i> Tiếng việt</a>
+                                </li>
+                                <li style="cursor: pointer" lang="en" class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" role="tab" aria-controls="img" aria-selected="false"><i class="flag-icon flag-icon-us"></i> English</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                    <div id="bodyCompose">
+                    </div>
+                    <div class="form-group d-flex align-items-center justify-content-start my-2">
+                        <div class="form-group d-flex align-items-center border-right pr-2 mb-0 mr-2">
+                            <button type="button" onclick="Clear()" class="btn btn-dark mr-2"><i class="fas fa-window-close"></i> @_translate.GetStringAdmin("button.close") </button>
+                            <button type="button" id="btnSave" onclick="Save()" class="btn btn-primary mr-1"><i class="fas fa-vote-yea mr-5"></i>@_translate.GetStringAdmin("button.update")</button>
+                        </div>
+                        <div id="toggle_enable" value="true" class="toggle toggle-light toggle-bg-success toggle2 mr-2 raw"></div>
+                    </div>
+                </div>
+            </div>*@
+        <!-- /Compose -->
+
+    </div>
+    <!-- /Row -->
+</div>
+
+<div class="modal fade ModalForm" id="inputModalCard" tabindex="-1" role="dialog" aria-labelledby="inputModalCard" aria-hidden="true">
+    <div class="modal-dialog" role="admin">
+        <form class="modal-content needs-validation" id="formInputCard" name="formInput" novalidate onsubmit="return false">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white text-uppercase">
+                    <i class="fas fa-layer-plus pr-10 bg-transparent"></i>Thông tin card
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="bodyModal">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="ClearCard()" data-dismiss="modal">
+                    <i class="fas fa-times mr-5"></i>
+                    @_translate.GetStringAdmin("group.btn-close")
+                </button>
+                <button id="btnSaveCard" onclick="SaveCard('')" type="submit" class="btn btn-primary">
+                    <i class="fas fa-save mr-5"></i>
+                    @_translate.GetStringAdmin("group.btn-save")
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+      //#define
+      var actionUrl = "/b-admin/Order/"
+      var state = "";
+      var lang = "vi";
+      var orderPid = @Pid;
+      var imagesObj = {
+        base64: '',
+        type: ''
+      }
+        let linkCounter = 0;
+
+      var obj = {
+        pid: 0,
+        enabled: true,
+        email: "",
+        paymentStatusPid: 0,
+        paymentMethod: "",
+        orderStatus: 0,
+        note: "",
+        companyName: "",
+        companyAddress: "",
+        taxCode: "",
+        backgroundImage: "",
+        vat: false,
+      };
+        var objCustomLink = [];
+
+      var objDetail = {
+        productPid: "",
+        productCatePid: "",
+        registerDate: new Date(),
+          expiredDate: new Date(),
+          price: 0,
+          priceOrigin: 0,
+          discountCode: "",
+      };
+
+      var objLang = {
+        Pid: 0,
+        Title: '',
+        Content: '',
+        Description: '',
+        LangKey: '',
+      }
+      var multiLang_obj = []
+      var objCardDetail = {
+        fullName: "",
+        personalPhone: "",
+        homePhone: "",
+        companyPhone: "",
+        personalEmail: "",
+        workEmail: "",
+        position: "",
+        url: "",
+        telegram: "",
+        whatsapp: "",
+        viber: "",
+        skype: "",
+        zalo: "",
+        linkedIn: "",
+        facebook: "",
+        twitter: "",
+          customLink: [],
+          avatar: "",
+          qrCode: "",
+          personalLink: "",
+          companyWebsiteLink: "",
+          personalWebsiteLink: "",
+      }
+
+      $(function() {
+        if ('@ViewBag.Pid' != '') {
+          EditOrder('@ViewBag.Pid')
+        } else {
+          InitInput();
+          setTimeout(function() {
+            $('#Product').trigger('change');
+          }, 1500)
+        }
+      })
+
+        function handleCsvUpload(event) {
+            Swal.fire({
+                title: 'Bạn có muốn upload dữ liệu?',
+                text: "",
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+                    var file = event.target.files[0];
+                    var formData = new FormData();
+                    formData.append("File", file);
+                    formData.append("OrderPid", orderPid);
+
+                    $.ajax({
+                        url: actionUrl + "UploadCSV",
+                        beforeSend: function () {
+                            Swal({
+                                title: "Processing...",
+                                text: "Please wait",
+                                imageUrl: "/img/configuration/Ajax-loader.gif",
+                                showConfirmButton: false,
+                                allowOutsideClick: false
+                            });
+                        },
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (!response.isError) {
+/*                                AlertToast('Thông báo', 'Thành công', 'success')*/
+                                SearchCard(null, orderPid);
+                                $('#csvFileInput').change(handleCsvUpload);
+                                UploadCSVMessage(response.data);
+                            }
+                            else {
+                                if (response.messError) {
+                                    AlertToast('Thông báo', response.messError, 'error')
+
+                                }
+                                else {
+                                    AlertToast('Thông báo', 'Thất bại', 'error')
+                                }
+                            }
+                            Swal.close();
+                            $('#csvFileInput').val('');
+                        },
+                        error: function (response) {
+                            // Optional: handle errors here
+                            Swal.close();
+                            SweetAlert('Thông báo', "Lỗi không xác định", 'error')
+                            $('#csvFileInput').val('');
+                        }
+                    });
+                }
+            })
+
+      }
+        function UploadCSVMessage(data) {
+            // Create the modal HTML
+            var modalHtml = `
+        <div class="modal fade ModalForm" id="uploadResultModal" tabindex="-1" role="dialog" aria-labelledby="uploadResultModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title text-white text-uppercase" id="uploadResultModalLabel">
+                            <i class="fas fa-file-upload pr-10 bg-transparent"></i>Kết quả nhập dữ liệu
+                        </h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Dữ liệu nhập thành công:</strong> ${data.uploadSuccess}</p>
+                        ${data.uploadFail > 0 ? `
+                        <p><strong>Dữ liệu nhập thất bại:</strong> ${data.uploadFail}</p>
+
+                            <p><strong>STT dữ liệu thất bại:</strong> ${data.failIds.join(', ')}</p>
+                            <p><strong>Vui lòng kiểm tra lại thông tin!</strong></p>
+                        ` : ''}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fas fa-times mr-5"></i>Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+            // Append the modal to the body
+            $('body').append(modalHtml);
+
+            // Show the modal
+            $('#uploadResultModal').modal('show');
+
+            // Remove the modal from the DOM after it is hidden to avoid duplicates
+            $('#uploadResultModal').on('hidden.bs.modal', function (e) {
+                $(this).remove();
+            });
+        }
+
+        function ExportCSV() {
+            Swal.fire({
+                title: 'Bạn có muốn xuất dữ liệu CSV?',
+                text: "",
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+                    var formData = new FormData();
+                    formData.append("OrderPid", orderPid);
+                    $.ajax({
+                        url: actionUrl + "ExportCSV",
+                        beforeSend: function () {
+                            Swal({
+                                title: "Processing...",
+                                text: "Please wait",
+                                imageUrl: "/img/configuration/Ajax-loader.gif",
+                                showConfirmButton: false,
+                                allowOutsideClick: false
+                            });
+                        },
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            if (!response.isError) {
+                                var csvString = response.data;
+                                var universalBOM = "\uFEFF";
+                                var blob = new Blob([universalBOM + csvString], { type: 'text/csv;charset=utf-8;' });
+                                var link = document.createElement("a");
+                                link.setAttribute("href", URL.createObjectURL(blob));
+                                link.setAttribute("download", "export.csv");
+                                link.style.visibility = 'hidden';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                                URL.revokeObjectURL(link.href);
+                                Swal.close();
+                                Swal.fire('Thông báo', 'Xuất dữ liệu CSV thành công', 'success');
+
+                            } else {
+                                if (response.messError) {
+                                    Swal.close();
+                                    Swal.fire('Thông báo', response.messError, 'error');
+                                }
+                                else {
+                                    Swal.close();
+                                    Swal.fire('Thông báo', 'Xuất dữ liệu CSV thất bại', 'error');
+                                }
+
+                            }
+                        },
+                        error: function (error) {
+                            Swal.close();
+                            Swal.fire('Thông báo', 'Lỗi khi xuất dữ liệu CSV', 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+      $(document).ready(function() {
+          $('#csvFileInput').change(handleCsvUpload);
+      });
+
+      //raw data action
+      function CustomSetDataEdit(data) {
+        obj = data.obj;
+        objDetail = data.objDetail;
+      }
+
+      function ShowRawData() {
+        $("#Email").val(obj.email);
+        $("#Note").val(obj.note);
+        $("#Price").val(ConvertNumberToMoneyOrder2(objDetail.price));
+        $("#PriceOrigin").val(ConvertNumberToMoneyOrder2(objDetail.priceOrigin));
+        $("#CompanyName").val(obj.companyName);
+        $("#CompanyAddress").val(obj.companyAddress);
+          $("#TaxCode").val(obj.taxCode);
+          $("#DiscountCode").val(objDetail.discountCode);
+        if (obj.backgroundImage != null) {
+          $("#imgPicThumb").attr("src", obj.backgroundImage);
+          }
+          if (obj.vat) {
+              $('#VAT').prop('checked', true)
+          }
+      }
+
+      function SaveRawData() {
+        obj.email = $("#Email").val();
+        obj.paymentMethod = $("#PaymentMethod").val();
+        obj.paymentStatusPid = $("#PaymentStatus").val();
+        obj.orderStatus = $("#OrderStatus").val();
+        obj.note = $("#Note").val();
+        obj.companyAddress = $("#CompanyAddress").val();
+        obj.companyName = $("#CompanyName").val();
+        obj.taxCode = $("#TaxCode").val();
+        objDetail.productPid = $("#Product").val();
+        objDetail.productCatePid = $("#ProductCate").val();
+        objDetail.registerDate = new Date();
+        objDetail.expiredDate = new Date();
+
+      }
+
+      //common action
+
+      function GetFormData() {
+        var formData = new FormData();
+        //let logo = document.getElementById("logo").files[0];
+        //formData.append("logo", logo);
+        //let department = document.getElementById("department").files[0];
+        //formData.append("department", department);
+        formData.append('Background', $('#Background').prop('files')[0])
+        formData.append('stringObj', JSON.stringify(obj));
+        formData.append('stringObjDetail', JSON.stringify(objDetail));
+        formData.append('email', obj.email);
+        formData.append('IsPayment', $('#PaymentStatus').val() === '1');
+        formData.append('OrderState', $('#OrderStatus').val());
+        formData.append('PaymentMethod', $('#PaymentMethod').val());
+        formData.append('Email', $('#Email').val());
+        formData.append('CompanyName', $('#CompanyName').val());
+        formData.append('CompanyAddress', $('#CompanyAddress').val());
+        formData.append('TaxCode', $('#TaxCode').val());
+        formData.append('TotalPrice', $('#Price').val());
+        formData.append('ProductDetailPid', $("#Product").val());
+        formData.append('ProductCatePid', $("#ProductCate").val());
+        formData.append('RegisterDate', $("#RegisterDate").val());
+        formData.append('ExpiredDate', $("#ExpiredDate").val());
+        formData.append('VAT', $('#VAT').is(":checked"));
+        formData.append('DiscountCode', $('#DiscountCode').val());
+        formData.append('Pid', orderPid);
+
+        return formData;
+      }
+
+      function Validate() {
+        if ($('#Email').val() == '') {
+          AlertToast("Thông tin khách hàng", "Chưa chọn khách hàng", "warning");
+          return false;
+        }
+          if ($('#CompanyName').val() == '') {
+              AlertToast("Thông tin khách hàng", "Chưa nhập tên công ty", "warning");
+              return false;
+          }
+          if ($('#TaxCode').val() == '') {
+              AlertToast("Thông tin khách hàng", "Chưa nhập mã số thuế", "warning");
+              return false;
+          }
+          if ($('#CompanyAddress').val() == '') {
+              AlertToast("Thông tin khách hàng", "Chưa nhập địa chỉ công ty", "warning");
+              return false;
+          }
+        return true;
+      }
+        function ValidateCard() {
+            if ($('#FullNameCard').val() == '') {
+                AlertToast("Thông tin card", "Chưa nhập tên", "warning");
+                return false;
+            }
+            if ($('#Url').val() == '') {
+                AlertToast("Thông tin card", "Chưa nhập Url", "warning");
+                return false;
+            }
+            if ($('#Position').val() == '') {
+                AlertToast("Thông tin card", "Chưa nhập chức danh", "warning");
+                return false;
+            }
+            return true;
+        }
+      function SetToggleCustomer(div, value) {
+        $(div).toggles({
+          drag: false,
+          click: true,
+          text: {
+            on: 'On',
+            off: 'Off'
+          },
+          on: value,
+          animate: 250,
+          easing: 'swing',
+          type: 'compact'
+        }).on('toggle', function(e, active) {
+          obj.enabled = active;
+          if (active) {
+            $(div).attr('value', 'true');
+          } else {
+            $(div).attr('value', 'false');
+          }
+
+        });
+      }
+
+      function EditOrder(Pid) {
+        $.ajax({
+          url: actionUrl + "Edit",
+          method: "POST",
+          data: {
+            Pid: Pid
+          }
+        }).done(function(data) {
+          CustomSetDataEdit(data)
+          ShowRawData()
+          InitInput();
+        })
+      }
+
+      function InitInput() {
+        LoadDataCard(lang, orderPid);
+        GetSelectProduct('#Product', objDetail.productPid, lang);
+        GetSelectProductCate('#ProductCate', objDetail.productCatePid, 'vi');
+        GetSelectEmailCustomer('#Email', obj.email, lang);
+        GetSelectOrderStatus('#OrderStatus', obj.orderStatus, 'vi');
+        GetSelectPaymentMethod('#PaymentMethod', obj.paymentMethod, 'vi')
+        GetSelectPaymentStatus('#PaymentStatus', obj.paymentStatusPid, 'vi')
+
+          SetToggleCustomer('#toggle_enable', obj.enabled);
+        InitDatePickerOrder("#RegisterDate", objDetail.registerDate);
+        InitDatePickerOrder("#ExpiredDate", objDetail.expiredDate);
+        $('.raw').on('change', function() {
+          SaveRawData();
+        })
+        $('#Product').on('change', function() {
+          GetPrice();
+        })
+          $('#ProductCate').on('change', function () {
+              GetPrice();
+              updateExpirationDate();
+
+          })
+
+
+          $('#RegisterDate').on('change', function () {
+              updateExpirationDate();
+          });
+
+          if ('@ViewBag.Pid' != '') {
+              //$('#DiscountCode').prop('disabled', true);
+              //$('#btnApplyDiscountCode').prop('hidden', true);
+          $.ajax({
+            url: "/b-admin/Order/GetInfoCustomer",
+            data: {
+              email: obj.email
+            },
+            method: "POST",
+            success: function(res) {
+              if (res) {
+                $('#EmailInfo').html(res.email);
+                  //$('#FullName').html(res.fullName);
+                  $('#FullName').html(res.firstName + " " + res.lastName);
+                $('#CreateDate').html(moment(res.createDate).format('@ViewBag.DateFormat'));
+              }
+            },
+            error: function(err) {
+              //console.log(err)
+            }
+          })
+        } else {
+          GetPrice();
+          }
+      }
+
+      function Clear() {
+        window.location.href = '/b-admin/Order/';
+      }
+
+      function SaveOrder() {
+        $('#btnSave').prop('disabled', true);
+        if (Validate()) {
+          var formData = new FormData();
+          formData = GetFormData();
+          var url = actionUrl + 'Insert';
+          if ('@ViewBag.Pid' != '') {
+            url = actionUrl + 'Update';
+          }
+          $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData
+          }).done(function(response) {
+            if (response.error.status) {
+              Clear();
+              AlertToast('Thông báo', 'Thành công', 'success')
+
+            } else {
+              $('#btnSave').prop('disabled', false);
+              SweetAlert('Thông báo', response.error.mess, 'error')
+            }
+          })
+        } else {
+          $('#btnSave').prop('disabled', false);
+
+        }
+      }
+
+
+      //grid action
+      function GetPrice() {
+        $.ajax({
+          url: actionUrl + 'GetPrice',
+          data: {
+            ProductPid: $('#Product').val(),
+            ProductCatePid: $('#ProductCate').val(),
+            DiscountCode: $('#DiscountCode').val(),
+          },
+          method: "POST"
+
+        }).done(function(data) {
+          ConvertNumberToMoneyOrder('Price', data);
+          ConvertNumberToMoneyOrder('PriceOrigin', data);
+        })
+      }
+
+      //select
+      function GetSelectEmailCustomer(divID, selected, lang) {
+        $.ajax({
+          url: "/b-admin/GetSelect/EmailCustomer",
+          data: {
+            lang: lang
+          },
+          method: "POST"
+
+        }).done(function(data) {
+          var rs = JSON.parse(data.jsData);
+          var html = "";
+          if (selected === "") {
+            html = `<option selected value="">--Chọn khách hàng</option>`;
+          } else {
+            html = `<option  value="">--Chose Email</option>`;
+
+          }
+          for (let i = 0; i < rs.length; i++) {
+            if (rs[i].Value === selected) {
+              html += `<option selected value="${rs[i].Value}">${rs[i].Name}</option>`;
+            } else {
+              html += `<option value="${rs[i].Value}">${rs[i].Name}</option>`;
+            }
+          }
+          $(divID).html(html);
+          $(divID).select2({
+            searchable: true
+          });
+
+          $(divID).on('select2:select', function(e) {
+            $.ajax({
+              url: "/b-admin/Order/GetInfoCustomer",
+              data: {
+                email: $(this).val()
+              },
+              method: "POST",
+              success: function(res) {
+                if (res) {
+                  $('#EmailInfo').html(res.email);
+                    //$('#FullName').html(res.fullName);
+                    $('#FullName').html(res.firstName + " " + res.lastName);
+                  $('#CreateDate').html(moment(res.createDate).format('@ViewBag.DateFormat'));
+                }
+              },
+              error: function(err) {
+                //console.log(err)
+              }
+            })
+          });
+        })
+      }
+
+      function GetSelectOrderStatus(divID, selected, lang) {
+        $.ajax({
+          url: "/b-admin/GetSelect/OrderState",
+          data: {
+            lang: lang
+          },
+          method: "POST"
+
+        }).done(function(data) {
+          var rs = JSON.parse(data.jsData);
+          var html = "";
+          for (let i = 0; i < rs.length; i++) {
+            if (rs[i].Value === selected) {
+              html += `<option selected value="${rs[i].Value}">${rs[i].Name}</option>`;
+            } else {
+              html += `<option value="${rs[i].Value}">${rs[i].Name}</option>`;
+            }
+          }
+          $(divID).html(html);
+          $(divID).niceSelect();
+        })
+
+
+      }
+
+      function GetSelectProduct(divID, selected, lang) {
+        $.ajax({
+          url: "/b-admin/GetSelect/GetProduct",
+          data: {
+            lang: lang
+          },
+          method: "POST"
+
+        }).done(function(data) {
+          var rs = JSON.parse(data.jsData);
+          var html = "";
+          for (let i = 0; i < rs.length; i++) {
+            if (rs[i].Value === selected) {
+              html += `<option selected value="${rs[i].Value}">${rs[i].Name}</option>`;
+            } else {
+              html += `<option value="${rs[i].Value}">${rs[i].Name}</option>`;
+            }
+          }
+          $(divID).html(html);
+          $(divID).niceSelect();
+        })
+      }
+
+      //function GetSelectProductCate(divID, selected, lang) {
+      //  $.ajax({
+      //    url: "/b-admin/GetSelect/GetProductCate",
+      //    data: {
+      //      lang: lang
+      //    },
+      //    method: "POST"
+
+      //  }).done(function(data) {
+      //    var rs = JSON.parse(data.jsData);
+      //    var html = "";
+      //    for (let i = 0; i < rs.length; i++) {
+      //      if (rs[i].Value === selected) {
+      //        html += `<option selected value="${rs[i].Value}">${rs[i].Name}</option>`;
+      //      } else {
+      //        html += `<option value="${rs[i].Value}">${rs[i].Name}</option>`;
+      //      }
+      //    }
+      //    $(divID).html(html);
+      //    $(divID).niceSelect();
+      //  })
+      //}
+        function GetSelectProductCate(divID, selected, lang) {
+            $.ajax({
+                url: "/b-admin/GetSelect/GetProductCate",
+                data: {
+                    lang: lang
+                },
+                method: "POST"
+            }).done(function (data) {
+                var rs = JSON.parse(data.jsData);
+                var html = "";
+                var monthsMapping = {};
+                for (let i = 0; i < rs.length; i++) {
+                    monthsMapping[rs[i].Value] = rs[i].Months;
+                    if (rs[i].Value === selected) {
+                        html += `<option selected value="${rs[i].Value}">${rs[i].Name}</option>`;
+                    } else {
+                        html += `<option value="${rs[i].Value}">${rs[i].Name}</option>`;
+                    }
+                }
+                $(divID).html(html);
+                $(divID).niceSelect();
+                // Store the monthsMapping in the element's data attribute for later use
+                $(divID).data('monthsMapping', monthsMapping);
+            });
+        }
+
+        function updateExpirationDate() {
+            var selectedProductCate = $('#ProductCate').val();
+            var registerDate = $('#RegisterDate').val();
+            var monthsMapping = $('#ProductCate').data('monthsMapping');
+
+            if (selectedProductCate && registerDate && monthsMapping) {
+                var monthsToAdd = monthsMapping[selectedProductCate];
+                var registerDateObj = new Date(registerDate);
+                var expirationDateObj = new Date(registerDateObj.setMonth(registerDateObj.getMonth() + monthsToAdd));
+
+                InitDatePickerOrder("#ExpiredDate", expirationDateObj);
+            }
+        }
+      function GetSelectPaymentMethod(divID, selected, lang) {
+        $.ajax({
+          url: "/b-admin/GetSelect/GetPaymentMethod",
+          data: {
+            lang: lang
+          },
+          method: "POST"
+
+        }).done(function(data) {
+          var rs = JSON.parse(data.jsData);
+          var html = "";
+          for (let i = 0; i < rs.length; i++) {
+            if (rs[i].Value === selected) {
+              html += `<option selected value="${rs[i].Value}">${rs[i].Name}</option>`;
+            } else {
+              html += `<option value="${rs[i].Value}">${rs[i].Name}</option>`;
+            }
+          }
+          $(divID).html(html);
+          $(divID).niceSelect();
+        })
+      }
+
+      function GetSelectPaymentStatus(divID, selected, lang) {
+        $.ajax({
+          url: "/b-admin/GetSelect/GetPaymentStatus",
+          data: {
+            lang: lang
+          },
+          method: "POST"
+
+        }).done(function(data) {
+          var rs = JSON.parse(data.jsData);
+          var html = "";
+          for (let i = 0; i < rs.length; i++) {
+            if (rs[i].Value === selected) {
+              html += `<option selected value="${rs[i].Value}">${rs[i].Name}</option>`;
+            } else {
+              html += `<option value="${rs[i].Value}">${rs[i].Name}</option>`;
+            }
+          }
+          $(divID).html(html);
+          $(divID).niceSelect();
+        })
+      }
+
+      //common
+      function InitDatePickerOrder(id, value) {
+        //$(id).datepicker({
+        //    autoHide: true,
+        //    zIndex: 2048
+
+        //});
+        $(id).datetimepicker({
+          format: 'm/d/Y H:i',
+          formatTime: 'H:i',
+          formatDate: 'm/d/Y'
+        });
+        try {
+          if (value === null || value === "") {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            $(id).val(mm + "/" + dd + "/" + yyyy + " " + today.getHours() + ":" + today.getMinutes());
+          } else {
+            $(id).val(moment(value).format("MM/DD/YYYY HH:mm"));
+
+
+          }
+        } catch (e) {
+          var today = new Date();
+          var dd = today.getDate();
+          var mm = today.getMonth() + 1;
+          var yyyy = today.getFullYear();
+          $(id).val(mm + "/" + dd + "/" + yyyy + " " + today.getHours() + ":" + today.getHours());
+        }
+
+      }
+
+      function readURLCustomer(input, divImages, id) {
+        try {
+          if (FileReader) {
+            var reader = new FileReader();
+            reader.readAsDataURL(input.files[0]);
+            reader.onload = function(e) {
+              var image = new Image();
+              image.src = e.target.result;
+              image.onload = function() {
+                imagesObj.base64 = image.src;
+                imagesObj.type = "new";
+                $(divImages).attr("src", image.src);
+              };
+            }
+          } else {
+            // Not supported
+          }
+        } catch (e) {
+
+        }
+
+      }
+
+      function ClearImageCustomer(divId) {
+        imagesObj = {
+          base64: '',
+          type: ''
+        };
+        $(divId).attr("src", defaultUrlImageLogo);
+      }
+
+      function ConvertNumberToMoneyOrder(id, number) {
+        try {
+          if (number == "") {
+            $("#" + id).val(0);
+
+          } else {
+
+            Number.prototype.format = function(n, x) {
+              var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+              return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+            };
+
+            var rs = JSON.parse(number).format(0, 3);
+
+            //var rs = formatter.format(number);
+            $("#" + id).val(rs);
+          }
+
+        } catch (e) {
+          $("#" + id).val(number);
+
+        }
+
+      }
+
+      function ConvertNumberToMoneyOrder2(number) {
+        try {
+
+          Number.prototype.format = function(n, x) {
+            var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+            return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+          };
+
+          var rs = JSON.parse(number).format(0, 3);
+
+          return rs;
+        } catch (e) {
+          return 0;
+
+        }
+
+      }
+
+      function ResetInput() {
+        //$("#formInput").removeClass("was-validated")
+        //$("#Name").val("");
+        //$("#customCheck-admin").prop("checked", false)
+        $("#btnSaveCard").attr('onclick', 'SaveCard()');
+      }
+
+      function readURL(input, divImages, id) {
+        try {
+          if (FileReader) {
+            var reader = new FileReader();
+            reader.readAsDataURL(input.files[0]);
+            reader.onload = function(e) {
+              var image = new Image();
+              image.src = e.target.result;
+              image.onload = function() {
+                imagesObj.base64 = image.src;
+                imagesObj.type = "new";
+                //if (state == "add") {
+
+                //    localStorage.setItem('rawProductObjsCommon', JSON.stringify(currentDataCommon));
+                //}
+
+                $(divImages).css("background-image", "url('" + image.src + "'");
+              };
+            }
+          } else {
+            // Not supported
+          }
+        } catch (e) {
+
+        }
+      }
+
+      function SaveCard(pid) {
+        $('#btnSaveCard').prop('disabled', true);
+          if (ValidateCard()) {
+          var formData = new FormData();
+          formData = GetFormDataCard();
+          var url = actionUrl + 'InsertCard';
+          if (pid != null && pid != "") {
+            url = actionUrl + 'UpdateCard';
+          }
+          $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            data: formData
+          }).done(function(response) {
+            if (response.error.status) {
+              ClearCard();
+              AlertToast('Thông báo', 'Thành công', 'success')
+              LoadDataCard(lang, orderPid)
+
+            } else {
+              $('#btnSaveCard').prop('disabled', false);
+              SweetAlert('Thông báo', response.error.mess, 'error')
+            }
+          })
+        } else {
+          $('#btnSaveCard').prop('disabled', false);
+
+        }
+      }
+
+      function GetFormDataCard() {
+        var formData = new FormData();
+        formData.append('Avatar', $('#Avatar').prop('files')[0])
+        formData.append('OrderPid', orderPid);
+        formData.append('FullName', $('#FullNameCard').val());
+        formData.append('PersonalPhone', $('#PersonalPhone').val());
+        formData.append('HomePhone', $('#HomePhone').val());
+        formData.append('CompanyPhone', $('#CompanyPhone').val());
+        formData.append('PersonalEmail', $('#PersonalEmail').val());
+        formData.append('WorkEmail', $('#WorkEmail').val());
+        formData.append('Position', $('#Position').val());
+        formData.append('Url', $('#Url').val());
+        formData.append('Telegram', $('#Telegram').val());
+        formData.append('WhatsApp', $('#WhatsApp').val());
+        formData.append('Viber', $('#Viber').val());
+        formData.append('Skype', $('#Skype').val());
+        formData.append('Zalo', $('#Zalo').val());
+        formData.append('LinkedIn', $('#LinkedIn').val());
+        formData.append('Facebook', $('#Facebook').val());
+          formData.append('Twitter', $('#Twitter').val());
+          formData.append('PersonalLink', $('#PersonalLink').val());
+          formData.append('CompanyWebsiteLink', $('#CompanyWebsiteLink').val());
+          formData.append('PersonalWebsiteLink', $('#PersonalWebsiteLink').val());
+        formData.append('Pid', $('#CardPid').val());
+          for (let i = 0; i < objCustomLink.length; i++) {
+              formData.append('CustomLink[' + i + '].Id', objCustomLink[i].id);
+              formData.append('CustomLink[' + i + '].Title', objCustomLink[i].title);
+              formData.append('CustomLink[' + i + '].Link', objCustomLink[i].link);
+          }
+        return formData;
+      }
+
+      function ClearCard() {
+        ClearInputPopupCard()
+        if (state == 'add') {
+          //localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+          //localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+        } else if (state = "edit") {
+
+        }
+        state = "";
+        $('#btnSaveCard').prop('disabled', false);
+        $('#formInputCard').removeClass("was-validated");
+        $("#inputModalCard").modal("hide");
+      }
+
+      function ClearInputPopupCard() {
+          objCardDetail = {
+              pid: "",
+              fullName: "",
+              personalPhone: "",
+              homePhone: "",
+              companyPhone: "",
+              personalEmail: "",
+              workEmail: "",
+              position: "",
+              url: "",
+              telegram: "",
+              whatsapp: "",
+              viber: "",
+              skype: "",
+              zalo: "",
+              linkedIn: "",
+              facebook: "",
+              twitter: "",
+              customLink: [],
+              avatar: "",
+              qrCode: "",
+              personalLink: "",
+              companyWebsiteLink: "",
+              personalWebsiteLink: "",
+          };
+          objCustomLink = [];
+          $("#QrBox").addClass("d-none");
+      }
+
+      function LoadGridCard(jsString, paging) {
+        var data = JSON.parse(jsString)
+        $("#tbodyData").html("")
+        var html = ""
+        for (let i = 0; i < data.length; i++) {
+          //Load parent
+          html = `<tr class="" tabIndex="${i}" slot="${data[i].Pid}" id="${data[i].Pid}">
+                  <td>
+                    <div class="custom-control custom-checkbox">
+                      <input onclick="KtCheckbox()" type="checkbox" class="custom-control-input" id="customCheck-${data[i].Pid}" name="Chk" value="${data[i].Pid}">
+                      <label class="custom-control-label" for="customCheck-${data[i].Pid}">&nbsp;</label>
+                    </div>
+                  </td>
+                  <td>
+                    <a role="button" onclick="OpenEditModalCard(${data[i].Pid})" class="avatar avatar-xs rounded" style="background-image: url('${data[i].Avatar}');">
+                    </a>
+                  </td>
+                  <td><a data-toggle="tooltip" data-original-title="edit" style="cursor:pointer" onclick="OpenEditModalCard(${data[i].Pid})" class="text-primary"}">${data[i].FullName}</a></td>
+                  <td class="text-center">${data[i].Url}</td>
+                  <td class="text-center text-nowrap">
+                    <a style="cursor:pointer" onclick="OpenEditModalCard(${data[i].Pid})" class="mx-2" data-toggle="tooltip" data-original-title="edit"><i class="far fa-sliders-h text-dark"></i></a>
+                    <a style="cursor:pointer" onclick="DeleteCard(${data[i].Pid})" data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a>
+                  </td>
+                </tr>`;
+
+          $("#tbodyData").append(html)
+          $(`#toggle_${data[i].Pid}`).toggles({
+            drag: false,
+            click: true,
+            text: {
+              on: '',
+              off: ''
+            },
+            on: data[i].Enabled,
+            animate: 250,
+            easing: 'swing',
+            type: 'compact'
+          }).on('toggle', function(e, active) {
+            Enable(data[i].Pid, active);
+          });
+
+
+          //LoadChildren(data[i].Children);
+
+        }
+        var pageHtml = PagingCard(paging.curentpage, paging.lastpage);
+        $("#divPaging").html(pageHtml)
+          ToolTipCard();
+        //InitDragDropTable();
+      }
+      $('#inputModalCard').on('hide.bs.modal', function() {
+        ClearInputPopupCard();
+      })
+
+        function CustomSetDataEditCard(data) {
+            //console.log(data.objCardDetail);
+          objCardDetail = data.objCardDetail;
+
+      }
+
+        function ShowRawDataCard() {
+            $("#FullNameCard").val(objCardDetail.fullName);
+        $("#PersonalPhone").val(objCardDetail.personalPhone);
+        $("#CompanyPhone").val(objCardDetail.companyPhone);
+        $("#HomePhone").val(objCardDetail.homePhone);
+        $("#PersonalEmail").val(objCardDetail.personalEmail);
+        $("#WorkEmail").val(objCardDetail.workEmail);
+        $("#Position").val(objCardDetail.position);
+        $("#Url").val(objCardDetail.url);
+        $("#Telegram").val(objCardDetail.telegram);
+        $("#WhatsApp").val(objCardDetail.whatsApp);
+        $("#Viber").val(objCardDetail.viber);
+        $("#Skype").val(objCardDetail.skype);
+        $("#Zalo").val(objCardDetail.zalo);
+        $("#Facebook").val(objCardDetail.facebook);
+          $("#Twitter").val(objCardDetail.twitter);
+        $("#LinkedIn").val(objCardDetail.linkedIn);
+        $("#CardPid").val(objCardDetail.pid);
+          $("#PersonalLink").val(objCardDetail.personalLink);
+          $("#CompanyWebsiteLink").val(objCardDetail.companyWebsiteLink);
+          $("#PersonalWebsiteLink").val(objCardDetail.personalWebsiteLink);
+
+        if (objCardDetail.avatar != null) {
+          $("#imgPicThumbCard").css("background-image", "url('" + objCardDetail.avatar + "'");
+        }
+          if (objCardDetail.qrCode != null && objCardDetail.qrCode != "") {
+              $("#QrBox").removeClass("d-none")
+              $("#imgQrImage").css("background-image", "url('" + objCardDetail.qrCode + "'")
+          }
+          if (objCardDetail.customLink.length > 0) {
+              linkCounter = 0;
+
+              objCardDetail.customLink.forEach(link => {
+                  addCustomLinkInput(link.title, link.link);
+              });
+          }
+        }
+        function addCustomLinkInput(title = '', link = '') {
+            linkCounter++;
+            const linkId = `customLink_${linkCounter}`;
+            const html = `<div class="col-12 mb-3" id="${linkId}">
+            <div class="form-group d-flex align-items-center">
+                <label class="tt-label mr-2 col-2">Tên link</label>
+                <input class="form-control raw mr-2 col-3 customLinkTitle"
+                       placeholder="Nhập tên link"
+                       value="${title}"
+                       type="text" />
+                <label class="tt-label mr-2 col-1">Link</label>
+                <input class="form-control raw mr-2 customLinkUrl"
+                       placeholder="Nhập link"
+                       value="${link}"
+                       type="text" />
+                <button type="button" class="btn btn-danger" onclick="removeCustomLink(${linkCounter})">Xóa</button>
+            </div>
+        </div>`;
+            $("#CardCustomLinks").append(html);
+
+                let customLink = {
+                    id: linkId,
+                    title: title,
+                    link: link
+            };
+            objCustomLink.push(customLink);
+
+
+
+            $(`#${linkId} .customLinkTitle`).on('input', function () {
+                objCustomLink.find(link => link.id === linkId).title = $(this).val();
+            });
+
+            $(`#${linkId} .customLinkUrl`).on('input', function () {
+                objCustomLink.find(link => link.id === linkId).link = $(this).val();
+            });
+        }
+        function removeCustomLink(linkCounter){
+            $(`#customLink_${linkCounter}`).remove();
+            objCustomLink = objCustomLink.filter(link => link.id !== `customLink_${linkCounter}`);
+        }
+        function ApplyDiscountCode() {
+            let discountCode = $("#DiscountCode").val();
+            if (discountCode.length == 10 && /^[a-zA-Z0-9]+$/.test(discountCode)) {
+                $.ajax({
+                    url: actionUrl + 'ApplyDiscountCode',
+                    method: 'POST',
+                    data: {
+                        price: $("#Price").val(),
+                        discountCode: $("#DiscountCode").val(),
+                    },
+                    success: function (response) {
+                        if (!response.isError) {
+                            ConvertNumberToMoneyOrder('Price', response.data);
+                            AlertToast('Thông báo', "Thành công", 'success')
+                        }
+                        else {
+                            AlertToast('Thông báo', response.messError, 'error')
+                        }
+                    },
+                    error: function (err) {
+                        AlertToast('Thông báo', "Thất bại", 'error')
+                    }
+                })
+            }
+            else {
+                AlertToast('Thông báo', "Mã giảm giá không hợp lệ", 'error')
+            }
+        }
+    </script>
+}
+

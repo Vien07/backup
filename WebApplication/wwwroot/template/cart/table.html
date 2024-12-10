@@ -1,0 +1,49 @@
+﻿<div class="row cart--item">
+    <div class="cell cell-del">
+        <a onclick="deleteItemInCart('{{id}}')" class="btn-del" alt="Xóa" title="Xóa"><span class="fal fa-times"></span></a>
+    </div>
+    <div class="cell cell-img">
+        <div class="thumb-res square">
+            <img alt="{{picture}}" src="{{picture}}">
+        </div>
+    </div>
+    <div class="cell cell-info">
+        <div class="tt fw-medium">{{title}}</div>
+        <div class="row gy-3 align-items-center">
+            <div class="col-4">
+                <div class="info">
+                    Màu
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="color">
+                    <span class="ball" style="--color-ball:{{colorCode}};"></span>{{color}}
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="info">
+                    Kích thước
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="size">
+                    {{option}}
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="info">
+                    Số lượng
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-quantity">
+                    <input class="form-control" type="text" value="{{quantity}}">
+                    <a onclick="downQuant('{{id}}')" class="control-down fa fa-minus" role="button"></a>
+                    <a onclick="upQuant('{{id}}')" class="control-up fa fa-plus" role="button"></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{htmlPrice}}
+</div>

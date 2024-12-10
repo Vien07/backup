@@ -1,0 +1,443 @@
+﻿@using CMS.Services.TranslateServices;
+@using System.Web
+@using CMS.Services
+@using DTO.News;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    NewsDto data = ViewBag.Data as NewsDto;
+    string content = HttpUtility.UrlDecode(data.Content);
+    string description = Convert.ToString(data.Description);
+    List<NewsDto> relateList = ViewBag.RelateList as List<NewsDto>;
+    var url = Context.Request.Host.Value;
+    var share = url + _translate.GetUrl("url.news") + data.Slug + ".html";
+    string banner = ViewBag.Banner as string;
+    List<NewsCateDto> listCate = ViewBag.Cate as List<NewsCateDto>;
+    string[] listTagkey = data.TagKey.Split(",");
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+
+}
+
+@section Banner{
+
+}
+
+<div class="container pb-3 pt-5">
+    <div class="text-center mb-3">
+        <div class="tt-lg text-uppercase mb-0">Sản phẩm</div>
+        <nav arial-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item">
+                    <a href="index.html" title="" alt="" target="_self">
+                        Trang
+                        chủ
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="products.html" title="" alt="" target="_self">
+                        Sản
+                        phẩm
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">Doritos</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="block-bg my-3">
+        <div class="row brief mb-2">
+            <div class="col-slide col-md-6 mb-0 mb-md-4">
+                <div class="carousel-wrapper">
+                    <div class="carousel-main-o">
+                        <div class="carousel-main carousel carousel-product">
+                            <div class="carousel-cell">
+                                <a class="thumb-res square mb-0"
+                                   href="css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png" title="" alt=""
+                                   target="_self" data-fancybox="pd">
+                                    <img src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png"
+                                         alt="" />
+                                </a>
+                            </div>
+                            <div class="carousel-cell">
+                                <a class="thumb-res square mb-0"
+                                   href="css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png" title="" alt=""
+                                   target="_self" data-fancybox="pd">
+                                    <img src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png"
+                                         alt="" />
+                                </a>
+                            </div>
+                            <div class="carousel-cell">
+                                <a class="thumb-res square mb-0"
+                                   href="css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png" title="" alt=""
+                                   target="_self" data-fancybox="pd">
+                                    <img src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png"
+                                         alt="" />
+                                </a>
+                            </div>
+                            <div class="carousel-cell">
+                                <a class="thumb-res square mb-0"
+                                   href="css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png" title="" alt=""
+                                   target="_self" data-fancybox="pd">
+                                    <img src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png"
+                                         alt="" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="group-info-carousel d-flex align-items-center">
+                            <a class="btn btn-next-previous button--previous" alt="" title=""
+                               href="javascript:void(0)"><span class="far fa-angle-left"></span></a>
+                            <span class="slide-present"></span>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="50%"
+                                     aria-valuemin="0" aria-valuemax="100" style="width:50%;">
+                                </div>
+                            </div>
+                            <span class="numb-slide"></span>
+                            <a class="btn btn-next-previous button--next" alt="" title=""
+                               href="javascript:void(0)"><span class="far fa-angle-right"></span></a>
+                        </div>
+                    </div>
+                    <div class="carousel-nav-wrap">
+                        <div class="carousel-nav ">
+                            <div class="carousel-cell">
+                                <div class="thumb-res square mb-0 is-nav-selected">
+                                    <img class="fit-cover"
+                                         src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="carousel-cell">
+                                <div class="thumb-res square mb-0">
+                                    <img class="fit-cover"
+                                         src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="carousel-cell">
+                                <div class="thumb-res square mb-0">
+                                    <img class="fit-cover"
+                                         src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png" alt="" />
+                                </div>
+                            </div>
+                            <div class="carousel-cell">
+                                <div class="thumb-res square mb-0">
+                                    <img class="fit-cover"
+                                         src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-social-share my-2">
+                        <a class="btn btn-facebook btn-social"><span class="fab fa-facebook-f"></span></a>
+                        <a class="btn btn-twitter btn-social"><span class="fab fa-twitter"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-info col-md-6 mb-4 pl-xl-4">
+                <div class="tt text-tiny mb-0  fw-normal">
+                    <span class="mr-2">#Sản phẩm mới</span><span class="mr-2">#Sản phẩm sale</span><span class="mr-2">#Sản phẩm hot</span>
+                </div>
+                <h2 class="tt-lg mb-0 txt-body">DORITOS</h2>
+                <div class="msp text-tiny fs-14 ">
+                    Mã sản phẩm: <span class="text-uppercase">01147</span>
+                </div>
+                <div class="price my-3 fw-semibold tt-xs">
+                    29.000.000<u>đ</u><del>30.000.000<u>đ</u></del>
+                </div>
+                <div class="subinfo my-3">
+                    <div class="d-tb-row">
+                        <div class="text-label fw-semibold">Size:</div>
+                        <div class="name-brands text-sub">&ovbar;800x750 (mm)</div>
+                    </div>
+                    <div class="d-tb-row">
+                        <div class="text-label fw-semibold">Chất liệu:</div>
+                        <div class="desc">
+                            Chân Inox màu gold, tay gỗ, bọc vải, nệm ngồi tháo rời
+                        </div>
+                    </div>
+                    <div class="d-tb-row">
+                        <div class="text-label fw-semibold">Kích thước:</div>
+                        <div class="text-sub">
+                            <div class="size">1600 x 750 x 600 mm</div>
+                        </div>
+                    </div>
+                    <div class="d-tb-row">
+                        <div class="text-label fw-semibold">Màu sắc:</div>
+                        <div class="d-flex flex-wrap text-sub">
+                            <a id="color1" role="button" class="color-item allcolor active"
+                               style="background-image: url('/css/skin/color/images.png');"
+                               data-color="1"><span class="fa fa-check"></span></a>
+                            <a id="color2" role="button" class="color-item allcolor "
+                               style="background-image: url('/css/skin/color/418e1a67a6ff452f43a39a4d913dc540.jpg');"
+                               data-color="2"><span class="fa fa-check"></span></a>
+                        </div>
+                    </div>
+                    <div class="d-tb-row">
+                        <div class="text-label fw-semibold">Số lượng:</div>
+                        <div class="d-flex flex-wrap text-sub">
+                            <div class="form-quantity">
+                                <input class="form-control" type="text" value="1"><a class="control-down fa fa-minus" role="button"></a><a class="control-up fa fa-plus" role="button"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-button my-3">
+                        <div class="d-flex flex-wrap gap-3">
+                            <button type="button" class="btn btn-add-cart">Thêm vào giỏ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="block-bg my-3">
+        <div class="container py-2">
+            <div class="container container-w-50 py-2">
+                <div class="nav-nowrap">
+                    <div class="nav nav-tab-detail">
+                        <a class="nav-link active tt-icon" href="#tab01"
+                           title="" alt="" target="_self" data-bs-toggle="tab" area-selected="true">
+                            Mô
+                            tả
+                        </a><a class="nav-link tt-icon" href="#tab02" title="" alt="" target="_self"
+                               data-bs-toggle="tab" area-selected="false">Vận chuyển</a>
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="tab01">
+                        <div class="content-ellips clearfix text-justify textover" id="toggleContent">
+                            <div class="gradient"></div>
+                            <div>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis sit enim
+                                    faucibus vivamus lorem. Vitae nunc, molestie elit scelerisque. Dolor,
+                                    nunc massa fermentum ac, eget morbi neque. Vestibulum, vitae, tempus
+                                    eget nibh amet facilisis cras in.
+                                </p>
+                                <p>
+                                    Nec egestas odio rutrum platea auctor imperdiet. Pulvinar gravida sed
+                                    facilisis diam malesuada quam. Vel, nullam enim, nisl nisi, elit
+                                    maecenas. Enim tortor vestibulum, vel, dignissim quam enim, nibh etiam
+                                    arcu. Feugiat et, eget id maecenas ultricies. Scelerisque ut sapien,
+                                    diam scelerisque nec, mollis. Parturient ullamcorper urna ut dignissim.
+                                    Et gravida eleifend mauris lobortis. Facilisis viverra proin amet,
+                                    egestas enim. Aenean etiam massa donec malesuada neque. Scelerisque quam
+                                    aliquam risus felis nec aliquam. Sodales nunc eu pellentesque in arcu
+                                    purus. Morbi in egestas tincidunt nisl. Accumsan tristique quisque duis
+                                    leo a dignissim pulvinar diam.
+                                </p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="tab02">
+                        <div class="text-justify clearfix">
+                            <ul>
+                                <li>Khách hàng đến kho lựa hàng trực tiếp để chọn món hàng cần mua.</li>
+                                <li>Tất cả các mặt hàng có hình trên web là có ở kho.</li>
+                                <li>Hàng điện máy tại thanh lý hàng cũ Anh Shop bao test 1 tuần, riêng máy lạnh bảo hành 1 tháng, không bao vật tư (ống đồng, dây điện, bơm ga).</li>
+                                <li>Tất cả các mặt hàng có hình trên web là có ở kho.</li>
+                                <li>Các mẫu sản phẩm bàn ghế thanh lý có lẽ bộ mới cũ khác nhau bạn có thể tự do lựa chọn</li>
+                                <li>Mọi thắc mắc khác vui lòng liên hệ trực tiếp bộ phận bán hàng để được tư vấn.</li>
+                                <li>Tất cả các mặt hàng bán theo giá niêm yết chưa bao gồm vận chuyển và lắp đặt.</li>
+                                <li>Chúng tôi có dịch vụ vận tải hàng hóa trên toàn quốc giao hàng tận tay khách hàng với giá cả tốt nhất(được thẩm định giá bởi Anh Shop)</li>
+                                <li>Lịch trình giao hàng đối với vũng tàu và các tĩnh thành lân cận.</li>
+                                <li> Vũng tàu giao hàng trong vong 48 h kể từ khi nhận đơn hàng.</li>
+                                <li>Công thức tính hàng cồng kềnh (m): (Dài x Rộng x Cao) x 0,0003 = Số kg tương ứng.</li>
+                                <li>Các tỉnh khác vui lòng xem bài vận chuyển đảm bảo của dịch vụ.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block-bg py-5">
+        <div class="tt-md tt-icon txt-body">Sản phẩm tương tự</div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 list-products my-1 g-3">
+            <div class="col wow fadeIn">
+                <div class="block h-100">
+                    <a class="absolute" alt="" href="products-detail.html" title=""></a>
+                    <div class="thumb-res square">
+                        <img src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png">
+                        <div class="group-badge">
+                            <div class="badge badge-new">NEW</div>
+                            <div class="badge badge-hot">HOT</div>
+                            <div class="badge badge-sale">-15%</div>
+                        </div>
+                        <div class="overlay-blur">
+                            <div class="info">
+                                <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="tt fw-normal">Magnetic Paper Clip</div>
+                        <div class="price">29.000.000<u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col wow fadeIn">
+                <div class="block h-100">
+                    <a class="absolute" alt="" href="products-detail.html" title=""></a>
+                    <div class="thumb-res square">
+                        <img src="/css/skin/products/AUGUSTA DOIMO - CADEIRA TECNO.png">
+                        <div class="group-badge d-none">
+                            <div class="badge bagde-new">NEW</div>
+                            <div class="badge bagde-hot">HOT</div>
+                            <div class="badge bagde-sale">-15%</div>
+                        </div>
+                        <div class="overlay-blur">
+                            <div class="info">
+                                <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="tt fw-normal">Moroccan Spiced Chickpea Tagine Chickpea Tagine</div>
+                        <div class="price">29.000.000<u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col wow fadeIn">
+                <div class="block h-100">
+                    <a class="absolute" alt="" href="products-detail.html" title=""></a>
+                    <div class="thumb-res square">
+                        <img src="/css/skin/products/DELINEAR - CADEIRA ADELE.png">
+                        <div class="group-badge d-none">
+                            <div class="badge bagde-new">NEW</div>
+                            <div class="badge bagde-hot">HOT</div>
+                            <div class="badge bagde-sale">-15%</div>
+                        </div>
+                        <div class="overlay-blur">
+                            <div class="info">
+                                <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="tt fw-normal">Cantina Castelnuovo del Garda Bardolino Castelnuovo</div>
+                        <div class="price">29.000.000<u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col wow fadeIn">
+                <div class="block h-100">
+                    <a class="absolute" alt="" href="products-detail.html" title=""></a>
+                    <div class="thumb-res square">
+                        <img src="/css/skin/products/DELINEAR - CADEIRA ALAMEDA.png">
+                        <div class="group-badge d-none">
+                            <div class="badge bagde-new">NEW</div>
+                            <div class="badge bagde-hot">HOT</div>
+                            <div class="badge bagde-sale">-15%</div>
+                        </div>
+                        <div class="overlay-blur">
+                            <div class="info">
+                                <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="tt fw-normal">Donnafugata Lighea</div>
+                        <div class="price">29.000.000<u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col wow fadeIn">
+                <div class="block h-100">
+                    <a class="absolute" alt="" href="products-detail.html" title=""></a>
+                    <div class="thumb-res square">
+                        <img src="/css/skin/products/AUGUSTA DOIMO - CADEIRA ALE.png">
+                        <div class="group-badge">
+                            <div class="badge badge-new">NEW</div>
+                            <div class="badge badge-hot">HOT</div>
+                            <div class="badge badge-sale">-15%</div>
+                        </div>
+                        <div class="overlay-blur">
+                            <div class="info">
+                                <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="tt fw-normal">Magnetic Paper Clip</div>
+                        <div class="price">29.000.000<u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col wow fadeIn">
+                <div class="block h-100">
+                    <a class="absolute" alt="" href="products-detail.html" title=""></a>
+                    <div class="thumb-res square">
+                        <img src="/css/skin/products/AUGUSTA DOIMO - CADEIRA TECNO.png">
+                        <div class="group-badge d-none">
+                            <div class="badge bagde-new">NEW</div>
+                            <div class="badge bagde-hot">HOT</div>
+                            <div class="badge bagde-sale">-15%</div>
+                        </div>
+                        <div class="overlay-blur">
+                            <div class="info">
+                                <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="tt fw-normal">Moroccan Spiced Chickpea Tagine Chickpea Tagine</div>
+                        <div class="price">29.000.000<u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col wow fadeIn">
+                <div class="block h-100">
+                    <a class="absolute" alt="" href="products-detail.html" title=""></a>
+                    <div class="thumb-res square">
+                        <img src="/css/skin/products/DELINEAR - CADEIRA ADELE.png">
+                        <div class="group-badge d-none">
+                            <div class="badge bagde-new">NEW</div>
+                            <div class="badge bagde-hot">HOT</div>
+                            <div class="badge bagde-sale">-15%</div>
+                        </div>
+                        <div class="overlay-blur">
+                            <div class="info">
+                                <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="tt fw-normal">Cantina Castelnuovo del Garda Bardolino Castelnuovo</div>
+                        <div class="price">29.000.000<u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col wow fadeIn">
+                <div class="block h-100">
+                    <a class="absolute" alt="" href="products-detail.html" title=""></a>
+                    <div class="thumb-res square">
+                        <img src="/css/skin/products/DELINEAR - CADEIRA ALAMEDA.png">
+                        <div class="group-badge d-none">
+                            <div class="badge bagde-new">NEW</div>
+                            <div class="badge bagde-hot">HOT</div>
+                            <div class="badge bagde-sale">-15%</div>
+                        </div>
+                        <div class="overlay-blur">
+                            <div class="info">
+                                <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="tt fw-normal">Donnafugata Lighea</div>
+                        <div class="price">29.000.000<u>đ</u></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

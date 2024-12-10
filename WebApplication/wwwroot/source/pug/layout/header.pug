@@ -1,0 +1,82 @@
+block headder
+    header.header
+        nav.topnav
+            .container.d-flex
+                .col-right
+                    .topnav-item.dd-hover.dd-language
+                        .dd-toggle
+                            span.text-label Tiếng việt
+                            i.far.fa-angle-down.ml-2
+                        .dd-menu
+                            a.dd-item(href="#" title="" alt="")
+                                i.flag.rounded-circle.block-bg.vi(style="background-image:url('css/skin/vietnam.png')")
+                                | Tiếng việt
+                            a.dd-item(href="#" title="" alt="")
+                                i.flag.rounded-circle.block-bg.en(style="background-image:url('css/skin/us.png')")
+                                | Tiếng anh
+                    .topnav-item
+                        +a("help.html", "", "Trợ giúp")
+        .header-main    
+            .container.d-flex
+                button.btn-menu.btn-menu-slide.fa.fa-bars(role="button")
+                    b Menu
+                a.logo(href="index.html" title="" alt=""): img(src="css/skin/logo.png" alt="")
+                .header-right.d-flex
+                    .form-search
+                        button.toggle-form-search.fa.fa-times
+                        .form-group.m-0
+                            .block
+                                input(type="text" class="form-control" placeholder="Nhập từ khóa tìm kiếm")
+                                button(type="submit" class="addon icon-submit far fa-search")
+                            //- .dropdown-sug
+                            //-     .item
+                            //-         .thumb: img(src="css/skin/products/1.jpg" alt="")
+                            //-         .info
+                            //-             .tt De Ville Prestige Automatic Men's Watch 424.13.40.21.03.002
+                            //-     .item
+                            //-         .thumb: img(src="css/skin/products/1.jpg" alt="")
+                            //-         .info
+                            //-             .tt De Ville Automatic Silver Dial Men's Watch 424.13.40.20.02.006
+                    .header-right-item.search-item
+                        button.icon.toggle-form-search.bi.bi-search
+                    .header-right-item.wishlist
+                        +a('wishlist.html', 'icon-item')
+                            span.icon.bi.bi-heart 
+                            .title Wishlist
+                    .header-right-item.dd-hover.dropdown-user
+                        .dd-toggle.icon-item
+                            span.icon.bi.bi-person-circle
+                            .title Tài khoản!{'<i class="far fa-angle-down ml-1"></i>'}
+                        if login
+                            .dd-menu 
+                                .dd-item.disabled.border-bottom Hello,  !{' <span class="fw-semibold">Tư Mã Ý</span>'}
+                                a.dd-item(href="wishlist.html" title="" alt="")
+                                    i.far.fa-book
+                                    | Sách đã lưu
+                                a.dd-item(href="account.html" title="" alt="")
+                                    i.far.fa-cog
+                                    | Cài đặt tài khoản
+                                a.dd-item(href="index.html" title="" alt="")
+                                    i.far.fa-sign-out-alt
+                                    | Đăng Xuất
+                        else
+                            .dd-menu
+                                a.dd-item(href="login.html" title="" alt="")
+                                    i.far.fa-lock
+                                    | Đăng nhập
+                                a.dd-item(href="register.html" title="" alt="")
+                                    i.far.fa-key
+                                    | Đăng ký
+                                .divider
+                                .text-muted.text-sm.text-center.mb-2.fs-13 Hoặc sử dụng tài khoản
+                                .d-grid.px-3
+                                    +a('#', 'btn mb-2 btn-facebook')
+                                        i.fab.fa-facebook-square.mr-2 
+                                        | Facebook
+                                    +a('#', 'btn mb-2 btn-google')
+                                        i.fab.fa-google.mr-2 
+                                        | Google                 
+        block menu
+            if navigate
+                include menu 
+                

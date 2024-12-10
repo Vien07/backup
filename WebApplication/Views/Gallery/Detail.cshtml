@@ -1,0 +1,212 @@
+﻿@using CMS.Services.TranslateServices;
+@using System.Web
+@using CMS.Services;
+@using DTO.Gallery;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    GalleryDto data = ViewBag.Data as GalleryDto;
+    //string content = HttpUtility.UrlDecode(data.Content);
+    //string description = Convert.ToString(data.Description);
+    //List<GalleryDto> relateList = ViewBag.RelateList as List<GalleryDto>;
+    //var url = Context.Request.Host.Value;
+    //var share = url + _translate.GetUrl("url.gallery") + data.Slug + ".html";
+    string banner = ViewBag.Banner as string;
+    //List<GalleryCateDto> cateList = ViewBag.CateList as List<GalleryCateDto>;
+    string[] listTagkey = data.TagKey.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    //string[] listSlugTagkey = data.SlugTagKey.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    //List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex align-items-center h-100">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(data.CateName)</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))"
+                               title="@Html.Raw(_translate.GetString("menu.home"))"
+                               alt="@Html.Raw(_translate.GetString("menu.home"))"
+                               target="_self">
+                                @Html.Raw(_translate.GetString("menu.home"))
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a href="@Html.Raw(_translate.GetUrl("url.gallery"))"
+                               title="@Html.Raw(_translate.GetString("menu.gallery"))"
+                               alt="@Html.Raw(_translate.GetString("menu.gallery"))"
+                               target="_self">
+                                @Html.Raw(_translate.GetString("menu.gallery"))
+                            </a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+
+<section class="block-bg">
+    <div class="container py-5 py-xl-6">
+        <div class="content-master w-xl-90 mx-auto">
+            <h2 class="tt-lg text-center text-uppercase">
+                @Html.Raw(data.Title)
+            </h2>
+            @if (!string.IsNullOrEmpty(data.VideoLink))
+            {
+                //Video
+                <div class="thumb-res iframe w-lg-90 mx-auto">
+                    <iframe width="560"
+                            height="315"
+                            src="@Html.Raw(data.VideoLink)"
+                            title="@Html.Raw(data.Title)"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                            loading="lazy">
+                    </iframe>
+                </div>
+            }
+            else
+            {
+                @if (data.ImageList.Any())
+                {
+                    @if (ViewBag.HowImageListShow == "slide")
+                    {
+                        <!-- Slider Detail -->
+                        <div class="album-detail-slider-o">
+                            <div class="album-detail-slider">
+                                @foreach (var item in data.ImageList)
+                                {
+                                    <div class="carousel-cell">
+                                        <a class="thumb-res wide mb-4"
+                                           alt="@Html.Raw(!string.IsNullOrEmpty(item.Value) ? item.Value : data.Title)"
+                                           title="@Html.Raw(!string.IsNullOrEmpty(item.Value) ? item.Value : data.Title)"
+                                           href="@Html.Raw(item.Key)"
+                                           data-caption="@Html.Raw(!string.IsNullOrEmpty(item.Value) ? item.Value : data.Title)"
+                                           data-fancybox="album01">
+                                            <img class="fit-cover"
+                                                 src="@Html.Raw(item.Key)" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                            <div class="container container-numb absolute d-flex align-items-end">
+                                <div class="numb-slide">
+                                    <span class="fw-bold fs-20">01</span>/06
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (ViewBag.HowImageListShow == "scroll" && ViewBag.PositionImageListShow == "top")
+                    {
+                        <!-- List Detail -->
+                        <div class="album-detail-slider-o">
+                            <div class="album-detail-wrapper">
+                                @foreach (var item in data.ImageList)
+                                {
+                                    <div class="block">
+                                        <figure>
+                                            <img src="@Html.Raw(item.Key)" />
+                                            <figcaption>@Html.Raw(item.Value)</figcaption>
+                                        </figure>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+
+            }
+
+
+            <div class="content-post w-md-75 w-lg-50 mx-auto mb-4">
+                <p style="color: #65635f">
+                    <strong>
+                        @Html.Raw(data.Description)
+                    </strong>
+                </p>
+                @Html.Raw(data.Content)
+            </div>
+            @if (ViewBag.HowImageListShow == "scroll" && ViewBag.PositionImageListShow == "bottom")
+            {
+                <!-- List Detail -->
+                <div class="album-detail-slider-o">
+                    <div class="album-detail-wrapper">
+                        @foreach (var item in data.ImageList)
+                        {
+                            <div class="block">
+                                <figure>
+                                    <img src="@Html.Raw(item.Key)" />
+                                    <figcaption>@Html.Raw(item.Value)</figcaption>
+                                </figure>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            @if (listTagkey.Any())
+            {
+                <div class="block-tagList w-md-75 w-lg-50 mx-auto">
+                    <span class="text-label tt-xs mb-2">Tags:</span>
+                    <ul class="list-tag">
+                        @foreach (var item in listTagkey)
+                        {
+                            <li>
+                                <a class="tag-link"
+                                   alt="@Html.Raw(item)"
+                                   title="@Html.Raw(item)"
+                                   href="javascript:void(0)"
+                                   onclick="SearchTag('@Html.Raw(item)')">
+                                    @Html.Raw(item)
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+    </script>
+}

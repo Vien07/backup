@@ -1,0 +1,177 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using DTO;
+
+@inject ITranslateServices _translate
+@inject ICommonServices _common
+
+<div class="row rowPageCRUD">
+    <div class="col-12">
+        <section class="hk-sec-wrapper">
+            <div class="form-group">
+                <label class="mb-1 text-primary" for="Title">@_translate.GetStringAdmin("label.title")</label>
+                <input class="form-control raw" id="Title" name="Title" placeholder="@_translate.GetStringAdmin("placeholder.title")" required value="" type="text">
+            </div>
+            <div class="form-group">
+                <label class="mb-1 text-primary" for="Description">@_translate.GetStringAdmin("label.short-description")</label>
+                <textarea class="form-control raw" id="Description" name="Description" rows="5" placeholder="@_translate.GetStringAdmin("placeholder.short-description")"></textarea>
+                <small class="form-text text-muted">Mô tả ngắn cho bài viết và không quá 200 từ.</small>
+            </div>
+            <div class="form-group">
+                <div hidden class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="d-block mb-1 text-primary">@_translate.GetStringAdmin("label.cate")</label>
+                            <select multiple plac id="RecruitmentCatePid" name="RecruitmentCatePid" class="form-control custom-select d-block w-100">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Nơi làm việc</label>
+                            <input type="text" class="form-control" id="WorkPlace" name="WorkPlace" placeholder="Nơi làm việc">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Hình thức</label>
+                            <input type="text" class="form-control" id="Type" name="Type" placeholder="Hình thức">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Kinh nghiệm</label>
+                            <input type="text" class="form-control" id="Exp" name="Exp" placeholder="Kinh nghiệm">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Cấp bậc</label>
+                            <input type="text" class="form-control" id="Rank" name="Rank" placeholder="Cấp bậc">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Ngành nghề</label>
+                            <input type="text" class="form-control" id="Job" name="Job" placeholder="Ngành nghề">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Mức lương</label>
+                            <input type="text" class="form-control" id="Salary" name="Salary" placeholder="Mức lương">
+                        </div>
+                    </div>
+                    <div hidden class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary">Số lượng</label>
+                            <input type="number" class="form-control" id="Amount" name="Amount" placeholder="Số lượng">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary" for="PublishDate">@_translate.GetStringAdmin("Ngày bắt đầu")</label>
+                            <div class="form-group position-relative">
+                                <input id="PublishDate" name="PublishDate" type="text" class="form-control datetimepicker-control" placeholder="Choose Date">
+                                <span class="position-absolute far fa-calendar-alt" style="top: 9px; right: 12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary" for="ExpireDate">@Html.Raw("Ngày kết thúc")</label>
+                            <div class="form-group position-relative">
+                                <input id="ExpireDate" name="ExpireDate" type="text" class="form-control datetimepicker-control" placeholder="Choose Date">
+                                <span class="position-absolute far fa-calendar-alt" style="top: 9px; right: 12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="my-3">
+                <label class="mb-1 text-primary">@_translate.GetStringAdmin("label.content")</label>
+                <div class="row">
+                    <div class="col-sm">
+                        <textarea class="raw" id="Content"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mb-0">
+                <div class="row">
+                    @if (_common.GetConfigValue(ConstantStrings.KeySEOConfig) == "on")
+                    {
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="mb-1 text-primary" for="TitleSEO">SEO Title</label>
+                                <input class="form-control raw" id="TitleSEO" name="TitleSEO" placeholder="nhập SEO title" value="" type="text">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="mb-1 text-primary" for="DescriptionSEO">SEO Description</label>
+                                <input class="form-control raw" id="DescriptionSEO" name="DescriptionSEO" placeholder="nhập SEO description" value="" type="text" />
+                            </div>
+                        </div>
+                    }
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary" for="TagKey">@_translate.GetStringAdmin("label.tag-key")</label>
+                            <input class="form-control raw" id="TagKey" name="TagKey" placeholder="@_translate.GetStringAdmin("placeholder.tag-key")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+    <div hidden class="col-12 col-md-5 col-sub">
+        <section class="hk-sec-wrapper avatarWrapper px-0 py-0">
+            <div class="hk-sec-title font-17 text-body p-3 border-bottom mb-0">
+                @_translate.GetStringAdmin("label.avatar")
+            </div>
+            <div class="hk-sec-body p-3">
+                <div>
+                    <div class="avatar avatar-lg" id="">
+                        <img id="imgPicThumb" src="/b-admin/dist/img/avatar3.jpg" alt="Images" class="avatar-img rounded">
+                    </div>
+                    <div class="form-group mb-0">
+                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                            <div class="form-control text-truncate" data-trigger="fileinput">
+                                <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                <span class="fileinput-filename"></span>
+                            </div>
+                            <span class="input-group-append">
+                                <span class="btn btn-primary btn-file">
+                                    <span class="fileinput-new">@_translate.GetStringAdmin("label.choose-file")</span>
+                                    <span class="fileinput-exists">@_translate.GetStringAdmin("label.change")</span>
+                                    <input onchange="readURLImage(this,'#imgPicThumb',0);" type="file" name="Images">
+                                </span>
+                                <a role="button" href="#" onclick="ClearImagesImage('#imgPicThumb')" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">@_translate.GetStringAdmin("label.delete")</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section hidden class="hk-sec-wrapper px-0 py-0">
+            <div class="hk-sec-title font-17 text-body p-3 border-bottom mb-0">
+                Thư viện ảnh
+            </div>
+            <div class="hk-sec-body p-3">
+                <div class="form-group">
+                    <form action="#" style="min-height: 50px !important" class="dropzone dz-clickable" id="dropzoneImages">
+                        <div class="dz-default dz-message text-center">
+                            <span>Drop files here to upload</span>
+                        </div>
+                    </form>
+                    <button type="button" onclick="UploadImages()" class="btn btn-circle mt-2 w-100">
+                        <i class="far fa-upload"></i> Upload
+                    </button>
+                </div>
+                <div class="form-group mb-0" id="listImagesUpload"></div>
+            </div>
+        </section>
+    </div>
+</div>

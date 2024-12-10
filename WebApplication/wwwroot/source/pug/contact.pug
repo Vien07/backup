@@ -1,0 +1,62 @@
+extends template/template
+block vars
+	- title= 'Liên hệ'
+	- wrapperClass = ''
+	- menuActive = ''
+	- homeSlider = false
+	- bannerAll = false
+	- breadcrumb = true
+	- navigate = false
+
+block breadcrumb 
+	+breadcrumb('container', {})
+block mainer
+	main.mainer
+		.container
+			section.banner-main.block-bg.d-flex.align-items-center.mb-5(style="background-image:url('css/skin/theme/block-01.jpg')")
+				.text-banner
+					.tt-lg.fw-semibold Yêu cầu Hỗ trợ trực tuyến
+			.row
+				.col-md-6.mb-4.order-md-2.pl-xl-5
+					.tt-xs.text-uppercase.mb-2 Thông tin liên hệ
+					.d-width.mb-4.bg-danger(width="30" height="4")
+					.tt.text-uppercase=companyName
+					+contact_info()
+					.fw-semibold.fs-13.text-uppercase.text-muted.mt-4 Theo dõi chúng tôi trên
+					+list_social('mt-1')
+
+				.col-md-6.mb-4.order-md-1
+					.tt-xs.text-uppercase.mb-2 Form liên hệ
+					.d-width.mb-4.bg-danger(width="30" height="4")
+					form.form-validate.material-form
+						.row.gx-3
+							.col-lg-6    
+								.form-group.mb-3
+									input.form-control(type="text" required)
+									label.label-text Tên của bạn
+							.col-lg-6    
+								.form-group.mb-3
+									input.form-control(type="tel")
+									label.label-text Điện thoại
+							.col-lg-6    
+								.form-group.mb-3
+									input.form-control(type="email" required)
+									label.label-text Email
+							.col-lg-6    
+								.form-group.mb-3
+									input.form-control(type="text" required)
+									label.label-text Tiêu đề
+							.col-12  
+								.form-group.mb-3
+									textarea.form-control(rows="5" required)
+									label.label-text Nội dung
+							.col-12.text-center
+								.d-flex.flex-wrap.align-items-center
+									div(class="g-recaptcha my-2 mr-3" data-sitekey="6LcbK98UAAAAALQI9rCCE3Vlm5LZtCt_Fdo7V4Wc")
+									input(type="submit" class="btn btn-primary px-4" value="Gửi liên hệ")
+
+			.map#map
+				+map('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.055460496474!2d106.70705681531172!3d10.80706436158133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175293327f7fcb3%3A0x6a12977221e9092!2zQml6TWFDIC0gVGhp4bq_dCBr4bq_IHdlYnNpdGUgRG9hbmggbmdoaeG7h3A!5e0!3m2!1svi!2s!4v1629428400576!5m2!1svi!2s')
+
+			script(src="https://www.google.com/recaptcha/api.js")
+			+validateJs()

@@ -1,0 +1,461 @@
+﻿@using CmsModels;
+@using Newtonsoft.Json;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+    //List<dynamic> course = ViewBag.Course as List<dynamic>;
+    List<dynamic> news = ViewBag.News as List<dynamic>;
+    List<dynamic> product = ViewBag.Product as List<dynamic>;
+    dynamic vistitor = ViewBag.Visitor;
+    var newsCount = ViewBag.CountNews;
+    var productCount = ViewBag.CountProduct;
+    dynamic chart = ViewBag.DataChart;
+    string jsData = chart.jsData;
+    string jsDay = chart.jsDay;
+    List<string> permission = ViewBag.Permission;
+}
+
+@section styles{
+    <!-- Daterangepicker CSS -->
+    <link href="/b-admin/vendors/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+}
+
+<!-- Container -->
+<div class="container-fluid px-lg-4 mt-xl-50 mt-sm-30 mt-15">
+    <!-- Title -->
+    <div class="hk-pg-header align-items-center mt-30 mt-lg-0">
+        <h2 class="hk-pg-title font-weight-600">Dashboard</h2>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+
+    <div class="row">
+        <div class="col-xl-12">
+            <!-- Block 1 -->
+            <div class="hk-row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card card-sm bg-dark text-white rounded-4">
+                        <a href="@(permission.Contains("News") ? "/b-admin/News/" : "javascript:void(0)")" class="position-absolute top-0 bottom-0 start-0 left-0"></a>
+                        <div class="card-body p-0">
+                            <div class="d-flex">
+                                <div class="avatar icon d-flex align-items-center justify-content-center">
+                                    <!-- Nếu cái này là dự án -->
+                                    <!-- <i class="icon-layers"></i> -->
+                                    <!-- Nếu là tin tức -->
+                                    <i class="far fa-newspaper"></i>
+                                </div>
+                                <div class="p-3">
+                                    <span class="d-block display-5 text-dark">@Html.Raw(newsCount)</span>
+                                    <span class="d-block font-15 text-dark font-weight-500">Tin tức</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card card-sm bg-info text-white rounded-4">
+                        <a href="@(permission.Contains("Product") ? "/b-admin/Product/" : "javascript:void(0)")" class="position-absolute top-0 bottom-0 start-0 left-0"></a>
+                        <div class="card-body p-0">
+                            <div class="d-flex">
+                                <div class="avatar icon d-flex align-items-center justify-content-center">
+                                    <!-- Nếu cái này là dịch vụ -->
+                                    <!-- <i class="far fa-cog"></i> -->
+                                    <!-- Nếu là tin tức -->
+                                    <i class="far fa-box"></i>
+                                </div>
+                                <div class="p-3">
+                                    <span class="d-block display-5 text-dark">@Html.Raw(productCount)</span>
+                                    <span class="d-block font-15 text-dark font-weight-500">Sản phẩm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card card-sm bg-warning text-white rounded-4">
+                        <div class="card-body p-0">
+                            <div class="d-flex">
+                                <div class="avatar icon d-flex align-items-center justify-content-center">
+                                    <i class="far fa-user"></i>
+                                </div>
+                                <div class="p-3">
+                                    <span class="d-block display-5 text-dark">@Html.Raw(Convert.ToString(vistitor.Online))</span>
+                                    <span class="d-block font-15 text-dark font-weight-500">Users online</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card card-sm bg-primary text-white rounded-4">
+                        <div class="card-body p-0">
+                            <div class="d-flex">
+                                <div class="avatar icon d-flex align-items-center justify-content-center">
+                                    <i class="far fa-ticket"></i>
+                                </div>
+                                <div class="p-3">
+                                    <span class="d-block display-5 text-dark">@Html.Raw(Convert.ToString(vistitor.Total))</span>
+                                    <span class="d-block font-15 text-dark font-weight-500">Lượt truy cập</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Block 3 -->
+            <div class="hk-row">
+                <div class="col-12">
+                    <div class="card rounded-4">
+                        <div class="card-header card-header-action align-items-center border-bottom py-3">
+                            <h5 id="title" class="text-uppercase text-primary">Truy cập | @(DateTime.Now.Month.ToString().Length<2?"0"+DateTime.Now.Month.ToString()+"/"+DateTime.Now.Year.ToString():DateTime.Now.Month.ToString()+"/"+DateTime.Now.Year.ToString()) (@ViewBag.CountVisitorInMonth)</h5>
+                            <div class="form-group mb-0 position-relative">
+                                <input id="PublishDate" name="PublishDate" type="text" class="form-control form-control-sm mr-30" placeholder="Chọn tháng">
+                                <span class="position-absolute far fa-calendar-alt" style="top: 8px; right: 12px;"></span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div id="e_chart_5" class="echart" style="height:294px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="card rounded-4">
+                        <div class="card-header card-header-action py-3">
+                            <!-- Có thể đổi thành Dịch vụ nổi bật -->
+                            <h5 class="text-uppercase text-primary">
+                                Top 10 Tin tức
+                            </h5>
+                        </div>
+                        <div class="card-body pa-0">
+                            <div class="table-wrap">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="py-2" width="100">Hình ảnh</th>
+                                                <th class="py-2">Tiêu đề</th>
+                                                <th class="py-2 text-center" width="120">Lượt xem</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in news)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a href="@(permission.Contains("News") ? "/b-admin/News/?editPid=" + @item.Pid : "javascript:void(0)")"
+                                                           class="avatar avatar-xs rounded"
+                                                           style="background-image: url('@item.Images');">
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="@(permission.Contains("News") ? "/b-admin/News/?editPid=" + @item.Pid : "javascript:void(0)")">
+                                                            @Html.Raw(item.Title)
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center">@Html.Raw(item.CounterView)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div hidden class="col-lg-4">
+                    <div class="card rounded-4">
+                        <div class="card-header card-header-action py-3">
+                            <!-- Có thể đổi thành Dự án nổi bật -->
+                            <h5 class="text-uppercase text-primary">
+                                Top 10 sản phẩm
+                            </h5>
+                        </div>
+                        <div class="card-body pa-0">
+                            <div class="table-wrap">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="py-2">Tiêu đề</th>
+                                                <th class="py-2 text-center" width="120">Lượt xem</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in product)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <a href="@(permission.Contains("Product") ? "/b-admin/Product/?editPid=" + @item.Pid : "javascript:void(0)")"
+                                                           class="avatar avatar-xs rounded"
+                                                           style="background-image: url('@item.Images');">
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="@(permission.Contains("Product") ? "/b-admin/Product/?editPid=" + @item.Pid : "javascript:void(0)")">
+                                                            @Html.Raw(item.Title)
+                                                        </a>
+                                                    </td>
+                                                    <td class="text-center">@Html.Raw(item.CounterView)</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+<!-- /Container -->
+@section Scripts{
+
+    <!-- DateTimePicker -->
+    <script type="text/javascript" src="/b-admin/vendors/datetimepicker/js/jquery.datetimepicker.full.min.js"></script>
+
+    <script src="/b-admin/vendors/daterangepicker/daterangepicker.js"></script>
+
+    <!-- tinyMCE -->
+    <!-- Counter Animation JavaScript -->
+    <script src="/b-admin/vendors/waypoints/lib/jquery.waypoints.min.js"></script>
+    <script src="/b-admin/vendors/jquery.counterup/jquery.counterup.min.js"></script>
+    <script src="/b-admin/vendors/echarts/dist/echarts-en.min.js"></script>
+    <script type="text/javascript">
+
+        $(function() {
+            $('input[name="PublishDate"]').daterangepicker({
+                opens: 'left',
+                "cancelClass": "btn-secondary",
+            }, function(start, end, label) {
+                GetDataChartWithDate(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+                //console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+
+            //$("#PublishDate").datetimepicker({
+            //timepicker:false,
+            //format: 'm/Y',
+            //    formatDate: 'MM yy',
+            //    value: new Date()
+            //});
+            //$('#PublishDate').change(function () {
+
+            // GetDataChart( $('#PublishDate').val())
+
+            //     });
+            var eChart_5 = echarts.init(document.getElementById('e_chart_5'));
+            var option4 = {
+                color: ['#88c241', '#97ca5a', '#c3e0a0', '#aed67e'],
+                tooltip: {
+                    show: true,
+                    trigger: 'axis',
+                    backgroundColor: '#fff',
+                    borderRadius: 6,
+                    padding: 6,
+                    axisPointer: {
+                        lineStyle: {
+                            width: 0,
+                        }
+                    },
+                    textStyle: {
+                        color: '#324148',
+                        fontFamily: '"Nunito", sans-serif',
+                        fontSize: 12
+                    }
+                },
+
+                grid: {
+                    top: '3%',
+                    left: '3%',
+                    right: '3%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: @Html.Raw(jsDay),
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#5e7d8a'
+                            }
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#5e7d8a'
+                            }
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: 'transparent',
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: moment(new Date()).format('MM/YYYY'),
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: @Html.Raw(jsData),
+                        itemStyle: {
+                            normal: {
+                                barBorderRadius: [6, 6, 0, 0],
+                            }
+                        },
+                    },
+                ]
+            };
+
+            eChart_5.setOption(option4);
+            eChart_5.resize();
+        })
+
+        function Drawchart(jsData, jsDay) {
+            var eChart_5 = echarts.init(document.getElementById('e_chart_5'));
+            var option4 = {
+                color: ['#88c241', '#97ca5a', '#c3e0a0', '#aed67e'],
+                tooltip: {
+                    show: true,
+                    trigger: 'axis',
+                    backgroundColor: '#fff',
+                    borderRadius: 6,
+                    padding: 6,
+                    axisPointer: {
+                        lineStyle: {
+                            width: 0,
+                        }
+                    },
+                    textStyle: {
+                        color: '#324148',
+                        fontFamily: '"Nunito", sans-serif',
+                        fontSize: 12
+                    }
+                },
+
+                grid: {
+                    top: '3%',
+                    left: '3%',
+                    right: '3%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: jsDay,
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#5e7d8a'
+                            }
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel: {
+                            textStyle: {
+                                color: '#5e7d8a'
+                            }
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: 'transparent',
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '',
+                        type: 'bar',
+                        barMaxWidth: 30,
+                        data: jsData,
+                        itemStyle: {
+                            normal: {
+                                barBorderRadius: [6, 6, 0, 0],
+                            }
+                        },
+                    },
+                ]
+            };
+
+            eChart_5.setOption(option4);
+            eChart_5.resize();
+        }
+        function GetDataChartWithDate(sDate, eDate) {
+            $.ajax({
+                url: "/b-admin/Dashboard/GetBarChartWithDate",
+                method: "POST",
+                data: {
+                    startDate: sDate,
+                    endDate: eDate
+                }
+            }).done(function(data) {
+                //console.log(data)
+                var jsData = JSON.parse(data.js.jsData);
+                var jsDay = JSON.parse(data.js.jsDay);
+                //console.log(jsData);
+                //console.log(jsDay);
+                Drawchart(jsData, jsDay);
+
+                $("#title").html("Truy cập từ " + moment(sDate).format("DD/MM/YYYY") + " đến " + moment(eDate).format("DD/MM/YYYY") + " (" + data.total + ")");
+            })
+        }
+                    // function GetDataChart(date) {
+                    //    $.ajax({
+                    //        url: "/b-admin/Dashboard/GetBarChart",
+                    //        method: "POST",
+                    //        data: {
+                    //            date:date
+                    //        }
+                    //    }).done(function(data){
+                    //        console.log(data)
+                    //        var jsData = JSON.parse(data.js.jsData);
+                    //        var jsDay = JSON.parse(data.js.jsDay);
+                    //        console.log(jsData);
+                    //        console.log(jsDay);
+                    //        $("#title").html("Thống kê truy cập tháng "+$('#PublishDate').val()+" (" + data.total+")");
+                    //        Drawchart(jsData, jsDay);
+                    //    })
+                    //}
+    </script>
+}
+

@@ -1,0 +1,149 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+
+<div class="rowForm">
+    <div class="images__wrapper">
+        <div class="images__main">
+            <div id="imgPicThumb" style="background-image: url('/b-admin/dist/img/avatar3.jpg');" class="avatar"></div>
+            <div class="form-group form-InputFile">
+                <label class="tt-label">@_translate.GetStringAdmin("label.avatar")</label>
+                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div id="imgPicThumbFileName" class="d-none form-control text-truncate" data-trigger="fileinput">
+                        <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                        <span class="fileinput-filename"></span>
+                    </div>
+                    <span class="input-group-append">
+                        <span class="btn btn-primary btn-file">
+                            <span class="fileinput-new">@_translate.GetStringAdmin("label.choose-file")</span>
+                            <span class="fileinput-exists">@_translate.GetStringAdmin("label.change")</span>
+                            <input onchange="readURL(this,'#imgPicThumb',0);" type="file" name="Images" />
+                        </span>
+                        <a role="button"
+                           href="#"
+                           onclick="ClearImages('#imgPicThumb')"
+                           class="btn btn-secondary fileinput-exists"
+                           data-dismiss="fileinput">@_translate.GetStringAdmin("label.delete")</a>
+                    </span>
+                </div>
+                <small class="form-text text-muted">
+                    @_translate.GetStringAdmin("label.format-images") (.gif, .png, .jpg, .jpeg)
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="group-info">
+        <div class="row">
+            <!-- Tiêu đề -->
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label class="tt-label">@_translate.GetStringAdmin("homepage.lbl-title")</label>
+                    <input class="form-control raw"
+                           id="Title"
+                           name="Title"
+                           placeholder="@_translate.GetStringAdmin("homepage.plh-title")"
+                           value=""
+                           required
+                           type="text" />
+                </div>
+            </div>
+            <!-- Radio/Checkbox -->
+            <div class="col-12 col-md-5 pr-md-1">
+                <div class="form-group">
+                    <label>@_translate.GetStringAdmin("homepage.lbl-text-position")</label>
+                    <div class="list-groupRadio">
+                        <div class="custom-control custom-radio">
+                            <input type="radio"
+                                   onclick="SaveRawData()"
+                                   id="text-position-1"
+                                   name="text-position"
+                                   value="left"
+                                   class="custom-control-input" />
+                            <label class="custom-control-label" for="text-position-1">@_translate.GetStringAdmin("homepage.lbl-left")</label>
+                        </div>
+                        @*<div class="custom-control custom-radio">
+            <input type="radio"
+                   onclick="SaveRawData()"
+                   id="text-position-2"
+                   name="text-position"
+                   value="center"
+                   class="custom-control-input" />
+            <label class="custom-control-label" for="text-position-2">@_translate.GetStringAdmin("homepage.lbl-center")</label>
+        </div>*@
+                        <div class="custom-control custom-radio">
+                            <input type="radio"
+                                   onclick="SaveRawData()"
+                                   id="text-position-3"
+                                   name="text-position"
+                                   value="right"
+                                   class="custom-control-input" />
+                            <label class="custom-control-label" for="text-position-3">@_translate.GetStringAdmin("homepage.lbl-right")</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Form-select / Form-control -->
+            <div class="col-12 col-md-7 pl-md-1">
+                <div class="form-group">
+                    <label>@_translate.GetStringAdmin("homepage.lbl-link")</label>
+                    <input class="form-control raw"
+                           id="IntroLink"
+                           name="IntroLink"
+                           placeholder="@_translate.GetStringAdmin("homepage.plh-link")"
+                           value=""
+                           type="text" />
+                </div>
+            </div>
+            <!-- Editor -->
+            <div hidden class="col-12">
+                <div class="form-group mb-3">
+                    <label class="tt-label">@_translate.GetStringAdmin("homepage.lbl-description")</label>
+                    <textarea class="form-control raw"
+                              id="Description"
+                              name="Description"
+                              placeholder="@_translate.GetStringAdmin("homepage.plh-description")"
+                              value=""
+                              type="text"
+                              rows="5"></textarea>
+                </div>
+            </div>
+            <!-- Editor -->
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label class="tt-label">@_translate.GetStringAdmin("homepage.lbl-content")</label>
+                    <textarea class="form-control raw"
+                              id="Content"
+                              name="Content"
+                              placeholder="@_translate.GetStringAdmin("homepage.plh-content")"
+                              value=""
+                              type="text"
+                              rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*<div hidden class="form-group">
+        <div class="d-flex flex-wrap align-items-center">
+            <div id="imgBackground" style="background-image: url('/b-admin/dist/img/avatar3.jpg');" class="avatar avatar-xl border rounded mr-3 mb-4 ">
+            </div>
+            <div class="col-md-9 form-group">
+                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                    <div class="form-control text-truncate" data-trigger="fileinput">
+                        <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                        <span class="fileinput-filename"></span>
+                    </div>
+                    <span class="input-group-append">
+                        <span class=" btn btn-primary btn-file">
+                            <span class="fileinput-new">@_translate.GetStringAdmin("label.choose-file")</span>
+                            <span class="fileinput-exists">@_translate.GetStringAdmin("label.change")</span>
+                            <input onchange="readURL(this,'#imgBackground',0);" type="file" name="BackgroundImage">
+                        </span>
+                        <a role="button" href="#" onclick="ClearImages('#imgBackground')" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">@_translate.GetStringAdmin("label.delete")</a>
+                    </span>
+                </div>
+                <small class="form-text text-muted">@_translate.GetStringAdmin("label.format-images") (.gif, .png, .jpg, .jpeg)</small>
+            </div>
+        </div>
+    </div>*@

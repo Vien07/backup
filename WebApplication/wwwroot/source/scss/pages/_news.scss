@@ -1,0 +1,124 @@
+@import "_news-detail.scss";
+// top news layout
+.grid-news {
+	display: grid;
+	grid-gap: 12px;
+	grid-template-columns: 1fr 1fr;
+
+    &-item:not(:first-child) {
+        .thumb-res {
+        	margin-bottom: 10px;
+        }
+    }
+	&-item:first-child {
+		grid-column: 1 / span 2;
+		.tt {
+			font-size: var(--tt-xs);
+			margin-bottom: 10px;
+		}
+	}
+	.tt {
+		@include ellips(4);
+		margin-bottom: 0;
+	}
+	&-item:hover {
+		.tt {
+			color: $danger;
+		}
+	}
+}
+@include media-breakpoint-up(md) {
+    .grid-news {
+    	--tt-xs: 22px;
+
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-gap: 20px;
+
+		&-item:first-child {
+			grid-row: 1 / span 2;
+			.thumb-res {
+				padding-bottom: 75% !important;
+			}
+		}
+    }
+}
+@include media-breakpoint-up(lg) {
+    .grid-news {
+    	--tt-xs: 24px;
+    	--tt: 18px;
+    }
+}
+//
+.list-news-all {
+	--thumb-width: 35%;
+	--tt: 18px;
+	--news-gutter-x: 20px;
+
+    margin: 0;
+	.block {
+		padding-bottom: var(--news-gutter-x);
+		border-top: 1px solid #eee;
+		padding-top: var(--news-gutter-x);
+		&:last-child {
+			padding-bottom: 0;
+		}
+	}
+	.thumb-res {
+        width: var(--thumb-width);
+        flex: 0 0 auto;
+        height: 100%;
+        padding-bottom: calc(var(--thumb-width) - 6%);
+        margin: 2px 0 0 13px;
+        order: 2;
+	}
+	.desc {
+		font-size: .9375rem;
+	    @include ellips(2);
+	    color: $desc;
+	}
+	.tt {
+		font-size: var(--tt);
+		letter-spacing: -.5px;
+	}
+	.block:hover {
+		.tt {
+			color: $danger;
+		}
+	}
+}
+@include media-breakpoint-up(md) {
+	.list-news-all {
+		--thumb-width: 39%;
+		--tt: 20px;
+
+		.thumb-res {
+			order: 0;
+			margin: 2px 5% 0 0;
+			padding-bottom: calc(var(--thumb-width) * 0.56);
+		}
+		.tt {
+			letter-spacing: -.75px;
+			font-weight: $semibold;
+		}
+	}
+}
+@include media-breakpoint-up(lg) {
+	.list-news-all {
+		--tt: 22px;
+        .info {
+        	padding-top: .75rem;
+        }
+	}
+}
+@include media-breakpoint-up(xl) {
+	.list-news-all {
+		--tt: 24px;
+		padding-right: 4%;
+		.block {
+			padding: 1.75rem 0;
+		}
+		.tt {
+			margin-bottom: 1.25rem;
+		}
+	}
+}

@@ -1,0 +1,245 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+<!-- Container -->
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>Thùng rác</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+
+                <!--filter action-->
+                <div class="form-inline align-items-center">
+                    <div class="col-auto form-group pl-0 pr-2 mb-3">
+                        <select id="cate" onchange="Search()" class="form-control select2 form-control-sm">
+                            <option value="0" selected>—All Page</option>
+                            <option value="2">Giới thiệu</option>
+                            <option value="4">Sản phẩm</option>
+                            <option value="5">Khách hàng</option>
+                            <option value="7">Tính năng</option>
+                            <option value="8">Tin tức</option>
+                        </select>
+                    </div>
+                    <div class="col-auto form-group px-2 mb-3">
+                        <input type="search" id="key" class="form-control form-control-sm" placeholder="Keyword search">
+                        <div class="input-group-append">
+                            <button onclick="Search(0)" type="button" class="btn btn-sm btn-light ml-2" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-search")"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-auto mb-3 px-2">
+                        <a onclick="DeleteAll()" href="javascript:void(0)" class="btn btn-sm btn-danger waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a"><i class="fas fa-trash-alt mr-1"></i>Delete all</a>
+                    </div>
+                </div>
+                <!--end filter action-->
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive ">
+                                <table class="table table-hover table-sm mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="py-2">Tiêu đề</th>
+                                            <th class="py-2 text-center" width="100">Danh mục</th>
+                                            <th class="py-2 text-center" width="200">Ngày xóa</th>
+                                            <th class="py-2 text-center" width="100">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyData">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="my-1 mr-auto form-inline">
+                                <label class="my-1 mr-2 d-none d-md-block" for="show-data">@_translate.GetStringAdmin("log.lbl-show")</label>
+                                <select onchange="ChangePageNumber()" id="pageNumber" class="form-control nice-select form-control-sm border mr-5">
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div class="my-1 ml-auto" id="divPaging">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+            </section>
+
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+
+<!-- /Container -->
+
+
+
+@section Scripts{
+    <script>
+        var pageNumber = $('#pageNumber').val();
+        var page = 1;
+        $('#key').on("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                Search(0);
+            }
+        });
+        $(function () {
+            GetListData();
+        })
+        function Undo(Pid,CateId) {
+
+            $.ajax({
+                url: '/b-admin/Trash/Undo',
+                method: 'POST',
+                data: {
+                    Page: page,
+                    pageNumber: pageNumber,
+                    Pid:Pid,
+                    CateId:CateId
+                }
+            }).done(function (data) {
+                 if (data.error) {
+                            AlertToast('@_translate.GetStringAdmin("alert.infomation")', "@_translate.GetStringAdmin("alert.success")", "success")
+                LoadGrid(data.jsData.jsData,data.jsData.paging);
+                 }
+                 else {
+                            SweetAlert('@_translate.GetStringAdmin("alert.infomation")',data.messError, 'error')
+                        }            })
+        }
+        function Delete(Pid, CateId) {
+                        Swal.fire({
+                 title: '@_translate.GetStringAdmin("alert.do-you-want-delete")',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '@_translate.GetStringAdmin("alert.confirmButtonText")'
+            }).then((result) => {
+                if (result.value) {
+            $.ajax({
+                url: '/b-admin/Trash/Delete',
+                method: 'POST',
+                data: {
+                    Page: page,
+                    pageNumber: pageNumber,
+                    Pid:Pid,
+                    CateId:CateId
+                }
+            })
+                .done(function (data) {
+                               //console.log(data);
+                 if (data.error) {
+                   AlertToast('@_translate.GetStringAdmin("alert.infomation")', "@_translate.GetStringAdmin("alert.success")", "success")
+                   LoadGrid(data.jsData.jsData,data.jsData.paging);
+                 }
+                 else {
+                            SweetAlert('@_translate.GetStringAdmin("alert.infomation")',data.messError, 'error')
+                        }
+            })
+                }
+            })
+
+        }
+        function GetListData() {
+            $.ajax({
+                url: '/b-admin/Trash/LoadData',
+                method: 'POST',
+                data: {
+                    Page: page,
+                    pageNumber:pageNumber
+                }
+            }).done(function (data) {
+               // console.log(data.jsData);
+                LoadGrid(data.jsData,data.paging);
+            })
+        }
+        function LoadGrid(jsString,paging) {
+            var data = JSON.parse(jsString)
+            //console.log(data)
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                html += `<tr>
+                                <td><a href="javascript:void(0);">${data[i].Title}</a></td>
+
+                                <td class="text-center">${data[i].Cate}</td>
+                                <td class="text-center">${moment(data[i].UpdateDate).format('@ViewBag.DateFormat HH:mm:ss')}</td>
+                                <td class="text-center">
+                                   <a style="cursor:pointer" onclick="Undo(${data[i].Pid},${data[i].CateId})" class="mx-2" data-toggle="tooltip" data-original-title="undo"><i class="fa fa-undo text-dark"></i></a>
+                                   <a style="cursor:pointer" onclick="Delete(${data[i].Pid},${data[i].CateId})"data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a>
+                                </td>
+
+                            </tr>`
+            }
+            $("#tbodyData").html(html)
+                        //console.log(paging)
+            var pageHtml = Paging( paging.curentpage, paging.lastpage);
+            $("#divPaging").html(pageHtml)
+        }
+        function Search(currentPage) {
+            if (currentPage > 0) {
+                page = currentPage;
+            }
+             $.ajax({
+                url: '/b-admin/Trash/LoadData',
+                method: 'GET',
+                data: {
+                    Page: page,
+                    PageNumber: pageNumber,
+                    Key: $('#key').val(),
+                    Cate:$('#cate').val()
+                }
+             }).done(function (data) {
+                 page = page;
+                //console.log(data.jsData);
+                LoadGrid(data.jsData,data.paging);
+            })
+        }
+        function DeleteAll() {
+                                    Swal.fire({
+                 title: '@_translate.GetStringAdmin("alert.do-you-want-delete")',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '@_translate.GetStringAdmin("alert.confirmButtonText")'
+            }).then((result) => {
+                if (result.value) {
+
+            $.ajax({
+                url: '/b-admin/Trash/DeleteAll',
+                method: 'POST'
+            }).done(function (data) {
+            if (data.error) {
+                AlertToast('@_translate.GetStringAdmin("alert.infomation")', "@_translate.GetStringAdmin("alert.success")", "success")
+                LoadGrid(data.jsData.jsData,data.jsData.paging);
+                 }
+                 else {
+                  SweetAlert('@_translate.GetStringAdmin("alert.infomation")',data.messError, 'error')
+                 }
+            })
+                }
+            })
+
+        }
+    </script>
+}
+
+

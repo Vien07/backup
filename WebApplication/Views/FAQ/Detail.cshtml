@@ -1,0 +1,184 @@
+﻿@using CMS.Services.TranslateServices;
+@using System.Web
+@using CMS.Services;
+@using DTO.FAQ;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    FAQDto data = ViewBag.Data as FAQDto;
+    string content = HttpUtility.UrlDecode(data.Content);
+    string description = Convert.ToString(data.Description);
+    List<FAQDto> relateList = ViewBag.RelateList as List<FAQDto>;
+    var url = Context.Request.Host.Value;
+    var share = url + _translate.GetUrl("url.faq") + data.Slug + ".html";
+    string banner = ViewBag.Banner as string;
+    List<FAQCateDto> cateList = ViewBag.CateList as List<FAQCateDto>;
+    string[] listTagkey = data.TagKey.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    string[] listSlugTagkey = data.SlugTagKey.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <div class="banner-lg block-bg" style="background-image: url(@banner)">
+        <div class="container d-flex align-items-center h-100">
+            <div class="text-banner">
+                <h1 class="tt-md text-uppercase">@Html.Raw(_translate.GetString("menu.faq"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="@_translate.GetUrl("url.home")" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a></li>
+                        <li class="breadcrumb-item"><a href="@_translate.GetUrl("url.faq")" title="@Html.Raw(_translate.GetString("menu.faq"))" alt="@Html.Raw(_translate.GetString("menu.faq"))" target="_self">@Html.Raw(_translate.GetString("menu.faq"))</a></li>
+                        <li class="breadcrumb-item active"><a href="#" title="@Html.Raw(data.Title)" alt="@Html.Raw(data.Title)" target="_self">@Html.Raw(data.Title)</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="block-bg mb-5">
+    <div class="container py-5">
+        <div class="block-sidebar" data-wrapper>
+            <div class="mainbody mb-4 mb-md-0 order-md-2" data-mainbody="">
+                <div class="list-share-icon mb-3">
+                    <a class="btn rounded-circle btn-twitter fab fa-twitter" href="https://www.facebook.com/sharer/sharer.php?u=@Html.Raw(share)" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+                    <a class="btn rounded-circle btn-facebook fab fa-facebook-f" href="https://www.facebook.com/sharer/sharer.php?u=@Html.Raw(share)" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+                </div>
+                <div class="content-master">
+                    <h1 class="tt-lg text-primary text-title">
+                        @Html.Raw(data.Title)
+                    </h1>
+                    <div class="d-width border-bottom border-3 border-content mb-3" width="32"
+                         style="width: 32px;"></div>
+                    <div class="desc text-desc">
+                        @Html.Raw(data.Description)
+                    </div>
+                    <div class="thumb-res wide-sm my-3">
+                        <img class="fit-cover" src=" @Html.Raw(data.PicFull)">
+                    </div>
+                    <div class="content-post">
+                        @Html.Raw(data.Content)
+                    </div>
+
+                </div>
+            </div>
+            <div class="sidebar order-md-1" data-sidebar>
+                <div data-stick data-width-fill>
+                    <div class="pane pane-menu pane-menu-faq mb-4">
+                        @if (cateList.Any())
+                        {
+                            <div class="tt-sm tt-ball text-primary">Danh mục</div>
+                            <ul class="menu-vertical">
+                                @foreach (var item in cateList)
+                                {
+                                    <li><a href="@_translate.GetUrl("url.faq")@(item.Slug)/" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="_self">@Html.Raw(item.Title)</a></li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                    @if (advertisements.Any())
+                    {
+                        <script>
+                            let advertisementEmbedCode = '';
+                        </script>
+                        <div id="advertisementdiv"></div>
+                        foreach (var item in advertisements)
+                        {
+                            if (item.DisplayType == "normal")
+                            {
+                                <div class="pane bannerqc mb-3">
+                                    <a class="block" href="@item.Link" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="@(item.TargetLink == "_blank" ? "_blank" : "")"><img src="@item.Image" alt="@item.Image" /></a>
+                                </div>
+                            }
+                            else
+                            {
+                                <script type="text/javascript">
+                                    advertisementEmbedCode = convertEmbedCode('@item.EmbedCode')
+                                    document.getElementById('advertisementdiv').innerHTML += advertisementEmbedCode;
+                                </script>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (relateList.Any())
+{
+    <div class="block-bg block-other-post block-secondary py-5">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-sm-between">
+                <div class="tt-md tt-icon text-primary">@Html.Raw(_translate.GetString("faq.other-faq"))</div>
+                <a class="btn btn-outline-primary d-none d-lg-inline-block" alt="Xem thêm" title="Xem thêm"
+                   href="@Html.Raw(_translate.GetUrl("url.faq"))">Xem thêm</a>
+            </div>
+            <div class="list-faq row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 my-2">
+                @foreach (var item in relateList)
+                {
+                    <div class="col wow fadeIn">
+                        <div class="block">
+                            <a class="absolute" href="@Html.Raw(_translate.GetUrl("url.faq"))@(item.Slug).html" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="_self"></a>
+                            <div class="thumb-res wide">
+                                <img class="fit-cover" src="@item.PicThumb"
+                                     alt="@item.PicThumb" />
+                            </div>
+                            <div class="info">
+                                <div class="tt">@Html.Raw(item.Title)</div>
+                                <div class="desc">
+                                    @Html.Raw(item.Description)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+            <div class="text-center my-3 d-lg-none">
+                <a class="btn btn-outline-primary " alt="Xem thêm" title="Xem thêm" href="@Html.Raw(_translate.GetUrl("url.faq"))">Xem thêm</a>
+            </div>
+        </div>
+    </div>
+
+}
+<partial name="/Views/Shared/Convenience.cshtml" />
+
+@section Scripts{
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+    </script>
+}

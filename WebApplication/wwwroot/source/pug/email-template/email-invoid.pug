@@ -1,0 +1,70 @@
+extends layout/email-template
+block vars
+	- title = "Email Invoid"
+	- header = false
+	- social = true
+
+block logo-outside 
+	.e-header.bsz
+		.logo.logo-outside.bsz: img(src="../css/skin/logo.png" alt="")
+block email-main 
+	.e-body
+		.tt-sm.mb-3 Cảm ơn Nam Phan đã đặt hàng tại !{sitename}
+		.fs-15.mb-3 !{sitename} rất vui thông báo đơn hàng #12345678 của quý khách đã được tiếp nhận và đang trong quá trình xử lý. !{sitename} sẽ thông báo đến quý khách ngay khi hàng chuẩn bị được giao.
+		.mb-3.fs-14
+			.tt.tt-color.uppercase.border-bottom.fs-14 Thông tin đơn hàng #12345678 !{'<span class="small fw-normal uppercase-none text-body">(Ngày 05 Tháng 04 Năm 2021 22:15:41)</span>'}
+			table.w-100.mb-2 
+				.tbody
+					tr 
+						td.col-6.align-top
+							b Thông tin thanh toán!{'<br>'} 
+							span Nguyen Van A !{'<br>'} 
+							| nguyenvana@gmail.com!{'<br>'} 
+							| 0256 123 456
+						td.col-6.align-top
+							b Địa chỉ giao hàng!{'<br>'} 
+							span Nguyen Van A !{'<br>'} 
+							| 67 Đinh Bộ Lĩnh, Phường 26, Quận Bình Thạnh, Hồ Chí Minh, Việt Nam!{'<br>'} 
+							| 0256 123 456
+			p 
+				b Phương thức thanh toán: 
+				| Thanh toán khi nhận hàng
+			.tt.tt-color.uppercase.border-bottom.fs-14 Chi tiết đơn hàng
+			table.table-invoid.fs-14.mb-2
+				thead.thead
+					tr.tr
+						th.th.text-left Picture
+						th.th.text-left Sản phẩm
+						th.th.text-right Đơn giá
+						th.th.text-right Số lượng
+						th.th.text-right Thành tiền
+				tbody.tbody
+					tr.tr
+						td.td.avatar: img.icon(src="../css/skin/noimages.jpg" alt="")
+						td.td Everybody Up 2 Students Book
+						td.td.text-right 
+							| 250.000đ !{'<br>'}
+							del.small.text-muted 320.000đ
+						td.td.text-right 1
+						td.td.text-right 250.000đ
+					tr.tr
+						td.td.avatar: img.icon(src="../css/skin/noimages.jpg" alt="")
+						td.td Everybody Up 3 Students Book
+						td.td.text-right 
+							| 250.000đ !{'<br>'}
+							del.small.text-muted 320.000đ
+						td.td.text-right 1
+						td.td.text-right 250.000đ
+					tr
+						td.td.p-sm.text-right(colspan="4") Tạm tính
+						td.td.p-sm.text-right 500.000đ
+					tr
+						td.td.p-sm.text-right(colspan="4") Phí vận chuyển
+						td.td.p-sm.text-right 0đ
+					tr.bg-light.fw-bold.text-red
+						td.td.p-sm.text-right(colspan="4") Tổng giá trị đơn hàng
+						td.td.p-sm.text-right 500.000đ
+			.text-center.mb-4
+				a.btn.btn-sm(href="#") Chi tiết đơn hàng tại !{sitename}
+		hr
+		.my-4 Mọi thắc mắc và góp ý, quý khách vui lòng liên hệ với !{sitename} qua !{'<a href="'+website+'">'+website+'</a>'}. Đội ngũ !{sitename} luôn sẵn sàng hỗ trợ bạn.

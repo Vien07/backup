@@ -1,9 +1,0 @@
-{
-  "contexts": [
-	  "LayoutPageContext",
-	  "MemberManagementContext",
-	  "SampleContext",
-	  "WebsiteConfigurationContext",
-	  "WebsiteKeysContext"
-  ]
-}

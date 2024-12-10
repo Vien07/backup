@@ -1,0 +1,54 @@
+extends layout/email-template
+block vars
+    - title = "Email Marketing"
+    - heading = ''
+    - header = false
+    - social = true
+
+block logo-outside 
+    .e-header.bsz
+        .logo.logo-outside.bsz: img(src="../css/skin/logo.png" alt="")
+block email-main 
+    .e-body
+        h1.tt-xl Chào mừng bạn đến với !{'<span class="text-primary">bản dùng thử Google Workspace miễn phí.</span>'}
+        p Tạo nội dung, kết nối và cộng tác hiệu quả hơn.
+        p: a(href="#" class="btn") Thiết lập ngay 
+        img.img(src="https://services.google.com/fh/files/emails/google-hedgehog_headers_em1.png" alt="")
+        p: strong Chào bạn 
+        p Bạn sắp xong rồi. Để bắt đầu sử dụng Google Workspace, hãy đăng nhập vào Bảng điều khiển dành cho quản trị viên của Google và hoàn tất quy trình ba bước:
+        p 
+            | Hẹn gặp lại bạn!
+            br
+            b Nhóm Google Workspace
+        table 
+            tbody 
+                tr 
+                    td(style="vertical-align: top; padding: 0 0 15px;"): img.icon(src="imgs/check.png" alt width="18px" style="margin: 5px 12px 0 0;")
+                    td(style="vertical-align: top; padding: 0 0 15px;"): strong Đăng ký dùng thử miễn phí Google Workspace
+                tr 
+                    td(style="vertical-align: top; padding: 0 0 15px;"): img.icon(src="imgs/check.png" alt width="18px" style="margin: 5px 12px 0 0;")
+                    td(style="vertical-align: top; padding: 0 0 15px;")
+                        strong Xác minh miền của bạn
+                        br 
+                        | Hãy đảm bảo không ai khác sử dụng dịch vụ Google Workspace dành cho bạn khi bạn chưa cho phép.
+                tr 
+                    td(style="vertical-align: top; padding: 0 0 15px;"): img.icon(src="imgs/check.png" alt width="18px" style="margin: 5px 12px 0 0;")
+                    td(style="vertical-align: top; padding: 0 0 15px;")
+                        strong Thiết lập bản ghi trao đổi thư (MX)
+                        | Dùng các bản ghi MX để thiết lập Gmail làm email công việc của bạn.
+        p Để giúp bạn khai thác tối đa lợi ích của bản dùng thử Google Workspace miễn phí 14 ngày, chúng tôi sẽ gửi cho bạn phần giải thích nhanh, hướng dẫn chi tiết, câu chuyện về khách hàng và nhiều thông tin khác.
+        p: a(href="#" class="btn") Thiết lập ngay 
+
+        hr            
+        p.fs-15.mb-1 Thông tin Liên hệ:
+        table.table-icontact
+            tbody 
+                tr
+                    td: img.icon-contact(src='imgs/email.png')
+                    td: a(href="mailto:support@domainname.com") support@domainname.com
+                tr
+                    td: img.icon-contact(src='imgs/call.png')
+                    td: a(href="tel:84-1900-1009") 84-1900-1009 
+                tr
+                    td: img.icon-contact(src='imgs/web.png')
+                    td: a(href="//www.websitedemo.com") www.websitedemo.com

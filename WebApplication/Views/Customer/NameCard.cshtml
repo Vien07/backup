@@ -1,0 +1,407 @@
+﻿@using DTO;
+@using DTO.Cart;
+@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using Microsoft.AspNetCore.Http
+@inject ITranslateServices _translate
+@inject ICommonServices _common
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Customer/Layout/_LayoutNameCard.cshtml";
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    if (string.IsNullOrEmpty(lang))
+    {
+        lang = ConstantStrings.DefaultLang;
+    }
+    var nameCard = ViewBag.NameCard as NameCard;
+}
+
+@section Meta {
+    @Html.Raw(ViewBag.Meta)
+}
+<main class="mainer page-landing">
+    <section class="block-landing">
+        <div class="content-card block-bg"
+             style="background-image: url('@Html.Raw(nameCard.Background)')">
+            <div class="container">
+                <div class="cardInfo">
+                    <div class="card-header">
+                        <a class="btn btn-share"
+                           alt="Share"
+                           title="Share"
+                           href="javascript:void(0)"
+                           data-bs-toggle="modal"
+                           data-bs-target="#modalShare">
+                            <i class="far fa-share-alt"></i>
+                        </a>
+                        <div class="avatar avatar-xl">
+                            @if (!String.IsNullOrEmpty(nameCard.Avatar))
+                            {
+                                <img src="@Html.Raw(nameCard.Avatar)" />
+                            }
+                            else
+                            {
+                                <img src="/css/skin/user-default.png" />
+                            }
+
+                        </div>
+
+                        <div class="name-card">@Html.Raw(nameCard.FullName)</div>
+                        <div class="company-card">@Html.Raw(nameCard.CompanyName)</div>
+                        @if (!String.IsNullOrEmpty(nameCard.Position))
+                        {
+                            <div class="title-card">@Html.Raw(nameCard.Position)</div>
+                        }
+
+                        <div class="d-flex align-items-center d-lg-none">
+                            <a class="btn btn-download w-100"
+                               alt="Add to Contact"
+                               title="Add to Contact"
+                               href="javascript:void(0)"
+                               id="downloadContact"
+                               download>Add to Contact</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-linkBox">
+                            @if (!String.IsNullOrEmpty(nameCard.PersonalPhone))
+                            {
+                                <li>
+                                    <a class="item-linkBox"
+                                       alt="@Html.Raw(nameCard.PersonalPhone)"
+                                       title="@Html.Raw(nameCard.PersonalPhone)"
+                                       href="tel:@Html.Raw(nameCard.PersonalPhone)"
+                                       target="_blank">
+                                        <div class="icon">
+                                            <i class="fal fa-phone-volume"></i>
+                                        </div>
+                                        <div class="text">@Html.Raw(nameCard.PersonalPhone)</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.CompanyPhone))
+                            {
+                                <li>
+                                    <a class="item-linkBox"
+                                       alt="@Html.Raw(nameCard.CompanyPhone)"
+                                       title="@Html.Raw(nameCard.CompanyPhone)"
+                                       href="tel:@Html.Raw(nameCard.CompanyPhone)"
+                                       target="_blank">
+                                        <div class="icon">
+                                            <i class="fal fa-phone-volume"></i>
+                                        </div>
+                                        <div class="text">@Html.Raw(nameCard.CompanyPhone)</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.HomePhone))
+                            {
+                                <li>
+                                    <a class="item-linkBox"
+                                       alt="@Html.Raw(nameCard.HomePhone)"
+                                       title="@Html.Raw(nameCard.HomePhone)"
+                                       href="tel:@Html.Raw(nameCard.HomePhone)"
+                                       target="_blank">
+                                        <div class="icon">
+                                            <i class="fal fa-phone-rotary"></i>
+                                        </div>
+                                        <div class="text">@Html.Raw(nameCard.HomePhone)</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.WorkEmail))
+                            {
+                                <li>
+                                    <a class="item-linkBox"
+                                       alt="@Html.Raw(nameCard.WorkEmail)"
+                                       title="@Html.Raw(nameCard.WorkEmail)"
+                                       href="mailto:@Html.Raw(nameCard.WorkEmail)"
+                                       target="_blank">
+                                        <div class="icon">
+                                            <i class="fal fa-envelope"></i>
+                                        </div>
+                                        <div class="text">@Html.Raw(nameCard.WorkEmail)</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.PersonalEmail))
+                            {
+                                <li>
+                                    <a class="item-linkBox"
+                                       alt="@Html.Raw(nameCard.PersonalEmail)"
+                                       title="@Html.Raw(nameCard.PersonalEmail)"
+                                       href="mailto:@Html.Raw(nameCard.PersonalEmail)"
+                                       target="_blank">
+                                        <div class="icon">
+                                            <i class="fal fa-envelope"></i>
+                                        </div>
+                                        <div class="text">@Html.Raw(nameCard.PersonalEmail)</div>
+                                    </a>
+                                </li>
+                            }
+                            @*@if (!String.IsNullOrEmpty(nameCard.PersonalLink))
+                            {
+                                <li>
+                                    <a class="item-linkBox"
+                                       alt="@Html.Raw(nameCard.PersonalLink)"
+                                       title="@Html.Raw(nameCard.PersonalLink)"
+                                       href="@Html.Raw(nameCard.PersonalLink)">
+                                        <div class="icon">
+                                            <i class="fal fa-link"></i>
+                                        </div>
+                                        <div class="text">Liên kết cá nhân</div>
+                                    </a>
+                                </li>
+
+                            }*@
+                            @*@if (!String.IsNullOrEmpty(nameCard.CompanyWebsiteLink))
+                            {
+                                <li>
+                                    <a class="item-linkBox"
+                                       alt="@Html.Raw(nameCard.CompanyWebsiteLink)"
+                                       title="@Html.Raw(nameCard.CompanyWebsiteLink)"
+                                       href="@Html.Raw(nameCard.CompanyWebsiteLink)"
+                                       target="_blank">
+                                        <div class="icon">
+                                            <i class="fal fa-link"></i>
+                                        </div>
+                                        <div class="text">Company Website</div>
+                                    </a>
+                                </li>
+
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.PersonalWebsiteLink))
+                            {
+                                <li>
+                                    <a class="item-linkBox"
+                                       alt="@Html.Raw(nameCard.PersonalWebsiteLink)"
+                                       title="@Html.Raw(nameCard.PersonalWebsiteLink)"
+                                       href="@Html.Raw(nameCard.PersonalWebsiteLink)"
+                                       target="_blank">
+                                        <div class="icon">
+                                            <i class="fal fa-link"></i>
+                                        </div>
+                                        <div class="text">Personal Website</div>
+                                    </a>
+                                </li>
+
+                            }*@
+                            @if (nameCard.CustomLink != null && nameCard.CustomLink.Any())
+                            {
+                                @foreach (var item in nameCard.CustomLink)
+                                {
+                                    <li>
+                                        <a class="item-linkBox" alt="@Html.Raw(item.Title)" title="@Html.Raw(item.Title)" href="@Html.Raw(item.Link)" target="_blank">
+                                            <div class="icon">
+                                                <i class="fal fa-link"></i>
+                                            </div>
+                                            <div class="text">@Html.Raw(item.Title)</div>
+                                        </a>
+                                    </li>
+                                }
+                            }
+
+
+                            @if (!String.IsNullOrEmpty(nameCard.Zalo))
+                            {
+                                <li>
+                                    <a class="item-linkBox" alt="Zalo" title="Zalo" href="https://zalo.me/@Html.Raw(nameCard.Zalo)" target="_blank">
+                                        <div class="icon">
+                                            <span class="iconify"
+                                                  data-icon="simple-icons:zalo"></span>
+                                        </div>
+                                        <div class="text">Zalo</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.Facebook))
+                            {
+                                <li>
+                                    <a class="item-linkBox" alt="Facebook" title="Facebook" href="@Html.Raw(nameCard.Facebook)" target="_blank">
+                                        <div class="icon">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </div>
+                                        <div class="text">Facebook</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.Twitter))
+                            {
+                                <li>
+                                    <a class="item-linkBox" alt="X" title="X" href="@Html.Raw(nameCard.Twitter)" target="_blank">
+                                        <div class="icon">
+                                            <i class="fab fa-x-twitter"></i>
+                                        </div>
+                                        <div class="text">X</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.LinkedIn))
+                            {
+                                <li>
+                                    <a class="item-linkBox" alt="Linkedin" title="Linkedin" href="@Html.Raw(nameCard.LinkedIn)" target="_blank">
+                                        <div class="icon">
+                                            <i class="fab fa-linkedin-in"></i>
+                                        </div>
+                                        <div class="text">Linkedin</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.Telegram))
+                            {
+                                <li>
+                                    <a class="item-linkBox" alt="Telegram" title="Telegram" href="https://t.me/@Html.Raw(nameCard.Telegram)" target="_blank">
+                                        <div class="icon">
+                                            <i class="fab fa-telegram"></i>
+                                        </div>
+                                        <div class="text">Telegram</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.WhatsApp))
+                            {
+                                <li>
+                                    <a class="item-linkBox" alt="Whatsapp" title="Whatsapp" href="https://wa.me/@Html.Raw(nameCard.WhatsApp)" target="_blank">
+                                        <div class="icon">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </div>
+                                        <div class="text">Whatsapp</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.Skype))
+                            {
+                                <li>
+                                    <a class="item-linkBox" alt="Skype" title="Skype" href="skype:@(Html.Raw(nameCard.Skype))?chat" target="_blank">
+                                        <div class="icon">
+                                            <i class="fab fa-skype"></i>
+                                        </div>
+                                        <div class="text">Skype</div>
+                                    </a>
+                                </li>
+                            }
+                            @if (!String.IsNullOrEmpty(nameCard.Viber))
+                            {
+                                <li>
+                                    <a class="item-linkBox" alt="Viber" title="Viber" href="viber://add?number=@Html.Raw(nameCard.Viber)" target="_blank">
+                                        <div class="icon">
+                                            <i class="fab fa-viber"></i>
+                                        </div>
+                                        <div class="text">Viber</div>
+                                    </a>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a class="logo-full"
+                           alt="@Html.Raw(_translate.GetString("menu.home"))"
+                           title="@Html.Raw(_translate.GetString("menu.home"))"
+                           href="@Html.Raw(_translate.GetUrl("url.home"))"
+                           target="_blank">
+                            <img class="logo mx-auto"
+                                 src="/css/skin/logo-footer.png"
+                                 alt="logo" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Modal -->
+<div class="modal fade"
+     id="modalShare"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="modalShareTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md"
+         role="document">
+        <div class="modal-content">
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            <div class="modal-body">
+                <div class="form-custom">
+                    <div class="text-center">
+                        <div class="tt-xs mb-1">Information Sharing</div>
+                        <div class="tt-lg text-gradient text-center">
+                            @Html.Raw(nameCard.FullName)
+                        </div>
+                        <div class="text-desc mb-3">
+                            @Html.Raw(_translate.GetString("card.desc"))
+                        </div>
+                    </div>
+                    <div class="img-qr-custom mb-4 mx-auto">
+                        <img src="@Html.Raw(nameCard.QrImage)" alt="QR" title="QR" />
+                    </div>
+                    <div class="form-group form-link-custom mb-3">
+                        <input id="qrLinkInput" class="form-control pe-5"
+                               alt="Url"
+                               type="text"
+                               title="Url"
+                               value="@Html.Raw(nameCard.QrLink)" />
+                        <button id="copyButton" class="btn rounded-circle btn-copy"
+                                alt="Copy"
+                                type="button"
+                                title="Copy link">
+                            <i class="fal fa-clone"></i>
+                        </button>
+                    </div>
+                    <a class="logo-full" alt="@Html.Raw(_translate.GetString("menu.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" href="@Html.Raw(_translate.GetUrl("url.home"))">
+                        <img class="logo mx-auto" src="/css/skin/logo-share.png" alt="logo" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#copyButton").click(function () {
+                var qrLinkInput = $("#qrLinkInput");
+                //qrLinkInput.select();
+                //qrLinkInput[0].setSelectionRange(0, 99999);
+                //document.execCommand("copy")
+                navigator.clipboard.writeText($("#qrLinkInput").val())
+                AlertToast("Info", "Copied", "success")
+            });
+             $("#downloadContact").click(function () {
+    var formData = new FormData();
+
+                 formData.append("CardId", "@Html.Raw(nameCard.Pid)");
+
+    $.ajax({
+        url: "/Customer/GetVCard",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            var blob = new Blob([data], { type: "text/x-vcard" });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = "contact.vcf";
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Error downloading vCard: " + textStatus, errorThrown);
+        }
+    });
+});
+
+        });
+    </script>
+}

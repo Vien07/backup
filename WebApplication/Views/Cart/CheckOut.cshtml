@@ -1,0 +1,234 @@
+﻿@using System.Web
+@using CMS.Services
+@using CMS.Services.TranslateServices
+@using DTO.Customer;
+@using Microsoft.AspNetCore.Http;
+@using DTO;
+@using CMS.Repository
+
+@inject ITranslateServices _translate
+@inject IContact_Repository _repContact
+@inject ICustomer_Repository _repCustomer
+
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor;
+
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string banner = ViewBag.Banner as string;
+    var customer = ViewBag.Customer as CustomerDto;
+    var lang = _httpContextAccessor.HttpContext.Session.GetString(ConstantStrings.WebsiteLang);
+    string reCapchaSiteKey = ViewBag.reCapchaSiteKey as string;
+    dynamic data = _repContact.GetContactInfo(lang);
+}
+
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("menu.check-out"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.product"))" title="@Html.Raw(_translate.GetString("menu.product"))" alt="@Html.Raw(_translate.GetString("menu.product"))" target="_self">@Html.Raw(_translate.GetString("menu.product"))</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a href="@Html.Raw(_translate.GetUrl("url.check-out"))" title="@Html.Raw(_translate.GetString("menu.check-out"))" alt="@Html.Raw(_translate.GetString("menu.check-out"))" target="_self">@Html.Raw(_translate.GetString("menu.check-out"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+}
+<section class="block-bg py-5 py-xl-6">
+    <div class="container">
+        <div class="title-box mb-3 w-xxl-90 mx-auto">
+            <div class="tt-lg text-uppercase text-gradient">
+                @Html.Raw(_translate.GetString("cart.process-payment"))
+            </div>
+        </div>
+        <div class="row w-xxl-90 mx-auto block-order g-3">
+            <div class="col-12 col-lg-7 col-xl-8 mb-4 mb-md-0">
+                <div class="form-order">
+                    <div class="tt-xs">@Html.Raw(_translate.GetString("cart.customer-info"))</div>
+                    <div class="table-info mb-3">
+                        <div class="form-group">
+                            <span class="text">Họ tên:</span>
+                            <span class="value">@Html.Raw(customer.FirstName) @Html.Raw(customer.LastName)</span>
+                        </div>
+                        <div class="form-group">
+                            <span class="text">Email:</span>
+                            <span class="value">@Html.Raw(customer.Email)</span>
+                        </div>
+                        @if (!String.IsNullOrEmpty(customer.PhoneNumber))
+                        {
+                            <div class="form-group">
+                                <span class="text">Số điện thoại:</span>
+                                <span class="value">@Html.Raw(customer.PhoneNumber)</span>
+                            </div>
+
+                        }
+                        @if (!String.IsNullOrEmpty(customer.FullAddress))
+                        {
+                            <div class="form-group">
+                                <span class="text">Địa chỉ:</span>
+                                <span class="value">
+                                    @Html.Raw(customer.FullAddress)
+                                </span>
+                            </div>
+                        }
+
+                    </div>
+                    <form id="frmCart" class="form-validate material-form" novalidate="">
+                        <input hidden id="Email" name="Email" class="form-control" type="text" value="@Html.Raw(customer.Email)" required>
+                        <div class="row gy-2 gx-3">
+                            <div class="col-12">
+                                <div class="tt-xs">@Html.Raw(_translate.GetString("cart.company-info"))</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input id="CompanyName" name="CompanyName" class="form-control" type="text" required>
+                                    <label for="CompanyName" class="label-text">Tên công ty</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input name="TaxCode" id="TaxCode" class="form-control" type="text" required>
+                                    <label class="label-text">Mã số thuế</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <input id="CompanyAddress" name="CompanyAddress" class="form-control" type="text" required>
+                                    <label for="CompanyAddress" class="label-text">Địa chỉ công ty</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="tt-xs mt-3">@Html.Raw(_translate.GetString("cart.choose-cycle"))</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <select class="nice-select" id="payment-select"></select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="tt-xs mt-3 mb-0">
+                                    @Html.Raw(_translate.GetString("cart.payment-method"))
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group form-group-check">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input"
+                                               id="radio1a"
+                                               type="radio"
+                                               name="PaymentMethod"
+                                               value="0" />
+                                        <label class="form-check-label" for="radio1a">Ví điện tử</label>
+                                    </div>
+                                    <div hidden class="form-check mb-2">
+                                        <input class="form-check-input"
+                                               id="radio1b"
+                                               type="radio"
+                                               name="PaymentMethod"
+                                               value="2" />
+                                        <label class="form-check-label" for="radio1a">Momo</label>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(ViewBag.InfoPayment) && ViewBag.DisplayiBanking == "on")
+                                    {
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input"
+                                                   id="radio1c"
+                                                   type="radio"
+                                                   name="PaymentMethod"
+                                                   value="1" />
+                                            <label class="form-check-label" for="radio1b">iBanking</label>
+                                            <div class="form-tax-o">
+                                                <div class="text-desc fs-14 fw-semibold mb-3">
+                                                    @Html.Raw(_translate.GetString("cart.payment-info"))
+                                                </div>
+                                                @Html.Raw(ViewBag.InfoPayment)
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="VAT" />
+                                    <label class="form-check-label" for="VAT">@Html.Raw(_translate.GetString("cart.issue-vat"))</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="text-end">
+                                    <button onclick="saveOrder(this)" class="btn btn-primary my-2" type="button">
+                                        <span>Thanh toán</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 col-xl-4 ps-lg-5">
+                <div class="pane pane-order">
+                    <div class="pane-header">
+                        <div class="tt-sm">Đơn hàng</div>
+                        @*<div class="code">#PRO-12345</div>*@
+                    </div>
+                    <div class="pane-body">
+                        <div class="order-info">
+                            <div class="form-group list-order">
+
+                            </div>
+                            <div class="form-group list-order-cate">
+
+                            </div>
+                            @*<div class="form-group">
+                                    <div class="text">VAT 8%</div>
+                                    <div class="value">
+                                        <span class="price">24.000<span class="unit">₫</span></span>
+                                    </div>
+                                </div>*@
+                            <div class="form-group">
+                                <div class="text">Tổng thanh toán</div>
+                                <div class="value">
+                                    <span id="total" class="price priceTotal">328.000<span class="unit">₫</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<partial name="/Views/Shared/Convenience.cshtml" />
+@section Scripts {
+    <script asp-append-version="true" src="~/vendors/controllers/cartController.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <script>
+        var recapchaStatus = '@ViewBag.Recaptcha';
+        loadCart(lang);
+
+        InitSelect("#payment-select");
+        initParsley('#frmCart', lang)
+        var checkoutSuccessUrl = "@Html.Raw(_translate.GetUrl("url.check-out-success"))"
+
+
+        @*getSelectProvince('Province', 'District', 'Ward', '@customer.Province', '@customer.District', '@customer.Ward')*@
+    </script>
+
+}

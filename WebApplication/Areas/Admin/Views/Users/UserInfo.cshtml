@@ -1,0 +1,175 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "UserInfo";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+@using Newtonsoft.Json.Linq;
+@{
+    ViewData["Title"] = "UserEdit";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+@{
+    dynamic data = JValue.Parse(ViewBag.Data);
+    string role = ViewBag.Role as string;
+}
+<!-- Container -->
+
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>@_translate.GetStringAdmin("left-menu.infopersonnal")</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <form id="formInput" class="row" onsubmit="return false;">
+                    <div class="col-lg-4">
+                        <div class="card text-white bg-dark card-body">
+                            <div class="text-center">
+                                <span>
+                                    <img src="@data["Avatar"]" class="avatar avatar-xl rounded-circle" />
+                                    <h4 class="card-title mt-3 text-white">Hello, @data["FullName"]</h4>
+                                    @if (Convert.ToBoolean(data["Enabled"]) == true)
+                                    {
+                                        <span class="badge badge-pill badge-success text-white">@_translate.GetStringAdmin("users.badge-active")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-pill badge-danger text-white">@_translate.GetStringAdmin("users.badge-inactive")</span>
+                                    }
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card-body p-2">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"><i class="fal fa-id-card mr-5"></i>@_translate.GetStringAdmin("users.lbl-fullname")</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="FullName" name="FullName" value="@data["FullName"]" @(role == ConstantStrings.RoleAdmin || role == ConstantStrings.RoleRoot ? "" : "disabled")>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"><i class="fal fa-at mr-5"></i> @_translate.GetStringAdmin("users.lbl-email")</label>
+                                <div class="col-sm-6">
+                                    <input required type="text" value="@data["Email"]" id="Email" name="Email" class="form-control" @(role == ConstantStrings.RoleAdmin || role == ConstantStrings.RoleRoot ? "" : "disabled")>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3"><i class="fal fa-users mr-5"></i>@_translate.GetStringAdmin("users.lbl-permission")</label>
+                                <div class="col-sm-6">
+                                    <select id="GroupUserCode" name="GroupUserCode" class="form-control" @(role == ConstantStrings.RoleAdmin || role == ConstantStrings.RoleRoot ? "" : "disabled")>
+                                        @if (role == ConstantStrings.RoleRoot)
+                                        {
+                                            <option selected value="1">Supper Admin</option>
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="hr-light mt-0 mb-10">
+                            <div class="form-group row">
+                                <label class="col-sm-3"><i class="fal fa-user-circle  mr-5"></i>@_translate.GetStringAdmin("users.lbl-avata")</label>
+                                <div class="col-sm-6">
+                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Upload</span>
+                                        </div>
+                                        <div class="form-control text-truncate" data-trigger="fileinput">
+                                            <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                            <span class="fileinput-filename">@data["FileName"]</span>
+                                        </div>
+                                        <span class="input-group-append">
+                                            <span class=" btn btn-dark btn-file">
+                                                <span class="fileinput-new">Select file</span><span class="fileinput-exists">@_translate.GetStringAdmin("label.change")</span>
+                                                <input type="file" name="Images">
+                                            </span>
+                                            <a href="#" class="btn btn-secondary fileinput-exists" data-dismiss="fileinput">@_translate.GetStringAdmin("label.remove")</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label"><i class="fal fa-key mr-5"></i>@_translate.GetStringAdmin("users.lbl-password")</label>
+                                <div class="col-sm-6">
+                                    <input type="password" value="********" class="form-control" placeholder="@_translate.GetStringAdmin("users.placeholder-password")">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">— @_translate.GetStringAdmin("users.lbl-newpassword") </label>
+                                <div class="col-sm-6">
+                                    <input type="password" name="newPassWord" value="" class="form-control" placeholder="@_translate.GetStringAdmin("users.placeholder-newpassword")">
+                                    <small class="form-text text-muted">@_translate.GetStringAdmin("users.note-password")</small>
+                                </div>
+                            </div>
+                            <div class="form-group row pt-0 pb-0">
+                                <label class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-6">
+                                    <button type="submit" onclick="Update()" class="btn btn-primary"><i class="fas fa-vote-yea mr-5"></i>@_translate.GetStringAdmin("users.btn-update")</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </section>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+
+<!-- /Container -->
+@section Scripts{
+    <script>
+        $(function () {
+            if ('@role' != '@ConstantStrings.RoleRoot') {
+
+                setTimeout(function () { GetSelectGroupUser("#GroupUserCode", "@data["GroupUserCode"]"); }, 500);
+
+            }
+            else {
+                   $("#GroupUserCode").niceSelect();
+            }
+        })
+        function Update() {
+            var formData = new FormData($("#formInput").get(0));
+            formData.append('Pid',@data["Pid"]);
+            formData.append('Code','@data["Code"]');
+            formData.append('Type',1);
+            $.ajax({
+                url: '/b-admin/Users/Update',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false
+
+            }).done(function (data) {
+                if (data.error == "reset") {
+                    window.location.href = "/b-admin/Admin/LogOut";
+                    return;
+                }
+                if (data.error) {
+                    //$("#inputModal").modal("hide")
+                     AlertToast('@_translate.GetStringAdmin("alert.infomation")', "@_translate.GetStringAdmin("alert.success")", "success")
+                    //window.location.href = "/b-admin/Users/";
+                     setTimeout(function(){        location.reload();}, 500);
+
+                    //LoadList(data.jsData)
+                }
+                else {
+                    SweetAlert('Thông báo', data.messError, 'error')
+                    //$('#formInput').removeClass("was-validated")
+                }
+
+            })
+        }
+    </script>
+}
+

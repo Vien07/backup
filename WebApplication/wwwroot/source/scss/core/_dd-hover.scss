@@ -1,0 +1,133 @@
+
+@mixin dd-menu($align, $space:13px) {
+	@if $align == 'left' {
+		// align: left
+        .dd-menu {
+			left: $space * -1;
+			right: auto;
+			margin-left: 0;
+			&:before {
+				left: $space + 9;
+			}
+			&:after {
+				left: $space + 9 - 1;
+			}
+			&:before,
+			&:after {
+				right: auto;
+				margin: 0;
+			}
+        }
+			
+	} @else if $align == 'right' {
+		// align: right
+		.dd-menu {
+			left: auto;
+			right: $space * -1;
+			margin-left: auto;
+			&:before {
+				left: auto;
+				right: $space + 9;
+			}
+			&:after {
+				left: auto;
+				right: $space + 9 - 1;
+			}
+			&:before,
+			&:after {
+				margin: 0;
+			}
+		}
+	} @else if $align == 'center' {
+		// align: center
+		.dd-menu {
+			left: 50%;
+			right: auto;
+			margin-left: calc(var(--dd-menu-width) / 2 * -1);
+			&:before,
+			&:after {
+				left: $space;
+				right: $space;
+				margin: auto;
+			}
+		}
+	}
+}
+.dd-hover {
+	$dd-border: rgba(#000, .15);
+	--dd-menu-width: 250px;
+
+	position: relative;
+	.dd-toggle {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		white-space: nowrap;
+	}
+	@include dd-menu(left);
+	.dd-menu {
+		@include absolute(100%);
+		width: var(--dd-menu-width);
+		transform: translateY(5px);
+		background: #fff;
+		border: 1px solid $dd-border;
+		border-radius: 6px;
+		z-index: 4567;
+		box-shadow: 0 8px 30px rgba(#000, .1);
+		padding: 6px 0;
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.3s ease;
+
+		&:before,
+		&:after {
+			content: '';
+            position: absolute;
+            bottom: 100%;
+			width: 0;
+			border: 8px solid transparent;
+			border-bottom: 7px solid #fff;
+		}
+		&:after {
+			border-width: 9px;
+			border-bottom: 8px solid $dd-border;
+			z-index: -1;
+		}
+	}
+	.dd-item {
+		display: flex;
+		align-items: center;
+		padding: 6px 16px;
+		clear: both;
+		text-decoration: none;
+		white-space: nowrap;
+		color: $body-color;
+		&:hover {
+			background: rgba($primary, .07);
+			color: darken($primary, 9%);
+		}
+		&.disabled {
+			pointer-events: none;
+		}
+		.fa, .far, .fas, .fal, .fab, .bi {
+		    width: 24px;
+		    flex: 0 0 24px;
+		    margin-right: 6px;
+		}
+	}
+	.divider {
+		border-top: 1px solid $dd-border;
+		display: block;
+		width: 100%;
+		height: 1px;
+		margin: 8px 0;
+	}
+	&.active,
+	&:hover {
+		.dd-menu {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(10px);
+		}
+	}
+}

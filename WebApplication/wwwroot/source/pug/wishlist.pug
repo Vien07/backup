@@ -1,0 +1,55 @@
+extends template/template
+block vars
+	- title= 'Danh sách yêu thích'
+	- wrapperClass = ''
+	- menuActive = ''
+	- homeSlider = false
+	- bannerAll = false
+	- breadcrumb = true
+	- login = true
+	- navigate = true
+
+block breadcrumb 
+	+breadcrumb('container', {})
+
+//- mixin list
+mixin wishlist(img,tt)
+	.col.mb-3
+		.block 
+			.thumb-book 
+				.thumb-res.a4
+					+a('product-detail.html', 'absolute'): +img('products/'+img)
+			.info 
+				.tt: +a('product-detail.html', '', tt)
+				.auth.text-muted 
+					| by 
+					+a('text-hover-link', 'text-dark', 'James Patterson')
+				.rate.d-flex.align-items-center
+					.star-rate
+						+star('5')
+					.ml-2.text-muted (21)
+				.desc 
+					p: strong From James Patterson, the world's #1 bestselling author: a young lawyer takes on the judge who is destroying her hometown—and ends up in jail herself.
+					p In picture-perfect Erva, Alabama, the most serious crimes are misdemeanors. Speeding tickets. Shoplifting. Contempt of court.
+					p Then why is the jail so crowded? And why are so few prisoners released? There’s only one place to learn the truth behind these incriminating secrets.
+			.process 
+				+a('product-detail.html', 'btn btn-sm mb-2 btn-primary')
+					i.far.fa-book.mr-2 
+					| Đọc thêm
+				+a('#', 'btn btn-sm mb-2 btn-outline-danger mr-2')
+					i.far.fa-trash-alt.mr-2 
+					| Xóa khỏi Wishlish
+
+block mainer
+	main.mainer
+		.container
+			.heading-section
+				h1.tt-sm=title
+			.list-wishlist.row.row-cols-2.row-cols-md-1.g-3
+				+wishlist('1.jpg', 'Tư duy lại lợi thế cạnh tranh')
+				+wishlist('2.jpg', 'Bộ công cụ chiến lược nội dung')
+				+wishlist('3.jpg', 'Dậy thì không xì trét')
+				+wishlist('4.jpg', 'Phụ nữ thành công dám có tất cả')
+				+wishlist('5.jpg', 'Mặt trời lúc nửa đêm')
+			+pagination('my-45')
+			.pb-1

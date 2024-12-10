@@ -1,0 +1,28 @@
+extends template/template-login
+block vars
+	- title= 'Đăng nhập'
+	- wrapperClass = ''
+	
+block form-body 
+	.mb-3: +a('register.html', 'text-link', 'Tạo tài khoản mới')
+	.tt-sm=title
+	form.form-validate.material-form
+		.form-group.mb-2
+			input.form-control(type="text" required)
+			label.label-text Địa chỉ email
+		.form-group.mb-2
+			input.form-control(type="password" required)
+			span.passw-toggle-view.far.fa-eye-slash
+			label.label-text Mật khẩu 
+		.d-grid.my-4
+			button(type="submit" class="btn btn-primary") Đăng nhập 
+		+a('forgot.html', 'text-link', 'Quên mật khẩu')
+		.divider.text-center: span Hoặc
+		.d-grid.btn-social-group
+			+a('#', 'btn btn-facebook')
+				i.fab.fa-facebook-square.mr-2
+				| Đăng nhập bằng Facebook
+			+a('#', 'btn btn-google')
+				i.fab.fa-google.mr-2
+				| Đăng nhập bằng Google
+	+validateJs()

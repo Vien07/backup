@@ -1,0 +1,53 @@
+// Menu Mega
+@mixin menu-mega() {
+	@include media-breakpoint-up(lg) {
+		.menu-body {
+			position: relative;
+		}
+		.menu-mega {
+			position: static;
+
+			&-col-text {
+				padding: 8px;
+			}
+
+			> ul {
+				width: 100%;
+				left: 0;
+				right: 0;
+				background: #fff;
+				padding: 10px;
+				border-radius: 0 0 2px 2px;
+				border-top: 3px solid var(--ul-background-hover);
+			}
+			&-inner {
+                .col-12 {
+                	width: (100% / 3);
+                }
+                ul {
+                	position: static;
+                    padding: 0;
+                    width: auto;
+                    transform: none;
+                    background: transparent;
+                    box-shadow: none;
+                    a {
+                    	padding: 4px 0;
+                    	color: var(--nav-color);
+                    }
+                    li:hover a {
+                    	background: transparent;
+                    	color: var(--nav-color-active);
+                    }
+                }
+			}
+			&:hover ul {
+				opacity: 1;
+				visibility: visible;
+			}
+		}
+	}
+}
+.menu {
+	@include menu-mega;
+}

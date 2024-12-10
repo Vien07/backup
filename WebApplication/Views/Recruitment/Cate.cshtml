@@ -1,0 +1,265 @@
+﻿@using CMS.Services.TranslateServices
+@inject ITranslateServices _translate
+@using DTO.Website
+@using DTO.News
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<dynamic> list = ViewBag.Data as List<dynamic>;
+    dynamic paging = ViewBag.Paging as dynamic;
+    int currentPage = ViewBag.CurrentPage;
+    int lastpage = ViewBag.PageTotal;
+    string banner = ViewBag.Banner as string;
+    List<dynamic> listCate = ViewBag.Cate as List<dynamic>;
+    dynamic currentCate = ViewBag.CurrentCate as dynamic;
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    string titleBanner = ViewBag.TitleBanner as string;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <div class="banner-lg banner-prm " style="background-image:url(@banner)">
+        <div class="container d-flex align-items-end h-100">
+            <div class="text-banner my-3">
+                <div class="tt-md mt-3 mb-5">
+                    @Html.Raw(titleBanner)
+                </div>
+                <div class="breadcumb d-flex justify-content-center">
+                    <div class="breadcumb-items">
+                        <a href="@_translate.GetUrl("url.home")" title="@Html.Raw(_translate.GetString("menu.home"))" class="breadcumb-link text-uppercase">@Html.Raw(_translate.GetString("menu.home"))</a>
+                    </div>
+                    <div class="breadcumb-items">
+                        <a href="@_translate.GetUrl("url.recruitment")" title="@Html.Raw(_translate.GetString("menu.recruitment"))" class="breadcumb-link active text-uppercase">@Html.Raw(_translate.GetString("menu.recruitment"))</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (list.Count() > 0)
+{
+    <div class="block-bg block-second section-news">
+        <div class="container py-3">
+            <div class="block-sidebar" data-wrapper>
+                <div class="sidebar" data-sidebar>
+                    <div data-stick data-width-fill>
+                        <div class="header-section">
+                            <h2 class="tt-lg text-third mb-0">@Html.Raw(_translate.GetString("label.news-and-event"))</h2>
+                        </div>
+                        <div class="pane mb-4">
+                            <ul class="menu-vertical">
+                                <li class="active">
+                                    <div class="block">
+                                        <a href="@_translate.GetUrl("url.recruitment")" title="@Html.Raw(_translate.GetString("menu.recruitment"))" alt="@Html.Raw(_translate.GetString("menu.recruitment"))" target="_self">
+                                            @Html.Raw(_translate.GetString("menu.recruitment"))
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        @if (advertisements != null && advertisements.Any())
+                        {
+                            @foreach (var item in advertisements)
+                            {
+                                <div class="pane bannerqc">
+                                    <a class="block" href="@item.Link" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="@(item.TargetLink == "_blank" ? "_blank" : "")">
+                                        <img class="fit-cover" src="@item.Image" alt="@Html.Raw(item.TitleAlt)" />
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="mainbody mb-4 mb-md-0" data-mainbody>
+                    <div class="container section-news-other py-5">
+                        <h1 class="tt-xxl tt-line red">@Html.Raw(_translate.GetString("menu.recruitment"))</h1>
+                        <div class="list-news row row-cols-1">
+                            @foreach (var item in list)
+                            {
+                                <div class="col-12 wow zoomIn mb-3">
+                                    <div class="block">
+                                        <a class="absolute" href="@_translate.GetUrl("url.news")@(item.Slug + ".html")" alt="@Html.Raw(item.TitleAlt)" title="@Html.Raw(item.TitleAlt)"
+                                           target="_self"></a>
+                                        <div class="thumb-res wide-sm">
+                                            <img class="fit-cover" src="@item.PicThumb">
+                                        </div>
+                                        <div class="info">
+                                            <div class="tt-md">
+                                                @Html.Raw(item.Title)
+                                            </div>
+                                            <div class="desc fs-14">
+                                                @Html.Raw(item.Description)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @{
+                            var block = 5;
+                            int nextPage = currentPage + 1;
+                            int perPage = currentPage - 1;
+                            if (perPage == 0)
+                            {
+                                perPage = 1;
+                            }
+                            if (nextPage >= lastpage)
+                            {
+                                nextPage = lastpage;
+                            }
+                            int tempcurrentPage = currentPage + (currentPage / block);
+                            int currentBlock = currentPage / block;
+                            int startPage = 0;
+                            int endPage = 0;
+
+
+                            if (currentBlock == 0)
+                            {
+                                startPage = 1;
+                                endPage = block;
+
+
+                            }
+                            else
+                            {
+                                endPage = block * (currentBlock + 1);
+                                startPage = endPage - block;
+                            }
+                            if (endPage > lastpage)
+                            {
+                                endPage = lastpage;
+                            }
+                        }
+                        @if (endPage != 1)
+                        {
+                            <div class="pagination-o">
+                                <ul class="pagination">
+                                    <li class="page-items">
+                                        <a @(currentPage == 1 ? "hidden" : "") class="page-links" href="?page=@(currentPage - 1)" title="Prev" alt="Prev" target="_self"><i class="fa fa-angle-left"></i></a>
+                                    </li>
+
+                                    @for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        <li class="page-items"><a class="page-links @(i == currentPage ? "is-active" : "" )" href="?page=@i">@i</a></li>
+                                    }
+                                    @if (currentPage < lastpage - block)
+                                    {
+                                        <li class="page-items readonly"><a class="page-links"><i class="fa fa-ellipsis-h"></i></a></li>
+                                        <li class="page-items"><a class="page-links" href="?page=@lastpage">@lastpage</a></li>
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                    <li class="page-items">
+                                        <a @(currentPage == lastpage ? "hidden" : "") class="page-links" href="?page=@(currentPage + 1)" title="Next" alt="Next" target="_self"><i class="fa fa-angle-right"></i></a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div style="margin-top:25px" class="text-center">@Html.Raw(_translate.GetString("common.infoisupdating"))</div>
+}
+
+
+@*@if (list != null && list.Count() > 0)
+    {
+        <div class="container py-2">
+            <h2 class="tt-lg text-uppercase tt-ss text-secondary text-center mb-1">@Html.Raw(_translate.GetString("menu.recruitment"))</h2>
+            <div class="block-sidebar" data-wrapper>
+                <div class="mainbody mb-4 mb-md-0" data-mainbody>
+                    <div class="list-recruitment row row-cols-1 row-cols-md-2 mb-45">
+                        @foreach (var item in list)
+                        {
+                            <div class="col">
+                                <div class="block">
+                                    <a class="absolute" href="@_translate.GetUrl("url.recruitment")@(item.Slug + ".html")" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="_self"></a>
+                                    <div class="tt">@Html.Raw(item.Title)</div>
+                                    <div class="desc d-flex flex-wrap align-items-center">
+                                        <div class="mr-4 salary"><span class="mr-2 far fa-money-bill"></span>@Html.Raw(item.Salary)</div>
+                                        <div class="mr-4 date text-muted"><span class="mr-2 far fa-calendar-alt"> </span>@Html.Raw(item.PublishDate)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="sidebar" data-sidebar>
+                    <div data-stick data-width-fill>
+                        @if (listCate != null && listCate.Any())
+                        {
+                            <div class="pane pane-menu mb-3">
+                                <div class="tt-xs text-uppercase">@Html.Raw(_translate.GetString("label.recruitment-categories"))</div>
+                                <ul class="menu-vertical">
+                                    @foreach (var item in listCate)
+                                    {
+                                        <li class="@(currentCate.Slug == item.Slug ? "active" : "")"><a href="@_translate.GetUrl("url.recruitment")@(item.Slug)/" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="_self">@Html.Raw(item.Title)</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        @if (advertisements != null && advertisements.Any())
+                        {
+                            @foreach (var item in advertisements)
+                            {
+                                <div style="margin-bottom: !20px;" class="pane pane-qc">
+                                    <a class="block mb-3" href="@item.Link" title="@Html.Raw(item.TitleAlt)" alt="@Html.Raw(item.TitleAlt)" target="_blank"><img src="@item.Image" alt="@Html.Raw(item.TitleAlt)" /></a>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div style="margin-top:25px" class="text-center">@_translate.GetString("common.infoisupdating")</div>
+    }*@
+
+@section Scripts{
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+    </script>
+}

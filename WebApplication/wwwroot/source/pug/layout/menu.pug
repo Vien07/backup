@@ -1,0 +1,66 @@
+block menu
+    nav.navigate-dym#navigate
+        .menu
+            .menu-header.d-flex.align-items-center.justify-content-between
+                .user-s.d-flex.align-items-center
+                    .dd-hover.dropdown-user
+                        .dd-toggle 
+                            .user-s-avatar.avatar.avatar-sm.rounded-circle: i.fal.fa-user-circle
+                            | Tài khoản !{'<i class="far fa-angle-down ml-2"></i>'}
+                        .dd-menu 
+                            a.dd-item(href="#" title="" alt="")
+                                i.far.fa-lock
+                                | Đăng nhập
+                            a.dd-item(href="#" title="" alt="")
+                                i.far.fa-key
+                                | Đăng ký
+                            .divider
+                            .text-muted.text-sm.text-center.mb-2.fs-13 Hoặc sử dụng tài khoản
+                            .d-grid.px-3
+                                +a('#', 'btn mb-2 btn-facebook')
+                                    i.fab.fa-facebook-square.mr-2 
+                                    | Facebook
+                                +a('#', 'btn mb-2 btn-youtube')
+                                    i.fab.fa-google.mr-2 
+                                    | Google
+
+                button.btn-close.close-menu(type="button")
+            .menu-body
+                ul.menu-slide
+                    li(class=(menuActive=='Sách điện tử' ? 'active' : ''))
+                        a(href="products.html" title="" alt="" data-rel="menu-ebook") Sách điện tử
+                        ul.menu-slide-sub#menu-ebook
+                            li: a(href="products.html" title="" alt="" target="_self") Donec rutrum Pisisd
+                            li: a(href="products.html" title="" alt="" target="_self") Morbi placerat Blue
+                            li: a(href="products.html" title="" alt="" target="_self") Ut elementum Leo
+                            li: a(href="products.html" title="" alt="" target="_self") Vestibulum Egestas
+                            li: a(href="products.html" title="" alt="" target="_self") Nulla vel Eros Sed
+                    li(class=(menuActive=='Sách nói' ? 'active' : ''))
+                        a(href="products.html" title="" alt="" data-rel="menu-audiobook") Sách nói
+                        ul.menu-slide-sub#menu-audiobook
+                            li: a(href="products.html" title="" alt="" target="_self") Phasellus eget lorem
+                            li: a(href="products.html" title="" alt="" target="_self") Laoreet portt sodales
+                            li: a(href="products.html" title="" alt="" target="_self") Fusce viverra erata
+                            li: a(href="products.html" title="" alt="" target="_self") Nulla accumsan telien
+                            li: a(href="products.html" title="" alt="" target="_self") Donec scelers nisiin
+                    li(class=(menuActive=='Sách giấy' ? 'active' : ''))
+                        a(href="products.html" title="" alt="" data-rel="menu-paperbook") Sách giấy
+                        ul.menu-slide-sub#menu-paperbook
+                            li: a(href="products.html" title="" alt="" target="_self") Nisi vel valiquam
+                            li: a(href="products.html" title="" alt="" target="_self") Suspendi quis velit
+                            li: a(href="products.html" title="" alt="" target="_self") Tortor pellsque saged
+                            li: a(href="products.html" title="" alt="" target="_self") Suspen luctus nequed
+                            li: a(href="products.html" title="" alt="" target="_self") Mauris viverra quam
+                            li: a(href="products.html" title="" alt="" target="_self") Donec rutrum commodo
+                    li(class=(menuActive=='Blog' ? 'active' : ''))
+                        a(href="news.html" title="" alt="" data-rel="menu-blog") Blog
+                        ul.menu-slide-sub#menu-blog
+                            li: a(href="news.html" title="" alt="" target="_self") New & Hot Reads
+                            li: a(href="news.html" title="" alt="" target="_self") Conversation Podcast
+                            li: a(href="news.html" title="" alt="" target="_self") Author Interviews
+                            li: a(href="news.html" title="" alt="" target="_self") Recommended Reading
+                ul.menu-slide.d-md-none
+                    li: +a("wishlist.html", "", "Wishlist")
+                    li: +a('', "", "Feedback")(data-bs-toggle="modal" data-bs-target="#modal-feedback-group")
+            .menu-footer
+                +list_social()

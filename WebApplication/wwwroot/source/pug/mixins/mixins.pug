@@ -1,0 +1,263 @@
+include mixin-slider
+include mixin-products
+include mixin-news
+include mixin-js-install
+include mixin-custom
+
+//- PHAN 1: CAU HINH THONG TIN WEBSITE
+- phoneNumber = '84-1900-1090'
+- mailAddress = 'info@laviebook.com'
+- Address = '156 Lê Quốc Hưng, Phường 13, Quận 4, Tp. Hồ Chí Minh'
+- Fax = 'Fax: 028 1234 5678'
+- web = 'www.laviebook.com'
+- companyName = 'LaVieBook'
+
+- path = 'css/skin/'
+
+mixin img(src)
+    img(src=path+src alt="")
+mixin bg(className, bgUrl)
+    div(class=className style="background-image:url('"+path+""+bgUrl+"')")&attributes(attributes)
+
+//- hotline link
+mixin phone_a(className)
+    a(href="tel:"+phoneNumber class=className title="" alt="" target="_self")&attributes(attributes)
+        if block
+            block
+        else
+            +phone_text()
+mixin phone_text()
+    if block
+        block
+    else
+        =phoneNumber
+        block
+
+//- email links
+mixin mail_a(className)
+    a(href="mailto:"+mailAddress class=className title="" alt="" target="_self")&attributes(attributes)
+        if block
+            block
+        else
+            +mail_text()
+mixin mail_text()
+    if block
+        block
+    else
+        =mailAddress
+        block
+
+//- Address
+mixin address()
+    if block
+        block
+    else
+        =Address
+        block
+//- Fax
+mixin fax()
+    if block
+        block
+    else
+        =Fax
+        block
+//- Website
+mixin website()
+    if block
+        block
+    else
+        a(href='//'+web title="" alt="" target="_self")&attributes(attributes)= web
+
+
+//- PHAN 2: UTILITY 
+//- =========================
+//- Thong tin lien he default
+mixin contact_info()
+    .picon
+        i.far.fa-map-marker-alt
+        +address()
+    .picon
+        i.far.fa-phone.fa-flip-horizontal
+        +phone_a()
+    .picon
+        i.far.fa-envelope
+        +mail_a()
+    //- .picon
+    //-     i.far.fa-fax
+    //-     +fax()
+    .picon
+        i.far.fa-globe
+        +website()
+
+//- Mang xa hoi Social
+mixin list_social(className)
+    .list-icon-social(class=className)
+        //- +phone_a()(class="btn bg-gradient btn-phone")
+        //-     i.fa.fa-phone.fa-flip-horizontal
+        a(href="#" class="btn bg-gradient btn-facebook fab fa-facebook-f" title="" alt="" target="_blank")
+        //- a(href="#" class="btn bg-gradient btn-zalo icon-zalo" title="" alt="" target="_blank")
+        //- a(href="#" class="btn bg-gradient btn-shopee icon-shopee" title="" alt="" target="_blank")
+        a(href="#" class="btn bg-gradient btn-twitter bi bi-twitter" title="" alt="" target="_blank")
+        a(href="#" class="btn bg-gradient btn-youtube bi bi-youtube" title="" alt="" target="_blank")
+        a(href="#" class="btn bg-gradient btn-instagram fab fa-instagram" title="" alt="" target="_blank")
+        a(href="#" class="btn bg-gradient btn-pinterest fab fa-pinterest-p" title="" alt="" target="_blank")
+
+//- the a co san title & alt
+mixin a(href, className, value)
+    a(href=href class=className title="" alt="" target="_self")&attributes(attributes)
+        if block
+            block
+        else
+            =value
+            block
+
+//- breadcrumb
+mixin breadcrumb(className, breadlist)
+    nav(class=className)
+        ol.breadcrumb
+            li.breadcrumb-item: +a('index.html', '', 'Trang chủ')
+            each name, href in breadlist
+                li.breadcrumb-item: a(href=href title="" alt="")=name
+            li.breadcrumb-item.active=title
+
+//- pagination
+mixin pagination(className)
+    nav.pagination(class=className)
+        .page-item.prev.disabled
+            +a('#', 'prev-page')
+                i.bi.bi-arrow-left.mr-2
+                | Prev
+        .page-item.page-counter
+            input(type="text" class="form-control" value="1")
+            span.text-counter / 158
+        .page-item.next
+            +a('#', 'next-page')
+                | Next
+                i.bi.bi-arrow-right.ml-2
+
+//- pagination 2
+mixin pagination2(className)
+    nav(aria-label="pagination")
+        ul.pagination(class=className)
+            li.page-item.d-none
+                +a('#', 'page-link', '')
+                    i.bi.bi-arrow-left
+            li.page-item.active
+                +a('#', 'page-link', '1')
+            li.page-item
+                +a('#', 'page-link', '2')
+            li.page-item
+                +a('#', 'page-link', '3')
+            li.page-item
+                +a('#', 'page-link', '20')
+            li.page-item
+                +a('#', 'page-link', '')
+                    i.bi.bi-arrow-right
+
+//- ads
+mixin ads(img)
+    +a('#', 'block mb-2', '')
+        img(src="css/skin/ads/"+img alt="Image Ads")
+
+
+//- embed youtube
+mixin youtube_embed(id)
+    iframe(width="100%" height="100%" src="https://www.youtube.com/embed/"+id title="YouTube Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)
+
+mixin youtube_thumb(className, id)
+    .bg-cover(class=className)(style="background-image:url(http://i3.ytimg.com/vi/"+id+"/maxresdefault.jpg)")
+        if block
+            block
+
+
+//- Google Map embed
+mixin map(src)
+    iframe(src=src width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy")
+
+
+//- select tinh/tp, quan/huyen, phuong xa
+mixin select_tinh(className)
+    select.form-select(class=className)&attributes(attributes)
+        option Hồ Chí Minh
+        option Hà Nội
+        option Hà Giang
+        option Cao Bằng
+        option Bắc Kạn
+        option Tuyên Quang
+        option Lào Cai
+        option Điện Biên
+        option Lai Châu
+        option Sơn La
+        option Yên Bái
+        option Hoà Bình
+        option Thái Nguyên
+        option Lạng Sơn
+        option Quảng Ninh
+        option Bắc Giang
+        option Phú Thọ
+        option Vĩnh Phúc
+        option Bắc Ninh
+        option Hải Dương
+        option Hải Phòng
+        option Hưng Yên
+        option Thái Bình
+        option Hà Nam
+        option Nam Định
+        option Ninh Bình
+        option Thanh Hoá
+        option Nghệ An
+        option Hà Tĩnh
+        option Quảng Bình
+        option Quảng Trị
+        option Thừa Thiên Huế
+        option Đà Nẵng
+        option Quảng Nam
+        option Quảng Ngãi
+        option Bình Phước
+        option Tây Ninh
+        option Bình Dương
+        option Đồng Nai
+        option Bà Rịa - Vũng Tàu
+mixin select_quan(className)
+    select.form-select(class=className)&attributes(attributes)
+        option Quận 1
+        option Quận 2
+        option Quận 3
+        option Quận 4
+        option Quận 5
+        option Quận 6
+        option Quận 7
+        option Quận 8
+        option Quận 9
+        option Quận 10
+        option Quận 11
+        option Quận 12
+        option Bình Tân
+        option Bình Thạnh
+        option Gò Vấp
+        option Phú Nhuận
+        option Tân Bình
+        option Tân Phú
+        option Thủ Đức
+        option Bình Chánh
+        option Cần Giờ
+        option Củ Chi
+        option Hóc Môn
+        option Nhà Bè
+mixin select_phuong(className)
+    select.form-select(class=className)&attributes(attributes)
+        option Phường 1
+        option Phường 2
+        option Phường 3
+        option Phường 4
+        option Phường 5
+        option Phường 6
+        option Phường 7
+        option Phường 8
+        option Phường 9
+        option Phường 10
+        option Phường 11
+        option Phường 12
+        option Phường 13
+        option Phường 14
+        option Phường 15

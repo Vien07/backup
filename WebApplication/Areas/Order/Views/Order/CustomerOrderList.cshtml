@@ -1,0 +1,558 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+<!-- Container -->
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>@Html.Raw(_translate.GetStringAdmin("left-menu.customer"))</h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <!-- Compose -->
+        <div id="compose" class="col-xl-12">
+            <section>
+                <div class="row">
+                    <div class="col-sm">
+                        <div id="formInput">
+                            <div id="bodyCompose">
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <section class="hk-sec-wrapper">
+                                        @*    <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row mb-20">
+                                                        <div class="col-lg-4">
+                                                            <div class="card  bg-primary">
+                                                                <div class="card-body pt-15 pb-5">
+                                                                    <h5 class="card-title text-white" id="FullName">Nguyễn Văn A</h5>
+                                                                </div>
+                                                                <ul class="list-group list-group-flush">
+                                                                    <li class="list-group-item"><span><i class="fas fa-envelope-open-text text-light-20 mr-10"></i><u>Email</u></span><span id="EmailCustomer" class="ml-5 text-dark">client@bizmac.com</span></li>
+                                                                    <li class="list-group-item"><span><i class="fas fa-calendar-check text-light-20 mr-10"></i><u>Đăng ký</u></span><span id="CreateDate" class="ml-5 text-dark">17/07/2021</span></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div hidden id="frmNote" class="alert alert-warning alert-wth-icon">
+                                                                <span class="alert-icon-wrap"><i class="zmdi zmdi-notifications-active"></i></span><span id="Note"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8">
+                                                            <div class="row">
+                                                                <div class="col-sm">
+                                                                    <div class="card shadow-sm shadow-hover-lg pa-10">
+                                                                        <div class="card-header card-header-action border-bottom border-light mb-10">
+                                                                            <h6 class="text-light text-uppercase">Thông Tin Chung</h6>
+                                                                            <div class="d-flex align-items-center card-action-wrap">
+                                                                                <a style="cursor:pointer" id="btn_edit" class="mx-2" data-toggle="tooltip" data-original-title="Edit info">
+                                                                                    <i class="far fa-sliders-h text-dark"></i>
+                                                                                </a> Edit
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-1 text-sm-right">Tên công ty</div>
+                                                                            <div class="col-8 col-sm-9 my-1 fw-medium" id="CompanyName"></div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-1 text-sm-right">Tên viết tắt</div>
+                                                                            <div class="col-8 col-sm-9 my-1 fw-medium" id="AbbreviationName"></div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-1 text-sm-right">Mã số thuế</div>
+                                                                            <div class="col-8 col-sm-9 my-1 fw-medium" id="TaxCode"></div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-1 text-sm-right">Đại diện</div>
+                                                                            <div class="col-8 col-sm-9 my-1 fw-medium" id="Representative"></div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-1 text-sm-right">Địa chỉ</div>
+                                                                            <div class="col-8 col-sm-9 my-1 fw-medium" id="Address">911 Dien Bien Phu, Phuong 24, Q. Binh Thanh, Tp.HCM</div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-1 text-sm-right">Điện thoại</div>
+                                                                            <div class="col-8 col-sm-9 my-1 fw-medium" id="PhoneNumber"></div>
+                                                                        </div>
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-1 text-sm-right">Email</div>
+                                                                            <div class="col-8 col-sm-9 my-1 fw-medium" id="EmailCompany"></div>
+                                                                        </div>
+
+                                                                        <div class="row gx-3 flex-nowrap">
+                                                                            <div class="col-4 col-sm-3 my-1 text-sm-right">File</div>
+                                                                            <div class="col-8 col-sm-9 my-1 fw-medium">
+                                                                                <a id="logo-file" download>Logo</a> /
+                                                                                <a download id="department-file">Sơ đồ</a> /
+                                                                                <a download id="list-user-file">Danh sách nhân sự đăng ký sử dụng</a>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /End row-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-20">
+                                                <div class="col-sm">
+                                                    <div class="table-wrap">
+                                                        <h6 class="text-primary text-uppercase pa-5"><i class="fas fa-server"></i> Products/Services</h6>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm table-hover mb-0">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th class="py-1">ID</th>
+                                                                        <th class="py-1">Product/Service</th>
+                                                                        <th class="py-1">Tổng</th>
+                                                                        <th class="py-1">Kỳ Thanh Toán</th>
+                                                                        <th class="py-1">Ngày Đăng Ký</th>
+                                                                        <th class="py-1">Ngày Hết Hạn</th>
+                                                                        <th class="py-1">Trạng Thái</th>
+                                                                        <th class="py-1 text-right">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tBodyDetail"> </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="table-wrap">
+                                                        <h6 class="text-primary text-uppercase pa-5"><i class="fas fa-file-invoice-dollar"></i> Đơn hàng</h6>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-sm table-hover mb-0">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th class="py-1">ID</th>
+                                                                        <th class="py-1">Ngày Tạo</th>
+                                                                        <th class="py-1">Ngày Thanh Toán</th>
+                                                                        <th class="py-1">Tổng</th>
+                                                                        <th class="py-1">Hình Thức Thanh Toán</th>
+                                                                        <th class="py-1">Thanh Toán</th>
+                                                                        <th class="py-1 text-right">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tBodyOrder"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group d-flex align-items-center">
+                                                <button style="margin-top:15px" type="button" onclick="Clear()" class="btn btn-dark mr-1"><i class="fas fa-window-close"></i> @_translate.GetStringAdmin("button.close") </button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- /Compose -->
+
+    </div>
+    <!-- /Row -->
+</div>
+
+@section Scripts {
+    <script>
+        var state = "add";
+        var actionUrl = "/b-admin/Order/"
+        var lang = "vi";
+        var orderList = [];
+
+        if ('@ViewBag.Pid') {
+            state = "edit"
+        }
+
+        if (state == "edit") {
+            $.ajax({
+                url: actionUrl + 'Edit',
+                type: 'GET',
+                data: { pid: '@ViewBag.Pid' },
+                success: function (response) {
+                    var data = JSON.parse(response)
+                    var customer = data.customer;
+                    loadCustomer(customer);
+
+                    var orderDetail = data.order;
+                    loadOrderDetail(orderDetail)
+
+                    var orderList = data.detail;
+                    loadOrderList(orderList);
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+
+            $('#Email').attr('disabled', 'disabled')
+        } else {
+            loadTableOrder();
+            getSelectOrderSate();
+            getSelectPaymentMethod();
+            GetSelectProvince('City', 'District', 'Ward');
+        }
+
+        GetSelectProductCateSearch("#productCate", lang, "")
+        loadProductList();
+
+        $('#ShipFee').keyup(function () {
+            ConvertNumberToMoney('ShipFee', this.value)
+        })
+
+        $('#Deposit').keyup(function () {
+            ConvertNumberToMoney('Deposit', this.value)
+        })
+
+        $('#ShipFee').change(function () {
+            loadTableOrder();
+        })
+
+        $('#Deposit').change(function () {
+            loadTableOrder();
+        })
+
+        function loadCustomer(data) {
+            $('#FirstName').val(data.FirstName)
+            $('#LastName').val(data.LastName)
+            $('#PhoneNumber').val(data.PhoneNumber)
+            $('#Email').val(data.Email)
+            $('#AddresNumber').val(data.Address)
+        }
+
+        function loadOrderDetail(data) {
+            getSelectOrderSate(data.State);
+            getSelectPaymentMethod(data.PaymentMethod);
+            GetSelectProvince('City', 'District', 'Ward', data.Province, data.District, data.Ward);
+
+            $('#Note').val(data.Note)
+            $('#ShipFee').val(ConvertNumberToMoney2(data.ShipFee))
+            $('#Deposit').val(ConvertNumberToMoney2(data.Deposit))
+            if (data.IsPayment) {
+                document.getElementById("customRadio1").checked = true;
+                document.getElementById("customRadio2").checked = false;
+            } else {
+                document.getElementById("customRadio1").checked = false;
+                document.getElementById("customRadio2").checked = true;
+            }
+        }
+
+        function loadOrderList(data) {
+            //{id: '34e87576-8f79-4bc0-87d9-c0b9570e8270', productId: 2, colorId: 2, optionId: 3, quantity: 1}
+            orderList = [];
+            for (var item of data) {
+                orderList.push({ id: item.UID, productId: item.ProductDetailPid, colorId: item.ColorId, optionId: item.OptionId, quantity: item.Quantity })
+            }
+            loadTableOrder();
+        }
+
+        function loadProductList() {
+            $.ajax({
+                url: actionUrl + 'LoadProductList',
+                type: 'GET',
+                data: {
+                    key: $('#keywordProduct').val(),
+                    catePid: $('#productCate').val()
+                },
+                success: function (response) {
+                    var data = JSON.parse(response);
+                    $('#ProductList').html(``);
+                    var html = ``;
+                    for (let item of data) {
+
+
+                        html += ` <tr>
+                                                                                                               <td>
+                                                                                                                   <div class="d-flex">
+                                                                                                                   <a data-toggle="tooltip" data-original-title="${item.title}" class="avatar avatar-xs rounded mr-2" style="background-image: url('${item.picThumb}');"></a>
+                                                                                                                   <div class="">
+                                                                                                                   <small> ${item.title} (#${item.code})</small>
+                                                                                                                   </div>
+                                                                                                                   </div>
+                                                                                                               </td>
+                                                                                                                               <td> <button  data-toggle="modal" data-target="#exampleModal" onclick="loadProductDetail(${item.pid})" style="cursor:pointer" class="btn btn-success btn-sm"><i class="fa fa-plus" aria-hidden="true"></i></button>      </td>
+                                                                                                               </tr>`
+                    }
+                    $('#ProductList').html(html);
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+        function loadProductDetail(productId) {
+            $.ajax({
+                url: actionUrl + 'LoadProductDetail',
+                type: 'GET',
+                data: { productId: productId },
+                success: function (response) {
+                    var data = JSON.parse(response)
+                    $('#colors').html(``);
+                    $('#options').html(``);
+                    var htmlColors = ``;
+                    var htmlOptions = ``;
+                    if (data) {
+                        $('#productId').val(productId)
+
+                        for (let item of data.colors) {
+                            htmlColors += ` <div class="form-check form-check-inline">
+                                                                                                                                                                                                                                                                                                                    <input class="form-check-input" type="radio" name="inlineRadioOptionColors" id="inlineRadioColor${item.pid}" value="${item.pid}">
+                                                                                                                                                                                                                                                                                                              <label class="form-check-label" for="inlineRadioColor${item.pid}">${item.title}</label>
+                                                                                                                                                                                                                                                                                                             </div>`;
+                        }
+
+                        for (let item of data.options) {
+                            htmlOptions += `  <div class="form-check form-check-inline">
+                                                                                                                                                                                                                                                                                                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioOption{item.pid}" value="${item.pid}">
+                                                                                                                                                                                                                                                                                                                                          <label class="form-check-label" for="inlineRadioOption${item.pid}">${item.code} (Giá: ${ConvertNumberToMoney2(item.price)}đ - Khuyến mãi: ${ConvertNumberToMoney2(item.priceDiscount)}đ )</label>
+                                                                                                                                                                                                                                                                                                                </div>`
+                        }
+
+                        $('#colors').html(htmlColors);
+                        $('#options').html(htmlOptions);
+                    }
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+        function saveProduct() {
+            var productId = parseInt($('#productId').val());
+            if (!productId) {
+                AlertToast('Thông báo', "Có lỗi xảy ra!", "error")
+                return
+            }
+
+            var colorId = parseInt($('input[name="inlineRadioOptionColors"]:checked').val());
+            if (!colorId) {
+                AlertToast('Thông báo', "Chưa chọn màu", "warning")
+                return
+            }
+
+            var optionId = parseInt($('input[name="inlineRadioOptions"]:checked').val());
+            if (!optionId) {
+                AlertToast('Thông báo', "Chưa chọn giá", "warning")
+                return
+            }
+            var newUUID = uuidv4();
+
+            var flag = false;
+
+            for (var item of orderList) {
+                if (item.productId == productId && item.colorId == colorId && item.optionId == optionId) {
+                    item.quantity += 1
+                    flag = true;
+                }
+            }
+
+            if (!flag) {
+                orderList.push({ id: newUUID, productId: productId, colorId: colorId, optionId: optionId, quantity: 1 })
+            }
+
+            AlertToast('Thông báo', "Thành công", "success")
+            loadTableOrder();
+        }
+        function loadTableOrder() {
+            $.ajax({
+                url: actionUrl + 'LoadOrderTable',
+                type: 'GET',
+                data: {
+                    orderString: JSON.stringify(orderList),
+                    shipFee: ConvertMoneyToNumber($('#ShipFee').val()),
+                    deposit: ConvertMoneyToNumber($('#Deposit').val()),
+                },
+                success: function (response) {
+                    if (response) {
+                        var data = JSON.parse(response);
+                        if (data) {
+                            $('#productOrderList').html(``);
+                            var html = ``;
+                            for (var item of data.items) {
+                                html += `  <tr>
+
+                                                                                                                                                                                                                       <td>
+                                                                                                                                                                                                                               <a data-toggle="tooltip" class="avatar avatar-xs rounded mr-2" style="background-image: url('${item.picture}');"></a>
+                                                                                                                                                                                                                       </td>
+                                                                                                                                                                                                                                <td>
+                                                                                                                                                                                                                                           ${item.code}
+                                                                                                                                                                                                                                       </td>
+                                                                                                                                                                                                                       <td>${item.title}</td>
+                                                                                                                                                                                                                       <td class="text-center">${item.colorTitle}</td>
+                                                                                                                                                                                                                                          <td class="text-center">${item.optionCode}</td>
+                                                                                                                                                                                                                                        <td class="text-center"><input class="form-control form-control-sm" min="1" onchange="chaneQuantity('${item.id}', this.value)" type="number" value="${item.quantity}" /></td>
+                                                                                                                                                                                                                                <td class="text-right">${item.priceString} đ</th>
+                                                                                                                                                                                                                                                                                                                                     <td class="text-right"><a onclick="deleteItemInOrderTable('${item.id}')"><i class="far fa-trash-alt text-danger"></i></a></td>
+                                                                                                                                                                                                                                                                                                                                  </tr>`
+                            }
+                            $('#productOrderList').html(html);
+                            $('#Total').text(data.temporaryPriceString + " đ")
+                            $('#TotalPayment').text(data.totalPriceString + " đ")
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+        function deleteItemInOrderTable(uuid) {
+            Swal.fire({
+                title: 'Bạn có muốn xóa?',
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý'
+            }).then((result) => {
+                if (result.value) {
+                    orderList = orderList.filter(x => x.id != uuid)
+                    loadTableOrder();
+                }
+            })
+        }
+        function uuidv4() {
+            return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
+        function chaneQuantity(id, value) {
+            for (var item of orderList) {
+                if (item.id == id) {
+                    item.quantity = parseInt(value)
+                }
+            }
+            loadTableOrder();
+        }
+        function getSelectOrderSate(value) {
+            $.ajax({
+                url: '/b-admin/GetSelect/OrderState',
+                type: 'GET',
+                success: function (response) {
+                    var html = ``;
+                    var data = JSON.parse(response.jsData);
+
+                    for (let i = 0; i < data.length; i++) {
+                        if (i == 0 && !value) {
+                            html += `<option selected value="${data[i].Value}">${data[i].Name}</option>`
+                        } else {
+                            html += `<option ${data[i].Value == parseInt(value) ? 'selected' : ''} value="${data[i].Value}">${data[i].Name}</option>`
+                        }
+                    }
+                    $('#OrderState').html(html)
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+        function getSelectPaymentMethod(value) {
+            $.ajax({
+                url: '/b-admin/GetSelect/PaymentMethod',
+                type: 'GET',
+                success: function (response) {
+                    var html = ``;
+                    var data = JSON.parse(response.jsData);
+
+                    for (let i = 0; i < data.length; i++) {
+                        if (i == 0 && !value) {
+                            html += `<option selected value="${data[i].Value}">${data[i].Name}</option>`
+                        } else {
+                            html += `<option ${data[i].Value == parseInt(value) ? 'selected' : ''} value="${data[i].Value}">${data[i].Name}</option>`
+                        }
+                    }
+                    $('#PaymentMethod').html(html)
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+        function validate() {
+            var flag = true;
+            if (orderList && orderList.length <= 0) {
+                AlertToast('Thông báo', "Không có sản phẩm trong giỏ hàng", "warning")
+                flag = false;
+            }
+
+            var fullName = $('#FirstName').val();
+            if (!fullName) {
+                AlertToast('Thông báo', "Tên khách hàng không bỏ trống", "warning")
+                flag = false;
+            }
+
+            var phoneNumber = $('#PhoneNumber').val();
+            if (!phoneNumber) {
+                AlertToast('Thông báo', "Số điện thoại không bỏ trống", "warning")
+                flag = false;
+            }
+
+            var email = $('#Email').val();
+            if (!email) {
+                AlertToast('Thông báo', "Email không bỏ trống", "warning")
+                flag = false;
+            }
+            return flag;
+        }
+        function saveOrder(pid) {
+            if (validate()) {
+                let formData = new FormData();
+                formData.append('OrderString', JSON.stringify(orderList));
+                formData.append('IsPayment', $('input[name=isPayment]:checked').val());
+                formData.append('OrderState', $('#OrderState').val());
+                formData.append('PaymentMethod', $('#PaymentMethod').val());
+                formData.append('FirstName', $('#FirstName').val());
+                formData.append('LastName', $('#LastName').val());
+                formData.append('PhoneNumber', $('#PhoneNumber').val());
+                formData.append('Email', $('#Email').val());
+                formData.append('ShipFee', ConvertMoneyToNumber($('#ShipFee').val()));
+                formData.append('Deposit', ConvertMoneyToNumber($('#Deposit').val()));
+                formData.append('Province', $('#City').val());
+                formData.append('District', $('#District').val());
+                formData.append('Ward', $('#Ward').val());
+                formData.append('Address', $('#AddresNumber').val());
+                formData.append('Note', $('#Note').val());
+
+                let url = '';
+                if (!pid) {
+                    url = actionUrl + 'Insert';
+                } else {
+                    formData.append('Pid', pid);
+                    url = actionUrl + 'Update';
+                }
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.error.status) {
+                            location.href = '/b-admin/Order/Index'
+                        } else {
+                            AlertToast('Thông báo', "Có lỗi xảy ra trong quá trình xử lý", "error")
+                        }
+                    },
+                    error: function (e) {
+                        console.error(e)
+                    }
+                })
+            }
+
+        }
+    </script>
+}

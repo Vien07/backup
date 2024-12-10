@@ -1,0 +1,18 @@
+//- Validate
+mixin validateJs()
+    script(src="js/parsley.min.js")
+    script.
+        $(function(){
+            $(".form-validate").parsley();
+        });
+        
+mixin fancybox()
+    //- link(href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" rel="stylesheet")
+    //- script(src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js")
+    script(src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0.0-beta.2/dist/fancybox.umd.js")
+
+mixin plyr()
+    link(href="https://cdn.jsdelivr.net/npm/plyr@3.6.8/dist/plyr.css" rel="stylesheet")
+    script(src="https://cdn.jsdelivr.net/npm/plyr@3.6.8/dist/plyr.min.js")
+    script.
+        const player = new Plyr('#player');

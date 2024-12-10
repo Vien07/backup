@@ -1,0 +1,34 @@
+- slide_tt1 = 'The Best of the Book Review: A Virtual Event Celebrating 125 Years'
+- slide_tt2 = 'Here are the greatest audiobooks for your listening pleasure'
+- slide_tt3 = 'Exciting new titles that might just become your next beloved read.'
+
+- slide_desc1 = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis nostrud exercitation ullamco laboris.'
+- slide_desc2 = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis nostrud exercitation ullamco laboris.'
+- slide_desc3 = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis nostrud exercitation ullamco laboris.'
+
+mixin home_slider(className)
+    div(class=className)
+        +a('#', 'absolute')
+        .img-slide(style="background-image: url('css/skin/slider/slider_01.jpg')")
+        .container.absolute.d-flex
+            .text-slider
+                .badge.bg-warning.rounded-1.mb-2 Sách điện tử
+                .tt-lg=slide_tt1
+                .button: span.btn.btn-lighter Xem thêm !{'<i class="far fa-chevron-right"></i>'}
+    div(class=className)
+        +a('#', 'absolute')
+        .img-slide(style="background-image: url('css/skin/slider/slider_02.jpg')")
+        .container.absolute.d-flex
+            .text-slider
+                .badge.bg-warning.rounded-1.mb-2 Sách nói
+                .tt-lg=slide_tt2
+                .button: span.btn.btn-lighter Xem thêm !{'<i class="far fa-chevron-right"></i>'}
+    div(class=className)
+        +a('#', 'absolute')
+        .img-slide(style="background-image: url('css/skin/slider/slider_03.jpg')")
+        .container.absolute.d-flex
+            .text-slider
+                .badge.bg-warning.rounded-1.mb-2 Sách điện tử
+                .tt-lg=slide_tt3
+                .button: span.btn.btn-lighter Xem thêm !{'<i class="far fa-chevron-right"></i>'}
+    

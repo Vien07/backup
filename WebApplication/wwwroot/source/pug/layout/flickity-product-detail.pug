@@ -1,0 +1,17 @@
+block mixins
+	include ../mixins/mixins
+	
+- sliderClass = 'carousel-cell'
+- gallImg1 = 'detail_1.jpg'
+- gallImg2 = 'detail_2.jpg'
+- gallImg3 = 'detail_3.jpg'
+- gallImg4 = 'detail_4.jpg'
+- gallThumbClass = 'thumb-res square mb-0'
+
+.carousel-wrapper
+	.carousel-nav-wrap
+		.carousel-nav
+			+gallery_nav()
+
+	.carousel-main
+		+gallery_main()

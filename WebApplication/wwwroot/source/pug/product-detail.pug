@@ -1,0 +1,529 @@
+extends template/template
+block vars
+	- title= 'The Best Punctuation Book'
+	- wrapperClass = ''
+	- menuActive = ''
+	- homeSlider = false
+	- bannerAll = false
+	- breadcrumb = true
+	- navigate = true
+
+block breadcrumb 
+	+breadcrumb('container', {'products.html':'Sản phẩm', 'product.html':'Sản phẩm', 'products.html':'Sách nói'})
+block mainer
+	main.mainer
+		.container 
+			.row.brief(data-wrapper)
+				.col-md-4.col-slide.mb-45(data-sidebar)
+					div(data-stick data-width-fill)
+						.wrap-book
+							.abook 
+								.abook-front: +img('products/book.jpg')
+								.abook-middle
+								.abook-back
+						.border-top.border-2.pt-3.mt-4 
+							.d-flex.justify-content-between
+								.rate-info.lh-base
+									.d-flex.align-items-center
+										.star-rate.fs-18
+											span.star.fa.fa-star
+											span.star.fa.fa-star
+											span.star.fa.fa-star
+											span.star.fa.fa-star
+											span.star.fa.fa-star
+										.fs-24.fw-semibold.ml-3 5.0
+									.text-muted.text-desc.fs-15 
+										span.mr-4 360 bình chọn
+										|
+										|
+										+a('#block-rate', 'text-reset hover-link text-nowrap', '250 đánh giá')
+								a(role="button" class="add-wishlist" data-tooltip="Add to Wishlist" title="" alt=""): i.fa.fa-heart
+							.div-share.d-flex.align-items-center
+								span.mr-3
+									i.far.fa-share.mr-2 
+									| Share
+								.list-icon-social 
+									a(href="#" class="btn bg-gradient btn-facebook fab fa-facebook-f" title="" alt="" target="_blank")
+									a(href="#" class="btn bg-gradient btn-twitter bi bi-twitter" title="" alt="" target="_blank")
+									a(href="#" class="btn bg-gradient btn-pinterest fab fa-pinterest-p" title="" alt="" target="_blank")
+				.col-md-8.col-info(data-mainbody)
+					h1.tt-lg.tt-post=title
+					.auth.lh-base.fw-semibold.mb-3
+						span.text-muted by !{'<span class="text-dark">June Casagrande</span>'}
+						br
+						span.text-muted series !{'<span class="text-dark">#peroid</span>'}
+					.text-muted: small Chọn loại sách bạn muốn mua 
+					.group-button
+						+a('#', 'btn btn-secondary-soft', 'Sách nói')
+						+a('#', 'btn btn-secondary-soft', 'Sách điện tử')
+						+a('#', 'btn btn-secondary-soft', 'Sách giấy')
+					.line-h.my-4.border-top
+					.content-detail.position-relative
+						.content-ellips.clearfix#ellipsContent
+							.ellips-nav
+								button.ellips-nav-toggle.px-5(data-clickjs data-active="ellipsContent" data-fs="Xem thêm" data-en="Ẩn bớt")
+									i.far.fa-chevron-down
+							h3.tt-xs Punctuate with Confidence—No Matter the Style
+							p Confused about punctuation? There’s a reason. Everywhere you turn, publications seem to follow different rules on everything from possessive apostrophes to hyphens to serial commas. Then there are all the gray areas of punctuation—situations the rule books gloss over or never mention at all. At last, help has arrived. 
+							p This complete reference guide from grammar columnist June Casagrande covers the basic rules of punctuation plus the finer points not addressed anywhere else, offering clear answers to... perplexing questions about semicolons, quotation marks, periods, apostrophes, and more. Better yet, this is the only guide that uses handy icons to show how punctuation rules differ for book, news, academic, and science styles—so you can boldly switch between essays, online newsletters, reports, fiction, and magazine and news articles.
+
+						.catalogue
+							h2.tt-xs.mb-3 Sơ lược về cuốn sách này
+							.d-flex.flex-wrap
+								.catalogue-item.d-md-flex.align-items-center
+									.icon.avatar.mr-md-2: +img('icons/page.png')
+									.info.lh-1
+										.tt-md.mb-0 390
+										.text-muted.fs-15 Trang
+								.catalogue-item.d-md-flex.align-items-center
+									.icon.avatar.mr-md-2: +img('icons/clock.png')
+									.info.lh-1
+										.tt-md.mb-0 6 - 7h
+										.text-muted.fs-15 đọc hết
+								.catalogue-item.d-md-flex.align-items-center
+									.icon.avatar.mr-md-2: +img('icons/word.png')
+									.info.lh-1
+										.tt-md.mb-0 120K
+										.text-muted.fs-15 số chữ
+						.book-series
+							h3.tt-xs.mb-3 Các tập cùng Series
+							.carousel-series
+								.carousel-cell 
+									.block
+										+a('product-detail.html', 'absolute')
+										.thumb-res.a4 
+											+img('products/book.jpg')
+										.info.tt Tập 2
+								.carousel-cell 
+									.block
+										+a('product-detail.html', 'absolute')
+										.thumb-res.a4 
+											+img('products/book.jpg')
+										.info.tt Tập 3
+								.carousel-cell 
+									.block
+										+a('product-detail.html', 'absolute')
+										.thumb-res.a4 
+											+img('products/book.jpg')
+										.info.tt Tập 4
+						.block-related
+							h3.tt-sm.mb-3 Có thể bạn cũng thích
+							.carousel-c2md4.list-products
+								.carousel-cell
+									+product_item('1.jpg', 'Tư duy lại lợi thế cạnh tranh', '',)
+								.carousel-cell
+									+product_item('2.jpg', 'Bộ công cụ chiến lược nội dung', '',)
+								.carousel-cell
+									+product_item('3.jpg', 'Dậy thì không xì trét', '',)
+								.carousel-cell
+									+product_item('4.jpg', 'Phụ nữ thành công dám có tất cả', '',)
+								.carousel-cell
+									+product_item('5.jpg', 'Mặt trời lúc nửa đêm', '',)
+						.line-h.my-4.border-top
+						//- danh gia binh chon
+						.rating-section#block-rate
+							h3.tt-sm.mb-3 Đánh giá và bình chọn 
+							.rate-box 
+								.rate-box-col.d-flex
+									.left
+										.tt-lg.fw-semibold.lh-1.mb-0 4.9/5
+										.text-muted.lh-base 156 đánh giá
+									.star-rate
+										+star('4.9')
+								.rate-box-col
+									.rate-view 
+										.rate-view-item
+											.text.text-label 5 sao 
+											.progress
+												.progress-bar(aria-valuemin="0" aria-valuemax="100" style="width:100%")
+											.text 151
+										.rate-view-item
+											.text.text-label 4 sao 
+											.progress
+												.progress-bar(aria-valuemin="0" aria-valuemax="100" style="width:5%")
+											.text 2
+										.rate-view-item
+											.text.text-label 3 sao 
+											.progress
+												.progress-bar(ria-valuemin="0" aria-valuemax="100")
+											.text 0
+										.rate-view-item
+											.text.text-label 2 sao 
+											.progress
+												.progress-bar(ria-valuemin="0" aria-valuemax="100")
+											.text 0
+										.rate-view-item
+											.text.text-label 1 sao 
+											.progress
+												.progress-bar(ria-valuemin="0" aria-valuemax="100")
+											.text 0
+								.rate-box-col
+									.text.desc.mb-3 Bạn có cảm nhận gì về cuốn sách này?
+									button.btn.btn-dark.px-4(data-bs-toggle="modal" data-bs-target="#modal-rate") Viết đánh giá
+						.block-review 
+							.review-heading.d-flex.justify-content-between  
+								.tt-xs.mb-0 Tất cả đánh giá
+								.col-filter.d-flex
+									.d-flex.align-items-center 
+										.fs-15.mr-2 Lọc xem 
+										select.form-select 
+											option(disabled selected) Tấ cả
+											option 5 sao
+											option 4 sao
+											option 3 sao
+											option 2 sao
+											option 1 sao
+									select.form-select.ml-2
+										option(disabled selected) Sắp xếp
+										option Mới nhất
+										option Cũ nhất
+							.review-body 
+								.review-body-item.d-flex 
+									.avatar.rounded-circle.mr-2(style="background-image:url('https://play-lh.googleusercontent.com/0x9dPQAT_gMD7u_M58QmOv9xcWic6Wb7vayoWCxnoSC88YLHAiVmvLuaNvKHuGPTGDRE')")
+									.info 
+										.title-group.d-flex.flex-wrap.justify-content-between 
+											.left.d-flex.align-items-center
+												.star-rate.mr-3
+													+star('5')
+												b by Nguyễn Hương 
+											.date.text-muted Thứ 3, 24/12/2021
+										.review-content I received this book from the publishers via Netgalley for a review. Another good read from David Mark. Aector McAvoy is one of the best literary detectives about. A must read.
+										.review-action.d-flex.lh-base 
+											a.like-action(role="button") 
+												i.bi.bi-hand-thumbs-up.mr-1
+												span 42
+											.reply-action Trả lời
+											.share-action 
+												span Chia sẻ
+												.share-menu.list-icon-social.d-block
+													+a('#', 'd-flex align-items-center')
+														span.btn.btn-facebook.fab.fa-facebook-f
+														| Facebook
+													+a('#', 'd-flex align-items-center mt-2')
+														span.btn.btn-twitter.fab.fa-twitter
+														| Twitter
+										.form-reply
+											.block 
+												textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+												button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+
+										.review-action.review-toggle(role="button") 
+											i.bi.bi-arrow-return-right.mr-2 
+											b 3 câu trả lời 
+										.reply-group 
+											.review-body-item.d-flex 
+												.avatar.rounded-circle.mr-2(style="background-image:url('https://gpihefp.com/wp-content/uploads/2021/05/male_boy_person_people_avatar_icon_159358.png')")
+												.info 
+													.title-group.d-flex.flex-wrap.justify-content-between 
+														.left.d-flex.align-items-center
+															b Lưu Bị 
+														.date.text-muted Thứ 3, 24/12/2021
+													.review-content I received this book from the publishers via Netgalley for a review. Another good read from David Mark. Aector McAvoy is one of the best literary detectives about. A must read.
+													.review-action.d-flex.lh-base 
+														a.like-action(role="button") 
+															i.bi.bi-hand-thumbs-up.mr-1
+															span 42
+														.reply-action Trả lời
+														.share-action 
+															span Chia sẻ
+															.share-menu.list-icon-social.d-block
+																+a('#', 'd-flex align-items-center')
+																	span.btn.btn-facebook.fab.fa-facebook-f
+																	| Facebook
+																+a('#', 'd-flex align-items-center mt-2')
+																	span.btn.btn-twitter.fab.fa-twitter
+																	| Twitter
+													.form-reply
+														.block 
+															textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+															button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+
+											.review-body-item.d-flex 
+												.avatar.rounded-circle.mr-2(style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCfvp52mMEvat7Adkb7LrjI9veIU-9HN1WlzghfKE0PmBJrGkvt83DwAZvO8DErD8NsnU&usqp=CAU')")
+												.info 
+													.title-group.d-flex.flex-wrap.justify-content-between 
+														.left.d-flex.align-items-center
+															b Tào Tháo 
+														.date.text-muted Thứ 3, 24/12/2021
+													.review-content I received this book from the publishers via Netgalley for a review. Another good read from David Mark. Aector McAvoy is one of the best literary detectives about. A must read.
+													.review-action.d-flex.lh-base 
+														a.like-action(role="button") 
+															i.bi.bi-hand-thumbs-up.mr-1
+															span 42
+														.reply-action Trả lời
+														.share-action 
+															span Chia sẻ
+															.share-menu.list-icon-social.d-block
+																+a('#', 'd-flex align-items-center')
+																	span.btn.btn-facebook.fab.fa-facebook-f
+																	| Facebook
+																+a('#', 'd-flex align-items-center mt-2')
+																	span.btn.btn-twitter.fab.fa-twitter
+																	| Twitter
+													.form-reply
+														.block 
+															textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+															button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+
+											.review-body-item.d-flex 
+												.avatar.rounded-circle.mr-2(style="background-image:url('https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg')")
+												.info 
+													.title-group.d-flex.flex-wrap.justify-content-between 
+														.left.d-flex.align-items-center
+															b Phong Lan 
+														.date.text-muted Thứ 3, 24/12/2021
+													.review-content I received this book from the publishers via Netgalley for a review. Another good read from David Mark. Aector McAvoy is one of the best literary detectives about. A must read.
+													.review-action.d-flex.lh-base 
+														a.like-action(role="button") 
+															i.bi.bi-hand-thumbs-up.mr-1
+															span 42
+														.reply-action Trả lời
+														.share-action 
+															span Chia sẻ
+															.share-menu.list-icon-social.d-block
+																+a('#', 'd-flex align-items-center')
+																	span.btn.btn-facebook.fab.fa-facebook-f
+																	| Facebook
+																+a('#', 'd-flex align-items-center mt-2')
+																	span.btn.btn-twitter.fab.fa-twitter
+																	| Twitter
+													.form-reply
+														.block 
+															textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+															button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+								.review-body-item.d-flex 
+									.avatar.rounded-circle.mr-2(style="background-image:url('https://cdn-icons-png.flaticon.com/128/149/149071.png')")
+									.info 
+										.title-group.d-flex.flex-wrap.justify-content-between 
+											.left.d-flex.align-items-center
+												.star-rate.mr-3
+													+star('5')
+												b by Quang Vinh
+											.date.text-muted Thứ 3, 24/12/2021
+										.review-content Absolutely brilliant. This could be a based on a true story it is so realistic. Great characterisation. So fast paced and compelling.
+										.review-action.d-flex.lh-base 
+											a.like-action(role="button") 
+												i.bi.bi-hand-thumbs-up.mr-1
+												span 142
+											.reply-action Trả lời
+											.share-action 
+												span Chia sẻ
+												.share-menu.list-icon-social.d-block
+													+a('#', 'd-flex align-items-center')
+														span.btn.btn-facebook.fab.fa-facebook-f
+														| Facebook
+													+a('#', 'd-flex align-items-center mt-2')
+														span.btn.btn-twitter.fab.fa-twitter
+														| Twitter
+										.form-reply
+											.block 
+												textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+												button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+
+										.review-action.review-toggle(role="button") 
+											i.bi.bi-arrow-return-right.mr-2 
+											b 1 câu trả lời 
+										.reply-group 
+											.review-body-item.d-flex 
+												.avatar.rounded-circle.mr-2(style="background-image:url('https://cdn-icons-png.flaticon.com/128/149/149071.png')")
+												.info 
+													.title-group.d-flex.flex-wrap.justify-content-between 
+														.left.d-flex.align-items-center
+															b Hồng Sơn 
+														.date.text-muted Thứ 3, 24/12/2021
+													.review-content I received this book from the publishers via Netgalley for a review. Another good read from David Mark. Aector McAvoy is one of the best literary detectives about. A must read.
+													.review-action.d-flex.lh-base 
+														a.like-action(role="button") 
+															i.bi.bi-hand-thumbs-up.mr-1
+															span 42
+														.reply-action Trả lời
+														.share-action 
+															span Chia sẻ
+															.share-menu.list-icon-social.d-block
+																+a('#', 'd-flex align-items-center')
+																	span.btn.btn-facebook.fab.fa-facebook-f
+																	| Facebook
+																+a('#', 'd-flex align-items-center mt-2')
+																	span.btn.btn-twitter.fab.fa-twitter
+																	| Twitter
+													.form-reply
+														.block 
+															textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+															button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+								.review-body-item.d-flex 
+									.avatar.rounded-circle.mr-2(style="background-image:url('https://cdn-icons-png.flaticon.com/128/149/149071.png')")
+									.info 
+										.title-group.d-flex.flex-wrap.justify-content-between 
+											.left.d-flex.align-items-center
+												.star-rate.mr-3
+													+star('5')
+												b by Duy Mạnh 
+											.date.text-muted Thứ 3, 24/12/2021
+										.review-content Great book. Luke Delaney pulls you into a nightmare world of a serial killer taunting the police and seemingly impossible to catch. Great descriptive work and strong characters make this all very believable, and all the more frightening because of that. Very hard to put down.
+										.review-action.d-flex.lh-base 
+											a.like-action(role="button") 
+												i.bi.bi-hand-thumbs-up.mr-1
+												span 432
+											.reply-action Trả lời
+											.share-action 
+												span Chia sẻ
+												.share-menu.list-icon-social.d-block
+													+a('#', 'd-flex align-items-center')
+														span.btn.btn-facebook.fab.fa-facebook-f
+														| Facebook
+													+a('#', 'd-flex align-items-center mt-2')
+														span.btn.btn-twitter.fab.fa-twitter
+														| Twitter
+										.form-reply
+											.block 
+												textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+												button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+								.review-body-item.d-flex 
+									.avatar.rounded-circle.mr-2(style="background-image:url('https://cdn-icons-png.flaticon.com/128/149/149071.png')")
+									.info 
+										.title-group.d-flex.flex-wrap.justify-content-between 
+											.left.d-flex.align-items-center
+												.star-rate.mr-3
+													+star('5')
+												b by Quan Vũ 
+											.date.text-muted Thứ 3, 24/12/2021
+										.review-content Absolutely brilliant. This could be a based on a true story it is so realistic. Great characterisation. So fast paced and compelling.
+										.review-action.d-flex.lh-base 
+											a.like-action(role="button") 
+												i.bi.bi-hand-thumbs-up.mr-1
+												span 432
+											.reply-action Trả lời
+											.share-action 
+												span Chia sẻ
+												.share-menu.list-icon-social.d-block
+													+a('#', 'd-flex align-items-center')
+														span.btn.btn-facebook.fab.fa-facebook-f
+														| Facebook
+													+a('#', 'd-flex align-items-center mt-2')
+														span.btn.btn-twitter.fab.fa-twitter
+														| Twitter
+										.form-reply
+											.block 
+												textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+												button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+								.review-body-item.d-flex 
+									.avatar.rounded-circle.mr-2(style="background-image:url('https://cdn-icons-png.flaticon.com/128/149/149071.png')")
+									.info 
+										.title-group.d-flex.flex-wrap.justify-content-between 
+											.left.d-flex.align-items-center
+												.star-rate.mr-3
+													+star('5')
+												b by Lữ Bố 
+											.date.text-muted Thứ 3, 24/12/2021
+										.review-content Absolutely brilliant. This could be a based on a true story it is so realistic. Great characterisation. So fast paced and compelling.
+										.review-action.d-flex.lh-base 
+											a.like-action(role="button") 
+												i.bi.bi-hand-thumbs-up.mr-1
+												span 432
+											.reply-action Trả lời
+											.share-action 
+												span Chia sẻ
+												.share-menu.list-icon-social.d-block
+													+a('#', 'd-flex align-items-center')
+														span.btn.btn-facebook.fab.fa-facebook-f
+														| Facebook
+													+a('#', 'd-flex align-items-center mt-2')
+														span.btn.btn-twitter.fab.fa-twitter
+														| Twitter
+										.form-reply
+											.block 
+												textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+												button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+								.review-body-item.d-flex 
+									.avatar.rounded-circle.mr-2(style="background-image:url('https://cdn-icons-png.flaticon.com/128/149/149071.png')")
+									.info 
+										.title-group.d-flex.flex-wrap.justify-content-between 
+											.left.d-flex.align-items-center
+												.star-rate.mr-3
+													+star('5')
+												b by Điêu Thuyền 
+											.date.text-muted Thứ 3, 24/12/2021
+										.review-content Absolutely brilliant. This could be a based on a true story it is so realistic. Great characterisation. So fast paced and compelling.
+										.review-action.d-flex.lh-base 
+											a.like-action(role="button") 
+												i.bi.bi-hand-thumbs-up.mr-1
+												span 432
+											.reply-action Trả lời
+											.share-action 
+												span Chia sẻ
+												.share-menu.list-icon-social.d-block
+													+a('#', 'd-flex align-items-center')
+														span.btn.btn-facebook.fab.fa-facebook-f
+														| Facebook
+													+a('#', 'd-flex align-items-center mt-2')
+														span.btn.btn-twitter.fab.fa-twitter
+														| Twitter
+										.form-reply
+											.block 
+												textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+												button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+								.review-body-item.d-flex 
+									.avatar.rounded-circle.mr-2(style="background-image:url('https://cdn-icons-png.flaticon.com/128/149/149071.png')")
+									.info 
+										.title-group.d-flex.flex-wrap.justify-content-between 
+											.left.d-flex.align-items-center
+												.star-rate.mr-3
+													+star('5')
+												b by Khổng Minh 
+											.date.text-muted Thứ 3, 24/12/2021
+										.review-content Absolutely brilliant. This could be a based on a true story it is so realistic. Great characterisation. So fast paced and compelling.
+										.review-action.d-flex.lh-base 
+											a.like-action(role="button") 
+												i.bi.bi-hand-thumbs-up.mr-1
+												span 432
+											.reply-action Trả lời
+											.share-action 
+												span Chia sẻ
+												.share-menu.list-icon-social.d-block
+													+a('#', 'd-flex align-items-center')
+														span.btn.btn-facebook.fab.fa-facebook-f
+														| Facebook
+													+a('#', 'd-flex align-items-center mt-2')
+														span.btn.btn-twitter.fab.fa-twitter
+														| Twitter
+										.form-reply
+											.block 
+												textarea.form-control(rows="1" placeholder="Nhận xét của bạn")
+												button.btn.btn-submit(type="submit" role="button") Gửi nhận xét
+						+pagination('mt-4 smaller right')
+		//- modal rate
+		.modal.modal-rate.fade#modal-rate(data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1")
+			.modal-dialog.modal-dialog-centered
+				.modal-content
+					button.btn-close(type="button" data-bs-dismiss="modal" aria-label="Close")
+					.modal-header
+						.thumb-book 
+							.thumb-res.a4: +img('products/book.jpg')
+							.tt The Best Punctuation Book
+						.info 
+							.tt-xs.fw-semibold Chia sẻ suy nghĩ của bạn
+							.desc Nói cho bạn đọc biết suy nghĩ của bạn như thế nào bằng cách bình chọn và đánh giá về cuốn sách này.
+					.modal-body
+						.d-flex.align-items-center.justify-content-between.mb-3 
+							.tt-xs.fw-semibold.mb-0 Đánh giá
+							.star-rate.star-rating
+								input#star5(type="radio" name="rate" value="5")
+								label(for="star5" title="Tuyệt vời")
+								input#star4(type="radio" name="rate" value="4")
+								label(for="star4" title="Tốt")
+								input#star3(type="radio" name="rate" value="3")
+								label(for="star3" title="Cũng được")
+								input#star2(type="radio" name="rate" value="2")
+								label(for="star2" title="Bình thường")
+								input#star1(type="radio" name="rate" value="1")
+								label(for="star1" title="Hơi tệ")
+						.block-form 
+							.form-group.mb-3
+								textarea.form-control(rows="4" placeholder="Nhập nhận xét của bạn")
+							.form-group.mb-3 
+								.tt-xs.fw-semibold Tên hiển thị
+								input.form-control.fw-semibold(type="text" value="Tư Mã Ý")
+						.button-group.mt-3
+							button.btn.btn-danger.px-4(type="button" data-bs-dismiss="modal") Hủy
+							button.btn.btn-primary.px-4(type="submit") Gửi đánh giá
+

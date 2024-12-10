@@ -1,0 +1,152 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services
+@using DTO.Comment;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<CommentDto> list = ViewBag.Data as List<CommentDto>;
+    int currentPage = ViewBag.CurrentPage;
+    int lastpage = ViewBag.PageTotal;
+    string banner = ViewBag.Banner as string;
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+    @section Banner{
+
+    <div class="banner-lg block-bg" style="background-image: url(@banner)">
+        <div class="container d-flex align-items-center h-100">
+            <div class="text-banner">
+                <h1 class="tt-md text-uppercase">@Html.Raw(_translate.GetString("menu.comment"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="@_translate.GetUrl("url.home")" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a></li>
+                        <li class="breadcrumb-item active"><a href="@_translate.GetUrl("url.comment")" title="@Html.Raw(_translate.GetString("menu.comment"))" alt="@Html.Raw(_translate.GetString("menu.comment"))" target="_self">@Html.Raw(_translate.GetString("menu.comment"))</a></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+}
+@if (list.Any())
+{
+    <div class="block-bg">
+        <div class="container py-5">
+            <div class="tt-lg tt-ball text-primary fw-medium">Chia sẻ hữu ích</div>
+            <div class="list-feedback row row-cols-1 gy-3">
+                @foreach (var item in list)
+                {
+                    <div class="col wow fadeIn">
+                        <div class="block">
+                            <a class="absolute" alt="@Html.Raw(item.TitleAlt)" title="@Html.Raw(item.TitleAlt)" href="#"></a>
+                            <div class="thumb-res square">
+                                <img class="fit-cover" src="@item.Image" />
+                            </div>
+                            <div class="info">
+                                <div class="avatar">
+                                    <img src="@item.PicThumb" alt="@item.PicThumb">
+                                </div>
+                                <div class="content">
+                                    <div class="name-ava">
+                                        @Html.Raw(item.Title)
+                                    </div>
+                                    <div class="rated-star">
+                                        @for (var i = 0; i < item.Star; i++)
+                                        {
+                                            <span class="fa fa-star"></span>
+                                        }
+                                    </div>
+                                    <div class="desc">
+                                        @Html.Raw(item.Description)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            @{
+                var block = 5;
+                int nextPage = currentPage + 1;
+                int perPage = currentPage - 1;
+                if (perPage == 0)
+                {
+                    perPage = 1;
+                }
+                if (nextPage >= lastpage)
+                {
+                    nextPage = lastpage;
+                }
+                int tempcurrentPage = currentPage + (currentPage / block);
+                int currentBlock = currentPage / block;
+                int startPage = 0;
+                int endPage = 0;
+
+
+                if (currentBlock == 0)
+                {
+                    startPage = 1;
+                    endPage = block;
+
+
+                }
+                else
+                {
+                    endPage = block * (currentBlock + 1);
+                    startPage = endPage - block;
+                }
+                if (endPage > lastpage)
+                {
+                    endPage = lastpage;
+                }
+            }
+
+            <nav class="pagination justify-content-center my-45">
+                <div class="page-item prev @(currentPage == 1 ? "disabled" : "")">
+                    <a href="?page=@(currentPage - 1)" title="Trước" alt="Trước" target="_self">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                </div>
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <div class="page-item @(currentPage == i ? "active" : "")">
+                        <a class="page-counter" alt="@i" title="@i" href="?page=@i">@i</a>
+                    </div>
+                }
+
+                @if (currentPage < lastpage - block)
+                {
+                    <div class="page-item">
+                        <a class="page-counter" alt="..." title="..." href="#">...</a>
+                    </div>
+
+                    <div class="page-item">
+                        <a class="page-counter" alt="@lastpage" title="@lastpage" href="?page=@lastpage">@lastpage</a>
+                    </div>
+                }
+                else
+                {
+
+                }
+                <div class="page-item next @(currentPage == lastpage ? "disabled" : "")">
+                    <a href="?page=@(currentPage + 1)" title="Sau" alt="Sau" target="_self">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+}
+else
+{
+    <div style="margin-top:80px" class="text-center">@Html.Raw(_translate.GetString("common.infoisupdating"))</div>
+}
+
+<partial name="/Views/Shared/Convenience.cshtml" />
+

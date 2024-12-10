@@ -1,0 +1,176 @@
+﻿@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Dashboard Powered by BizMaC</title>
+    <meta name="description" content="A responsive bootstrap 4 admin dashboard template by hencework" />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Custom CSS -->
+    <link href="/b-admin/dist/css/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <!-- Preloader -->
+    @*<div class="preloader-it">
+            <div class="loader-pendulums"></div>
+        </div>*@
+    <!-- /Preloader -->
+    <!-- HK Wrapper -->
+    <div class="hk-wrapper">
+
+        <!-- Main Content -->
+        <div class="hk-pg-wrapper hk-auth-wrapper">
+            <header class="d-flex align-items-center">
+                <a class="d-flex auth-brand ml-lg-auto mr-xl-60" href="//bizmac.com.vn">
+                    <img class="brand-img" width="150" src="/b-admin/dist/img/logo/bizmac-logo.svg" alt="BizMaC" />
+                </a>
+            </header>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-5 pa-0 d-none d-lg-block">
+                        <div class="d-flex align-items-center justify-content-center w-100 h-100 bg-blue">
+                            <img class="w-100 w-md-70" src="/b-admin/dist/img/login/bg_cover.svg" alt="Cover">
+                        </div>
+                    </div>
+                    <div class="col-lg-7 pa-0">
+                        <div class="py-50 d-lg-none"></div>
+                        <div class="auth-form-wrap py-50">
+                            <div class="auth-form w-xxl-40 w-sm-50 w-xs-100">
+                                <form id="formData" onsubmit="Login(); return false;">
+                                    <h1 class="display-5 font-weight-bold mb-10">Dashboard CMS</h1>
+                                    <p class="mb-30">Chào mừng đến với hệ thống quản trị. Vui lòng điền vào thông tin của bạn để truy cập Dashboard.</p>
+                                    <div id="divalert" hidden class="alert alert-danger" role="alert">Tên đăng nhập hoặc mật khẩu chưa chính xác!</div>
+
+                                    <div class="form-group">
+                                        <input id="Code" name="Code" class="form-control" placeholder="tên truy cập" type="text" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input id="Password" name="Password" class="form-control" placeholder="mật khẩu truy cập" type="password" required>
+                                            <div class="input-group-append" style="cursor:pointer" onclick="ShowHide()">
+                                                <span class="input-group-text"><span class="feather-icon"><i data-feather="eye-off"></i></span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mb-25">
+                                        <input class="custom-control-input" name="RememberMe" id="RememberMe" type="checkbox" checked>
+                                        <label class="custom-control-label font-14" for="RememberMe">Keep me logged in</label>
+                                    </div>
+                                    <button class="btn btn-primary px-4 mr-2" type="submit">Login</button>
+                               @*     <a href="/b-admin/Admin/Forget/">Quên mật khẩu?</a>*@
+                                    <input id="RedirectTo" name="RedirectTo" hidden="hidden" value="@ViewBag.redirectTo" />
+                                </form>
+                                <div class="mt-50 font-13"><span>Powered by <a target="_blank" rel="noopener noreferrer" href="//bizmac.com.vn">BizMaC</a></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Main Content -->
+
+    </div>
+
+    <!-- /HK Wrapper -->
+    <!-- jQuery -->
+    <script src="/b-admin/vendors/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/b-admin/vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/b-admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Slimscroll JavaScript -->
+    <script src="/b-admin/dist/js/jquery.slimscroll.js"></script>
+
+    <!-- Fancy Dropdown JS -->
+    <script src="/b-admin/dist/js/dropdown-bootstrap-extended.js"></script>
+
+    <!-- Owl JavaScript -->
+    <script src="/b-admin/vendors/owl.carousel/dist/owl.carousel.min.js"></script>
+
+    <!-- FeatherIcons JavaScript -->
+    <script src="/b-admin/dist/js/feather.min.js"></script>
+
+    <!-- Init JavaScript -->
+    <script src="/b-admin/dist/js/init.js"></script>
+    <script src="/b-admin/dist/js/login-data.js"></script>
+    <link href="/b-admin/vendors/jquery-toast-plugin/dist/jquery.toast.min.css" rel="stylesheet" />
+    <script src="/b-admin/vendors/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+    <script>
+        if ('@ViewBag.redirectTo' !== '') {
+            var new_url = "/b-admin?redirect_to=@ViewBag.redirectTo";
+            window.history.pushState("data", "Title", new_url);
+            if ('@ViewBag.messPer' != '' && '@ViewBag.messPer' == 'True') {
+                 $.toast({
+                    heading: "@_translate.GetStringAdmin("Thông báo")",
+                    text: `<p>@_translate.GetStringAdmin("Bạn không có quyền truy cập vào màn hình này vui lòng đăng nhập lại.")</p>`,
+                    position: 'top-right',
+                    loaderBg: '#7a5449',
+                    hideAfter: 3500,
+                    stack: 6,
+                    showHideTransition: 'fade'
+                });
+            }
+        }
+
+        function Login() {
+            var formData = $('#formData');
+            $.ajax({
+                url: '/b-admin/Admin/Login',
+                type: 'POST',
+                data: formData.serialize(),
+            }).done(function (data) {
+                //console.log(data)
+                if (data.error) {
+                  //  Cookies.set('role', data.role)
+                    window.location.href = data.jsData;
+                }
+                else {
+                    $('#divalert').removeAttr("hidden");
+                }
+            })
+        }
+        function ShowHide() {
+            if ($('#Password').attr('type') == "password") {
+                $('#Password').attr('type', 'text');
+            } else {
+                $('#Password').attr('type', 'password');
+
+            }
+
+        }
+
+        @*$(function () {
+            var host = '@ViewBag.RootDomain';
+            var currenthost = window.location.hostname;
+            if (!host.includes(currenthost) && currenthost != "" ) {
+                window.location.href = 'https://support.bizmac.com.vn/login';
+            }
+            var search = window.location.search;
+            if (search) {
+                return;
+            }
+            var path = window.location.pathname;ok
+            if (path!="/b-admin/") {
+               var new_url="/b-admin/";
+             window.history.pushState("data","Title",new_url);
+            } else {
+                return
+            }
+        })*@
+    </script>
+</body>
+
+</html>

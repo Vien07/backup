@@ -1,0 +1,234 @@
+﻿@using CMS.Services.TranslateServices;
+@using System.Web
+@using CMS.Services;
+@using DTO.News;
+@using DTO.Gallery;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    NewsDto data = ViewBag.Data as NewsDto;
+    List<NewsDto> relateList = ViewBag.RelateList as List<NewsDto>;
+    var url = Context.Request.Host.Value;
+    var share = url + _translate.GetUrl("url.news") + data.Slug + ".html";
+    string banner = ViewBag.Banner as string;
+    //string[] listTagkey = data.TagKey.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    //string[] listSlugTagkey = data.SlugTagKey.Split(",").Where(x => !string.IsNullOrEmpty(x)).ToArray();
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+    List<NewsDto> highViewList = ViewBag.HighViewList as List<NewsDto>;
+    string zaloOAID = ViewBag.ZaloOAID;
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">
+                    @Html.Raw(data.Title)
+                </h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.news"))" title="@Html.Raw(_translate.GetString("menu.news"))" alt="@Html.Raw(_translate.GetString("menu.news"))" target="_self">@Html.Raw(_translate.GetString("menu.news"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+<section class="block-bg py-5 py-xl-6">
+    <div class="container">
+        <div class="block-sidebar" data-wrapper>
+            <div class="mainbody mb-4 mb-md-0" data-mainbody>
+                <div class="content-share content-master">
+                    <h2 class="tt-lg f-work title-post text-capitalize">
+                        @Html.Raw(data.Title)
+                    </h2>
+                    <div class="desc text-desc mb-4">
+                        @Html.Raw(data.Description)
+                    </div>
+                    <div class="content-post mx-auto">
+                        @Html.Raw(data.Content)
+                    </div>
+                    <div class="social-share social-stick">
+                        <a class="btn rounded-circle btn-zalo zalo-share-button"
+                           data-customize="true"
+                           data-href="@share"
+                           data-oaid="@(!String.IsNullOrEmpty(zaloOAID) ? zaloOAID : "1")"
+                           title="Zalo"
+                           alt="Zalo">
+                            <span class="iconify"
+                                  data-icon="simple-icons:zalo"></span>
+                        </a>
+                        <a class="btn rounded-circle btn-twitter"
+                           href="https://twitter.com/intent/tweet?original_referer=@Html.Raw(share)&via="
+                           onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                           title="Twitter"
+                           alt="Twitter"
+                           target="_self">
+                            <span class="fab fa-x-twitter"></span>
+                        </a>
+                        <a class="btn rounded-circle btn-facebook"
+                           href="https://www.facebook.com/sharer/sharer.php?u=@Html.Raw(share)"
+                           onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"
+                           title="Facebook"
+                           alt="Facebook"
+                           target="_self">
+                            <span class="fab fa-facebook-f"></span>
+                        </a>
+                        <span class="label">
+                            @Html.Raw(_translate.GetString("news.share-now"))<i class="fal fa-share-alt ms-2"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar" data-sidebar>
+                <div data-stick data-width-fill>
+                    <div class="pane mb-4">
+                        <div class="form-search" id="form-search">
+                            <div class="form-group">
+                                <input type="text"
+                                       class="form-control search-biz"
+                                       name="search-desktop"
+                                       id="search-desktop"
+                                       placeholder="Tìm kiếm từ khoá" />
+                                <i id="search-button" class="fa fa-search addon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    @if (highViewList.Any())
+                    {
+                        <div class="pane pane-list mb-4">
+                            <div class="tt pane-tt">@Html.Raw(_translate.GetString("news.popular-news"))</div>
+                            @foreach (var item in highViewList)
+                            {
+                                <div class="pane-list-item d-flex block">
+                                    <a class="absolute"
+                                       href="@Html.Raw(_translate.GetUrl("url.news"))@(item.Slug).html"
+                                       title="@Html.Raw(item.TitleAlt)"
+                                       alt="@Html.Raw(item.TitleAlt)"
+                                       target="_self"></a>
+                                    <div class="thumb">
+                                        <img class="fit-cover"
+                                             src="@Html.Raw(item.PicThumb)"
+                                             alt="@Html.Raw(item.TitleAlt)" />
+                                    </div>
+                                    <div class="info">
+                                        <div class="tt">
+                                            @Html.Raw(item.Title)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    }
+                    @if (advertisements.Any())
+                    {
+                        <script>
+                            let advertisementEmbedCode = '';
+                        </script>
+                        <div id="advertisementdiv"></div>
+                        foreach (var item in advertisements)
+                        {
+                            if (item.DisplayType == "normal")
+                            {
+                                <div class="pane bannerqc mb-3">
+                                    <a class="block"
+                                       href="@item.Link"
+                                       title="@Html.Raw(item.TitleAlt)"
+                                       alt="@Html.Raw(item.TitleAlt)"
+                                       target="@(item.TargetLink == "_blank" ? "_blank" : "")">
+                                        <img class="fit-cover"
+                                             src="@item.Image"
+                                             alt="@Html.Raw(item.TitleAlt)" />
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <script type="text/javascript">
+                                    advertisementEmbedCode = convertEmbedCode('@item.EmbedCode')
+                                    document.getElementById('advertisementdiv').innerHTML += advertisementEmbedCode;
+                                </script>
+                            }
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+
+        @if (relateList.Any())
+        {
+            <div class="other-post">
+                <div class="tt-ss tt-xs">@Html.Raw(_translate.GetString("news.other-news"))</div>
+                <ul class="list-other-news">
+
+                    @foreach (var item in relateList)
+                    {
+                        <li>
+                            <a class="block" alt="@Html.Raw(item.TitleAlt)" title="@Html.Raw(item.TitleAlt)" href="@Html.Raw(_translate.GetUrl("url.news"))@(item.Slug).html">
+                                <span class="title">
+                                    @Html.Raw(item.Title)
+                                </span>
+                            </a>
+                        </li>
+
+                    }
+                </ul>
+            </div>
+        }
+
+    </div>
+</section>
+
+
+<partial name="/Views/Shared/Convenience.cshtml" />
+@section Scripts{
+    <script asp-append-version="true" src="~/vendors/controllers/searchController.js"></script>
+    <script src="https://sp.zalo.me/plugins/sdk.js"></script>
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+        var searchUrl = '@_translate.GetUrl("url.search")';
+        var enterSearchKeyword = '@Html.Raw(_translate.GetString("news.enter-search-keyword"))';
+    </script>
+}

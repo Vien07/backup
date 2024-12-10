@@ -1,0 +1,130 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using DTO.FAQ;
+@using DTO.Website;
+@using DTO;
+@inject ITranslateServices _translate
+@inject ICommonServices _common;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<FAQDto> list = ViewBag.Data as List<FAQDto>;
+    //int currentPage = ViewBag.CurrentPage;
+    //int lastpage = ViewBag.PageTotal;
+    string banner = ViewBag.Banner as string;
+    //List<FAQCateDto> cateList = ViewBag.FAQCateList as List<FAQCateDto>;
+    //List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex align-items-center h-100">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("menu.faq"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))"
+                               title="@Html.Raw(_translate.GetString("menu.home"))"
+                               alt="@Html.Raw(_translate.GetString("menu.home"))"
+                               target="_self">
+                                @Html.Raw(_translate.GetString("menu.home"))
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a href="@Html.Raw(_translate.GetUrl("url.faq"))"
+                               title="@Html.Raw(_translate.GetString("menu.faq"))"
+                               alt="@Html.Raw(_translate.GetString("menu.faq"))"
+                               target="_self">
+                                @Html.Raw(_translate.GetString("menu.faq"))
+                            </a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+<section class="block-bg block-primary">
+    <div class="container py-5 py-xl-6">
+        <div class="text-center">
+            <div class="title-box fadeInDown wow">
+                <h2 class="tt-lg">@Html.Raw(_translate.GetString("faq.faq"))</h2>
+            </div>
+        </div>
+        @if (list.Any())
+        {
+            <div class="row block-faqIndex mt-5 gy-3">
+                <div class="col-12 col-lg-4 order-md-2">
+                    <div class="thumb-res mb-0 wide h-100">
+                        <img class="fit-cover" src="@ConstantStrings.UrlConfigurationImages@(_common.GetConfigValue(ConstantStrings.KeyFAQImage))" />
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8 order-md-1">
+                    <div class="block-faq pe-lg-3">
+                        @foreach (var item in list)
+                        {
+                            <div class="faq-items">
+                                <a class="faq-links @(item == list[0] ? "open-toggle" : "")"
+                                   role="button"
+                                   alt="@Html.Raw(item.TitleAlt)"
+                                   title="@Html.Raw(item.TitleAlt)"
+                                   data-toggle="#FAQ-@Html.Raw(item.Pid)">
+                                    @Html.Raw(item.Title)
+                                </a>
+                                <div class="faq-collapse faq-content" id="FAQ-@Html.Raw(item.Pid)">
+                                    <p>
+                                        @Html.Raw(item.Answer)
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="margin-top:25px" class="text-center">@Html.Raw(_translate.GetString("common.infoisupdating"))</div>
+        }
+    </div>
+</section>
+
+@section Scripts{
+    <script>
+        if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+    </script>
+}

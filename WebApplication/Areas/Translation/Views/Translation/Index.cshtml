@@ -1,0 +1,159 @@
+﻿@using CMS.Services.TranslateServices;
+@using DTO;
+@inject ITranslateServices _translate;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+    </style>
+}
+
+<div class="container-fluid px-lg-4">
+
+    <!-- Title -->
+    <div class="hk-pg-header">
+        <div class="hk-pg-header pt-20">
+            <h5 class="hk-pg-title text-light text-uppercase"><span class="pg-title-icon"><i class="fas fa-layer-group"></i></span>@_translate.GetStringAdmin("left-menu.translation")</h5>
+        </div>
+    </div>
+    <!-- /Title -->
+
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <p class="mb-20">
+                    Bạn có thể tùy chỉnh văn bản giao diện người dùng (UI) bằng cách dịch nó theo cách bạn mong muốn.
+                </p>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive border-0">
+                                <table id="edit_datable_1" class="table table-sm mb-0 table-edit" style="cursor: pointer;">
+                                    <thead class="thead-light border">
+                                        <tr>
+                                            <th class="py-2" width="250">
+                                                Mô tả
+                                            </th>
+                                            <th class="py-2">Tiếng Việt</th>
+                                            <th hidden class="py-2">English</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyData">
+                                    </tbody>
+                                </table>
+                                @*<input style="position: absolute; top: 144px; left: 270.578px; padding: 12px 20px; text-align: left; font: 400 15px / 22.5px Lato, sans-serif; width: 394.812px; height: 47.5px; border-width: 1px 0px 0px; border-style: solid none none; border-color: rgb(224, 227, 228) rgb(111, 122, 127) rgb(111, 122, 127); display: none;">*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-left">
+                    <a href="/b-admin/Dashboard/Index" class="btn btn-dark mt-3 mr-2"><i class="fas fa-window-close"></i> @_translate.GetStringAdmin("button.close") </a>
+                    <button type="button" id="btnSave" onclick="Update()" class="btn btn-primary mt-3"><i class="fas fa-save mr-5"></i>@_translate.GetStringAdmin("group.btn-save")</button>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<!--</div>-->
+@section Scripts{
+    <script type="text/javascript">
+        //#define
+        var actionUrl = "/b-admin/Translation/"
+        $(function () {
+            LoadData();
+        })
+
+        function LoadData() {
+            $.ajax({
+                url: actionUrl + 'LoadData',
+                method: 'GET',
+                success: function (response) {
+                    //LoadGrid(response.data, response.paging);
+                    LoadTable(response);
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+
+        let translation = [];
+
+        function LoadTable(rs) {
+            let data = JSON.parse(rs);
+            $("#tbodyData").html("");
+            let html = ``;
+            //<!--Bao nhiêu cột thì colspan bấy nhiêu cột(f.x 4 => colspan = 4)-- >
+            data.map((item, index) => {
+                html += `<tr>
+                                                    <td colspan="2" class="edit-disabled py-2 px-1 bg-white tabindex="1">
+                                                        <h6 class="mb-0 ${index !== 0 ? "mt-35" : ""} text-primary">
+                                                            <i class="fas fa-edit mr-5 text-desc"></i>
+                                                            <span>${item.title}</span>
+                                                        </h6>
+                                                    </td>
+                                                </tr>`;
+
+                item.value.map((item2) => {
+                    html += `<tr class="border">
+                                                        <td class="edit-disabled" tabindex="1"><p>${item2.title}</p></td>
+                                                        <td id="${item.key}.${item2.key}.vi" tabindex="1"><p>${item2.value.vi}</p></td>
+                                                        <td hidden id="${item.key}.${item2.key}.en" tabindex="1"><p>${item2.value.en}</p></td>
+                                                    </tr>`;
+                });
+            });
+            $("#tbodyData").append(html);
+            $('#edit_datable_1').editableTableWidget({ disableClass: "edit-disabled" });
+            translation = data;
+            $('#edit_datable_1 td').on('change', function (evt, newValue) {
+                let id = evt.currentTarget.id.toString().split(".");
+                translation.map((item) => {
+                    if (item.key === id[0]) {
+                        item.value.map((item2) => {
+                            if (item2.key === id[1]) {
+                                if (id[2] === "vi") {
+                                    item2.value.vi = newValue;
+                                } else if (id[2] === "en") {
+                                    item2.value.en = newValue;
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#edit_datable_1 td').on('focus', function () {
+                $('#edit_datable_1 td').css("white-space", "normal");
+            });
+        }
+
+        function Update() {
+            $('#btnSave').prop('disabled', true);
+            var formData = new FormData();
+            formData.append("data", JSON.stringify(translation));
+            $.ajax({
+                url: actionUrl + 'Update',
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    if (response.error.status) {
+                        $('#btnSave').prop('disabled', false);
+                        AlertToast('Thông tin', "Thành công", "success")
+                    } else {
+                        $('#btnSave').prop('disabled', false);
+                        SweetAlert('Thông tin', response.error.mess, 'error')
+                    }
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            });
+        }
+
+    </script>
+}

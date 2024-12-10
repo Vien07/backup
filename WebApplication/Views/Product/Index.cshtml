@@ -1,0 +1,146 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services
+@using DTO.Product;
+@using DTO.Website;
+@using DTO.Customer;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<ProductDto> list = ViewBag.Data as List<ProductDto>;
+    string banner = ViewBag.Banner as string;
+    PopupDto popup = ViewBag.Popup;
+    int? popupDelayTime = null;
+    CustomerDto customer = ViewBag.Customer as CustomerDto;
+    if (popup != null)
+    {
+        popupDelayTime = popup.DelayTime;
+    }
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Popup{
+    @if (popup != null)
+    {
+        <div class="modal-body p-0" id="popupModalBody">
+            @if (popup.DisplayType == "normal")
+            {
+                <a target="@(popup.TargetLink == "_blank" ? "_blank" : "")" href="@popup.Link"><img src="@popup.Image" title="@popup.Title" alt="@popup.Title"></a>
+            }
+            else
+            {
+                <div id="popupdiv"></div>
+                <script>
+                    let popupEmbedCode = convertEmbedCode('@popup.EmbedCode');
+                    document.getElementById('popupdiv').innerHTML += popupEmbedCode;
+                </script>
+            }
+        </div>
+    }
+}
+
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("menu.product"))</h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a href="@Html.Raw(_translate.GetUrl("url.product"))" title="@Html.Raw(_translate.GetString("menu.product"))" alt="@Html.Raw(_translate.GetString("menu.product"))" target="_self">@Html.Raw(_translate.GetString("menu.product"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+<section class="block-bg py-5 py-xl-6">
+    <div class="container wow zoomOutIn">
+        <div class="title-box text-center mb-3">
+            <div class="tt-lg text-uppercase text-gradient">
+                @Html.Raw(_translate.GetString("product.title"))
+            </div>
+        </div>
+        <div class="desc text-center mb-45 text-desc">
+            @Html.Raw(_translate.GetString("product.desc"))
+        </div>
+        <div class="list-pricing w-xxl-90 mx-auto">
+            @foreach (var item in list)
+            {
+
+                <div class="table-price @(item.IsHot ? "popular" : "")">
+                    <div class="price-header">
+                        <div class="badge">
+                            <span>@Html.Raw(item.Title)</span>
+                        </div>
+                        @if (item.Price > 0)
+                        {
+
+                            <div class="price">@Html.Raw(item.PriceString)<span class="unit">₫</span></div>
+                            <div class="text-desc">Mỗi tháng</div>
+                        }
+                        else
+                        {
+                            <div class="price">@Html.Raw(_translate.GetString("product.contact"))</div>
+                            <div class="text-desc">@Html.Raw(_translate.GetString("product.receive-best-price"))</div>
+                        }
+
+                    </div>
+                    <div class="price-body">
+                        @Html.Raw(item.Content)
+                    </div>
+                    <div class="price-footer">
+                        @if (item.Price > 0)
+                        {
+                            @if (customer.Pid == 0)
+                            {
+                                <a class="btn btn-outline-primary"
+                                   onclick="CheckUser()"
+                                   alt="@Html.Raw(_translate.GetString("product.buy-now"))"
+                                   title="@Html.Raw(_translate.GetString("product.buy-now"))"
+                                   href="javascript:void(0)">@Html.Raw(_translate.GetString("product.buy-now"))</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-primary btn-add-cart"
+                                   onclick="addToCart(@(item.Pid), 0, 0, 1)"
+                                   alt="@Html.Raw(_translate.GetString("product.buy-now"))"
+                                   title="@Html.Raw(_translate.GetString("product.buy-now"))"
+                                   href="javascript:void(0)">@Html.Raw(_translate.GetString("product.buy-now"))</a>
+                            }
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-primary"
+                               alt="@Html.Raw(_translate.GetString("product.contact-now"))"
+                               title="@Html.Raw(_translate.GetString("product.contact-now"))"
+                               href="@Html.Raw(_translate.GetUrl("url.contact"))">@Html.Raw(_translate.GetString("product.contact-now"))</a>
+                        }
+
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</section>
+
+<partial name="/Views/Shared/Convenience.cshtml" />
+@section Scripts{
+    <script asp-append-version="true" src="~/vendors/controllers/cartController.js"></script>
+    <script>
+        if ('@popupDelayTime' !== "") {
+            if ('@popupDelayTime' !== "") {
+            ShowPopupBizMaC('@popupDelayTime')
+        }
+        }
+                 var checkoutUrl = "@Html.Raw(_translate.GetUrl("url.check-out"))"
+    </script>
+}

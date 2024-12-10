@@ -1,0 +1,348 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase">
+            <span class="pg-title-icon">
+                <i class="fas fa-layer-group">
+                </i>
+            </span>@_translate.GetStringAdmin("left-menu.branch")
+        </h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <!--Discription table-->
+                @*<p class="mb-20">
+                    @_translate.GetStringAdmin("table-desc.branch")
+                </p>*@
+                <!--filter action-->
+                <div class="form-inline align-items-center">
+                    <div class="col-auto form-group px-0 mb-3">
+                        <select onchange="Search()" id="selectActive" class="form-control select2 form-control-sm">
+                            <option value="" selected>—@_translate.GetStringAdmin("group.select-all")</option>
+                            <option value="1">@_translate.GetStringAdmin("group.select-active")</option>
+                            <option value="0">@_translate.GetStringAdmin("group.select-inactive")</option>
+                        </select>
+                    </div>
+                    <div class="col-auto form-group px-2 mb-3 ">
+                        <input id="key" type="search" class="form-control form-control-sm" placeholder="Keyword search">
+                        <div class="input-group-append">
+                            <button onclick="Search()" class="btn btn-sm btn-light ml-2" title="@_translate.GetStringAdmin("group.tooltip-search")" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-auto mb-3 px-2">
+                        <button onclick="OpenAddPopup()" class="btn btn-sm btn-success waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaycolor="#38414a">
+                            <i class="fas fa-layer-plus mr-1"></i>@_translate.GetStringAdmin("group.btn-add")
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="table-wrap">
+                            <div class="table-responsive">
+                                <table id="tableData" class="table table-sm table-hover mb-0">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="py-2" width="5">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input onclick="CheckAll()" type="checkbox" class="custom-control-input" id="customcheck-all">
+                                                    <label class="custom-control-label position-static" for="customcheck-all"></label>
+                                                </div>
+                                            </th>
+                                            @*<th class="py-2" width="100">@_translate.GetStringAdmin("branch.table-header-images")</th>*@
+                                            <th class="py-2">@_translate.GetStringAdmin("branch.table-header-title")</th>
+                                            <th class="py-2 text-center" width="120">@_translate.GetStringAdmin("branch.table-header-active")</th>
+                                            <th class="py-2 text-center" width="100">
+                                                @_translate.GetStringAdmin("label.action")
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyData"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="my-1 mr-auto">
+                                <button type="button" onclick="Enable(0,true)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="active"><i class="fas fa-eye"></i></button>
+                                <button type="button" onclick="Enable(0,false)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="inactive"><i class="fas fa-eye-slash"></i></button>
+                                <button type="button" onclick="Coppy()" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="copy clone row"><i class="fas fa-copy"></i></button>
+                                <button type="button" onclick="DeleteMulti()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fal fa-trash-alt"></i></button>
+                                <button type="button" onclick="LoadData()" class="btn btn-sm btn-primary " data-toggle="tooltip" data-placement="top" title="save order" data-original-title=""><i class="fal fa-save"></i></button>
+                            </div>
+                            <div class="my-1 ml-auto" id="divPaging">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+<!-- Custom Modal -->
+<!-- Custom Modal -->
+<div class="modal fade ModalForm" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModal" aria-hidden="true">
+    <div class="modal-dialog" role="admin">
+        <form class="modal-content needs-validation" id="formInput" name="formInput" novalidate onsubmit="return false">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white text-uppercase">
+                    <i class="fas fa-layer-plus pr-10 bg-transparent"></i>@_translate.GetStringAdmin("branch.modal-title")
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <ul class="nav nav-tabs" id="langTab" role="tablist">
+                        <li style="cursor:pointer" lang="vi" class="nav-item">
+                            <a class="nav-link active show" data-toggle="tab" role="tab" aria-controls="info" aria-selected="true"><i class="flag-icon flag-icon-vn"></i> Tiếng việt</a>
+                        </li>
+                        <li style="cursor:pointer" lang="en" class="nav-item">
+                            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="img" aria-selected="false"><i class="flag-icon flag-icon-us"></i> English</a>
+                        </li>
+                    </ul>
+                    <hr class="hr-light mt-0">
+                </div>
+                <div id="bodyModal">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    <i class="fas fa-times mr-5"></i>
+                    @_translate.GetStringAdmin("group.btn-close")
+                </button>
+                <button id="btnSave" onclick="Save()" type="submit" class="btn btn-primary">
+                    <i class="fas fa-save mr-5"></i>
+                    @_translate.GetStringAdmin("group.btn-save")
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Custom Modal -->
+<!-- Custom Modal -->
+@section Scripts{
+    <script type="text/javascript">
+        //define
+        var actionUrl = "/b-admin/Branch/"
+        var state = "";
+        var lang = "@ConstantStrings.DefaultLangAdmin";
+        var localStorgaNameObjs = "rawBranchObjs";
+        var localStorgaNameMultiLang_Obj = "rawBranchMultiLang_Obj";
+
+        var imagesObj = {
+            base64: '',
+            type: ''
+        }
+        var obj = {
+            pid: 0,
+            //picThumb: '',
+            link: '',
+            //position: '',
+            phoneNumber:''
+        };
+
+        var objLang = {
+            Pid: 0,
+            Title: '',
+            //Description: '',
+            LangKey: '',
+            Address: '',
+        }
+
+        var multiLang_obj = []
+
+        $(function () {
+            GetSelectPageSearch('#selectPage', lang);
+            LoadData(lang);
+        })
+
+
+        //raw data action
+        function CustomSetDataEdit(data) {
+            obj = data.detail;
+            multiLang_obj = data.list;
+        }
+
+        function ShowRawData() {
+            if (state === "add") {
+                // get raw data in localStorage
+                var rawObjs = localStorage.getItem(localStorgaNameObjs);
+                if (rawObjs != null && typeof rawObjs != "undefined" && rawObjs != "null") {
+                    obj = JSON.parse(rawObjs);
+                }
+                var rawMultiLang_Obj = localStorage.getItem(localStorgaNameMultiLang_Obj);
+                if (rawMultiLang_Obj != null && typeof rawMultiLang_Obj != "undefined" && rawMultiLang_Obj != "null") {
+                    multiLang_obj = JSON.parse(rawMultiLang_Obj);
+                }
+            }
+            //else if (state === "edit") {
+            //    $("#imgPicThumb").css("background-image", "url('" + obj.picThumb + "'");
+            //}
+
+            //if (imagesObj.type == "new") {
+            //    $("#imgPicThumb").css("background-image", "url('" + imagesObj.base64 + "'");
+            //}
+
+            //SetToggle('#toggle_enable', obj.enabled);
+            if (multiLang_obj.length > 0) {
+                tobjLang = multiLang_obj.filter(x => x.LangKey == lang)[0];
+                if (tobjLang != null && typeof tobjLang != "undefined" && tobjLang != "null") {
+                    objLang = tobjLang;
+                }
+            }
+            if(objLang) {
+                $('#Title').val(objLang.Title);
+                //$('#Description').val(objLang.Description);
+                $('#Address').val(objLang.Address);
+            } else {
+                $('#Title').val("");
+                //$('#Description').val("");
+                $('#Address').val("");
+            }
+
+            $('#Link').val(obj.link);
+            $('#PhoneNumber').val(obj.phoneNumber);
+            //$('input:radio[name=text-position]').val([obj.position]);
+        }
+        function SaveRawData() {
+            obj.link = $("#Link").val();
+            obj.phoneNumber = $("#PhoneNumber").val();
+            //obj.position = $('input[name="text-position"]:checked').val();
+            var tempObjLang = {};
+            tempObjLang.Title = $('#Title').val();
+            //tempObjLang.Description = $('#Description').val();
+            tempObjLang.Address = $('#Address').val();
+            tempObjLang.LangKey = lang;
+            var tempMultiLang_obj = multiLang_obj.filter(x => x.LangKey == lang);
+            if (tempMultiLang_obj.length > 0) {
+                tempMultiLang_obj[0].Title = tempObjLang.Title;
+                //tempMultiLang_obj[0].Description = tempObjLang.Description;
+                tempMultiLang_obj[0].Address = tempObjLang.Address;
+            }
+            else {
+                multiLang_obj.push(tempObjLang);
+            }
+            if (state == "add") {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+            }
+        }
+        function GetFormData() {
+            var formData = new FormData();
+            if (imagesObj.type == "new") {
+                var blob = dataURItoBlob(imagesObj.base64);
+                formData.append('PicThumb', blob, 'fileName.jpeg');
+            }
+            formData.append("stringObj", JSON.stringify(obj));
+            formData.append("stringMultiLangObj", JSON.stringify(multiLang_obj));
+            return formData;
+        }
+        function Validate() {
+            SaveRawData();
+            var rs = false;
+            if ($('#Title').val() == "") {
+                AlertToast('Thông báo', "Chưa nhập tiêu đề", 'warning')
+                return false;
+            }
+            return true;
+        }
+
+        //Initinput Action
+        function InitInput() {
+            $('.raw').keyup(function () {
+
+                SaveRawData();
+            });//event raw
+        }
+        function ClearInputPopup() {
+            obj = {
+                pid: 0,
+                picThumb: ''
+            };
+            objLang = {
+                Pid: 0,
+                Title: '',
+                //Description: '',
+                LangKey: '',
+                Address: ''
+            }
+            multiLang_obj = [];
+            cate = [];
+            ClearImages();
+        }
+        function Clear() {
+            ClearInputPopup();
+            if (state == 'add') {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+            }
+            else if (state = "edit") {
+
+            }
+
+            state = "";
+            $('#btnSave').prop('disabled', false);
+            $('#formInput').removeClass("was-validated")
+            $("#inputModal").modal("hide");
+        }
+
+        //grid action
+        function LoadGrid(jsString, paging) {
+            var data = JSON.parse(jsString)
+            $("#tbodyData").html("")
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                html = `<tr class="${!data[i].Enabled ? "inactive" : ""}" tabIndex="${i}" slot="${data[i].Order}"  id="${data[i].Pid}">
+                              <td>
+                                  <div  class="custom-control custom-checkbox">
+                                      <input  onclick="KtCheckbox()" type="checkbox" class="custom-control-input" id="customCheck-${data[i].Pid}" name="Chk" value="${data[i].Pid}">
+                                      <label class="custom-control-label" for="customCheck-${data[i].Pid}">&nbsp;</label>
+                                  </div>
+                                  </td>                                     @*<td>
+                                        <a role="button" href="#" data-src="${data[i].Images}" onmouseover="tooltipImg(this)" onclick="OpenEditModal(${data[i].Pid})" class="${!data[i].Enabled ? "inactive" : ""} avatar avatar-xs rounded" style="background-image: url('${data[i].Images}');">
+                                        </a>
+                                      </td>*@
+                                    <td>
+                                        <a  data-toggle="tooltip" data-original-title="edit" style="cursor:pointer"  onclick="OpenEditModal(${data[i].Pid})"  class="${data[i].Enabled == false ? "text-mute" : "text-primary"}">${data[i].Title}</a>
+                                <ul class="group-info font-13">
+                                  <li><p class="text-desc">Địa chỉ: ${data[i].Address}</p></li>
+                                  <li><p class="text-desc">Số điện thoại: ${data[i].PhoneNumber}</p></li>
+                                </ul>
+                                    </td>
+                                    <td class="text-md-center">
+                                    <span class="toggle-wrap">
+                                    <div id="toggle_${data[i].Pid}" class="toggle toggle-sm toggle-simple toggle-light toggle-bg-success toggle1 mt-5"></div>
+                                    </span>
+                                    </td>
+                                  <td class="text-center text-nowrap">
+                        <input id="orderInput-${data[i].Pid}" onfocusout="UpdateOrder(${data[i].Pid})" type="text" tabindex="${100 + i}" class="form-control form-control-sm d-inline mr-2 text-right border" placeholder="" value="${data[i].Order}" style="width:45px;height:25px ">
+                        <a    style="cursor:pointer"  data-toggle="tooltip" data-original-title="move"><i class="fas fa-arrows-alt text-dark handle"></i></a>
+
+                                      <a style="cursor:pointer" onclick="OpenEditModal(${data[i].Pid})" class="mx-2" data-toggle="tooltip" data-original-title="edit"><i class="far fa-sliders-h text-dark"></i></a>
+                                      <a style="cursor:pointer" onclick="Delete(${data[i].Pid})"data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a>
+                                  </td>
+                                </tr>`;
+                $("#tbodyData").append(html)
+                InitToggle(data[i]);
+            }
+            var pageHtml = Paging(paging.curentpage, paging.lastpage);
+            $("#divPaging").html(pageHtml)
+            ToolTip();
+            InitDragDropTable();
+        }
+    </script>
+}

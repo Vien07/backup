@@ -1,0 +1,392 @@
+﻿@using DTO;
+@using CMS.Services.TranslateServices;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Shared/Views/_Layout.cshtml";
+}
+
+<div class="container-fluid px-lg-4">
+    <!-- Title -->
+    <div class="hk-pg-header pt-20">
+        <h5 class="hk-pg-title text-light text-uppercase">
+            <span class="pg-title-icon">
+                <i class="fas fa-layer-group">
+                </i>
+            </span>@_translate.GetStringAdmin("left-menu.faq-cate")
+        </h5>
+    </div>
+    <!-- /Title -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-xl-12">
+            <section class="hk-sec-wrapper">
+                <div class="row pb-20">
+                    <div class="col-sm">
+                        <div class="row">
+                            <!--filter action-->
+                            <div class="form-inline align-items-center pb-10">
+                                <div class="col-auto form-group">
+                                    <select onchange="Search()" id="selectActive" class="form-control select2 form-control-sm border mr-5 mb-5">
+                                        <option value="" selected>—@_translate.GetStringAdmin("group.select-all")</option>
+                                        <option value="1">@_translate.GetStringAdmin("group.select-active")</option>
+                                        <option value="0">@_translate.GetStringAdmin("group.select-inactive")</option>
+                                    </select>
+                                    <input id="key" type="search" class="form-control form-control-sm mr-5 mb-5" placeholder="Keyword search">
+                                    <button onclick="Search()" type="button" class="btn btn-sm btn-light mr-5 mb-5" data-toggle="tooltip" data-placement="top" title="@_translate.GetStringAdmin("group.tooltip-search")">
+                                        <i class="fal fa-search"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-green mr-5 mb-5" data-toggle="modal" onclick="OpenAddPopup()">
+                                        <i class="fas fa-layer-plus"></i> @_translate.GetStringAdmin("group.btn-add")
+                                    </button>
+                                </div>
+                            </div>
+                        </div><!--end filter action-->
+                        <div class="table-responsive">
+                            <table id="tableData" class="table table-hover table-sm mb-0 bg-white">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th width="1">
+                                            <div class="custom-control custom-checkbox">
+                                                <input onclick="CheckAll()" type="checkbox" class="custom-control-input" id="customcheck-all">
+                                                <label class="custom-control-label position-static" for="customcheck-all"></label>
+                                            </div>
+                                        </th>
+                                        <th class="text-nowrap" class="resizeable">@_translate.GetStringAdmin("course.table-header-cate-name")</th>
+                                        <th class="text-nowrap" width="1">@_translate.GetStringAdmin("course.table-header-count")</th>
+                                        <th class="text-nowrap text-right" width="1">@_translate.GetStringAdmin("course.table-header-active")</th>
+                                        <th class="text-right text-nowrap" scope="col" width="1">@_translate.GetStringAdmin("label.action")</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyData"></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap align-items-center">
+                    <div class="my-1 mr-auto">
+                        <button type="button" onclick="Enable(0,true)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="active"><i class="fas fa-eye"></i></button>
+                        <button type="button" onclick="Enable(0,false)" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="inactive"><i class="fas fa-eye-slash"></i></button>
+                        <button type="button" onclick="Coppy()" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="" data-original-title="copy clone row"><i class="fas fa-copy"></i></button>
+                        <button type="button" onclick="DeleteMulti()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="delete"><i class="fal fa-trash-alt"></i></button>
+                        <button type="button" onclick="LoadData()" class="btn btn-sm btn-primary " data-toggle="tooltip" data-placement="top" title="save order" data-original-title=""><i class="fal fa-save"></i></button>
+
+                    </div>
+                    <div class="my-1 ml-auto" id="divPaging">
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+    <!-- /Row -->
+</div>
+<!-- Custom Modal -->
+<div class="modal fade" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="admin">
+
+        <form class="modal-content needs-validation" name="formInput" id="formInput" novalidate onsubmit="return false">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white text-uppercase"><i class="fas fa-layer-plus pr-10 "></i>@_translate.GetStringAdmin("course.modal-title")</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <ul class="nav nav-tabs" id="langTab" role="tablist">
+                        <li style="cursor:pointer" lang="vi" class="nav-item">
+                            <a class="nav-link active show" data-toggle="tab" role="tab" aria-controls="info" aria-selected="true"><i class="flag-icon flag-icon-vn"></i> Tiếng việt</a>
+                        </li>
+                        <li style="cursor:pointer" lang="en" class="nav-item">
+                            <a class="nav-link" data-toggle="tab" role="tab" aria-controls="img" aria-selected="false"><i class="flag-icon flag-icon-us"></i> English</a>
+                        </li>
+                    </ul>
+                    <hr class="hr-light mt-0">
+                </div>
+                <div id="bodyModal" class="form-group">
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<div id="toggle_enable" value="true" class="toggle  toggle-simple toggle-light toggle-bg-success toggle1 raw"></div>*@
+                <button type="submit" id="btnSave" onclick="Save()" class="btn btn-primary"><i class="fas fa-save mr-5"></i>@_translate.GetStringAdmin("group.btn-save")</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Custom Modal -->
+@section Scripts{
+
+
+    <script type="text/javascript">
+        //define
+        var actionUrl = "/b-admin/FAQCate/"
+        var state = "";
+        var lang = "@ConstantStrings.DefaultLangAdmin";
+        var localStorgaNameObjs = "rawFAQCateObjs";
+        var localStorgaNameMultiLang_Obj = "rawFAQCateMultiLang_Obj";
+
+        var imagesObj = {
+            base64: '',
+            type: ''
+        }
+
+        var obj = {
+            pid: 0,
+            parentId: 0
+        };
+
+        var objLang = {
+            Pid: 0,
+            Name: '',
+            Description: '',
+            LangKey: '',
+        }
+
+        var multiLang_obj = []
+
+        $(function () {
+            LoadData(lang);
+        })
+
+        //-------------------SET GET DATA-------------
+        function CustomSetDataEdit(data) {
+            obj = data.detail;
+            multiLang_obj = data.list;
+        }
+        function ShowRawData() {
+            GetSelectParentFAQ('#ParentId', obj.parentId, lang, obj.pid)
+            if (state == "add") {
+                // get raw data in localStorage
+                var rawFAQObjs = localStorage.getItem(localStorgaNameObjs);
+                if (rawFAQObjs != null && rawFAQObjs != "undefined" && rawFAQObjs != "null") {
+                    obj = JSON.parse(rawFAQObjs);
+                }
+                var rawFAQMultiLang_Obj = localStorage.getItem(localStorgaNameMultiLang_Obj);
+                if (rawFAQMultiLang_Obj != null && rawFAQMultiLang_Obj != "undefined" && rawFAQMultiLang_Obj != "null") {
+                    multiLang_obj = JSON.parse(rawFAQMultiLang_Obj);
+                }
+            } else if (state == "edit") {
+                //obj = editData.detail;
+                //multiLang_obj = editData.list;
+            }
+            //SetToggle('#toggle_enable', obj.enabled);
+            if (multiLang_obj.length > 0) {
+                objLang = multiLang_obj.filter(x => x.LangKey == lang)[0];
+            }
+            if (objLang) {
+                $('#Name').val(objLang.Name);
+                $('#Description').val(objLang.Description);
+            } else {
+                $('#Name').val("");
+                $('#Description').val("");
+            }
+        }
+        function SaveRawData() {
+            var tempObjLang = {};
+            tempObjLang.Name = $('#Name').val();
+            tempObjLang.Description = $('#Description').val();
+            tempObjLang.LangKey = lang;
+            var tempMultiLang_obj = multiLang_obj.filter(x => x.LangKey == lang);
+            if (tempMultiLang_obj.length > 0) {
+                tempMultiLang_obj[0].Name = tempObjLang.Name;
+                tempMultiLang_obj[0].Description = tempObjLang.Description;
+            } else {
+                multiLang_obj.push(tempObjLang);
+            }
+            if (state == "add") {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+            }
+            obj.parentId = $('#ParentId').val();
+        }
+
+        //---------------------ACTION-----------------
+        function GetFormData() {
+            var formData = new FormData();
+            formData.append("stringObj", JSON.stringify(obj));
+            formData.append("stringMultiLangObj", JSON.stringify(multiLang_obj));
+            return formData;
+        }
+        function Validate() {
+            SaveRawData();
+            if ($('#Name').val() == "") {
+                AlertToast('Thông báo', "Chưa nhập tiêu đề", 'warning')
+                return false;
+            }
+            if (parseInt(obj.parentId) == obj.pid && parseInt(obj.parentId) != 0) {
+                AlertToast('Thông báo', "Không thể chọn danh mục trùng với bản thân nó!!!", 'warning')
+                return false;
+            }
+            return true;
+        }
+        function readURL(input, divImages, id) {
+            try {
+                if (FileReader) {
+                    var reader = new FileReader();
+                    //console.log(FileReader)
+                    reader.readAsDataURL(input.files[0]);
+                    reader.onload = function (e) {
+                        var image = new Image();
+                        image.src = e.target.result;
+                        image.onload = function () {
+                            imagesObj.base64 = image.src;
+                            imagesObj.type = "new";
+                            //if (state == "add") {
+
+                            //    localStorage.setItem('rawFAQObjsCommon', JSON.stringify(currentDataCommon));
+                            //}
+
+                            $(divImages).css("background-image", "url('" + image.src + "'");
+                        };
+                    }
+                }
+                else {
+                    // Not supported
+                }
+            } catch (e) {
+
+            }
+        }
+        function InitInput() {
+            $('.raw').keyup(function () {
+                SaveRawData();
+            });//event raw
+        }
+        function Clear() {
+            ClearInputPopup()
+            if (state == 'add') {
+                localStorage.setItem(localStorgaNameObjs, JSON.stringify(obj));
+                localStorage.setItem(localStorgaNameMultiLang_Obj, JSON.stringify(multiLang_obj));
+            }
+            else if (state = "edit") {
+
+            }
+            state = "";
+            $('#btnSave').prop('disabled', false);
+            $('#formInput').removeClass("was-validated");
+            $("#inputModal").modal("hide");
+        }
+        function ClearInputPopup() {
+            obj = {
+                pid: 0,
+                parentId: null
+            };
+
+            objLang = {
+                Pid: 0,
+                Name: '',
+                Description: '',
+                LangKey: '',
+            }
+            multiLang_obj = [];
+        }
+
+        //grid action
+        function LoadGrid(jsString, paging) {
+            var data = JSON.parse(jsString)
+            $("#tbodyData").html("")
+            var html = ""
+            for (let i = 0; i < data.length; i++) {
+                //Load parent
+                html = `<tr class="${!data[i].Enabled ? "inactive" : ""}" tabIndex="${i}" slot="${data[i].Order}"  id="${data[i].Pid}">
+                                            <td class="align-middle text-center pr-0">
+                                                 <div  class="custom-control custom-checkbox">
+                                                     <input  onclick="KtCheckbox()" type="checkbox" class="custom-control-input" id="customCheck-${data[i].Pid}" name="Chk" value="${data[i].Pid}">
+                                                     <label class="custom-control-label" for="customCheck-${data[i].Pid}">&nbsp;</label>
+                                                 </div>
+                                            </td>
+                                            <td><a data-toggle="tooltip" data-original-title="edit" style="cursor:pointer"  onclick="OpenEditModal(${data[i].Pid})"  class="${data[i].Enabled == false ? "text-mute" : "text-primary"}">${data[i].Name}</a></td>
+                                            <td class="text-center"><a style="cursor:pointer"  onclick="LoadByCate(${data[i].Pid})">${data[i].CountPost}</a></td>
+
+                                            <td class="align-middle text-md-center">
+                                                <span class="toggle-wrap">
+                                                    <div id="toggle_${data[i].Pid}" class="toggle toggle-sm toggle-simple toggle-light toggle-bg-success toggle1 mt-5"></div>
+                                                </span>
+                                           </td>
+                                            <td class="text-right text-nowrap">
+                                                <input id="orderInput-${data[i].Pid}" onfocusout="UpdateOrder(${data[i].Pid})" type="text" tabindex="${100 + i}" class="form-control form-control-sm d-inline mr-2 text-right border" placeholder="" value="${data[i].Order}" style="width:45px;height:25px ">
+                                                <a style="cursor:pointer"  data-toggle="tooltip" data-original-title="move"><i class="fas fa-arrows-alt text-dark handle"></i></a>
+                                                <a style="cursor:pointer" onclick="OpenEditModal(${data[i].Pid})" class="mx-2" data-toggle="tooltip" data-original-title="edit"><i class="far fa-sliders-h text-dark"></i></a>
+                                                <a style="cursor:pointer" onclick="Delete(${data[i].Pid})"data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a>
+                                            </td>
+                                        </tr>`;
+
+                $("#tbodyData").append(html)
+                $(`#toggle_${data[i].Pid}`).toggles({
+                    drag: false,
+                    click: true,
+                    text: {
+                        on: '',
+                        off: ''
+                    },
+                    on: data[i].Enabled,
+                    animate: 250,
+                    easing: 'swing',
+                    type: 'compact'
+                }).on('toggle', function (e, active) {
+                    Enable(data[i].Pid, active);
+                });
+
+
+                LoadChildren(data[i].Children);
+
+            }
+            var pageHtml = Paging(paging.curentpage, paging.lastpage);
+            $("#divPaging").html(pageHtml)
+            ToolTip();
+            InitDragDropTable();
+        }
+        function LoadChildren(data) {
+            var html = ``;
+
+            for (let i = 0; i < data.length; i++) {
+                html = `<tr class="${!data[i].Enabled ? "inactive" : ""}" tabIndex="${i}" slot="${data[i].Order}"  id="${data[i].Pid}">
+                                            <td class="align-middle text-center pr-0">
+                                                 <div  class="custom-control custom-checkbox">
+                                                     <input  onclick="KtCheckbox()" type="checkbox" class="custom-control-input" id="customCheck-${data[i].Pid}" name="Chk" value="${data[i].Pid}">
+                                                     <label class="custom-control-label" for="customCheck-${data[i].Pid}">&nbsp;</label>
+                                                 </div>
+                                            </td>
+                                                                        <td><a data-toggle="tooltip" data-original-title="edit" style="cursor:pointer"  onclick="OpenEditModal(${data[i].Pid})"  class="${data[i].Enabled == false ? "text-mute" : "text-primary"}">${data[i].Name}</a></td>
+
+                                            <td class="text-center"><a style="cursor:pointer"  onclick="LoadByCate(${data[i].Pid})">${data[i].CountPost}</a></td>
+
+                                            <td class="align-middle text-md-center">
+                                                <span class="toggle-wrap">
+                                                    <div id="toggle_${data[i].Pid}" class="toggle toggle-sm toggle-simple toggle-light toggle-bg-success toggle1 mt-5"></div>
+                                                </span>
+                                           </td>
+                                            <td class="text-right text-nowrap">
+                                                <input id="orderInput-${data[i].Pid}" onfocusout="UpdateOrder(${data[i].Pid})" type="text" tabindex="${100 + i}" class="form-control form-control-sm d-inline mr-2 text-right border" placeholder="" value="${data[i].Order}" style="width:45px;height:25px ">
+                                                <a style="cursor:pointer"  data-toggle="tooltip" data-original-title="move"><i class="fas fa-arrows-alt text-dark handle"></i></a>
+                                                <a style="cursor:pointer" onclick="OpenEditModal(${data[i].Pid})" class="mx-2" data-toggle="tooltip" data-original-title="edit"><i class="far fa-sliders-h text-dark"></i></a>
+                                                <a style="cursor:pointer" onclick="Delete(${data[i].Pid})"data-toggle="tooltip" data-original-title="delete"><i class="far fa-trash-alt text-danger"></i></a>
+                                            </td>
+                                        </tr>`;
+
+                $("#tbodyData").append(html)
+                $(`#toggle_${data[i].Pid}`).toggles({
+                    drag: false,
+                    click: true,
+                    text: {
+                        on: '',
+                        off: ''
+                    },
+                    on: data[i].Enabled,
+                    animate: 250,
+                    easing: 'swing',
+                    type: 'compact'
+                }).on('toggle', function (e, active) {
+                    Enable(data[i].Pid, active);
+                });
+
+                LoadChildren(data[i].Children);
+
+            }
+        }
+
+
+    </script>
+}

@@ -1,0 +1,54 @@
+.banner-main {
+    min-height: 120px;
+    border-radius: $border-radius;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    margin-top: -1rem;
+    &:after {
+        content: '';
+        @include absolute(25%,0,0,0);
+        background: linear-gradient(to top, rgba(#000,.4), rgba(#000,0));
+        z-index: -1;
+    }
+    #{$tt-all} {
+        color: #fff;
+        margin: 0;
+    }
+    .text-banner {
+        padding-top: 5%;
+    }
+}
+.map {
+    position: relative;
+    height: 200px;
+    border-radius: $border-radius;
+    overflow: hidden;
+    margin: .75rem auto;
+    iframe {
+        @extend %absolute-all;
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+@include media-breakpoint-up(md) {
+    .banner-main {
+        min-height: 200px;
+        --tt-lg: 2rem;
+    }
+    .map {
+        height: 300px;
+    }
+}
+@include media-breakpoint-up(lg) {
+    .banner-main {
+        --tt-lg: 2.75rem;
+        .tt-lg {
+            letter-spacing: -1.5px;
+        }
+    }
+    .map {
+        height: 400px;
+    }
+}

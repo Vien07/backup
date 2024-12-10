@@ -1,0 +1,40 @@
+block mixins
+    include ../mixins/mixins
+block vars
+    - title = ''
+    - wrapperClass = ''
+    
+
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+        title=title
+        link(rel="shortcut icon" href="favicon.png")
+        link(href="css/library.min.css" rel="stylesheet")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js")
+    body
+        .preloader
+            .shape
+            .shape
+            .preloader-in: img(src="css/skin/logo.png" alt="Loading...")
+        .wrapper.bg-fixed.login-page(class=wrapperClass)(style="background-image:url('css/skin/theme/bg-login.jpg')")
+            .overlay-white
+            .form-container 
+                .form-logo.text-center
+                    +a('index.html'): +img('logo.png')
+                .form-box 
+                    block form-body 
+                
+                .form-footer.text-center
+                    +a('#', 'text-link', 'Điều khoản sử dụng') 
+                    p Chính sách Quyền riêng tư và Điều khoản Dịch vụ đã được áp dụng.
+                    p 
+                        | © 2021 <b>!{companyName}</b>. 
+                        span.text-nowrap Powered by 
+                            a(href="//bizmac.com" title="BizMaC, Thiết kế website chuyên nghiệp" target="_blank") BizMaC
+
+            block scripts 
+                include ../layout/scripts

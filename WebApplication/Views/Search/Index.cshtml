@@ -1,0 +1,286 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services
+@using DTO;
+@using DTO.News;
+@using DTO.SearchResult;
+@using DTO.Website;
+@inject ITranslateServices _translate
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //List<NewsDto> news = ViewBag.News as List<NewsDto>;
+    //List<ProductDto> products = ViewBag.Products as List<ProductDto>;
+    List<NewsDto> list = ViewBag.Data as List<NewsDto>;
+    List<NewsDto> highViewList = ViewBag.HighViewList as List<NewsDto>;
+    List<AdvertisementDto> advertisements = ViewBag.Advertisements as List<AdvertisementDto>;
+    int currentPage = ViewBag.CurrentPage;
+    int lastpage = ViewBag.PageTotal;
+
+    string banner = ViewBag.Banner as string;
+    string keyword = ViewBag.Key;
+    string option = ViewBag.Option;
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+@section Banner{
+    <section class="banner-lg block-bg banner-page"
+             style="background-image: url('@banner')">
+        <div class="container d-flex">
+            <div class="text-banner">
+                <h1 class="tt-md f-secondary">@Html.Raw(_translate.GetString("search.search-result-for-keyword")) <span style="text-transform: none;">“@Html.Raw(keyword)”</span></h1>
+                <nav arial-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">@Html.Raw(_translate.GetString("menu.home"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="@Html.Raw(_translate.GetUrl("url.news"))" title="@Html.Raw(_translate.GetString("menu.news"))" alt="@Html.Raw(_translate.GetString("menu.news"))" target="_self">@Html.Raw(_translate.GetString("menu.news"))</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0)" title="@Html.Raw(_translate.GetString("menu.search"))" alt="@Html.Raw(_translate.GetString("menu.search"))" target="_self">@Html.Raw(_translate.GetString("menu.search"))</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+}
+
+
+<section class="block-bg py-5 py-xl-6">
+    <div class="container">
+        <div class="block-sidebar" data-wrapper>
+            <div class="mainbody mb-4 mb-md-0" data-mainbody>
+                <div class="title-box mb-4">
+                    <div class="tt-lg text-uppercase text-gradient">@Html.Raw(_translate.GetString("search.search-result-for-keyword"))&nbsp;<span style="text-transform: none;">“@Html.Raw(keyword)”</span></div>
+                </div>
+                @if (list.Any())
+                {
+                    <div class="list-news-flex row row-cols-1">
+                        @foreach (var item in list)
+                        {
+                            <div class="col">
+                                <div class="block">
+                                    <a class="absolute"
+                                       alt="@Html.Raw(item.TitleAlt)"
+                                       title="@Html.Raw(item.TitleAlt)"
+                                       href="@Html.Raw(_translate.GetUrl("url.news"))@(item.Slug).html"></a>
+                                    <div class="thumb-res wide">
+                                        <img alt="@Html.Raw(item.TitleAlt)"
+                                             class="fit-cover"
+                                             src="@Html.Raw(item.PicFull)" />
+                                    </div>
+                                    <div class="info">
+                                        <div class="tt">
+                                            @Html.Raw(item.Title)
+                                        </div>
+                                        <div class="desc">
+                                            @Html.Raw(item.Description)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+                    @if (lastpage > 1)
+                    {
+                        var block = 1;
+                        int nextPage = currentPage + 1;
+                        int perPage = currentPage - 1;
+                        if (perPage == 0)
+                        {
+                            perPage = 1;
+                        }
+                        if (nextPage >= lastpage)
+                        {
+                            nextPage = lastpage;
+                        }
+                        int tempcurrentPage = currentPage + (currentPage / block);
+                        int currentBlock = currentPage / block;
+                        int startPage = 0;
+                        int endPage = 0;
+
+
+                        if (currentBlock == 0)
+                        {
+                            startPage = 1;
+                            endPage = block;
+
+
+                        }
+                        else
+                        {
+                            endPage = block * (currentBlock + 1);
+                            startPage = endPage - block;
+                        }
+                        if (endPage > lastpage)
+                        {
+                            endPage = lastpage;
+                        }
+
+                        <nav class="pagination justify-content-center my-45">
+                            <div class="page-item prev @(currentPage == 1 ? "disabled" : "")">
+                                <a href="?q=@keyword&page=@(currentPage - 1)" title="@Html.Raw(_translate.GetString("label.prev"))" alt="@Html.Raw(_translate.GetString("label.prev"))" target="_self">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                            </div>
+                            @if (currentPage > 1 && lastpage > 1)
+                            {
+                                <div class="page-item">
+                                    <a class="page-counter" alt="1" title="1" href="?q=@keyword&page=1">1</a>
+                                </div>}
+                            @if (startPage > 2 && startPage <= 4)
+                            {
+                                <div class="page-item">
+                                    <a class="page-counter" alt="2" title="2" href="?q=@keyword&page=2">2</a>
+                                </div>}
+                            @if (startPage == 4)
+                            {
+                                <div class="page-item">
+                                    <a class="page-counter" alt="3" title="3" href="?q=@keyword&page=3">3</a>
+                                </div>}
+                            @if (startPage > 4)
+                            {
+                                <div class="page-item">
+                                    <a class="page-counter" alt="..." title="..." href="#">...</a>
+                                </div>
+                                @if (startPage >= 5)
+                                {
+                                    <div class="page-item">
+                                        <a class="page-counter" alt="@(startPage - 1)" title="@(startPage - 1)" href="?q=@keyword&page=@(startPage - 1)">@(startPage - 1)</a>
+                                    </div>}}
+
+                            @for (int i = startPage; i <= endPage; i++)
+                            {
+                                <div class="page-item @(currentPage == i ? "active" : "")">
+                                    <a class="page-counter" alt="@i" title="@i" href="?q=@keyword&page=@i">@i</a>
+                                </div>}
+
+                            @if (currentPage < lastpage - block)
+                            {
+
+                                if (currentPage == lastpage - 3)
+                                {
+                                    <div class="page-item">
+                                        <a class="page-counter" alt="@(lastpage - 1)" title="@(lastpage - 1)" href="?q=@keyword&page=@(lastpage - 1)">@(lastpage - 1)</a>
+                                    </div> }
+                                else if (currentPage < lastpage - 2)
+                                {
+                                    <div class="page-item">
+                                        <a class="page-counter" alt="..." title="..." href="#">...</a>
+                                    </div> }
+
+
+                                <div class="page-item">
+                                    <a class="page-counter" alt="@lastpage" title="@lastpage" href="?q=@keyword&page=@lastpage">@lastpage</a>
+                                </div>}
+
+                            <div class="page-item next @(currentPage == lastpage ? "disabled" : "")">
+                                <a href="?q=@keyword&page=@(currentPage + 1)" title="@Html.Raw(_translate.GetString("label.next"))" alt="@Html.Raw(_translate.GetString("label.next"))" target="_self">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </nav>
+
+                    }
+
+                }
+                else
+                {
+                    <div style="margin-top:25px" class="text-center">@Html.Raw(_translate.GetString("common.infoisupdating"))</div>
+                }
+
+
+            </div>
+            <div class="sidebar" data-sidebar>
+                <div data-stick data-width-fill>
+                    <div class="pane mb-4">
+                        <div class="form-search" id="form-search">
+                            <div class="form-group">
+                                <input type="text"
+                                       class="form-control search-biz"
+                                       name="search-desktop"
+                                       id="search-desktop"
+                                       placeholder="Tìm kiếm từ khoá" value="@keyword" />
+                                <i id="search-button" class="fa fa-search addon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    @if (highViewList.Any())
+                    {
+                        <div class="pane pane-list mb-4">
+                            <div class="tt pane-tt">@Html.Raw(_translate.GetString("news.popular-news"))</div>
+                            @foreach (var item in highViewList)
+                            {
+                                <div class="pane-list-item d-flex block">
+                                    <a class="absolute"
+                                       href="@Html.Raw(_translate.GetUrl("url.news"))@(item.Slug).html"
+                                       title="@Html.Raw(item.TitleAlt)"
+                                       alt="@Html.Raw(item.TitleAlt)"
+                                       target="_self"></a>
+                                    <div class="thumb">
+                                        <img class="fit-cover"
+                                             src="@Html.Raw(item.PicThumb)"
+                                             alt="@Html.Raw(item.TitleAlt)" />
+                                    </div>
+                                    <div class="info">
+                                        <div class="tt">
+                                            @Html.Raw(item.Title)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+                        </div>
+                    }
+                    @if (advertisements.Any())
+                    {
+                        <script>
+                            let advertisementEmbedCode = '';
+                        </script>
+                        <div id="advertisementdiv"></div>
+                        foreach (var item in advertisements)
+                        {
+                            if (item.DisplayType == "normal")
+                            {
+                                <div class="pane bannerqc mb-3">
+                                    <a class="block"
+                                       href="@item.Link"
+                                       title="@Html.Raw(item.TitleAlt)"
+                                       alt="@Html.Raw(item.TitleAlt)"
+                                       target="@(item.TargetLink == "_blank" ? "_blank" : "")">
+                                        <img class="fit-cover"
+                                             src="@item.Image"
+                                             alt="@Html.Raw(item.TitleAlt)" />
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <script type="text/javascript">
+                                    advertisementEmbedCode = convertEmbedCode('@item.EmbedCode')
+                                    document.getElementById('advertisementdiv').innerHTML += advertisementEmbedCode;
+                                </script>
+                            }
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<partial name="/Views/Shared/Convenience.cshtml" />
+@section Scripts{
+    <script asp-append-version="true" src="~/vendors/controllers/searchController.js"></script>
+    <script>
+        var searchUrl = '@_translate.GetUrl("url.search")';
+        var enterSearchKeyword = '@Html.Raw(_translate.GetString("news.enter-search-keyword"))';
+    </script>
+}

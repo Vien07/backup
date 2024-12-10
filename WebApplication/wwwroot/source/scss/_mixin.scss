@@ -1,0 +1,137 @@
+
+@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+    position: $position;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+@mixin absolute($args...) {
+    @include position(absolute, $args...);
+}
+
+@mixin fixed($args...) {
+    @include position(fixed, $args...);
+}
+
+@mixin opacity($value) {
+    $IEValue: $value*100;
+    opacity: $value;
+    //-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity="+$IEValue+")";
+    filter: alpha(opacity=$IEValue); // <=ie8
+}
+
+@mixin clearfix {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+@mixin icon($content) {
+    content: $content;
+    font-family: "Font Awesome 5 Pro";
+}
+
+%clearfix {
+    @include clearfix;
+}
+
+%fa {
+    font-family: 'Font Awsome 5 Pro';
+}
+
+%bg-image {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+%absolute-all {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+%flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+%inline-flex-center {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Input Placeholder
+@mixin placeholder-color($color) {
+    &::-webkit-input-placeholder {
+        color: $color;
+    }
+    &:-ms-input-placeholder {
+        color: $color;
+    }
+    &:-moz-placeholder {
+        color: $color;
+    }
+    &::-moz-placeholder {
+        color: $color;
+    }
+}
+@mixin placeholder-focus() {
+    &::-webkit-input-placeholder {
+        font-size: 0;
+    }
+    &:-ms-input-placeholder {
+        font-size: 0;
+    }
+    &:-moz-placeholder {
+        font-size: 0;
+    }
+    &::-moz-placeholder {
+        font-size: 0;
+    }
+}
+
+// Smooth Font
+@mixin fontsmooth {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// ellipsis
+@mixin ellips($value) {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $value;
+}
+
+// scrollbar
+@mixin scrollbar-none() {
+    &::-webkit-scrollbar {
+        width: 0;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: transparent;
+    }
+}
+
+// mixin filter blur supports
+@mixin support-filter-blur {
+    @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+        @content;
+    }
+}

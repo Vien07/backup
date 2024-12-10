@@ -1,0 +1,264 @@
+﻿@using DTO;
+@using CMS.Services.CommonServices
+@inject ICommonServices _common
+@{
+    var pageNumber = _common.GetConfigValue(ConstantStrings.KeyPageLimitAdmin);
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Dashboard Admin - Powered by BizMaC</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+    <meta name="author" content="BizMaC, Thiết kế website chuyên nghiệp">
+    <meta name="robots" content="noindex,noarchive" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="generator" content="BizMaC, Thiết kế website chuyên nghiệp (bizmac.com.vn)" />
+    <meta name="copyright" content="BizMaC, Thiết kế website chuyên nghiệp (bizmac.com.vn)" />
+    <link rel="dns-prefetch" href="//maps.google.com" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//s.w.org" />
+    <link rel="shortcut icon" href="/b-admin/dist/img/logo/favicon.png">
+
+    <!-- Favicon -->
+    <!-- Calendar CSS -->
+    <link href="/b-admin/vendors/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap table CSS -->
+
+    <link href="/b-admin/vendors/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Toggles CSS -->
+    <link href="/b-admin/vendors/jquery-toggles/css/toggles.css" rel="stylesheet" type="text/css">
+    <link href="/b-admin/vendors/jquery-toggles/css/themes/toggles-light.css" rel="stylesheet" type="text/css">
+
+    <!-- select2 CSS -->
+    <link href="/b-admin/vendors/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <!-- Toastr CSS -->
+    <link href="/b-admin/plugins/toart/jquery.toast.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Sweet alert CSS -->
+    <link href="/b-admin/vendors/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom CSS -->
+    <link href="/b-admin/dist/css/style.css" rel="stylesheet" type="text/css">
+
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="/b-admin/vendors/flag/css/flag-icon.css" rel="stylesheet" type="text/css" />
+    <link href="/b-admin/vendors/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
+    <!--datepicker-->
+    <link rel="stylesheet" type="text/css" href="/b-admin/vendors/datetimepicker/css/jquery.datetimepicker.css">
+
+    @*<link href="/b-admin/vendors/flag/jquery-ui.min.css" rel="stylesheet" />*@
+    <link href="/b-admin/vendors/dropzone/dist/dropzone.css" rel="stylesheet" type="text/css" />
+    <style>
+        .st0, .st1 {
+            fill: rgba(255,255,255,.65)
+        }
+
+        .st1 {
+            fill-rule: evenodd;
+            clip-rule: evenodd;
+        }
+    </style>
+
+    @RenderSection("styles", false)
+    <!-- Custom CSS -->
+</head>
+
+<body>
+    <!-- Preloader -->
+    @*<div class="preloader-it">
+        <div class="loader-pendulums"></div>
+        </div>*@
+    <!-- /Preloader -->
+    <!-- HK Wrapper -->
+    <div class="hk-wrapper hk-vertical-nav">
+
+        <!-- Top Navbar -->
+        @await Html.PartialAsync("/Areas/Shared/Views/_TopNav.cshtml")
+        <!-- /Top Navbar -->
+        <!-- Vertical Nav -->
+
+        @*Load left menu*@
+        @await Html.PartialAsync("/Areas/Shared/Views/_LeftNav.cshtml")
+
+        <!-- /Vertical Nav -->
+        <!-- Main Content -->
+        <div class="hk-pg-wrapper">
+            @RenderBody()
+            <!-- /Row -->
+            <!-- /Container -->
+            <!-- Footer -->
+            @await Html.PartialAsync("/Areas/Shared/Views/_Footer.cshtml")
+
+            <!-- /Footer -->
+
+        </div>
+        <!-- /Main Content -->
+
+    </div>
+    <!-- /HK Wrapper -->s
+    <!-- jQuery -->
+    <script src="/b-admin/vendors/jquery/dist/jquery.min.js"></script>
+
+    <!-- Jasny-bootstrap  JavaScript -->
+    <script src="/b-admin/vendors/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/b-admin/vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/b-admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Slimscroll JavaScript -->
+    <script src="/b-admin/dist/js/jquery.slimscroll.js"></script>
+
+    <!-- FeatherIcons JavaScript -->
+    <script src="/b-admin/dist/js/feather.min.js"></script>
+
+    <!-- Fancy Dropdown JS -->
+    <script src="/b-admin/dist/js/dropdown-bootstrap-extended.js"></script>
+    <!-- Toastr JS -->
+    @*<script src="/b-admin/vendors/jquery-toast-plugins/dist/jquery.toast.min.js"></script>*@
+    <script src="/b-admin/plugins/toart/jquery.toast.min.js"></script>
+
+    <!-- Bootstrap-table JavaScript -->
+    <!-- Peity JavaScript -->
+    <script src="/b-admin/vendors/peity/jquery.peity.min.js"></script>
+    <script src="/b-admin/dist/js/peity-data.js"></script>
+
+    <!-- Toggles JavaScript -->
+    <script src="/b-admin/vendors/jquery-toggles/toggles.min.js"></script>
+    <script src="/b-admin/dist/js/toggle-data.js"></script>
+
+    <!-- Select2 JavaScript -->
+    <script src="/b-admin/vendors/select2/dist/js/select2.full.min.js"></script>
+    <script src="/b-admin/dist/js/select2-data.js"></script>
+
+    <!-- Nice select -->
+    <script src="/b-admin/vendors/nice-select/dist/js/jquery.nice-select.min.js"></script>
+    <script src="/b-admin/dist/js/nice-select-data.js"></script>
+
+    <!-- Sweet alert2-->
+    <script src="/b-admin/vendors/sweetalert2/sweetalert2.min.js"></script>
+
+
+    <script src="/b-admin/dist/js/validation-data.js"></script>
+    <!--Momment -->
+    <script src="/b-admin/vendors/moment/min/moment.min.js"></script>
+    @*<script src="/b-admin/vendors/jquery-ui.min.js"></script>*@
+    <script src="/b-admin/vendors/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script src="/b-admin/vendors/fullcalendar/dist/locale-all.js"></script>
+    @*<script src="/b-admin/dist/js/fullcalendar-data.js"></script>*@
+    <script src="/b-admin/vendors/daterangepicker/daterangepicker.js"></script>
+    <!--table drag -->
+    <script src="/b-admin/vendors/table-drager/table-dragger.min.js"></script>
+    <!---->
+    <!-- DateTimePicker -->
+    <script type="text/javascript" src="/b-admin/vendors/datetimepicker/js/jquery.datetimepicker.full.min.js"></script>
+
+    <!-- tinyMCE -->
+    <script src="/b-admin/vendors/tinymce5/js/tinymce/tinymce.min.js"></script>
+    <!-- Dropzone JavaScript -->
+    <script src="/b-admin/vendors/dropzone/dist/dropzone.js"></script>
+
+    <script src="/b-admin/plugins/bizmac/paging.js"></script>
+    <!--datepicker-->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
+
+    <!-- Editable Table JavaScript -->
+    <script src="/b-admin/vendors/editable-table/mindmup-editabletable.js"></script>
+    <script src="/b-admin/vendors/editable-table/numeric-input-example.js"></script>
+    <script src="/b-admin/dist/js/editable-table-data.js"></script>
+
+
+
+
+    <!--bizmac-->
+    <script src="/b-admin/plugins/bizmac/customJS.js"></script>
+    <script src="/b-admin/plugins/bizmac/CustomFunctionBrowser.js"></script>
+    <script src="/b-admin/plugins/bizmac/filemanager.js"></script>
+    <script src="/b-admin/plugins/bizmac/getselect.js"></script>
+    <script src="/b-admin/plugins/bizmac/InitInputAction.js"></script>
+    <script src="/b-admin/plugins/bizmac/CommonAction.js"></script>
+    <!---->
+    <script>
+        var pageNumber = '@pageNumber';
+        var page = 1;
+        var lang = "@ConstantStrings.DefaultLangAdmin";
+    </script>
+
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        $(function () {
+            LoadActiveNav();
+        })
+
+        function LoadActiveNav() {
+            var nav = $(".bizmac-left-nav");
+            for (let i = 0; i <= nav.length; i++) {
+                try {
+                    var href = window.location.pathname;
+                    var id = nav[i].id;
+                    var parent = $("#" + id);
+                    parent = parent.attr("parent-left-nav");
+                    var aNavLeff = $("#a-" + id);
+                    aNavLeff = aNavLeff.attr("href");
+                    if (aNavLeff == href) {
+                        $("#li-" + parent).addClass("active");
+                        $("#a-" + parent).attr("aria-expanded", "true");
+                        $("#" + parent).addClass("show");
+                        $("#" + id).addClass("active");
+                        return;
+                    }
+                    if (href === "/b-admin/HomePageFeature/" || href === "/b-admin/HomePageIntro/") {
+                        $("#a-infopage").addClass("active");
+                        $("#a-nav-left-homepage").attr("aria-expanded", "true");
+                        $("#infopage").addClass("show");
+                        $("#nav-left-homepage").addClass("active");
+                    }
+                    else if (href == "/b-admin/Permit/UserIndex") {
+                        $("#li-permissions").addClass("active");
+                        $("#a-nav-left-member").attr("aria-expanded", "true");
+                        $("#permissions").addClass("show");
+                        $("#nav-left-member").addClass("active");
+                    }
+                    else if (href == "/b-admin/Permit/GroupIndex") {
+                        $("#li-permissions").addClass("active");
+                        $("#a-nav-left-group").attr("aria-expanded", "true");
+                        $("#permissions").addClass("show");
+                        $("#nav-left-group").addClass("active");
+                    }
+                    else if (href == "/b-admin/Order/CreateOrUpdate") {
+                        $("#li-order").addClass("active");
+                        $("#a-nav-left-group").attr("aria-expanded", "true");
+                        $("#order").addClass("show");
+                        $("#nav-left-group").addClass("active");
+                    }
+                    else if (href == "/b-admin/Customer/CreateOrUpdate") {
+                        $("#li-order").addClass("active");
+                        $("#a-nav-left-group").attr("aria-expanded", "true");
+                        $("#order").addClass("show");
+                        $("#nav-left-group").addClass("active");
+                    }
+
+                } catch (e) {
+
+                }
+            }
+        }
+    </script>
+
+    <!-- Init JavaScript -->
+    <script src="/b-admin/dist/js/init.js"></script>
+
+</body>
+
+</html>
+
+

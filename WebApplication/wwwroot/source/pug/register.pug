@@ -1,0 +1,46 @@
+extends template/template-login
+block vars
+	- title= 'Đăng ký'
+	- wrapperClass = ''
+	
+block form-body 
+	.mb-3: +a('login.html', 'text-link', 'Đăng nhập')
+	.tt-sm=title
+	form.form-validate.material-form
+		.row.gx-2.row-cols-2
+			.col
+				.form-group.mb-2
+					input.form-control(type="text" required)
+					label.label-text Họ
+			.col
+				.form-group.mb-2
+					input.form-control(type="text" required)
+					label.label-text Tên
+		.form-group.mb-2
+			input.form-control(type="text" required)
+			label.label-text Địa chỉ email
+		.form-group.mb-2
+			input.form-control(type="password" required)
+			span.passw-toggle-view.far.fa-eye-slash
+			label.label-text Mật khẩu 
+		.form-group.mb-2
+			input.form-control(type="password" required)
+			span.passw-toggle-view.far.fa-eye-slash
+			label.label-text Nhập lại mật khẩu
+		.warning.fs-14.my-3 
+			| Bằng cách tiếp tục, bạn xác nhận rằng bạn đồng ý với 
+			+a('#', 'text-link', 'Điều khoản sử dụng')
+			| và xác nhận rằng bạn đã đọc 
+			+a('#', 'text-link', 'Chính sách quyền riêng tư')
+		.d-grid.my-4
+			button(type="submit" class="btn btn-primary") Đăng ký 
+		.divider.text-center: span Hoặc
+		.d-grid.btn-social-group
+			+a('#', 'btn btn-facebook')
+				i.fab.fa-facebook-square.mr-2
+				| Tiếp tục với Facebook
+			+a('#', 'btn btn-google')
+				i.fab.fa-google.mr-2
+				| Tiếp tục với Google
+	
+	+validateJs()

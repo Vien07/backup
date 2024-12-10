@@ -1,0 +1,35 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services.CommonServices;
+@using DTO;
+@inject ITranslateServices _translate
+@inject ICommonServices _common
+
+
+<div class="row rowPageCRUD">
+    <div class="col-12">
+        <section class="hk-sec-wrapper">
+            <div class="form-group col-lg-6 pl-0">
+                <label class="mb-1 text-primary" for="Title">@_translate.GetStringAdmin("label.title")</label>
+                <input class="form-control raw" id="Title" name="Title" placeholder="@_translate.GetStringAdmin("placeholder.title")" required value="" type="text">
+            </div>                    
+            <div class="my-3">
+                <label class="mb-1 text-primary">@_translate.GetStringAdmin("label.content")</label>
+                <div class="row">
+                    <div class="col-sm">
+                        <textarea class="raw" id="Content"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group mb-0">
+                <div class="row">                                     
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="mb-1 text-primary" for="TagKey">@_translate.GetStringAdmin("label.tag-key")</label>
+                            <input class="form-control raw" id="TagKey" name="TagKey" placeholder="@_translate.GetStringAdmin("placeholder.tag-key")" />
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </section>
+    </div>
+</div>

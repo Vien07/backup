@@ -1,0 +1,23 @@
+.page-404 {
+	max-width: 540px;
+	margin: auto;
+
+	.heading {
+		font-size: 120px;
+		font-weight: $semibold;
+		line-height: 1;
+		text-shadow: 1px 1px 0 #ccc, 2px 2px 0 #ccc, 3px 3px 0 #ccc, 4px 4px 0 #ddd, 5px 5px 0 #ddd, 6px 6px 0 #ddd, 7px 7px 5px #ddd, 8px 8px 8px #eee, 9px 9px 12px #eee, 10px 10px 15px #eee;
+	}
+	.tt-sm {
+		font-size: 26px;
+		letter-spacing: -1px;
+		margin-bottom: 16px;
+	}
+}
+@media screen and (min-width: 768px) {
+	.page-404 {
+		.heading {
+			font-size: 140px;
+		}
+	}
+}

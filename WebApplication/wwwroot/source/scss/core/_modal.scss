@@ -1,0 +1,18 @@
+.modal {
+    .modal-content > .btn-close {
+        @include absolute(0,0);
+        z-index: 88;
+        margin: 6px;
+        border-radius: 50%;
+        width: 26px;
+        height: 26px;
+        background-color: #f7f7f7;
+    }
+}
+.modal-backdrop {
+    background-color: rgba(#000, .5);
+    backdrop-filter: blur(12px);
+    &.show {
+        opacity: 1;
+    }
+}

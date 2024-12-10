@@ -1,0 +1,90 @@
+﻿@using CMS.Services.TranslateServices;
+@using CMS.Services
+@using DTO.Product;
+@using DTO.Website;
+@inject ITranslateServices _translate
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<ProductDto> list = ViewBag.Products as List<ProductDto>;
+    string banner = ViewBag.Banner as string;
+
+}
+@section Meta{
+    @Html.Raw(ViewBag.Meta)
+}
+
+@section Banner{
+    <div class="container pb-3 pt-5">
+        <div class="text-center mb-3">
+            <div class="tt-lg text-uppercase mb-0">@Html.Raw(_translate.GetString("menu.tags"))</div>
+            <nav arial-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center">
+                    <li class="breadcrumb-item">
+                        <a href="@Html.Raw(_translate.GetUrl("url.home"))" title="@Html.Raw(_translate.GetString("menu.home"))" alt="@Html.Raw(_translate.GetString("menu.home"))" target="_self">
+                            @Html.Raw(_translate.GetString("menu.home"))
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">@Html.Raw(_translate.GetString("menu.tags"))</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+}
+
+<div class="container py-4 py-xl-45">
+    @if (list.Any())
+    {
+        <div class="tt-md tt-icon txt-body mt-3">@Html.Raw(_translate.GetString("menu.product"))</div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 list-products my-3 g-3">
+            @foreach (var item in list)
+            {
+                <div class="col wow fadeIn">
+                    <div class="block h-100">
+                        <a class="absolute" alt="@Html.Raw(item.TitleAlt)" href="@Html.Raw(_translate.GetUrl("url.product"))@(item.Slug).html" title="@Html.Raw(item.TitleAlt)"></a>
+                        <div class="thumb-res square">
+                            <img src="@item.PicThumb">
+                            <div class="group-badge">
+                                @if (item.IsNew)
+                                {
+                                    <div class="badge badge-new">NEW</div>
+                                }
+
+                                @if (item.IsHot)
+                                {
+                                    <div class="badge badge-hot">HOT</div>
+                                }
+
+                                @if (item.PriceDiscount != 0)
+                                {
+                                    <div class="badge badge-sale">-@(Math.Floor(100 - (item.PriceDiscount / item.Price) * 100))%</div>
+                                }
+                            </div>
+                            <div class="overlay-blur">
+                                <div class="info">
+                                    <div class="tt-xs mb-0 text-white text-center">Xem chi tiết</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="tt fw-normal">@Html.Raw(item.Title)</div>
+                            @if (item.Price == 0)
+                            {
+                                <div class="price">Liên hệ</div>
+                            }
+                            else if (item.PriceDiscount == 0)
+                            {
+                                <div class="price">@Html.Raw(item.PriceString)<u>đ</u></div>
+                            }
+                            else
+                            {
+                                <div class="price">@Html.Raw(item.PriceDiscountString)<u>đ</u><del>@Html.Raw(item.PriceString)<u>đ</u></del></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
